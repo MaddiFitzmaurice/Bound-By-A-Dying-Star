@@ -63,12 +63,13 @@ public class PlayerTest : MonoBehaviour
             Debug.Log("MoveVect2DHandler is null");
         }
 
-
+        // Set current velocity to zero, then set move direction
         _rb.velocity = Vector2.zero;
         _moveDirection = (Vector2)data;
-        if (_moveDirection == Vector2.zero)
-        {
-            _rb.velocity = new Vector2(0, 0);
-        }
+        
+        //if (_moveDirection == Vector2.zero)
+        //{
+        //    _rb.velocity = new Vector2(0, 0);
+        //}
     }
 }

@@ -1,3 +1,4 @@
+// Enum with all the events in the game
 public enum EventType
 {
     // SceneManagement           

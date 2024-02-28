@@ -38,16 +38,6 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions
         _canPause = (bool)data;
     }
 
-    public void DebuggingHandler(object data)
-    {
-        if (data == null)
-        {
-            Debug.LogError("DebuggingHandler has not received a bool!!!");
-        }
-
-        _debugging = (bool)data;
-    }
-
     // If WSAD or Arrows are pressed
     public void OnMove(InputAction.CallbackContext context)
     {

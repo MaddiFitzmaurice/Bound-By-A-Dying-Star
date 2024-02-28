@@ -17,6 +17,7 @@ public class Fader : MonoBehaviour
         _fadeOutBG = GetComponentInChildren<CanvasGroup>();
     }
 
+    // Fades a scene to black over the set time
     public IEnumerator NormalFadeOut()
     {
         LeanTween.alphaCanvas(_fadeOutBG, 1f, _fadeOutTime).setFrom(0f);
@@ -27,6 +28,7 @@ public class Fader : MonoBehaviour
         }
     }
 
+    // Fades from black to the scene over the set time
     public IEnumerator NormalFadeIn()
     {
         LeanTween.alphaCanvas(_fadeOutBG, 0f, _fadeOutTime).setFrom(1f);
@@ -37,6 +39,7 @@ public class Fader : MonoBehaviour
         }
     }
 
+    // Unused, to be deleted
     private Vector3 WorldToUI(Vector3 worldPos)
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);

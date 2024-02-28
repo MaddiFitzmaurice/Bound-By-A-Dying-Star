@@ -18,10 +18,12 @@ public class MainMenuUIManager : MonoBehaviour
 
     private void OnEnable()
     {
+
     }
 
     private void OnDisable()
     {
+
     }
 
     private void Start()
@@ -31,12 +33,13 @@ public class MainMenuUIManager : MonoBehaviour
         Cursor.visible = true;
     }
     #endregion
-    // Button to signal exiting the game
+    // Starts event sequence which exits the game
     public void QuitButton()
     {
         EventManager.EventTrigger(EventType.QUIT_GAME, null);
     }
 
+    // Starts event sequence which loads the selected level
     public void LevelSelectButton(int levelNum)
     {
         if (!_buttonPressed)
@@ -46,6 +49,7 @@ public class MainMenuUIManager : MonoBehaviour
         }
     }
 
+    // Handles the main menu events sent from selecting a button on the main menu
     public void MainMenuEventHandler(object data)
     {
         if (data == null)
@@ -58,7 +62,7 @@ public class MainMenuUIManager : MonoBehaviour
         switch (code)
         {
             case 1:
-                // Quit
+                // Quit game button
                 if (!_buttonPressed)
                 {
                     EventManager.EventTrigger(EventType.QUIT_GAME, null);
@@ -66,21 +70,13 @@ public class MainMenuUIManager : MonoBehaviour
                 }
                 break;
             case 2:
-                // Play
+                // Play game button
                 if (!_buttonPressed)
                 {
                     EventManager.EventTrigger(EventType.LEVEL_SELECTED, 0);
                     _buttonPressed = true;
                 }
                 break;
-            //case 3:
-            //    // Options
-            //    if (!_buttonPressed)
-            //    {
-
-            //        ShowHideSettings();
-            //    }
-            //    break;
             default:
                 
                 break;
