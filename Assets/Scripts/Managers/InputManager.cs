@@ -51,7 +51,6 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions
     // If WSAD or Arrows are pressed
     public void OnMove(InputAction.CallbackContext context)
     {
-        Debug.Log(context);
         EventManager.EventTrigger(EventType.PLAYER_MOVE_VECT2D, _inputs.Gameplay.Move.ReadValue<Vector2>());
     }
 }
