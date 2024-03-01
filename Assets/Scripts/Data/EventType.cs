@@ -3,7 +3,7 @@ public enum EventType
 {
     // SceneManagement           
     QUIT_LEVEL,             
-    FADING,
+    FADING, 
     LEVEL_SELECTED,
     LEVEL_STARTED,
     LEVEL_ENDED,
@@ -11,4 +11,7 @@ public enum EventType
 
     // Inputs
     PLAYER_MOVE_VECT2D,
+
+    // Puzzles
+    ASSIGNMENT_CODE_TRIGGER,  //trigger code for puzzle features
 };
