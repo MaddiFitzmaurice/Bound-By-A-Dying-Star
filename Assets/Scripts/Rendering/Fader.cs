@@ -38,15 +38,4 @@ public class Fader : MonoBehaviour
             yield return null;
         }
     }
-
-    // Unused, to be deleted
-    private Vector3 WorldToUI(Vector3 worldPos)
-    {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
-
-        Vector2 circlePos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, screenPos, _canvas.worldCamera, out circlePos);
-
-        return _canvas.transform.TransformPoint(circlePos);
-    }
 }

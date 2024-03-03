@@ -10,8 +10,6 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
 {
     // Internal data
     private InputActions _inputs;
-    private bool _canPause;
-    private bool _debugging = false;
 
     // Input Action Assets
     private Player1InputActions _player1Inputs;
@@ -42,8 +40,6 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
 
         // Subscription to listen for device changes
         InputSystem.onDeviceChange += DeviceChangeHandler;
-
-        EventManager.EventSubscribe(EventType.FADING, PauseAllowedHandler);
     }
 
     void OnDisable()
@@ -55,17 +51,11 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
    
         // Unsubscribing from listening to device changes
         InputSystem.onDeviceChange -= DeviceChangeHandler;
-
-        EventManager.EventUnsubscribe(EventType.FADING, PauseAllowedHandler);
     }
 
+    #region DEVICE FUNCTIONS
     public void DeviceSetup()
     {
-        foreach (var device in InputSystem.devices)
-        {
-            Debug.Log(device.description.deviceClass);
-        }
-
         // Create player 1 and 2 InputUsers and associate them with respective Action Assets
         _player1 = InputUser.CreateUserWithoutPairedDevices();
         _player2 = InputUser.CreateUserWithoutPairedDevices();
@@ -130,16 +120,7 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
                 break;
         }
     }
-
-    public void PauseAllowedHandler(object data)
-    {
-        if (data is not bool)
-        {
-            Debug.LogError("PauseAllowedHandler has not received a bool!!!");
-        }
-
-        _canPause = (bool)data;
-    }
+    #endregion
 
     #region ACTIONMAP INTERFACES
     // If WSAD or Arrows are pressed
@@ -148,6 +129,7 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
         EventManager.EventTrigger(EventType.PLAYER_MOVE_VECT2D, _inputs.Gameplay.Move.ReadValue<Vector2>());
     }
 
+    // TEST CALLBACKS FOR 2 PLAYER TEST
     public void OnPlayer1(InputAction.CallbackContext context)
     {
         if (context.performed)
