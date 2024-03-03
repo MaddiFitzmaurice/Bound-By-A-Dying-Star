@@ -1,0 +1,34 @@
+{
+    "name": "Player2InputActions",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "3ac3e93b-aa1f-4a0d-bb61-21ad72d0d6c3",
+            "actions": [
+                {
+                    "name": "Player2",
+                    "type": "Button",
+                    "id": "12bccc2f-32b4-4393-a2b1-0b7893f8482d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "018b217f-61c6-4a6d-9e13-2a0f69f35bcc",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
