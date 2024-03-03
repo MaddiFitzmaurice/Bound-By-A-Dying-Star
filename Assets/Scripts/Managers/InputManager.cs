@@ -1,6 +1,10 @@
+using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.InputSystem.Utilities;
+using UnityEngine.iOS;
 
 public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions
 {
@@ -9,8 +13,11 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
     private bool _canPause;
     private bool _debugging = false;
 
+    // Input Action Assets
     private Player1InputActions _player1Inputs;
     private Player2InputActions _player2Inputs;
+    
+    // Input Users
     private InputUser _player1;
     private InputUser _player2;
 
@@ -42,6 +49,9 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
     void OnDisable()
     {
         _inputs.Gameplay.Disable();
+
+        _player1Inputs.Disable();
+        _player2Inputs.Disable();
    
         // Unsubscribing from listening to device changes
         InputSystem.onDeviceChange -= DeviceChangeHandler;
@@ -51,14 +61,26 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
 
     public void DeviceSetup()
     {
-        if (Gamepad.all[0] != null)
+        foreach (var device in InputSystem.devices)
         {
-            _player1Inputs.devices = new [] { Gamepad.all[0] };
+            Debug.Log(device.description.deviceClass);
         }
 
-        if (Gamepad.all[1] != null)
+        // Create player 1 and 2 InputUsers and associate them with respective Action Assets
+        _player1 = InputUser.CreateUserWithoutPairedDevices();
+        _player2 = InputUser.CreateUserWithoutPairedDevices();
+        _player1.AssociateActionsWithUser(_player1Inputs);
+        _player2.AssociateActionsWithUser(_player2Inputs);
+
+        // At least find one gamepad device to pair with player 1
+        if (Gamepad.current != null)
         {
-            _player2Inputs.devices = new [] { Gamepad.all[1] };
+            InputUser.PerformPairingWithDevice(Gamepad.current, _player1);
+            _player1Inputs.Enable();
+        }
+        else 
+        {
+            Debug.Log("Please connect a gamepad to the game!");
         }
     }
 
@@ -68,26 +90,50 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
         switch (change)
         {
             case InputDeviceChange.Added:
-                // New Device.
+                // If player 1 has no currently paired devices
+                if (_player1.pairedDevices.Count == 0)
+                {
+                    if (device.description.deviceClass != "Keyboard" || device.description.deviceClass != "Mouse")
+                    {
+                        InputUser.PerformPairingWithDevice(device, _player1);
+                        _player1Inputs.Enable();
+                    }
+                }
+                // If player 2 has no currently paired devices
+                else if (_player2.pairedDevices.Count == 0)
+                {
+                    if (device.description.deviceClass != "Keyboard" || device.description.deviceClass != "Mouse")
+                    {
+                        InputUser.PerformPairingWithDevice(device, _player2);
+                        _player2Inputs.Enable();
+                    }
+                }
                 break;
             case InputDeviceChange.Disconnected:
-                // Device got unplugged.
+                // If device has been disconnected from player 1
+                if (_player1.pairedDevices.ToList().Contains(device))
+                {
+                    _player1Inputs.Disable();
+                }
+                 // Else if device has been disconnected from player 2
+                if (_player1.pairedDevices.ToList().Contains(device))
+                {
+                    _player2Inputs.Disable();
+                }
                 break;
             case InputDeviceChange.Reconnected:
                 // Plugged back in.
-                break;
-            case InputDeviceChange.Removed:
-                // Remove from Input System entirely; by default, Devices stay in the system once discovered.
+                Debug.Log($"Reconnected {device}");
                 break;
             default:
-                // See InputDeviceChange reference for other event types.
+                //Debug.Log($"Unknown activity occuring with {device}.");
                 break;
         }
     }
 
     public void PauseAllowedHandler(object data)
     {
-        if (data == null)
+        if (data is not bool)
         {
             Debug.LogError("PauseAllowedHandler has not received a bool!!!");
         }
