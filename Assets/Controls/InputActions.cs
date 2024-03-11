@@ -44,6 +44,24 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": ""NormalizeVector2"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Player1Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e970879-431f-41e1-b2c6-ff3e98bedcab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player2Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""7c458556-52be-4c1d-9a41-8d3e5b98998a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -156,6 +174,28 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""MovePlayer2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""258ca87b-5d41-4a77-a94b-3141c98d674d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4ff311eb-3604-4a4a-99c6-11c7bdb3cb5a"",
+                    ""path"": ""<Keyboard>/numpad0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -194,6 +234,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_MovePlayer1 = m_Gameplay.FindAction("MovePlayer1", throwIfNotFound: true);
         m_Gameplay_MovePlayer2 = m_Gameplay.FindAction("MovePlayer2", throwIfNotFound: true);
+        m_Gameplay_Player1Interact = m_Gameplay.FindAction("Player1Interact", throwIfNotFound: true);
+        m_Gameplay_Player2Interact = m_Gameplay.FindAction("Player2Interact", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
@@ -260,12 +302,16 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_MovePlayer1;
     private readonly InputAction m_Gameplay_MovePlayer2;
+    private readonly InputAction m_Gameplay_Player1Interact;
+    private readonly InputAction m_Gameplay_Player2Interact;
     public struct GameplayActions
     {
         private @InputActions m_Wrapper;
         public GameplayActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @MovePlayer1 => m_Wrapper.m_Gameplay_MovePlayer1;
         public InputAction @MovePlayer2 => m_Wrapper.m_Gameplay_MovePlayer2;
+        public InputAction @Player1Interact => m_Wrapper.m_Gameplay_Player1Interact;
+        public InputAction @Player2Interact => m_Wrapper.m_Gameplay_Player2Interact;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -281,6 +327,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @MovePlayer2.started += instance.OnMovePlayer2;
             @MovePlayer2.performed += instance.OnMovePlayer2;
             @MovePlayer2.canceled += instance.OnMovePlayer2;
+            @Player1Interact.started += instance.OnPlayer1Interact;
+            @Player1Interact.performed += instance.OnPlayer1Interact;
+            @Player1Interact.canceled += instance.OnPlayer1Interact;
+            @Player2Interact.started += instance.OnPlayer2Interact;
+            @Player2Interact.performed += instance.OnPlayer2Interact;
+            @Player2Interact.canceled += instance.OnPlayer2Interact;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -291,6 +343,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @MovePlayer2.started -= instance.OnMovePlayer2;
             @MovePlayer2.performed -= instance.OnMovePlayer2;
             @MovePlayer2.canceled -= instance.OnMovePlayer2;
+            @Player1Interact.started -= instance.OnPlayer1Interact;
+            @Player1Interact.performed -= instance.OnPlayer1Interact;
+            @Player1Interact.canceled -= instance.OnPlayer1Interact;
+            @Player2Interact.started -= instance.OnPlayer2Interact;
+            @Player2Interact.performed -= instance.OnPlayer2Interact;
+            @Player2Interact.canceled -= instance.OnPlayer2Interact;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -358,6 +416,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     {
         void OnMovePlayer1(InputAction.CallbackContext context);
         void OnMovePlayer2(InputAction.CallbackContext context);
+        void OnPlayer1Interact(InputAction.CallbackContext context);
+        void OnPlayer2Interact(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

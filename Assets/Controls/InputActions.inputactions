@@ -22,6 +22,24 @@
                     "processors": "NormalizeVector2",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Player1Interact",
+                    "type": "Button",
+                    "id": "0e970879-431f-41e1-b2c6-ff3e98bedcab",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Player2Interact",
+                    "type": "Button",
+                    "id": "7c458556-52be-4c1d-9a41-8d3e5b98998a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -134,6 +152,28 @@
                     "action": "MovePlayer2",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "258ca87b-5d41-4a77-a94b-3141c98d674d",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player1Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4ff311eb-3604-4a4a-99c6-11c7bdb3cb5a",
+                    "path": "<Keyboard>/numpad0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

@@ -31,6 +31,8 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
 
         EventManager.EventInitialise(EventType.PLAYER_1_MOVE_VECT2D);
         EventManager.EventInitialise(EventType.PLAYER_2_MOVE_VECT2D);
+        EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
+        EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
 
         DeviceSetup();
     }
@@ -129,10 +131,31 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
     {
         EventManager.EventTrigger(EventType.PLAYER_1_MOVE_VECT2D, _inputs.Gameplay.MovePlayer1.ReadValue<Vector2>());
     }
+
     // For testing, if Player 2's arrow keys are pressed
     public void OnMovePlayer2(InputAction.CallbackContext context)
     {
         EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT2D, _inputs.Gameplay.MovePlayer2.ReadValue<Vector2>());
+    }
+
+    // For testing, if Player 1 uses the interract E key
+    public void OnPlayer1Interact(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, null);
+            Debug.Log("PLAYER_1_INTERACT");
+        }
+    }
+
+    // For testing, if Player 2 uses the interract numpad 0 key
+    public void OnPlayer2Interact(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, null);
+            Debug.Log("PLAYER_2_INTERACT");
+        }
     }
 
     // TEST CALLBACKS FOR 2 PLAYER TEST
