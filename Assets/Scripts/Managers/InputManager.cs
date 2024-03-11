@@ -138,6 +138,18 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
         EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT2D, _inputs.Gameplay.MovePlayer2.ReadValue<Vector2>());
     }
 
+    // For testing, if Player 1's WSAD keys are pressed
+    public void OnPlayer1Move(InputAction.CallbackContext context)
+    {
+        EventManager.EventTrigger(EventType.PLAYER_1_MOVE_VECT2D, _player1Inputs.Gameplay.Player1Move.ReadValue<Vector2>());
+    }
+
+    // For testing, if Player 2's arrow keys are pressed
+    public void OnPlayer2Move(InputAction.CallbackContext context)
+    {
+        EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT2D, _player2Inputs.Gameplay.Player2Move.ReadValue<Vector2>());
+    }
+
     // For testing, if Player 1 uses the interract E key
     public void OnPlayer1Interact(InputAction.CallbackContext context)
     {
