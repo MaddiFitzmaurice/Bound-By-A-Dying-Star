@@ -6,7 +6,8 @@ public enum EventType
     QUIT_GAME,  
 
     // Inputs
-    PLAYER_MOVE_VECT2D,
+    PLAYER_1_MOVE_VECT2D,
+    PLAYER_2_MOVE_VECT2D,
 
     // Puzzles
     ASSIGNMENT_CODE_TRIGGER,  //trigger code for puzzle features

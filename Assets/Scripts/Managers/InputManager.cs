@@ -29,7 +29,8 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
         _player1Inputs.Gameplay.SetCallbacks(this);
         _player2Inputs.Gameplay.SetCallbacks(this);
 
-        EventManager.EventInitialise(EventType.PLAYER_MOVE_VECT2D);
+        EventManager.EventInitialise(EventType.PLAYER_1_MOVE_VECT2D);
+        EventManager.EventInitialise(EventType.PLAYER_2_MOVE_VECT2D);
 
         DeviceSetup();
     }
@@ -123,10 +124,15 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
     #endregion
 
     #region ACTIONMAP INTERFACES
-    // If WSAD or Arrows are pressed
-    public void OnMove(InputAction.CallbackContext context)
+    // For testing, if Player 1's WSAD keys are pressed
+    public void OnMovePlayer1(InputAction.CallbackContext context)
     {
-        EventManager.EventTrigger(EventType.PLAYER_MOVE_VECT2D, _inputs.Gameplay.Move.ReadValue<Vector2>());
+        EventManager.EventTrigger(EventType.PLAYER_1_MOVE_VECT2D, _inputs.Gameplay.MovePlayer1.ReadValue<Vector2>());
+    }
+    // For testing, if Player 2's arrow keys are pressed
+    public void OnMovePlayer2(InputAction.CallbackContext context)
+    {
+        EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT2D, _inputs.Gameplay.MovePlayer2.ReadValue<Vector2>());
     }
 
     // TEST CALLBACKS FOR 2 PLAYER TEST
