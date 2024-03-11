@@ -156,7 +156,7 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
         if (context.performed)
         {
             EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, null);
-            Debug.Log("PLAYER_1_INTERACT");
+            //Debug.Log("PLAYER_1_INTERACT");
         }
     }
 
@@ -166,7 +166,7 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
         if (context.performed)
         {
             EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, null);
-            Debug.Log("PLAYER_2_INTERACT");
+            //Debug.Log("PLAYER_2_INTERACT");
         }
     }
 

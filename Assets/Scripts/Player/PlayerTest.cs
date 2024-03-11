@@ -30,12 +30,14 @@ public class PlayerTest : MonoBehaviour
         _boxCollider2 = _player2.GetComponent<BoxCollider>();
     }
 
+    // On enabling of the attached GameObject
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.PLAYER_1_MOVE_VECT2D, Player1Vect2DHandler);
         EventManager.EventSubscribe(EventType.PLAYER_2_MOVE_VECT2D, Player2Vect2DHandler);
     }
 
+    // On disabling of the attached GameObject
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE_VECT2D, Player1Vect2DHandler);
@@ -62,7 +64,7 @@ public class PlayerTest : MonoBehaviour
     {
         if (data == null)
         {
-            Debug.Log("Player1Vect2DHandler is null");
+            Debug.LogError("Player1Vect2DHandler is null");
         }
 
         // Set move direction
@@ -73,7 +75,7 @@ public class PlayerTest : MonoBehaviour
     {
         if (data == null)
         {
-            Debug.Log("Player2Vect2DHandler is null");
+            Debug.LogError("Player2Vect2DHandler is null");
         }
 
         // Set move direction
