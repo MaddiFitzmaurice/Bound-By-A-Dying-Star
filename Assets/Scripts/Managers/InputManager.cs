@@ -6,7 +6,7 @@ using UnityEngine.InputSystem.Users;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.iOS;
 
-public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions
+public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions
 {
     // Internal data
     private InputActions _inputs;
@@ -21,8 +21,8 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
 
     void Awake()
     {
-        _inputs = new InputActions();
-        _inputs.Gameplay.SetCallbacks(this);
+        //_inputs = new InputActions();
+        //_inputs.Gameplay.SetCallbacks(this);
 
         _player1Inputs = new Player1InputActions();
         _player2Inputs = new Player2InputActions();
@@ -39,7 +39,7 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
 
     void OnEnable()
     {
-        _inputs.Gameplay.Enable();
+        //_inputs.Gameplay.Enable();
 
         // Subscription to listen for device changes
         InputSystem.onDeviceChange += DeviceChangeHandler;
@@ -47,7 +47,7 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
 
     void OnDisable()
     {
-        _inputs.Gameplay.Disable();
+        //_inputs.Gameplay.Disable();
 
         _player1Inputs.Disable();
         _player2Inputs.Disable();
@@ -64,6 +64,13 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
         _player2 = InputUser.CreateUserWithoutPairedDevices();
         _player1.AssociateActionsWithUser(_player1Inputs);
         _player2.AssociateActionsWithUser(_player2Inputs);
+
+#if UNITY_EDITOR
+        InputUser.PerformPairingWithDevice(Keyboard.current, _player1);
+        InputUser.PerformPairingWithDevice(Keyboard.current, _player2);
+        _player1Inputs.Enable();
+        _player2Inputs.Enable();
+#endif
 
         // At least find one gamepad device to pair with player 1
         if (Gamepad.current != null)
@@ -123,20 +130,20 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
                 break;
         }
     }
-    #endregion
+#endregion
 
     #region ACTIONMAP INTERFACES
     // For testing, if Player 1's WSAD keys are pressed
-    public void OnMovePlayer1(InputAction.CallbackContext context)
-    {
-        EventManager.EventTrigger(EventType.PLAYER_1_MOVE_VECT2D, _inputs.Gameplay.MovePlayer1.ReadValue<Vector2>());
-    }
+    //public void OnMovePlayer1(InputAction.CallbackContext context)
+    //{
+    //    EventManager.EventTrigger(EventType.PLAYER_1_MOVE_VECT2D, _inputs.Gameplay.MovePlayer1.ReadValue<Vector2>());
+    //}
 
-    // For testing, if Player 2's arrow keys are pressed
-    public void OnMovePlayer2(InputAction.CallbackContext context)
-    {
-        EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT2D, _inputs.Gameplay.MovePlayer2.ReadValue<Vector2>());
-    }
+    //// For testing, if Player 2's arrow keys are pressed
+    //public void OnMovePlayer2(InputAction.CallbackContext context)
+    //{
+    //    EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT2D, _inputs.Gameplay.MovePlayer2.ReadValue<Vector2>());
+    //}
 
     // For testing, if Player 1's WSAD keys are pressed
     public void OnPlayer1Move(InputAction.CallbackContext context)
