@@ -558,6 +558,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 482397145653760635, guid: 4ed66716791cf514fac0d2e230d59f02, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 944418667781449212, guid: 4ed66716791cf514fac0d2e230d59f02, type: 3}
       propertyPath: _playerObjects.Array.data[0]
       value: 
