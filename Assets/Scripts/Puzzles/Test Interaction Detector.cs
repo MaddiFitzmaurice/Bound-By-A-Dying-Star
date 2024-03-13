@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TestInteractionDetector : MonoBehaviour
 {
+    public GameObject _floatingTextPrefab; //Reference Floating Text Prefab
     private bool _player1Present = false;
     private bool _player2Present = false;
 
@@ -21,6 +22,11 @@ public class TestInteractionDetector : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.PLAYER_2_INTERACT, Player2InteractHandler);
     }
 
+    void ShowFloatingText() //Define show floating text method
+    {
+        Instantiate(_floatingTextPrefab, transform.position, Quaternion.identity, transform);
+    }
+    
     // Set state variable when entering a region
     private void OnTriggerEnter(Collider collision)
     {        
@@ -29,10 +35,21 @@ public class TestInteractionDetector : MonoBehaviour
         if(collision.tag == "Player1")
         {
             _player1Present = true;
+            
+            if (_floatingTextPrefab) //Only show floating text if the prefab is assigned
+            {
+                ShowFloatingText(); //Show flaoting text method
+            }
         }
+
         else if (collision.tag == "Player2")
         {
             _player2Present = true;
+
+            if (_floatingTextPrefab) //Only show floating text if the prefab is assigned
+            {
+                ShowFloatingText(); //Show flaoting text method
+            }
         }
     }
 
