@@ -20,4 +20,7 @@ public enum EventType
 
     // Puzzles
     ASSIGNMENT_CODE_TRIGGER,  //trigger code for puzzle features
+
+    // Narrative
+    NPC_SEND_DIALOGUE
 };
