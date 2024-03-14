@@ -7,11 +7,14 @@ TagManager:
   - Pickupable
   - Player1Portal
   - Player2Portal
+  - Player1
+  - Player2
+  - Interactable
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - ParticleInteractive

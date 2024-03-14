@@ -35,6 +35,24 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player1Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""2f4694da-c4a8-4a77-bc36-c22e7249333c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""NormalizeVector2"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Player1Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a1a266b-6c7e-452c-9ca6-062c3fa69355"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -48,6 +66,160 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Player1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""c2e0af56-f76b-42c1-8fd8-f0ad4398862d"",
+                    ""path"": ""Dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""380d168c-66e2-456b-83e0-c5dd1c434d6b"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""8bd3b93a-a780-43f6-bda5-081d590fb85c"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""47c42f30-e143-4921-8ee8-e6104e3d3bc4"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""b6d7b0b1-8ec6-40a6-b463-1197aabc6d57"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb3c8dcf-c7a6-4908-99dd-331df8e33466"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""861a2331-455a-4c81-9933-cf5741a6359b"",
+                    ""path"": ""<Joystick>/stick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1a63c87-02ed-4d6d-b1f1-452c0b9d4c18"",
+                    ""path"": ""<XRController>/{Primary2DAxis}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0352f89f-b509-4722-bf27-b0b56feadf8d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0dc74054-718b-48ed-8804-83ba08446a99"",
+                    ""path"": ""<XRController>/{PrimaryAction}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""030a89cb-9810-4b4f-9efd-a038ea2a94eb"",
+                    ""path"": ""<Joystick>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c4f3e363-82db-4222-a5d1-3b73551d1406"",
+                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89a326cb-eb32-4975-953e-9c72aa5f33af"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc571431-746c-4b6d-a370-27df413e56df"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -57,6 +229,8 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Player1 = m_Gameplay.FindAction("Player1", throwIfNotFound: true);
+        m_Gameplay_Player1Move = m_Gameplay.FindAction("Player1Move", throwIfNotFound: true);
+        m_Gameplay_Player1Interact = m_Gameplay.FindAction("Player1Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -119,11 +293,15 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Player1;
+    private readonly InputAction m_Gameplay_Player1Move;
+    private readonly InputAction m_Gameplay_Player1Interact;
     public struct GameplayActions
     {
         private @Player1InputActions m_Wrapper;
         public GameplayActions(@Player1InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Player1 => m_Wrapper.m_Gameplay_Player1;
+        public InputAction @Player1Move => m_Wrapper.m_Gameplay_Player1Move;
+        public InputAction @Player1Interact => m_Wrapper.m_Gameplay_Player1Interact;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -136,6 +314,12 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1.started += instance.OnPlayer1;
             @Player1.performed += instance.OnPlayer1;
             @Player1.canceled += instance.OnPlayer1;
+            @Player1Move.started += instance.OnPlayer1Move;
+            @Player1Move.performed += instance.OnPlayer1Move;
+            @Player1Move.canceled += instance.OnPlayer1Move;
+            @Player1Interact.started += instance.OnPlayer1Interact;
+            @Player1Interact.performed += instance.OnPlayer1Interact;
+            @Player1Interact.canceled += instance.OnPlayer1Interact;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -143,6 +327,12 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1.started -= instance.OnPlayer1;
             @Player1.performed -= instance.OnPlayer1;
             @Player1.canceled -= instance.OnPlayer1;
+            @Player1Move.started -= instance.OnPlayer1Move;
+            @Player1Move.performed -= instance.OnPlayer1Move;
+            @Player1Move.canceled -= instance.OnPlayer1Move;
+            @Player1Interact.started -= instance.OnPlayer1Interact;
+            @Player1Interact.performed -= instance.OnPlayer1Interact;
+            @Player1Interact.canceled -= instance.OnPlayer1Interact;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -163,5 +353,7 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     public interface IGameplayActions
     {
         void OnPlayer1(InputAction.CallbackContext context);
+        void OnPlayer1Move(InputAction.CallbackContext context);
+        void OnPlayer1Interact(InputAction.CallbackContext context);
     }
 }
