@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerTest : MonoBehaviour
@@ -20,6 +21,12 @@ public class PlayerTest : MonoBehaviour
     // Object references
     [SerializeField] private GameObject _player1;
     [SerializeField] private GameObject _player2;
+
+    //PickableObjects
+    // Assign this in the Inspector, this is the pickup point of the object for player 1
+    [SerializeField] private Transform pickupPoint1;
+    // Assign this in the Inspector, this is the pickup point of the object for player 2
+    [SerializeField] private Transform pickupPoint2;
 
     void Awake()
     {
@@ -44,7 +51,7 @@ public class PlayerTest : MonoBehaviour
 
     void Start()
     {
-
+     
     }
 
     private void FixedUpdate()
@@ -57,7 +64,7 @@ public class PlayerTest : MonoBehaviour
         _rb1.AddForce(new Vector3(_moveSpeed * _moveDirection1.x, 0f, _moveSpeed * _moveDirection1.y), ForceMode.Impulse);
         _rb2.AddForce(new Vector3(_moveSpeed * _moveDirection2.x, 0f, _moveSpeed * _moveDirection2.y), ForceMode.Impulse);
     }
-
+    
     private void Player1Vect2DHandler(object data)
     {
         if (data == null)

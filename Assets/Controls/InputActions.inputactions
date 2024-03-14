@@ -33,9 +33,45 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Player1GeneratePortal",
+                    "type": "Button",
+                    "id": "4f35797d-4a71-4b99-ab2f-53a6d0b6bcc9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Player1SendItem",
+                    "type": "Button",
+                    "id": "78bc8145-f079-4a44-b6f2-0baf322cc011",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Player2Interact",
                     "type": "Button",
                     "id": "7c458556-52be-4c1d-9a41-8d3e5b98998a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Player2GeneratePortal",
+                    "type": "Button",
+                    "id": "31cfc1ec-242f-4e89-a885-50482de8bc49",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Player2SendItem",
+                    "type": "Button",
+                    "id": "689e580b-d7f5-485d-9857-b501b82972b2",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -172,6 +208,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Player2Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "15fc8238-65ac-48f4-b30a-103f771cace5",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player1GeneratePortal",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "41da2082-f6be-4cf2-a75e-2c35db1d94fe",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2GeneratePortal",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "96b62509-c681-47ef-bfce-51a70acdb963",
+                    "path": "<Keyboard>/numpadPeriod",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2SendItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5cb9b717-4d9f-473f-9984-71b9d2cd4257",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player1SendItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

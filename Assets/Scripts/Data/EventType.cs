@@ -12,6 +12,12 @@ public enum EventType
     PLAYER_1_INTERACT,
     PLAYER_2_INTERACT,
 
+    PLAYER_1_CREATEPORTAL,
+    PLAYER_2_CREATEPORTAL,
+
+    PLAYER_1_SENDITEM,
+    PLAYER_2_SENDITEM,
+
     // Puzzles
     ASSIGNMENT_CODE_TRIGGER,  //trigger code for puzzle features
 };

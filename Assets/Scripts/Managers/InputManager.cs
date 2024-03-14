@@ -33,6 +33,10 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
         EventManager.EventInitialise(EventType.PLAYER_2_MOVE_VECT2D);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
+        EventManager.EventInitialise(EventType.PLAYER_1_CREATEPORTAL);
+        EventManager.EventInitialise(EventType.PLAYER_2_CREATEPORTAL);
+        EventManager.EventInitialise(EventType.PLAYER_1_SENDITEM);
+        EventManager.EventInitialise(EventType.PLAYER_2_SENDITEM);
 
         DeviceSetup();
     }
@@ -143,7 +147,7 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
     {
         if (context.performed)
         {
-            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, null);
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, "Player 1");
             Debug.Log("PLAYER_1_INTERACT");
         }
     }
@@ -153,7 +157,7 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
     {
         if (context.performed)
         {
-            EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, null);
+            EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, "Player 2");
             Debug.Log("PLAYER_2_INTERACT");
         }
     }
@@ -173,6 +177,42 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions, Player
         {
             Debug.Log("PLAYER 2");
         }    
+    }
+
+    public void OnPlayer1GeneratePortal(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.PLAYER_1_CREATEPORTAL, "Player 1");
+            Debug.Log("PLAYER_1_CREATEPORTAL");
+        }
+    }
+
+    public void OnPlayer2GeneratePortal(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.PLAYER_2_CREATEPORTAL, "Player 2");
+            Debug.Log("PLAYER_2_CREATEPORTAL");
+        }
+    }
+
+    public void OnPlayer1SendItem(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.PLAYER_1_SENDITEM, null);
+            Debug.Log("PLAYER_1_SENDITEM");
+        }
+    }
+
+    public void OnPlayer2SendItem(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.PLAYER_2_SENDITEM, null);
+            Debug.Log("PLAYER_2_SENDITEM");
+        }
     }
     #endregion
 }
