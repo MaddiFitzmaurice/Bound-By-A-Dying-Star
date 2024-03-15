@@ -53,6 +53,24 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player1GeneratePortal"",
+                    ""type"": ""Button"",
+                    ""id"": ""adc2d72c-5de1-4b0a-a629-bcf9bd8c2ccd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player1SendItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""24180373-9cde-4611-bb48-faf8f591593d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -220,6 +238,28 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Player1Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c27d24e-b9e9-4574-80ae-2c2562b78fd1"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1GeneratePortal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""920c553c-e671-4bdb-9c7f-a974edcdc70d"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1SendItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -231,6 +271,8 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         m_Gameplay_Player1 = m_Gameplay.FindAction("Player1", throwIfNotFound: true);
         m_Gameplay_Player1Move = m_Gameplay.FindAction("Player1Move", throwIfNotFound: true);
         m_Gameplay_Player1Interact = m_Gameplay.FindAction("Player1Interact", throwIfNotFound: true);
+        m_Gameplay_Player1GeneratePortal = m_Gameplay.FindAction("Player1GeneratePortal", throwIfNotFound: true);
+        m_Gameplay_Player1SendItem = m_Gameplay.FindAction("Player1SendItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -295,6 +337,8 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Player1;
     private readonly InputAction m_Gameplay_Player1Move;
     private readonly InputAction m_Gameplay_Player1Interact;
+    private readonly InputAction m_Gameplay_Player1GeneratePortal;
+    private readonly InputAction m_Gameplay_Player1SendItem;
     public struct GameplayActions
     {
         private @Player1InputActions m_Wrapper;
@@ -302,6 +346,8 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         public InputAction @Player1 => m_Wrapper.m_Gameplay_Player1;
         public InputAction @Player1Move => m_Wrapper.m_Gameplay_Player1Move;
         public InputAction @Player1Interact => m_Wrapper.m_Gameplay_Player1Interact;
+        public InputAction @Player1GeneratePortal => m_Wrapper.m_Gameplay_Player1GeneratePortal;
+        public InputAction @Player1SendItem => m_Wrapper.m_Gameplay_Player1SendItem;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -320,6 +366,12 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1Interact.started += instance.OnPlayer1Interact;
             @Player1Interact.performed += instance.OnPlayer1Interact;
             @Player1Interact.canceled += instance.OnPlayer1Interact;
+            @Player1GeneratePortal.started += instance.OnPlayer1GeneratePortal;
+            @Player1GeneratePortal.performed += instance.OnPlayer1GeneratePortal;
+            @Player1GeneratePortal.canceled += instance.OnPlayer1GeneratePortal;
+            @Player1SendItem.started += instance.OnPlayer1SendItem;
+            @Player1SendItem.performed += instance.OnPlayer1SendItem;
+            @Player1SendItem.canceled += instance.OnPlayer1SendItem;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -333,6 +385,12 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1Interact.started -= instance.OnPlayer1Interact;
             @Player1Interact.performed -= instance.OnPlayer1Interact;
             @Player1Interact.canceled -= instance.OnPlayer1Interact;
+            @Player1GeneratePortal.started -= instance.OnPlayer1GeneratePortal;
+            @Player1GeneratePortal.performed -= instance.OnPlayer1GeneratePortal;
+            @Player1GeneratePortal.canceled -= instance.OnPlayer1GeneratePortal;
+            @Player1SendItem.started -= instance.OnPlayer1SendItem;
+            @Player1SendItem.performed -= instance.OnPlayer1SendItem;
+            @Player1SendItem.canceled -= instance.OnPlayer1SendItem;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -355,5 +413,7 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         void OnPlayer1(InputAction.CallbackContext context);
         void OnPlayer1Move(InputAction.CallbackContext context);
         void OnPlayer1Interact(InputAction.CallbackContext context);
+        void OnPlayer1GeneratePortal(InputAction.CallbackContext context);
+        void OnPlayer1SendItem(InputAction.CallbackContext context);
     }
 }

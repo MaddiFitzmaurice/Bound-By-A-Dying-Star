@@ -15,6 +15,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Player2SendItem",
+                    "type": "Button",
+                    "id": "62e28aa5-59b3-43de-b90c-74fe99f3fe4d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Player2GeneratePortal",
+                    "type": "Button",
+                    "id": "65386f05-4dba-4c71-9fac-18218b7656be",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Player2Move",
                     "type": "Value",
                     "id": "969d9365-6b8e-4309-a5cb-71feb2630eb6",
@@ -196,6 +214,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Player2Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "45ecb988-76d3-4511-9967-93423110d662",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2GeneratePortal",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ddcda487-faa5-45e9-8298-1fcf378ff432",
+                    "path": "<Keyboard>/numpadPeriod",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2SendItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

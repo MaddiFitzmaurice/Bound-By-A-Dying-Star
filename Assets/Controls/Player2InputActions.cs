@@ -37,6 +37,24 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Player2SendItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""62e28aa5-59b3-43de-b90c-74fe99f3fe4d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player2GeneratePortal"",
+                    ""type"": ""Button"",
+                    ""id"": ""65386f05-4dba-4c71-9fac-18218b7656be"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Player2Move"",
                     ""type"": ""Value"",
                     ""id"": ""969d9365-6b8e-4309-a5cb-71feb2630eb6"",
@@ -220,6 +238,28 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Player2Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""45ecb988-76d3-4511-9967-93423110d662"",
+                    ""path"": ""<Keyboard>/numpadEnter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2GeneratePortal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ddcda487-faa5-45e9-8298-1fcf378ff432"",
+                    ""path"": ""<Keyboard>/numpadPeriod"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2SendItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -229,6 +269,8 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Player2 = m_Gameplay.FindAction("Player2", throwIfNotFound: true);
+        m_Gameplay_Player2SendItem = m_Gameplay.FindAction("Player2SendItem", throwIfNotFound: true);
+        m_Gameplay_Player2GeneratePortal = m_Gameplay.FindAction("Player2GeneratePortal", throwIfNotFound: true);
         m_Gameplay_Player2Move = m_Gameplay.FindAction("Player2Move", throwIfNotFound: true);
         m_Gameplay_Player2Interact = m_Gameplay.FindAction("Player2Interact", throwIfNotFound: true);
     }
@@ -293,6 +335,8 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Player2;
+    private readonly InputAction m_Gameplay_Player2SendItem;
+    private readonly InputAction m_Gameplay_Player2GeneratePortal;
     private readonly InputAction m_Gameplay_Player2Move;
     private readonly InputAction m_Gameplay_Player2Interact;
     public struct GameplayActions
@@ -300,6 +344,8 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         private @Player2InputActions m_Wrapper;
         public GameplayActions(@Player2InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Player2 => m_Wrapper.m_Gameplay_Player2;
+        public InputAction @Player2SendItem => m_Wrapper.m_Gameplay_Player2SendItem;
+        public InputAction @Player2GeneratePortal => m_Wrapper.m_Gameplay_Player2GeneratePortal;
         public InputAction @Player2Move => m_Wrapper.m_Gameplay_Player2Move;
         public InputAction @Player2Interact => m_Wrapper.m_Gameplay_Player2Interact;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
@@ -314,6 +360,12 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
             @Player2.started += instance.OnPlayer2;
             @Player2.performed += instance.OnPlayer2;
             @Player2.canceled += instance.OnPlayer2;
+            @Player2SendItem.started += instance.OnPlayer2SendItem;
+            @Player2SendItem.performed += instance.OnPlayer2SendItem;
+            @Player2SendItem.canceled += instance.OnPlayer2SendItem;
+            @Player2GeneratePortal.started += instance.OnPlayer2GeneratePortal;
+            @Player2GeneratePortal.performed += instance.OnPlayer2GeneratePortal;
+            @Player2GeneratePortal.canceled += instance.OnPlayer2GeneratePortal;
             @Player2Move.started += instance.OnPlayer2Move;
             @Player2Move.performed += instance.OnPlayer2Move;
             @Player2Move.canceled += instance.OnPlayer2Move;
@@ -327,6 +379,12 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
             @Player2.started -= instance.OnPlayer2;
             @Player2.performed -= instance.OnPlayer2;
             @Player2.canceled -= instance.OnPlayer2;
+            @Player2SendItem.started -= instance.OnPlayer2SendItem;
+            @Player2SendItem.performed -= instance.OnPlayer2SendItem;
+            @Player2SendItem.canceled -= instance.OnPlayer2SendItem;
+            @Player2GeneratePortal.started -= instance.OnPlayer2GeneratePortal;
+            @Player2GeneratePortal.performed -= instance.OnPlayer2GeneratePortal;
+            @Player2GeneratePortal.canceled -= instance.OnPlayer2GeneratePortal;
             @Player2Move.started -= instance.OnPlayer2Move;
             @Player2Move.performed -= instance.OnPlayer2Move;
             @Player2Move.canceled -= instance.OnPlayer2Move;
@@ -353,6 +411,8 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     public interface IGameplayActions
     {
         void OnPlayer2(InputAction.CallbackContext context);
+        void OnPlayer2SendItem(InputAction.CallbackContext context);
+        void OnPlayer2GeneratePortal(InputAction.CallbackContext context);
         void OnPlayer2Move(InputAction.CallbackContext context);
         void OnPlayer2Interact(InputAction.CallbackContext context);
     }
