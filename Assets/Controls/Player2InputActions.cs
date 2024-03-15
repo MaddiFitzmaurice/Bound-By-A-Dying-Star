@@ -176,7 +176,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8e3c48ac-9e13-45fb-b6c3-5b3efc286818"",
-                    ""path"": ""<Keyboard>/numpad0"",
+                    ""path"": ""<Keyboard>/slash"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -242,7 +242,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""45ecb988-76d3-4511-9967-93423110d662"",
-                    ""path"": ""<Keyboard>/numpadEnter"",
+                    ""path"": ""<Keyboard>/period"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -253,7 +253,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ddcda487-faa5-45e9-8298-1fcf378ff432"",
-                    ""path"": ""<Keyboard>/numpadPeriod"",
+                    ""path"": ""<Keyboard>/comma"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
