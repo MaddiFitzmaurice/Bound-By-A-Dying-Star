@@ -106,6 +106,9 @@ public class PortalInteraction : MonoBehaviour
             {
                 // If the player is holding an item and near a portal, teleport the item.
                 GameObject itemToTeleport = itemPickup.CurrentlyHeldObject;
+                Debug.Log("Item to teleport original position: " + itemToTeleport.transform.position);
+                itemToTeleport = ChangeItemVersion(itemToTeleport);
+                Debug.Log("Item to teleport new position: " + itemToTeleport.transform.position);
                 itemToTeleport.transform.position = portalTarget.position;
                 itemPickup.DropObject();
                 Debug.Log("Item teleported to target portal");
@@ -137,4 +140,58 @@ public class PortalInteraction : MonoBehaviour
             Debug.Log("Portal created in front of the player");
         }
     }
+
+    private GameObject ChangeItemVersion(GameObject item)
+    {
+        PickupableObject pickupableObject = item.GetComponent<PickupableObject>();
+        GameObject newItemVersionPrefab = null;
+        if (pickupableObject != null)
+        {
+            //Debug.Log("Current Item Version: " + pickupableObject.CurrentItemVersion);
+
+            if (pickupableObject.CurrentItemVersion.name == pickupableObject.ItemVersion1.name)
+            {
+                //Debug.Log("New Item Version (Should be 2): " + pickupableObject.ItemVersion2);
+                newItemVersionPrefab = pickupableObject.ItemVersion2;
+            }
+            else if (pickupableObject.CurrentItemVersion.name == pickupableObject.ItemVersion2.name)
+            {
+                //Debug.Log("New Item Version (Should be 1): " + pickupableObject.ItemVersion1);
+                newItemVersionPrefab = pickupableObject.ItemVersion1;
+            }
+
+            if (newItemVersionPrefab != null)
+            {
+                //Debug.Log("New Item Name: " + newItemVersionPrefab.name);
+                GameObject newItem = Instantiate(newItemVersionPrefab, item.transform.position, item.transform.rotation);
+                // Remove "(Clone)" from the name
+                newItem.name = newItemVersionPrefab.name; 
+
+
+                // Grabs PickupableObject from the newly instantiated item for version updating
+                PickupableObject newPickupableObject = newItem.GetComponent<PickupableObject>();
+
+                if (newPickupableObject != null)
+                {
+                    // Copy the item version references to the new object
+                    newPickupableObject.SetItemVersions(pickupableObject.ItemVersion1, pickupableObject.ItemVersion2);
+
+                    // Update the currentItemVersion to reflect the current active version
+                    newPickupableObject.CurrentItemVersion = newItem;
+                }
+
+                // Destroy the old item
+                Destroy(item);
+
+                // Returns the new item
+                return newItem;
+
+            }
+        }
+        // Returns the original item if no transformation occured
+        return item;
+    }
+
+
+
 }

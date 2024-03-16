@@ -106,4 +106,16 @@ public class ItemPickup : MonoBehaviour
             }
         }
     }
+
+    public void SetCarriedObject(GameObject newObject)
+    {
+        if (isHoldingItem && carriedObject != null)
+        {
+            carriedObject = newObject;
+            // You may want to set the parent and position again if needed
+            carriedObject.transform.SetParent(pickupPoint);
+            carriedObject.transform.localPosition = Vector3.zero;
+        }
+    }
+
 }
