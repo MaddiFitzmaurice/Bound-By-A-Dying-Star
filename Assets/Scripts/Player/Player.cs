@@ -25,4 +25,6 @@ public class Player : MonoBehaviour
         // then add forces based on movement inputs
         _rb.AddForce(new Vector3(MoveSpeed * MoveDirection.x, 0f, MoveSpeed * MoveDirection.y), ForceMode.Impulse);
     }
+
+    
 }

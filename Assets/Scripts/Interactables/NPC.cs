@@ -32,4 +32,9 @@ public class NPC : MonoBehaviour, Interactable
 
         Debug.Log($"NPC about to interact: {_aboutToInteract}");
     }
+
+    public void PlayerInteracting()
+    {
+        throw new System.NotImplementedException();
+    }
 }
