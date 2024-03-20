@@ -37,6 +37,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         EventManager.EventInitialise(EventType.PLAYER_2_CREATEPORTAL);
         EventManager.EventInitialise(EventType.PLAYER_1_SENDITEM);
         EventManager.EventInitialise(EventType.PLAYER_2_SENDITEM);
+        EventManager.EventInitialise(EventType.PLAYER_1_NPC);
+        EventManager.EventInitialise(EventType.PLAYER_2_NPC);
 
         DeviceSetup();
     }
@@ -231,6 +233,22 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         {
             EventManager.EventTrigger(EventType.PLAYER_2_SENDITEM, null);
             Debug.Log("PLAYER_2_SENDITEM");
+        }
+    }
+
+    public void OnPlayer1NPC(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.PLAYER_1_NPC, null);
+        }
+    }
+
+    public void OnPlayer2NPC(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.PLAYER_2_NPC, null);
         }
     }
     #endregion

@@ -12,7 +12,7 @@ public class InteractTrigger : MonoBehaviour
         _interactable = GetComponentInParent<Interactable>();
     }
 
-    // When player starts an interaction
+    // When player enters the trigger that can allow them to interact
     void OnTriggerEnter(Collider other)
     {
         if (CheckIfPlayer(other))
@@ -21,7 +21,7 @@ public class InteractTrigger : MonoBehaviour
         } 
     }
 
-    // When player finishes an interaction
+    // When player leaves the trigger that can allow them to interact
     void OnTriggerExit(Collider other)
     {
         if (CheckIfPlayer(other))
@@ -30,6 +30,7 @@ public class InteractTrigger : MonoBehaviour
         } 
     }
 
+    // Did a player enter the trigger?
     bool CheckIfPlayer(Collider other)
     {
         var colliderType = other.GetComponent<Player>();

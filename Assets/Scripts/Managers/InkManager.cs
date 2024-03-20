@@ -39,7 +39,6 @@ public class InkManager : MonoBehaviour
     }
 
     #region EVENT HANDLERS
-    // Listens for UI response when in a dialogue
     public void ReceiveTextAssetHandler(object data)
     {
         if (data is not TextAsset)
@@ -47,17 +46,21 @@ public class InkManager : MonoBehaviour
             Debug.LogError("InkManager has not received a TextAsset.");
         }
 
+        // Set the script and play the first line
         SetScript(data as TextAsset);
+        NextLineHandler(null);
     }
 
+    // Listens for UI response when in a dialogue or gets called when first starting a script
     public void NextLineHandler(object data)
     {
         // If there are lines to parse and no questions
         if (_currentScript.canContinue)
         {
-            _currentScript.Continue();
+            string line = _currentScript.Continue();
             
             HandleTags(_currentScript.currentTags);
+            Debug.Log(line);
         }
     }
     #endregion
