@@ -12,15 +12,15 @@ public class PortalManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        //if (Instance == null)
+        //{
+        //    Instance = this;
+        //    DontDestroyOnLoad(gameObject);
+        //}
+        //else
+        //{
+        //    Destroy(gameObject);
+        //}
     }
 
     public void CreatePortal(Vector3 position, Quaternion rotation, GameObject portalPrefab, string playerTag, PortalInteraction portalInteractionScript)

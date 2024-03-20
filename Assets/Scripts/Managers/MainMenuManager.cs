@@ -15,4 +15,14 @@ public class MainMenuUIManager : MonoBehaviour
     {
         EventManager.EventTrigger(EventType.QUIT_GAME, null);
     }
+
+    // Starts the event sequence which opens the game scene
+    //public void StartGameButton(int levelNum)
+    //{
+    //    if (!_buttonPressed)
+    //    {
+    //        EventManager.EventTrigger(EventType.LEVEL_SELECTED, levelNum);
+    //        _buttonPressed = true;
+    //    }
+    //}
 }
