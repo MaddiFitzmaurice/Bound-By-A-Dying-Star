@@ -10,6 +10,7 @@ TagManager:
   - Player1
   - Player2
   - Interactable
+  - LibraConst
   layers:
   - Default
   - TransparentFX
