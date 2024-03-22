@@ -18,6 +18,9 @@ public enum EventType
     PLAYER_1_SENDITEM,
     PLAYER_2_SENDITEM,
 
+    PLAYER_1_NPC,
+    PLAYER_2_NPC,
+
     // Puzzles
     ASSIGNMENT_CODE_TRIGGER,  //trigger code for puzzle features
 

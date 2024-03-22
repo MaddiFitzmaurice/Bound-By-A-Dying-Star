@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestInteractionDetector : MonoBehaviour
 {
-    public GameObject _floatingTextPrefab; //Reference Floating Text Prefab
+    [SerializeField] private GameObject _floatingTextPrefab; //Reference Floating Text Prefab
     private bool _player1Present = false;
     private bool _player2Present = false;
 

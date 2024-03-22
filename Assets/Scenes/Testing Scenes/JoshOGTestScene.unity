@@ -123,7 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
-<<<<<<< HEAD
 --- !u!1 &34340073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1718,8 +1717,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5320ec9ed668054489426aa68e31dd67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-=======
->>>>>>> e90af989db3196b4b6aafa53dab71bbf84dc3039
 --- !u!1 &1348425347
 GameObject:
   m_ObjectHideFlags: 0
@@ -2850,7 +2847,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1348425351}
-<<<<<<< HEAD
   - {fileID: 1444020578}
   - {fileID: 34340077}
   - {fileID: 1294597001}
@@ -2869,6 +2865,3 @@ SceneRoots:
   - {fileID: 738423402}
   - {fileID: 742717570}
   - {fileID: 1333265194}
-=======
-  - {fileID: 1975452734}
->>>>>>> e90af989db3196b4b6aafa53dab71bbf84dc3039

@@ -6,5 +6,5 @@ public interface Interactable
 {
     public void PlayerAboutToInteract(Collider player, bool aboutToInteract);
 
-    public void PlayerInteracting();
+    public void PlayerStartInteract(object data);
 }

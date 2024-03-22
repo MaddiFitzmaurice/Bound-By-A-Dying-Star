@@ -8,8 +8,10 @@ public class NPC : MonoBehaviour, Interactable
     [SerializeField] TextAsset _dialogue;
 
     // Internal Data
-    private bool _aboutToInteract = false; // Whether a player is within the interacting trigger
-    private bool _currentlyInteracting = false; // Whether a player is currently interacting with NPC
+    private bool _player1InTrigger = false; // Whether Player 1 is within the interacting trigger
+    private bool _player2InTrigger = false; // Whether Player 2 is within the interacting trigger
+    private bool _canInteract = false;
+    private bool _currentlyInteracting = false; // Whether interaction has started or not
 
     private void Awake()
     {
@@ -18,23 +20,51 @@ public class NPC : MonoBehaviour, Interactable
 
     private void OnEnable()
     {
-
+        EventManager.EventSubscribe(EventType.PLAYER_1_NPC, PlayerStartInteract);
+        EventManager.EventSubscribe(EventType.PLAYER_2_NPC, PlayerStartInteract);
     }
 
     private void OnDisable()
     {
-
+        EventManager.EventUnsubscribe(EventType.PLAYER_1_NPC, PlayerStartInteract);
+        EventManager.EventUnsubscribe(EventType.PLAYER_2_NPC, PlayerStartInteract);
     }
 
-    public void PlayerAboutToInteract(Collider player, bool aboutToInteract)
+    public void PlayerAboutToInteract(Collider player, bool isInTrigger)
     {
-        _aboutToInteract = aboutToInteract;
+        // Check if players are in trigger or not
+        if (player.CompareTag("Player1"))
+        {
+            _player1InTrigger = isInTrigger;
+        }
+        else if (player.CompareTag("Player2"))
+        {
+            _player2InTrigger = isInTrigger;
+        }
 
-        Debug.Log($"NPC about to interact: {_aboutToInteract}");
+        // If both in trigger, NPC can be interacted with
+        if (_player1InTrigger && _player2InTrigger)
+        {
+            _canInteract = true;
+            Debug.Log($"NPC can now be interacted with");
+        }
+        else
+        {
+            _canInteract = false;
+            _currentlyInteracting = false;
+            Debug.Log($"NPC cannot be interacted with");
+        }
     }
 
-    public void PlayerInteracting()
+    #region EVENT HANDLERS
+    // If one player has started an interaction
+    public void PlayerStartInteract(object data)
     {
-        throw new System.NotImplementedException();
+        if (_canInteract && !_currentlyInteracting)
+        {
+            _currentlyInteracting = true;
+            EventManager.EventTrigger(EventType.NPC_SEND_DIALOGUE, _dialogue);
+        }
     }
+    #endregion
 }

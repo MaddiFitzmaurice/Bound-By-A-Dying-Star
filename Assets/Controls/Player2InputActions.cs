@@ -71,6 +71,15 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player2NPC"",
+                    ""type"": ""Button"",
+                    ""id"": ""25908da3-743f-442e-9802-60980ccb7073"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -260,6 +269,17 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Player2SendItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68b3ddb0-8a1b-4885-b6d9-d2c633d258f3"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2NPC"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -273,6 +293,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         m_Gameplay_Player2GeneratePortal = m_Gameplay.FindAction("Player2GeneratePortal", throwIfNotFound: true);
         m_Gameplay_Player2Move = m_Gameplay.FindAction("Player2Move", throwIfNotFound: true);
         m_Gameplay_Player2Interact = m_Gameplay.FindAction("Player2Interact", throwIfNotFound: true);
+        m_Gameplay_Player2NPC = m_Gameplay.FindAction("Player2NPC", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -339,6 +360,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Player2GeneratePortal;
     private readonly InputAction m_Gameplay_Player2Move;
     private readonly InputAction m_Gameplay_Player2Interact;
+    private readonly InputAction m_Gameplay_Player2NPC;
     public struct GameplayActions
     {
         private @Player2InputActions m_Wrapper;
@@ -348,6 +370,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         public InputAction @Player2GeneratePortal => m_Wrapper.m_Gameplay_Player2GeneratePortal;
         public InputAction @Player2Move => m_Wrapper.m_Gameplay_Player2Move;
         public InputAction @Player2Interact => m_Wrapper.m_Gameplay_Player2Interact;
+        public InputAction @Player2NPC => m_Wrapper.m_Gameplay_Player2NPC;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -372,6 +395,9 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
             @Player2Interact.started += instance.OnPlayer2Interact;
             @Player2Interact.performed += instance.OnPlayer2Interact;
             @Player2Interact.canceled += instance.OnPlayer2Interact;
+            @Player2NPC.started += instance.OnPlayer2NPC;
+            @Player2NPC.performed += instance.OnPlayer2NPC;
+            @Player2NPC.canceled += instance.OnPlayer2NPC;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -391,6 +417,9 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
             @Player2Interact.started -= instance.OnPlayer2Interact;
             @Player2Interact.performed -= instance.OnPlayer2Interact;
             @Player2Interact.canceled -= instance.OnPlayer2Interact;
+            @Player2NPC.started -= instance.OnPlayer2NPC;
+            @Player2NPC.performed -= instance.OnPlayer2NPC;
+            @Player2NPC.canceled -= instance.OnPlayer2NPC;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -415,5 +444,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         void OnPlayer2GeneratePortal(InputAction.CallbackContext context);
         void OnPlayer2Move(InputAction.CallbackContext context);
         void OnPlayer2Interact(InputAction.CallbackContext context);
+        void OnPlayer2NPC(InputAction.CallbackContext context);
     }
 }
