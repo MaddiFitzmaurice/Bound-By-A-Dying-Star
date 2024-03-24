@@ -25,5 +25,8 @@ public enum EventType
     ASSIGNMENT_CODE_TRIGGER,  //trigger code for puzzle features
 
     // Narrative
-    NPC_SEND_DIALOGUE
+    NPC_SEND_DIALOGUE,
+
+    // PortalManager
+    PORTALMANAGER_CREATEPORTAL
 };

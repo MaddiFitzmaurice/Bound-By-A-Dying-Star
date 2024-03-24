@@ -6,13 +6,20 @@ using UnityEngine;
 public class PortalInteraction : MonoBehaviour
 {
     // This is dynamically updated
-    [SerializeField] private Transform portalTarget;
+    [SerializeField] private Transform _portalTarget;
     // Assign players portal prefab in the Inspector
-    [SerializeField] private GameObject portalPrefab; 
+    [SerializeField] private GameObject _portalPrefab; 
     // How far in front the portal should spawn 
-    [SerializeField] private float distanceInFront = 2f;
-    private bool isNearPortal = false;
-    private ItemPickup itemPickup;
+    [SerializeField] private float _distanceInFront = 2f;
+    private bool _isNearPortal = false;
+    private ItemPickup _itemPickup;
+    // Portal Data to send to the PortalManager
+    private PortalData _portalData;
+
+    private void Awake()
+    {
+        EventManager.EventInitialise(EventType.PORTALMANAGER_CREATEPORTAL);
+    }
 
     private void OnEnable()
     {
@@ -33,44 +40,37 @@ public class PortalInteraction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        itemPickup = GetComponent<ItemPickup>();
+        _itemPickup = GetComponent<ItemPickup>();
+
+        // Create default data to be changed later
+        _portalData = new PortalData(Vector3.zero, Quaternion.Euler(0, 0, 0), _portalPrefab, this.name, this);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void Awake()
-    {
-
-    }
-        private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         // Check if the collider is a portal
         PortalInfo portalInfo = other.GetComponent<PortalInfo>();
+
         if (portalInfo != null && portalInfo.destinationPortal != null)
         {
             // Check for portal tag and set isNearPortal true if near own portal
             if (other.CompareTag("Player1Portal")) 
             {
-                isNearPortal = true;
+                _isNearPortal = true;
 
                 // Update portalTarget to the collided portal's destination
-                portalTarget = portalInfo.destinationPortal;
-                Debug.Log($"{gameObject.name} entered portal, setting target to {portalTarget.name}");
+                _portalTarget = portalInfo.destinationPortal;
+                Debug.Log($"{gameObject.name} entered portal, setting target to {_portalTarget.name}");
             }
             else if (other.CompareTag("Player2Portal"))
             {
-                isNearPortal = true;
+                _isNearPortal = true;
 
                 // Update portalTarget to the collided portal's destination
-                portalTarget = portalInfo.destinationPortal;
-                Debug.Log($"{gameObject.name} entered portal, setting target to {portalTarget.name}");
+                _portalTarget = portalInfo.destinationPortal;
+                Debug.Log($"{gameObject.name} entered portal, setting target to {_portalTarget.name}");
             }
         }
-         
     }
 
     private void OnTriggerExit(Collider other)
@@ -81,62 +81,62 @@ public class PortalInteraction : MonoBehaviour
             // Reset portalTarget when exiting the portal area
             if (other.GetComponent<PortalInfo>() != null)
             {
-                portalTarget = null;
+                _portalTarget = null;
                 Debug.Log($"{gameObject.name} exited portal, clearing portal target");
             }
-            isNearPortal = false;
+            _isNearPortal = false;
         }
         else if (other.CompareTag("Player2Portal"))
         { 
             // Reset portalTarget when exiting the portal area
             if (other.GetComponent<PortalInfo>() != null)
             {
-                portalTarget = null;
+                _portalTarget = null;
                 Debug.Log($"{gameObject.name} exited portal, clearing portal target");
             }
-            isNearPortal = false;
+            _isNearPortal = false;
         }
     }
 
     public void InteractWithPortal(object data)
     {
-        if (isNearPortal && portalTarget != null)
+        if (_isNearPortal && _portalTarget != null)
         {
-            if (itemPickup.isHoldingItem)
+            if (_itemPickup.isHoldingItem)
             {
                 // If the player is holding an item and near a portal, teleport the item.
-                GameObject itemToTeleport = itemPickup.CurrentlyHeldObject;
+                GameObject itemToTeleport = _itemPickup.CurrentlyHeldObject;
                 Debug.Log("Item to teleport original position: " + itemToTeleport.transform.position);
                 itemToTeleport = ChangeItemVersion(itemToTeleport);
                 Debug.Log("Item to teleport new position: " + itemToTeleport.transform.position);
-                itemToTeleport.transform.position = portalTarget.position;
-                itemPickup.DropObject();
+                itemToTeleport.transform.position = _portalTarget.position;
+                _itemPickup.DropObject();
                 Debug.Log("Item teleported to target portal");
             }
             else
             {
                 // If the player is not holding an item, and is at the portal, grabs the item instead of teleporting it
-                itemPickup.TryPickupObject();
+                _itemPickup.TryPickupObject();
             }
         }
     }
 
     private void CreatePortalInFrontOfPlayer(object data)
     {
-        if (this.name.Contains("Player 1") && (string)data == "Player 1")
+        if (_portalData.PlayerTag == "Player 1" && (string)data == "Player 1")
         {
-            Vector3 spawnPosition = transform.position + transform.forward * distanceInFront;
-            Quaternion spawnRotation = Quaternion.LookRotation(transform.forward);
+            _portalData.Position = transform.position + transform.forward * _distanceInFront;
+            _portalData.Rotation = Quaternion.LookRotation(transform.forward);
 
-            PortalManager.Instance.CreatePortal(spawnPosition, spawnRotation, portalPrefab, "Player 1", this);
+            EventManager.EventTrigger(EventType.PORTALMANAGER_CREATEPORTAL, _portalData);
             Debug.Log("Portal created in front of the player");
         }
         else if (this.name.Contains("Player 2") && (string)data == "Player 2")
         {
-            Vector3 spawnPosition = transform.position + transform.forward * distanceInFront;
-            Quaternion spawnRotation = Quaternion.LookRotation(transform.forward);
+            _portalData.Position = transform.position + transform.forward * _distanceInFront;
+            _portalData.Rotation = Quaternion.LookRotation(transform.forward);
 
-            PortalManager.Instance.CreatePortal(spawnPosition, spawnRotation, portalPrefab, "Player 2", this);
+            EventManager.EventTrigger(EventType.PORTALMANAGER_CREATEPORTAL, _portalData);
             Debug.Log("Portal created in front of the player");
         }
     }
@@ -191,7 +191,4 @@ public class PortalInteraction : MonoBehaviour
         // Returns the original item if no transformation occured
         return item;
     }
-
-
-
 }

@@ -4,18 +4,6 @@ using UnityEngine;
 
 public class PortalInfo : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // The other portal this one links to
     public Transform destinationPortal;
     // Store the reference to the player's PortalInteraction script

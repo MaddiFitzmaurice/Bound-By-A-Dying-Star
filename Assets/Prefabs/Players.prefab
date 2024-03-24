@@ -35,7 +35,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6759615275188325980}
   m_Father: {fileID: 6261473889923392163}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1733712802701567027
@@ -161,9 +162,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d27335f0de2ed42a05c85c8f8f0d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portalTarget: {fileID: 0}
-  portalPrefab: {fileID: 7309055256780470682, guid: 2bbde5304a815854c93f975e0178c489, type: 3}
-  distanceInFront: 2
+  _portalTarget: {fileID: 0}
+  _portalPrefab: {fileID: 7309055256780470682, guid: 2bbde5304a815854c93f975e0178c489, type: 3}
+  _distanceInFront: 2
 --- !u!114 &923859272043235654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,8 +177,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c37cf4c9de00a8459ddc427251d7f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupPoint: {fileID: 0}
+  pickupPoint: {fileID: 6759615275188325980}
   isHoldingItem: 0
+--- !u!1 &1899974933879190409
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7112648412667036520}
+  m_Layer: 0
+  m_Name: Player2PickupPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7112648412667036520
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1899974933879190409}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.25999987, y: -0.04000002, z: 1.09}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8436828856978574574}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2034282234537254542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6759615275188325980}
+  m_Layer: 0
+  m_Name: Player1PickupPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6759615275188325980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034282234537254542}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.04, z: 1.09}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5191844827372458372}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4691145707837510352
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +309,8 @@ Transform:
   m_LocalPosition: {x: 2.12, y: 0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7112648412667036520}
   m_Father: {fileID: 6261473889923392163}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3886662544011192701
@@ -372,9 +436,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d27335f0de2ed42a05c85c8f8f0d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portalTarget: {fileID: 0}
-  portalPrefab: {fileID: 3034152536773203027, guid: 700a6da1ba096df4086a4544f0730ea4, type: 3}
-  distanceInFront: 2
+  _portalTarget: {fileID: 0}
+  _portalPrefab: {fileID: 3034152536773203027, guid: 700a6da1ba096df4086a4544f0730ea4, type: 3}
+  _distanceInFront: 2
 --- !u!114 &8174228194467114050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,5 +451,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c37cf4c9de00a8459ddc427251d7f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupPoint: {fileID: 0}
+  pickupPoint: {fileID: 7112648412667036520}
   isHoldingItem: 0
