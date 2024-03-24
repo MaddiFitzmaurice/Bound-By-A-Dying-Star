@@ -5,8 +5,8 @@ using UnityEngine;
 public class ItemPickup : MonoBehaviour
 {
     // Assign the pick up location of the object in the Inspector
-    [SerializeField] private Transform pickupPoint;
-    private GameObject carriedObject = null;
+    [SerializeField] private Transform _pickupPoint;
+    private GameObject _carriedObject = null;
     // Track whether the player is holding an item
     public bool isHoldingItem = false;
 
@@ -38,7 +38,7 @@ public class ItemPickup : MonoBehaviour
     //Returns the currently held object of the player if need for other scripts
     public GameObject CurrentlyHeldObject
     {
-        get { return carriedObject; }
+        get { return _carriedObject; }
     }
 
     // You can call this method from an input event or another script
@@ -80,12 +80,16 @@ public class ItemPickup : MonoBehaviour
                 // This is the collider tag for objects, ensure each object has the "Pickupable" tag
                 if (collider.CompareTag("Pickupable"))
                 {
-                    Debug.Log(this.name + "Picked Up An Object");
-                    carriedObject = collider.gameObject;
-                    carriedObject.transform.SetParent(pickupPoint);
-                    carriedObject.transform.localPosition = Vector3.zero;
-                    isHoldingItem = true;
-                    break;
+                    PickupableObject pickupableObject = collider.GetComponent<PickupableObject>();
+                    if (pickupableObject != null && !pickupableObject.isLocked)
+                    {
+                        Debug.Log(this.name + "Picked Up An Object");
+                        _carriedObject = collider.gameObject;
+                        _carriedObject.transform.SetParent(_pickupPoint);
+                        _carriedObject.transform.localPosition = Vector3.zero;
+                        isHoldingItem = true;
+                        break;
+                    }
                 }
             }
         }      
@@ -95,12 +99,12 @@ public class ItemPickup : MonoBehaviour
     {
         if (isHoldingItem)
         {
-            if (carriedObject != null)
+            if (_carriedObject != null)
             {
                 // Detach the object
-                carriedObject.transform.SetParent(null);
+                _carriedObject.transform.SetParent(null);
                 // Can Apply force to throw or drop it gently here if need
-                carriedObject = null;
+                _carriedObject = null;
                 isHoldingItem = false;
                 Debug.Log(this.name + "Dropped An Object");
             }
@@ -109,12 +113,12 @@ public class ItemPickup : MonoBehaviour
 
     public void SetCarriedObject(GameObject newObject)
     {
-        if (isHoldingItem && carriedObject != null)
+        if (isHoldingItem && _carriedObject != null)
         {
-            carriedObject = newObject;
+            _carriedObject = newObject;
             // You may want to set the parent and position again if needed
-            carriedObject.transform.SetParent(pickupPoint);
-            carriedObject.transform.localPosition = Vector3.zero;
+            _carriedObject.transform.SetParent(_pickupPoint);
+            _carriedObject.transform.localPosition = Vector3.zero;
         }
     }
 
