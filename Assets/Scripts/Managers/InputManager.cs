@@ -29,8 +29,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player1Inputs.Gameplay.SetCallbacks(this);
         _player2Inputs.Gameplay.SetCallbacks(this);
 
-        EventManager.EventInitialise(EventType.PLAYER_1_MOVE_VECT2D);
-        EventManager.EventInitialise(EventType.PLAYER_2_MOVE_VECT2D);
+        EventManager.EventInitialise(EventType.PLAYER_1_MOVE_VECT);
+        EventManager.EventInitialise(EventType.PLAYER_2_MOVE_VECT);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_1_CREATEPORTAL);
@@ -139,28 +139,16 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
 #endregion
 
     #region ACTIONMAP INTERFACES
-    // For testing, if Player 1's WSAD keys are pressed
-    //public void OnMovePlayer1(InputAction.CallbackContext context)
-    //{
-    //    EventManager.EventTrigger(EventType.PLAYER_1_MOVE_VECT2D, _inputs.Gameplay.MovePlayer1.ReadValue<Vector2>());
-    //}
-
-    //// For testing, if Player 2's arrow keys are pressed
-    //public void OnMovePlayer2(InputAction.CallbackContext context)
-    //{
-    //    EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT2D, _inputs.Gameplay.MovePlayer2.ReadValue<Vector2>());
-    //}
-
-    // For testing, if Player 1's WSAD keys are pressed
+    // Player 1 movement
     public void OnPlayer1Move(InputAction.CallbackContext context)
     {
-        EventManager.EventTrigger(EventType.PLAYER_1_MOVE_VECT2D, _player1Inputs.Gameplay.Player1Move.ReadValue<Vector2>());
+        EventManager.EventTrigger(EventType.PLAYER_1_MOVE_VECT, context.ReadValue<Vector2>());
     }
 
-    // For testing, if Player 2's arrow keys are pressed
+    // Player 2 movement
     public void OnPlayer2Move(InputAction.CallbackContext context)
     {
-        EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT2D, _player2Inputs.Gameplay.Player2Move.ReadValue<Vector2>());
+        EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT, context.ReadValue<Vector2>());
     }
 
     // For testing, if Player 1 uses the interract E key
@@ -181,23 +169,6 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
             EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, "Player 2");
             //Debug.Log("PLAYER_2_INTERACT");
         }
-    }
-
-    // TEST CALLBACKS FOR 2 PLAYER TEST
-    public void OnPlayer1(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            Debug.Log("PLAYER 1");
-        }
-    }
-
-    public void OnPlayer2(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            Debug.Log("PLAYER 2");
-        }    
     }
 
     public void OnPlayer1GeneratePortal(InputAction.CallbackContext context)
@@ -251,5 +222,5 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
             EventManager.EventTrigger(EventType.PLAYER_2_NPC, null);
         }
     }
-    #endregion
 }
+#endregion

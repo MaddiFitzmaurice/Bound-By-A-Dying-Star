@@ -6,15 +6,6 @@
             "id": "06f24725-4ef2-4601-8dd0-8d5485633788",
             "actions": [
                 {
-                    "name": "Player1",
-                    "type": "Button",
-                    "id": "c05291e2-e23e-4365-bc2e-908794ca5a27",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Player1Move",
                     "type": "Value",
                     "id": "2f4694da-c4a8-4a77-bc36-c22e7249333c",
@@ -61,17 +52,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "0030d609-bd72-4290-915f-38c41753c596",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "WASD",
                     "id": "c2e0af56-f76b-42c1-8fd8-f0ad4398862d",

@@ -28,15 +28,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             ""id"": ""06f24725-4ef2-4601-8dd0-8d5485633788"",
             ""actions"": [
                 {
-                    ""name"": ""Player1"",
-                    ""type"": ""Button"",
-                    ""id"": ""c05291e2-e23e-4365-bc2e-908794ca5a27"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Player1Move"",
                     ""type"": ""Value"",
                     ""id"": ""2f4694da-c4a8-4a77-bc36-c22e7249333c"",
@@ -83,17 +74,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""0030d609-bd72-4290-915f-38c41753c596"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""WASD"",
                     ""id"": ""c2e0af56-f76b-42c1-8fd8-f0ad4398862d"",
@@ -288,7 +268,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
 }");
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_Player1 = m_Gameplay.FindAction("Player1", throwIfNotFound: true);
         m_Gameplay_Player1Move = m_Gameplay.FindAction("Player1Move", throwIfNotFound: true);
         m_Gameplay_Player1Interact = m_Gameplay.FindAction("Player1Interact", throwIfNotFound: true);
         m_Gameplay_Player1GeneratePortal = m_Gameplay.FindAction("Player1GeneratePortal", throwIfNotFound: true);
@@ -355,7 +334,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     // Gameplay
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
-    private readonly InputAction m_Gameplay_Player1;
     private readonly InputAction m_Gameplay_Player1Move;
     private readonly InputAction m_Gameplay_Player1Interact;
     private readonly InputAction m_Gameplay_Player1GeneratePortal;
@@ -365,7 +343,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     {
         private @Player1InputActions m_Wrapper;
         public GameplayActions(@Player1InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Player1 => m_Wrapper.m_Gameplay_Player1;
         public InputAction @Player1Move => m_Wrapper.m_Gameplay_Player1Move;
         public InputAction @Player1Interact => m_Wrapper.m_Gameplay_Player1Interact;
         public InputAction @Player1GeneratePortal => m_Wrapper.m_Gameplay_Player1GeneratePortal;
@@ -380,9 +357,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
-            @Player1.started += instance.OnPlayer1;
-            @Player1.performed += instance.OnPlayer1;
-            @Player1.canceled += instance.OnPlayer1;
             @Player1Move.started += instance.OnPlayer1Move;
             @Player1Move.performed += instance.OnPlayer1Move;
             @Player1Move.canceled += instance.OnPlayer1Move;
@@ -402,9 +376,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IGameplayActions instance)
         {
-            @Player1.started -= instance.OnPlayer1;
-            @Player1.performed -= instance.OnPlayer1;
-            @Player1.canceled -= instance.OnPlayer1;
             @Player1Move.started -= instance.OnPlayer1Move;
             @Player1Move.performed -= instance.OnPlayer1Move;
             @Player1Move.canceled -= instance.OnPlayer1Move;
@@ -439,7 +410,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     public GameplayActions @Gameplay => new GameplayActions(this);
     public interface IGameplayActions
     {
-        void OnPlayer1(InputAction.CallbackContext context);
         void OnPlayer1Move(InputAction.CallbackContext context);
         void OnPlayer1Interact(InputAction.CallbackContext context);
         void OnPlayer1GeneratePortal(InputAction.CallbackContext context);

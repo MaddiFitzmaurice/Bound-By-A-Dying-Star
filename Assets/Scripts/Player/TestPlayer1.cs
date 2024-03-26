@@ -7,23 +7,24 @@ public class TestPlayer1 : Player
     // On enabling of the attached GameObject
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.PLAYER_1_MOVE_VECT2D, Player1Vect2DHandler);
+        EventManager.EventSubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
     }
 
     // On disabling of the attached GameObject
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE_VECT2D, Player1Vect2DHandler);
+        EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
     }
 
-    private void Player1Vect2DHandler(object data)
+    private void Player1VectHandler(object data)
     {
-        if (data == null)
+        if (data is not Vector2)
         {
-            Debug.LogError("Player1Vect2DHandler is null");
+            Debug.LogError("Player1 has not received a Vector2!");
         }
 
         // Set move direction
-        MoveDirection = (Vector2)data;
+        Vector2 input = (Vector2)data;
+        MoveDirection.Set(input.x, 0, input.y);
     }
 }

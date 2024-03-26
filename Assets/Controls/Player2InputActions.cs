@@ -28,15 +28,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
             ""id"": ""3ac3e93b-aa1f-4a0d-bb61-21ad72d0d6c3"",
             ""actions"": [
                 {
-                    ""name"": ""Player2"",
-                    ""type"": ""Button"",
-                    ""id"": ""12bccc2f-32b4-4393-a2b1-0b7893f8482d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Player2SendItem"",
                     ""type"": ""Button"",
                     ""id"": ""62e28aa5-59b3-43de-b90c-74fe99f3fe4d"",
@@ -83,17 +74,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""018b217f-61c6-4a6d-9e13-2a0f69f35bcc"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""Arrow"",
                     ""id"": ""036946f6-1c34-4fa4-af5e-3df3d269c612"",
@@ -288,7 +268,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
 }");
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_Player2 = m_Gameplay.FindAction("Player2", throwIfNotFound: true);
         m_Gameplay_Player2SendItem = m_Gameplay.FindAction("Player2SendItem", throwIfNotFound: true);
         m_Gameplay_Player2GeneratePortal = m_Gameplay.FindAction("Player2GeneratePortal", throwIfNotFound: true);
         m_Gameplay_Player2Move = m_Gameplay.FindAction("Player2Move", throwIfNotFound: true);
@@ -355,7 +334,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     // Gameplay
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
-    private readonly InputAction m_Gameplay_Player2;
     private readonly InputAction m_Gameplay_Player2SendItem;
     private readonly InputAction m_Gameplay_Player2GeneratePortal;
     private readonly InputAction m_Gameplay_Player2Move;
@@ -365,7 +343,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     {
         private @Player2InputActions m_Wrapper;
         public GameplayActions(@Player2InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Player2 => m_Wrapper.m_Gameplay_Player2;
         public InputAction @Player2SendItem => m_Wrapper.m_Gameplay_Player2SendItem;
         public InputAction @Player2GeneratePortal => m_Wrapper.m_Gameplay_Player2GeneratePortal;
         public InputAction @Player2Move => m_Wrapper.m_Gameplay_Player2Move;
@@ -380,9 +357,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
-            @Player2.started += instance.OnPlayer2;
-            @Player2.performed += instance.OnPlayer2;
-            @Player2.canceled += instance.OnPlayer2;
             @Player2SendItem.started += instance.OnPlayer2SendItem;
             @Player2SendItem.performed += instance.OnPlayer2SendItem;
             @Player2SendItem.canceled += instance.OnPlayer2SendItem;
@@ -402,9 +376,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IGameplayActions instance)
         {
-            @Player2.started -= instance.OnPlayer2;
-            @Player2.performed -= instance.OnPlayer2;
-            @Player2.canceled -= instance.OnPlayer2;
             @Player2SendItem.started -= instance.OnPlayer2SendItem;
             @Player2SendItem.performed -= instance.OnPlayer2SendItem;
             @Player2SendItem.canceled -= instance.OnPlayer2SendItem;
@@ -439,7 +410,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     public GameplayActions @Gameplay => new GameplayActions(this);
     public interface IGameplayActions
     {
-        void OnPlayer2(InputAction.CallbackContext context);
         void OnPlayer2SendItem(InputAction.CallbackContext context);
         void OnPlayer2GeneratePortal(InputAction.CallbackContext context);
         void OnPlayer2Move(InputAction.CallbackContext context);
