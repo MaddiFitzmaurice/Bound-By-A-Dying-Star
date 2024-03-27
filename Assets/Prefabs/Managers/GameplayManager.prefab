@@ -507,7 +507,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   _smoothTime: 0.25
-  _minZoom: 34
+  _minZoom: 50
   _maxZoom: 20
   _zoomLimiter: 20
 --- !u!1 &6997963609783303494

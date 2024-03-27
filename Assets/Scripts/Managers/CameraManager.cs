@@ -12,9 +12,9 @@ public class CameraManager : MonoBehaviour
     private Vector3 _offset;
     private Vector3 _velocity;
     [SerializeField] private float _smoothTime = 0.25f;
-    [SerializeField] private float _minZoom = 34f;
-    [SerializeField] private float _maxZoom = 20f;
-    [SerializeField] private float _zoomLimiter = 20f;
+    [SerializeField] private float _zoomOutMax = 50f;
+    [SerializeField] private float _zoomInMax = 20f;
+    [SerializeField] private float _zoomDefaultDistance = 20f;
 
 
     void Start()
@@ -45,7 +45,7 @@ public class CameraManager : MonoBehaviour
     void ZoomCamera(float playerDistance)
     {
         // Note: Change bounds.size.x to distance between the two objects
-        float newZoom = Mathf.Lerp(_maxZoom, _minZoom, playerDistance / _zoomLimiter);
+        float newZoom = Mathf.Lerp(_zoomInMax, _zoomOutMax, playerDistance / _zoomDefaultDistance);
         _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, newZoom, Time.deltaTime);
     }
 }
