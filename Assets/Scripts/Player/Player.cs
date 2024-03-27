@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     // Components
-    private Rigidbody _rb;
+    private CharacterController _controller;
 
     // Movement
     [SerializeField] protected float MoveSpeed = 5f;
@@ -14,17 +14,24 @@ public class Player : MonoBehaviour
     void Awake()
     {
         // Set components
-        _rb = GetComponent<Rigidbody>();
+        _controller = GetComponent<CharacterController>();
     }
 
     private void FixedUpdate()
     {
-        // Set Velocity to zero
-        _rb.velocity = Vector3.zero;
-        
-        // then add forces based on movement inputs
-        _rb.AddForce(new Vector3(MoveSpeed * MoveDirection.x, 0f, MoveSpeed * MoveDirection.y), ForceMode.Impulse);
+        // Converting for character controller
+        Vector3 move = new Vector3(MoveDirection.x, 0, MoveDirection.y) * MoveSpeed;
+
+        // Apply gravity manually
+        if (!_controller.isGrounded)
+        {
+            move += Physics.gravity * Time.deltaTime;
+        }
+
+        // Move the player
+        _controller.Move(move * Time.deltaTime);
     }
+}
 
     
-}
+

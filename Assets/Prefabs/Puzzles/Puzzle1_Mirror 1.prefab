@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &8750601547567445168
 Transform:
@@ -121,7 +121,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &1770682620382302427
 Transform:
@@ -131,13 +131,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5008078416193452328}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 54.65168, z: 0.00872625}
+  m_LocalRotation: {x: 0.696588, y: -0, z: -0, w: 0.7174714}
+  m_LocalPosition: {x: 0, y: 41.82, z: -0}
   m_LocalScale: {x: 1, y: 2.908499, z: 5.6179776}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6358046871910828512}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 88.308, y: 0, z: 0}
 --- !u!108 &8230887581634068595
 Light:
   m_ObjectHideFlags: 0
@@ -149,9 +149,9 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0.972549, g: 0.9490196, b: 0.1264685, a: 1}
+  m_Color: {r: 1, g: 0.984822, b: 0.3726415, a: 1}
   m_Intensity: 100
-  m_Range: 10
+  m_Range: 9.95
   m_SpotAngle: 38.317833
   m_InnerSpotAngle: 30.119923
   m_CookieSize: 10
@@ -192,7 +192,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 50
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -236,12 +236,13 @@ GameObject:
   - component: {fileID: 8539762882104405150}
   - component: {fileID: 8923895412902255587}
   - component: {fileID: -1913099883474214037}
+  - component: {fileID: 8403965915925397422}
   m_Layer: 0
   m_Name: Puzzle1_Mirror 1
-  m_TagString: Untagged
+  m_TagString: Pickupable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &6358046871910828512
 Transform:
@@ -251,7 +252,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8852804476506635420}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.8683596, y: 0.102, z: 10.787}
   m_LocalScale: {x: 1, y: 0.178, z: 0.34382}
   m_ConstrainProportionsScale: 0
@@ -299,7 +300,7 @@ MeshRenderer:
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
+  m_ImportantGI: 1
   m_StitchLightmapSeams: 1
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
@@ -343,5 +344,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073e9564ef4966b479a491b4a04ab6bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemVersion1: {fileID: 0}
-  itemVersion2: {fileID: 0}
+  _itemVersion1: {fileID: 0}
+  _itemVersion2: {fileID: 0}
+  isLocked: 0
+--- !u!114 &8403965915925397422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8852804476506635420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d55ff98413bce9f45bdef42f50da36e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mirrorLight: {fileID: 8230887581634068595}
+  maxIntensity: 100
+  maxDistance: 10

@@ -27,7 +27,7 @@ public class CameraManager : MonoBehaviour
     void LateUpdate()
     {
         var bounds = new Bounds(_playerObjects[0].position, Vector3.zero);
-        bounds.Encapsulate(_playerObjects[1].position); 
+        bounds.Encapsulate(_playerObjects[1].position);
 
         MoveCamera(bounds.center);
         ZoomCamera(bounds.size.x);
