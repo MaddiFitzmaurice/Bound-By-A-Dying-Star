@@ -5,16 +5,20 @@ using UnityEngine;
 
 public class ConstTrigger : MonoBehaviour
 {
-    public List<GameObject> validObjects; // List of constellations that will change color
+    // List of constellations that will change color
+    public List<GameObject> validObjects; 
     private Renderer _diskRenderer;
     [SerializeField] private Vector3 _mirrorRotationAngle;
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _portalSizeScale;
 
-    [SerializeField] private GameObject pairedPedestal; // The pedestal that forms a pair with this one
+    // The pedestal that forms a pair with this one
+    [SerializeField] private GameObject[] _pairedPedestals;
+
+    [SerializeField] private ParticleSystem _lightEffect;
 
     public bool isPortalPlaced = false;
-    private GameObject currentPortal = null;
+    public GameObject currentPortal = null;
 
     void Start()
     {
@@ -24,21 +28,29 @@ public class ConstTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Check if the Mirror is in the list of valid objects
-        if (validObjects.Contains(other.gameObject))
+        // If player enters, check it's pickup point to check for valid object
+        foreach (Transform child in other.transform)
         {
-            // Change the disk's color to green
-            _diskRenderer.material.color = Color.green;
-
-            // Start rotating and locking the mirror if it's the correct object
-            PickupableObject pickupableObject = other.GetComponent<PickupableObject>();
-                     
-            if (pickupableObject != null)
+            foreach (Transform grandChild in child)
             {
-                // Drops the object
-                pickupableObject.BeDropped();
-                // Calls the routine to rotate the mirror and lock it
-                StartCoroutine(RotateMirror(other.transform, pickupableObject));
+                if (validObjects.Contains(grandChild.gameObject))
+                {
+                    // Change the disk's color to green
+                    _diskRenderer.material.color = Color.green;
+
+                    // Start rotating and locking the mirror if it's the correct object
+                    PickupableObject pickupableObject = grandChild.GetComponent<PickupableObject>();
+
+                    if (pickupableObject != null)
+                    {
+                        // Drops the object
+                        pickupableObject.BeDropped();
+                        // Calls the routine to rotate the mirror and lock it
+                        StartCoroutine(RotateMirror(grandChild.transform, pickupableObject));
+                    }
+
+                    break;
+                }
             }
         }
     }
@@ -67,7 +79,8 @@ public class ConstTrigger : MonoBehaviour
             yield return null;
         }
 
-        mirror.rotation = targetRotation; // Ensure the mirror snaps to the exact rotation
+        // Ensure the mirror snaps to the exact rotation
+        mirror.rotation = targetRotation; 
 
         // Make the mirror a child of the pedestal to maintain relative positioning
         mirror.SetParent(transform);
@@ -84,21 +97,28 @@ public class ConstTrigger : MonoBehaviour
             Vector3 mirrorScale = mirror.GetComponent<Renderer>().bounds.size;
 
             // Set the portal's position and rotation to match the mirror
-            //MANUAL MOVING OF PORTAL, REMOVE OCNE CENTRE OF OBJECT HAS BEEN FIXED
+            //MANUAL MOVING OF PORTAL, REMOVE ONCE CENTRE OF OBJECT HAS BEEN FIXED
             portal.transform.position = new Vector3(mirror.transform.position.x, mirror.transform.position.y * 1.5f, mirror.transform.position.z);
             portal.transform.rotation = mirror.transform.rotation;
 
             float targetWidth = mirror.transform.localScale.x;
             float targetHeight = mirror.transform.localScale.y;
-            float flattenFactor = 0.1f; // Adjust this value to control the flatness
+            // Adjust this value to control the flatness of portal
+            float flattenFactor = 0.1f;
 
             // Scale the portal relative to the mirror's scale
             portal.transform.localScale = new Vector3(targetWidth, targetHeight, flattenFactor);
 
             isPortalPlaced = true;
             currentPortal = portal;
-           
-            PortalManager.Instance.CheckForMatchingPortals(this, pairedPedestal.GetComponent<ConstTrigger>());
+            portal.GetComponent<PortalInfo>().AlignWithMirror();
+
+            //Old Logic
+            //PortalManager.Instance.CheckForMatchingPortals(this, _pairedPedestal.GetComponent<ConstTrigger>());
+            foreach (GameObject pairedPedestal in _pairedPedestals)
+            {
+                PortalManager.Instance.CheckForMatchingPortals(this, pairedPedestal.GetComponent<ConstTrigger>());
+            }
 
         }
     }
@@ -119,21 +139,16 @@ public class ConstTrigger : MonoBehaviour
         return null;
     }
 
-    public void LockPortal()
-    {
-        if (currentPortal != null)
-        {
-            PortalInfo portalInfo = currentPortal.GetComponent<PortalInfo>();
-            if (portalInfo != null && !portalInfo.isLocked)
-            {
-                portalInfo.LockPortal();
-                isPortalPlaced = true;
-            }
-        }
-    }
-
     public bool IsPortalPlaced()
     {
         return isPortalPlaced;
+    }
+
+    public void ActivateEffect()
+    {
+        if (_lightEffect != null)
+        {
+            _lightEffect.Play();
+        }
     }
 }

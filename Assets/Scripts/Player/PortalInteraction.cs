@@ -131,7 +131,8 @@ public class PortalInteraction : MonoBehaviour
 
         foreach (var hitCollider in hitColliders)
         {
-            if (hitCollider.CompareTag("Mirror Pedestal")) // Assuming your pedestals are tagged as "Pedestal"
+            // Assuming pedestals are tagged as "Mirror Pedestal"
+            if (hitCollider.CompareTag("Mirror Pedestal"))
             {
                 float distance = Vector3.Distance(transform.position, hitCollider.transform.position);
                 if (distance < closestDistance)
@@ -209,13 +210,6 @@ public class PortalInteraction : MonoBehaviour
         }
         // Returns the original item if no transformation occured
         return item;
-    }
-
-    public void LockPortal()
-    {
-        // Prevent the portal from being moved or replaced
-        this.enabled = false; // Disables the script to prevent further interaction
-                              // Additional code here if you need to visually indicate the portal is locked, or other logic
     }
 }
 
