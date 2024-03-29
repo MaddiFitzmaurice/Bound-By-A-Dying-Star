@@ -8,9 +8,25 @@ public class PortalInfo : MonoBehaviour
     public Transform destinationPortal;
     // Store the reference to the player's PortalInteraction script
     public PortalInteraction portalInteractionScript;
+    public bool isAlignedWithMirror = false;
+    public bool isLocked = false;
 
+    public GameObject Pedestal { get; set; }
     public void SetDestinationPortal(Transform destination)
     {
         destinationPortal = destination;
+    }
+
+    // When the portal aligns with a mirror
+    public void AlignWithMirror()
+    {
+        isAlignedWithMirror = true;
+    }
+
+    public void LockPortal()
+    {
+
+        //this.enabled = false;
+        isLocked = true;
     }
 }

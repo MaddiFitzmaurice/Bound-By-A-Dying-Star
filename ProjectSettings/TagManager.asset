@@ -11,6 +11,8 @@ TagManager:
   - Player2
   - Interactable
   - LibraConst
+  - Mirror
+  - Mirror Pedestal
   layers:
   - Default
   - TransparentFX
