@@ -1,6 +1,7 @@
 using Ink.Parsed;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ConstTrigger : MonoBehaviour
@@ -15,7 +16,11 @@ public class ConstTrigger : MonoBehaviour
     // The pedestal that forms a pair with this one
     [SerializeField] private GameObject[] _pairedPedestals;
 
+    
+
+    //Effects
     [SerializeField] private ParticleSystem _lightEffect;
+    [SerializeField] private LineRenderer _lightBeam;
 
     public bool isPortalPlaced = false;
     public GameObject currentPortal = null;
@@ -87,6 +92,11 @@ public class ConstTrigger : MonoBehaviour
 
         // Lock the mirror if needed
         pickupableObject.LockObject();
+
+        // Set laser beam to go in the direction of the mirror (+ 25) then turn beam on
+        Vector3 beamDirection = mirror.position + mirror.forward * 25;
+        _lightBeam.SetPosition(1, beamDirection);
+        _lightBeam.enabled = true;
     }
 
     public void HandlePortalOverlap(GameObject portal, GameObject mirror)
@@ -119,7 +129,6 @@ public class ConstTrigger : MonoBehaviour
             {
                 PortalManager.Instance.CheckForMatchingPortals(this, pairedPedestal.GetComponent<ConstTrigger>());
             }
-
         }
     }
 

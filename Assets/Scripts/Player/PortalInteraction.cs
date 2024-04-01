@@ -115,6 +115,7 @@ public class PortalInteraction : MonoBehaviour
                 itemToTeleport.transform.position = _portalTarget.position;
                 _itemPickup.DropObject();
                 Debug.Log("Item teleported to target portal");
+                EventManager.EventTrigger(EventType.PORTALSENDEFFECT, _portalData);
             }
             else
             {

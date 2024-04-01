@@ -35,6 +35,7 @@ public class PortalManager : MonoBehaviour
 
     private void Awake()
     {
+        EventManager.EventInitialise(EventType.PORTALMANAGER_CREATEPORTAL);
         if (Instance == null)
         {
             Instance = this;
