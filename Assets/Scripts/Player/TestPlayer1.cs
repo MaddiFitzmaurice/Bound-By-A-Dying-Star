@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class TestPlayer1 : Player
 {
-    
-    
-
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
