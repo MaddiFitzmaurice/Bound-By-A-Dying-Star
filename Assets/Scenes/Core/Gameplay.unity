@@ -454,7 +454,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4691145707837510352, guid: c82943f8ea57ffc4ea6122f26a8baae7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6261473889923392163, guid: c82943f8ea57ffc4ea6122f26a8baae7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -612,6 +612,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameplayManagerMaddi
       objectReference: {fileID: 0}
+    - target: {fileID: 6262189983294742227, guid: 463b5e60ef4bd964893627ea5be37e9d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7939548834092981447, guid: 463b5e60ef4bd964893627ea5be37e9d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -719,7 +723,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4745299710038087838, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6092367900801458956, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
       propertyPath: m_Enabled
@@ -837,6 +841,10 @@ PrefabInstance:
     - target: {fileID: 3239183671370231162, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_Name
       value: PlayersMaddi
+      objectReference: {fileID: 0}
+    - target: {fileID: 3239183671370231162, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
