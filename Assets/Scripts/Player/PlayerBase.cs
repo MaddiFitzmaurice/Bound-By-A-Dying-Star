@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
-    // Components
-    private Rigidbody _rb;
-
+    #region EXTERNAL DATA
     // Movement
     [Header("Movement")]
     [SerializeField] protected float MoveSpeed = 5f;
@@ -23,12 +22,20 @@ public class PlayerBase : MonoBehaviour
 
     // Item Data
     [field:Header("Item Data")]
-    [SerializeField] private Material _highlightMat;
+    [SerializeField] private Material _highlightMat; // Temp material to highlight object to be picked up
     [field:SerializeField] public Transform PickupPoint { get; private set; } // Assign the pick up location of the object in the Inspector
-    public bool isHoldingItem = false;
     [field:SerializeField] public GameObject CarriedItem { get; private set; } = null;
-    List<Collider> _itemsInRange;
-    List<Collider> _itemsNotInRange;
+    #endregion
+
+    #region INTERNAL DATA
+    // Components
+    private Rigidbody _rb;
+
+    // Interactables
+    List<Collider> _interactablesInRange;
+    List<Collider> _interactablesNotInRange;
+    Collider _closestInteractable;
+    #endregion
 
     void Awake()
     {
@@ -37,46 +44,13 @@ public class PlayerBase : MonoBehaviour
 
         // Set data
         RiftData = new RiftData(transform.position, transform.rotation, tag);
-        _itemsInRange = new List<Collider>();
-        _itemsNotInRange = new List<Collider>();
+        _interactablesInRange = new List<Collider>();
+        _interactablesNotInRange = new List<Collider>();
     }
 
     private void Update()
     {
-        Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactables"));
-        List<Collider> colliders = colliderArray.ToList<Collider>();
-
-        foreach (var collider in colliders)
-        {
-            IInteractable interactable = collider.GetComponentInParent<IInteractable>();
-
-            if (interactable != null)
-            {
-                interactable.PlayerInRange(_highlightMat);
-            }
-        }
-
-        if (_itemsInRange.Count != 0)
-        {
-            foreach (var item in _itemsInRange)
-            {
-                // If item is no longer in range
-                if (!colliders.Contains(item))
-                {
-                    item.GetComponentInParent<IInteractable>().PlayerNotInRange();
-                    _itemsNotInRange.Add(item);
-                }
-            }
-
-            foreach (var item in _itemsNotInRange)
-            {
-                _itemsInRange.Remove(item);
-            }
-            _itemsNotInRange.Clear();
-        }
-
-        // Add items to list
-        _itemsInRange.AddRange(colliders);
+        CheckInteract();
     }
 
     private void FixedUpdate()
@@ -110,6 +84,79 @@ public class PlayerBase : MonoBehaviour
         if (MoveDirection.magnitude != 0)
         {
             _rb.MoveRotation(Quaternion.LookRotation(MoveDirection, Vector3.up));
+        }
+    }
+
+    // Interaction
+    public void Interact(object data)
+    {
+
+    }
+
+    public void CheckInteract()
+    {
+        Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactables"));
+        List<Collider> colliders = colliderArray.ToList<Collider>();
+
+        foreach (var collider in colliders)
+        {
+            IInteractable interactable = collider.GetComponentInParent<IInteractable>();
+
+            if (interactable != null)
+            {
+                // If closest interactable hasn't been assigned yet, assign first one in found collider list
+                if (_closestInteractable == null)
+                {
+                    _closestInteractable = collider;
+                }
+                else 
+                {
+                    if (Vector3.Distance(collider.transform.position, transform.position) < 
+                        Vector3.Distance(_closestInteractable.transform.position, transform.position))
+                    {
+                        // Dehighlight previous closest interactable then assign new closest one
+                        _closestInteractable.GetComponentInParent<IInteractable>().PlayerNotInRange();
+                        _closestInteractable = collider;
+                    }
+                }
+            }
+        }
+
+        // If interactable is no longer in range, add to another list to be deleted safely
+        if (_interactablesInRange.Count != 0)
+        {
+            foreach (var item in _interactablesInRange)
+            {
+                if (!colliders.Contains(item))
+                {
+                    _interactablesNotInRange.Add(item);
+
+                    if (item == _closestInteractable)
+                    {
+                        item.GetComponentInParent<IInteractable>().PlayerNotInRange();
+                        _closestInteractable = null;
+                    }
+                }
+            }
+        }
+
+        // Remove interactables that are no longer in range
+        if (_interactablesNotInRange.Count != 0)
+        {
+            foreach (var item in _interactablesNotInRange)
+            {
+                _interactablesInRange.Remove(item);
+            }
+            _interactablesNotInRange.Clear();
+        }
+
+        // Add recently detected colliders to list
+        _interactablesInRange.AddRange(colliders);
+
+        // Highlight closest interactable to player
+        if (_closestInteractable != null)
+        {
+            _closestInteractable.GetComponentInParent<IInteractable>().PlayerInRange(_highlightMat);
         }
     }
 

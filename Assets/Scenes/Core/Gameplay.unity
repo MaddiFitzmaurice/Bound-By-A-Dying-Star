@@ -235,7 +235,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -454,7 +454,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4691145707837510352, guid: c82943f8ea57ffc4ea6122f26a8baae7, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6261473889923392163, guid: c82943f8ea57ffc4ea6122f26a8baae7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -614,7 +614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6262189983294742227, guid: 463b5e60ef4bd964893627ea5be37e9d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7939548834092981447, guid: 463b5e60ef4bd964893627ea5be37e9d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -723,7 +723,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4745299710038087838, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6092367900801458956, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
       propertyPath: m_Enabled
@@ -830,21 +830,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 964433810869957675, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
-      propertyPath: _highlightMat
-      value: 
-      objectReference: {fileID: 2100000, guid: 0d4dbd7018979d843b0e698eebcec528, type: 2}
-    - target: {fileID: 2632272185759781231, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
-      propertyPath: _highlightMat
-      value: 
-      objectReference: {fileID: 2100000, guid: 9a11f50988850fc4aab562a0b0a6ce26, type: 2}
     - target: {fileID: 3239183671370231162, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_Name
       value: PlayersMaddi
-      objectReference: {fileID: 0}
-    - target: {fileID: 3239183671370231162, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
