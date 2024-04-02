@@ -151,13 +151,12 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT, context.ReadValue<Vector2>());
     }
 
-    // For testing, if Player 1 uses the interract E key
+    // For testing, if Player 1 uses the interact E key
     public void OnPlayer1Interact(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
             EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, "Player 1");
-            //Debug.Log("PLAYER_1_INTERACT");
         }
     }
 
@@ -167,7 +166,6 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         if (context.performed)
         {
             EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, "Player 2");
-            //Debug.Log("PLAYER_2_INTERACT");
         }
     }
 

@@ -8,13 +8,14 @@ public class Player1 : PlayerBase
     {
         EventManager.EventSubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
         EventManager.EventSubscribe(EventType.PLAYER_1_CREATEPORTAL, CreatePortalInFrontOfPlayer);
-        //EventManager.EventSubscribe(EventType.PLAYER_1_SENDITEM, InteractWithPortal);
+        EventManager.EventSubscribe(EventType.PLAYER_1_INTERACT, Interact);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_1_CREATEPORTAL, CreatePortalInFrontOfPlayer);
+        EventManager.EventUnsubscribe(EventType.PLAYER_1_INTERACT, Interact);
     }
 
     private void Player1VectHandler(object data)

@@ -13,16 +13,14 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] protected float MoveAccel = 3f;
     [SerializeField] protected float MoveDecel = 2f;
     [SerializeField] protected float VelocityPower = 2f;
-    protected Vector3 MoveDirection;
 
     // Rift Data
     [Header("Rift Data")]
-    protected RiftData RiftData;
     [SerializeField] protected float DistanceInFront = 2f;
 
     // Item Data
-    [field:Header("Item Data")]
-    [SerializeField] private Material _highlightMat; // Temp material to highlight object to be picked up
+    [field:Header("Interactable Data")]
+    [field:SerializeField] public Material HighlightMat { get; private set; } // Temp material to highlight object to be interacted with
     [field:SerializeField] public Transform PickupPoint { get; private set; } // Assign the pick up location of the object in the Inspector
     [field:SerializeField] public GameObject CarriedItem { get; private set; } = null;
     #endregion
@@ -30,6 +28,10 @@ public class PlayerBase : MonoBehaviour
     #region INTERNAL DATA
     // Components
     private Rigidbody _rb;
+
+    // Data
+    protected RiftData RiftData;
+    protected Vector3 MoveDirection;
 
     // Interactables
     List<Collider> _interactablesInRange;
@@ -90,7 +92,30 @@ public class PlayerBase : MonoBehaviour
     // Interaction
     public void Interact(object data)
     {
+        // Drop an item
+        if (CarriedItem != null && _closestInteractable == null)
+        {
+            CarriedItem.GetComponent<IInteractable>().PlayerStartInteract(this);
+        }
+        // If not carrying an item
+        else if (CarriedItem == null && _closestInteractable != null)
+        {
+            IInteractable interactable = _closestInteractable.GetComponentInParent<IInteractable>();
 
+            // If not currently carrying item and closest object is item
+            if (CarriedItem == null && interactable is Item)
+            {
+                _closestInteractable = null;
+                interactable.PlayerStartInteract(this);
+            }
+
+            // NPC interact
+        }
+        // If carrying an item and an interactable that needs it is nearby
+        else if (CarriedItem != null && _closestInteractable != null)
+        {
+            // Rift
+        }
     }
 
     public void CheckInteract()
@@ -105,18 +130,22 @@ public class PlayerBase : MonoBehaviour
             if (interactable != null)
             {
                 // If closest interactable hasn't been assigned yet, assign first one in found collider list
-                if (_closestInteractable == null)
+                // Make sure carried item is not included again as a closest interactable
+                if (_closestInteractable == null && collider.transform.parent.gameObject != CarriedItem)
                 {
                     _closestInteractable = collider;
                 }
                 else 
                 {
-                    if (Vector3.Distance(collider.transform.position, transform.position) < 
-                        Vector3.Distance(_closestInteractable.transform.position, transform.position))
+                    if (collider.transform.parent.gameObject != CarriedItem)
                     {
-                        // Dehighlight previous closest interactable then assign new closest one
-                        _closestInteractable.GetComponentInParent<IInteractable>().PlayerNotInRange();
-                        _closestInteractable = collider;
+                        if (Vector3.Distance(collider.transform.position, transform.position) < 
+                            Vector3.Distance(_closestInteractable.transform.position, transform.position))
+                        {
+                            // Dehighlight previous closest interactable then assign new closest one
+                            _closestInteractable.GetComponentInParent<IInteractable>().PlayerNotInRange();
+                            _closestInteractable = collider;
+                        }
                     }
                 }
             }
@@ -156,7 +185,7 @@ public class PlayerBase : MonoBehaviour
         // Highlight closest interactable to player
         if (_closestInteractable != null)
         {
-            _closestInteractable.GetComponentInParent<IInteractable>().PlayerInRange(_highlightMat);
+            _closestInteractable.GetComponentInParent<IInteractable>().PlayerInRange(HighlightMat);
         }
     }
 

@@ -7,5 +7,5 @@ public interface IInteractable
     public void PlayerInRange(Material mat);
     public void PlayerNotInRange();
 
-    public void PlayerStartInteract();
+    public void PlayerStartInteract(PlayerBase player);
 }

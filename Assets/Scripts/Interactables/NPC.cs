@@ -43,7 +43,7 @@ public class NPC : MonoBehaviour, IInteractable
         UnhighlightItem();
     }
 
-    public void PlayerStartInteract()
+    public void PlayerStartInteract(PlayerBase player)
     {
         throw new System.NotImplementedException();
     }

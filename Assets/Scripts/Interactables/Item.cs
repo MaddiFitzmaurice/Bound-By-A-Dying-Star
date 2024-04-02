@@ -4,23 +4,30 @@ using UnityEngine;
 
 public class Item : MonoBehaviour, IInteractable
 {
-    // External Data
+    #region EXTERNAL DATA
+    // Item Versions
     [SerializeField] private GameObject _itemVersion1;
     [SerializeField] private GameObject _itemVersion2;
+    #endregion
 
-    // Internal Data
+    #region INTERNAL DATA
+    // Item Version Data
     private bool _version1;
     private GameObject _currentItemVersion;
-    private PlayerBase _playerInTrigger; // TODO: Potential for both players to be in trigger, change to list instead
-    private PlayerBase _playerHoldingItem;
-    private bool _isCarried = false;
+
+    // Player Interacting Data
+    private PlayerBase _playerHoldingItem; // Player who is currently holding the item
+
+    // Material Data
     private Material _defaultMat;
 
     // Components
     private Renderer _renderer;
+    #endregion
 
     private void Awake()
     {
+        // Assign current item version
         _currentItemVersion = GetComponentInChildren<Transform>().gameObject;
 
         if (_currentItemVersion == null)
@@ -34,6 +41,8 @@ public class Item : MonoBehaviour, IInteractable
 
         // Get components
         _renderer = GetComponentInChildren<Renderer>();
+
+        // Set default material
         _defaultMat = _renderer.material;
     }
 
@@ -54,20 +63,19 @@ public class Item : MonoBehaviour, IInteractable
 
     public void BeDropped()
     {
-        _isCarried = false;
         _playerHoldingItem.DropItem();
         _playerHoldingItem = null;
         // Removes the parent-child relationship, making the object independent in the scene
         SetItemParent(null); 
     }
 
-    public void BePickedUp()
+    public void BePickedUp(PlayerBase player)
     {
-        _playerHoldingItem = _playerInTrigger;
-        SetItemParent(_playerInTrigger.PickupPoint);
+        _playerHoldingItem = player;
+        SetItemParent(_playerHoldingItem.PickupPoint);
         transform.localPosition = Vector3.zero;
-        _playerHoldingItem.PickupItem(this.gameObject);
-        _isCarried = true;
+        _playerHoldingItem.PickupItem(gameObject);
+        UnhighlightItem();
     }
 
     public void SetItemParent(Transform parent)
@@ -83,6 +91,7 @@ public class Item : MonoBehaviour, IInteractable
         _currentItemVersion = Instantiate(newVersion, transform);
     }
 
+    #region INTERFACE FUNCTIONS
     public void PlayerInRange(Material mat)
     {
         HighlightItem(mat);
@@ -93,7 +102,7 @@ public class Item : MonoBehaviour, IInteractable
         UnhighlightItem();
     }
 
-    public void PlayerStartInteract()
+    public void PlayerStartInteract(PlayerBase player)
     {
         // If a player is holding the item
         if (_playerHoldingItem != null)
@@ -106,14 +115,11 @@ public class Item : MonoBehaviour, IInteractable
             }
         }
         // If a player is near the item
-        else if (_playerInTrigger != null)
+        else
         {
-            // If player is not already holding another item
-            if (_playerInTrigger.CarriedItem == null && !_isCarried)
-            {
-                Debug.Log("Item picked up");
-                BePickedUp();
-            }
+            Debug.Log("Item picked up");
+            BePickedUp(player);
         }
     }
+    #endregion
 }

@@ -19,7 +19,7 @@ public class Rift : MonoBehaviour, IInteractable
     }
 
     // If interact button is pressed near the Rift
-    public void PlayerStartInteract()
+    public void PlayerStartInteract(PlayerBase player)
     {   
         // If Rifts are linked and a player is in the trigger
         if (_target != null && _playerInTrigger != null)
