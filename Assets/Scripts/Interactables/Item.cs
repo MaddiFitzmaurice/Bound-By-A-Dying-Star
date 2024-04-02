@@ -63,10 +63,10 @@ public class Item : MonoBehaviour, IInteractable
 
     public void BeDropped()
     {
-        _playerHoldingItem.DropItem();
-        _playerHoldingItem = null;
         // Removes the parent-child relationship, making the object independent in the scene
         SetItemParent(null); 
+        _playerHoldingItem.DropItem();
+        _playerHoldingItem = null;
     }
 
     public void BePickedUp(PlayerBase player)

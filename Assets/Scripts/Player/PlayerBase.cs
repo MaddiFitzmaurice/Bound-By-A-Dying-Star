@@ -92,29 +92,35 @@ public class PlayerBase : MonoBehaviour
     // Interaction
     public void Interact(object data)
     {
-        // Drop an item
+        // If carrying an item and no objects are nearby
         if (CarriedItem != null && _closestInteractable == null)
         {
             CarriedItem.GetComponent<IInteractable>().PlayerStartInteract(this);
         }
-        // If not carrying an item
-        else if (CarriedItem == null && _closestInteractable != null)
+        // If interactable is nearby
+        else if (_closestInteractable != null)
         {
             IInteractable interactable = _closestInteractable.GetComponentInParent<IInteractable>();
 
-            // If not currently carrying item and closest object is item
-            if (CarriedItem == null && interactable is Item)
+            // If not currently carrying item
+            if (CarriedItem == null)
             {
-                _closestInteractable = null;
-                interactable.PlayerStartInteract(this);
+                // Closest interactable is item or NPC
+                if (interactable is Item || interactable is NPC)
+                {
+                    _closestInteractable = null;
+                    interactable.PlayerStartInteract(this);
+                }
             }
-
-            // NPC interact
-        }
-        // If carrying an item and an interactable that needs it is nearby
-        else if (CarriedItem != null && _closestInteractable != null)
-        {
-            // Rift
+            // If carrying an item
+            else
+            {
+                // Closest interactable is Rift
+                if (interactable is Rift)
+                {
+                    interactable.PlayerStartInteract(this);
+                }
+            }
         }
     }
 
@@ -122,11 +128,9 @@ public class PlayerBase : MonoBehaviour
     {
         Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactables"));
         List<Collider> colliders = colliderArray.ToList<Collider>();
-
         foreach (var collider in colliders)
         {
             IInteractable interactable = collider.GetComponentInParent<IInteractable>();
-
             if (interactable != null)
             {
                 // If closest interactable hasn't been assigned yet, assign first one in found collider list
