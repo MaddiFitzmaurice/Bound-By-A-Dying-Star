@@ -59,12 +59,12 @@ public class Rift : MonoBehaviour, IInteractable
         }
     }
 
-    public void PlayerInRange(Material mat)
+    public void PlayerInRange(PlayerBase player)
     {
-        HighlightItem(mat);
+        HighlightItem(player.HighlightMat);
     }
 
-    public void PlayerNotInRange()
+    public void PlayerNotInRange(PlayerBase player)
     {
         UnhighlightItem();
     }

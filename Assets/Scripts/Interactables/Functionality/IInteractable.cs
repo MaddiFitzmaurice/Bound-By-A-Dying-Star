@@ -4,8 +4,8 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    public void PlayerInRange(Material mat);
-    public void PlayerNotInRange();
+    public void PlayerInRange(PlayerBase player);
+    public void PlayerNotInRange(PlayerBase player);
 
     public void PlayerStartInteract(PlayerBase player);
 }

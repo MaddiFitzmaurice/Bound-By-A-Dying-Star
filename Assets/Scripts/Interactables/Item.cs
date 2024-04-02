@@ -92,12 +92,12 @@ public class Item : MonoBehaviour, IInteractable
     }
 
     #region INTERFACE FUNCTIONS
-    public void PlayerInRange(Material mat)
+    public void PlayerInRange(PlayerBase player)
     {
-        HighlightItem(mat);
+        HighlightItem(player.HighlightMat);
     }
 
-    public void PlayerNotInRange()
+    public void PlayerNotInRange(PlayerBase player)
     {
         UnhighlightItem();
     }

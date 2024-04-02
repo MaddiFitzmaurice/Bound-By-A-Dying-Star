@@ -147,7 +147,7 @@ public class PlayerBase : MonoBehaviour
                             Vector3.Distance(_closestInteractable.transform.position, transform.position))
                         {
                             // Dehighlight previous closest interactable then assign new closest one
-                            _closestInteractable.GetComponentInParent<IInteractable>().PlayerNotInRange();
+                            _closestInteractable.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
                             _closestInteractable = collider;
                         }
                     }
@@ -166,7 +166,7 @@ public class PlayerBase : MonoBehaviour
 
                     if (item == _closestInteractable)
                     {
-                        item.GetComponentInParent<IInteractable>().PlayerNotInRange();
+                        item.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
                         _closestInteractable = null;
                     }
                 }
@@ -189,7 +189,7 @@ public class PlayerBase : MonoBehaviour
         // Highlight closest interactable to player
         if (_closestInteractable != null)
         {
-            _closestInteractable.GetComponentInParent<IInteractable>().PlayerInRange(HighlightMat);
+            _closestInteractable.GetComponentInParent<IInteractable>().PlayerInRange(this);
         }
     }
 
