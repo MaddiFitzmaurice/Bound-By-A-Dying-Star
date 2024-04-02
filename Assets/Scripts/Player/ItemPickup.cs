@@ -116,7 +116,7 @@ public class ItemPickup : MonoBehaviour
         if (isHoldingItem && _carriedObject != null)
         {
             _carriedObject = newObject;
-            // You may want to set the parent and position again if needed
+            // Set the parent and position
             _carriedObject.transform.SetParent(_pickupPoint);
             _carriedObject.transform.localPosition = Vector3.zero;
         }

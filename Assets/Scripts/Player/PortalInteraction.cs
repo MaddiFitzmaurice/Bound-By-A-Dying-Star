@@ -8,13 +8,16 @@ public class PortalInteraction : MonoBehaviour
     // This is dynamically updated
     [SerializeField] private Transform _portalTarget;
     // Assign players portal prefab in the Inspector
-    [SerializeField] private GameObject _portalPrefab; 
+    [SerializeField] private GameObject _portalPrefab;
     // How far in front the portal should spawn 
     [SerializeField] private float _distanceInFront = 2f;
     private bool _isNearPortal = false;
     private ItemPickup _itemPickup;
     // Portal Data to send to the PortalManager
     private PortalData _portalData;
+
+    [SerializeField] private float detectionRadius = 5.0f;
+    private GameObject nearestPedestal = null;
 
     private void Awake()
     {
@@ -43,7 +46,7 @@ public class PortalInteraction : MonoBehaviour
         _itemPickup = GetComponent<ItemPickup>();
 
         // Create default data to be changed later
-        _portalData = new PortalData(Vector3.zero, Quaternion.Euler(0, 0, 0), _portalPrefab, this.name, this);
+        _portalData = new PortalData(Vector3.zero, Quaternion.Euler(0, 0, 0), _portalPrefab, this.name, this, nearestPedestal);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -54,7 +57,7 @@ public class PortalInteraction : MonoBehaviour
         if (portalInfo != null && portalInfo.destinationPortal != null)
         {
             // Check for portal tag and set isNearPortal true if near own portal
-            if (other.CompareTag("Player1Portal")) 
+            if (other.CompareTag("Player1Portal"))
             {
                 _isNearPortal = true;
 
@@ -87,7 +90,7 @@ public class PortalInteraction : MonoBehaviour
             _isNearPortal = false;
         }
         else if (other.CompareTag("Player2Portal"))
-        { 
+        {
             // Reset portalTarget when exiting the portal area
             if (other.GetComponent<PortalInfo>() != null)
             {
@@ -112,6 +115,7 @@ public class PortalInteraction : MonoBehaviour
                 itemToTeleport.transform.position = _portalTarget.position;
                 _itemPickup.DropObject();
                 Debug.Log("Item teleported to target portal");
+                EventManager.EventTrigger(EventType.PORTALSENDEFFECT, _portalData);
             }
             else
             {
@@ -123,6 +127,23 @@ public class PortalInteraction : MonoBehaviour
 
     private void CreatePortalInFrontOfPlayer(object data)
     {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        float closestDistance = Mathf.Infinity;
+
+        foreach (var hitCollider in hitColliders)
+        {
+            // Assuming pedestals are tagged as "Mirror Pedestal"
+            if (hitCollider.CompareTag("Mirror Pedestal"))
+            {
+                float distance = Vector3.Distance(transform.position, hitCollider.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    nearestPedestal = hitCollider.gameObject;
+                }
+            }
+        }
+
         if (_portalData.PlayerTag == "Player 1" && (string)data == "Player 1")
         {
             _portalData.Position = transform.position + transform.forward * _distanceInFront;
@@ -165,7 +186,7 @@ public class PortalInteraction : MonoBehaviour
                 //Debug.Log("New Item Name: " + newItemVersionPrefab.name);
                 GameObject newItem = Instantiate(newItemVersionPrefab, item.transform.position, item.transform.rotation);
                 // Remove "(Clone)" from the name
-                newItem.name = newItemVersionPrefab.name; 
+                newItem.name = newItemVersionPrefab.name;
 
 
                 // Grabs PickupableObject from the newly instantiated item for version updating
@@ -192,3 +213,4 @@ public class PortalInteraction : MonoBehaviour
         return item;
     }
 }
+

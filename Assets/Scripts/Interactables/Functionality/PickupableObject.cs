@@ -51,10 +51,11 @@ public class PickupableObject : MonoBehaviour
         _itemVersion2 = version2;
     }
 
-    public void LockObject()  // Add this method
+    public void LockObject() 
     {
         isLocked = true;
     }
+
     //Creates "public" properties of the item versions to avoid accidently changing the default values assigned in inspector. 
     public GameObject ItemVersion1 => _itemVersion1;
     public GameObject ItemVersion2 => _itemVersion2;
