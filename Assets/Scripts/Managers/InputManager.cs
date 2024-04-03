@@ -174,7 +174,6 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         if (context.performed)
         {
             EventManager.EventTrigger(EventType.PLAYER_1_CREATEPORTAL, "Player 1");
-            Debug.Log("PLAYER_1_CREATEPORTAL");
         }
     }
 
@@ -183,7 +182,6 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         if (context.performed)
         {
             EventManager.EventTrigger(EventType.PLAYER_2_CREATEPORTAL, "Player 2");
-            Debug.Log("PLAYER_2_CREATEPORTAL");
         }
     }
 

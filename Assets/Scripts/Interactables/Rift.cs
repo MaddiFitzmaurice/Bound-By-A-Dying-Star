@@ -53,6 +53,7 @@ public class Rift : MonoBehaviour, IInteractable
                 Debug.Log("Item to teleport original position: " + itemToSend.transform.position);
                 Debug.Log("Item to teleport new position: " + itemToSend.transform.position);
                 item.SetTransform(_target);
+                item.ChangeItemVersion();
                 item.BeDropped();
                 Debug.Log("Item teleported to target portal");
             }

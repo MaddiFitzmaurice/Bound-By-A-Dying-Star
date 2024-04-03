@@ -22,7 +22,7 @@ public class Player2 : PlayerBase
     {
         if (data == null)
         {
-            Debug.LogError("Player2Vect2DHandler is null");
+            Debug.LogError("Player2VectHandler is null");
         }
 
         // Set move direction
@@ -36,6 +36,5 @@ public class Player2 : PlayerBase
         RiftData.Rotation = Quaternion.LookRotation(transform.forward);
         
         EventManager.EventTrigger(EventType.PORTALMANAGER_CREATEPORTAL, RiftData);
-        Debug.Log("Portal created in front of player 2");
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3532430676551061159}
   - component: {fileID: 1443793303636288435}
   - component: {fileID: 3205086374855758797}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ItemSkin1
   m_TagString: Pickupable
   m_Icon: {fileID: 0}
@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 4946549746140236592}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.95, y: 1.05, z: 0.023103748}
-  m_LocalScale: {x: 0.5305, y: 0.5305, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.3, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4459fff084dd84526ab8fd5082d2eacb, type: 2}
+  - {fileID: 2100000, guid: 7d3f89ec8010abc4496d0f324c859187, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

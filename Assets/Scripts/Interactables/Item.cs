@@ -1,19 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Item : MonoBehaviour, IInteractable
 {
-    #region EXTERNAL DATA
-    // Item Versions
-    [SerializeField] private GameObject _itemVersion1;
-    [SerializeField] private GameObject _itemVersion2;
-    #endregion
-
     #region INTERNAL DATA
+    // Item Grouper
+    private Transform _itemGrouper; // Makes sure that items stay in level scene
+
     // Item Version Data
-    private bool _version1;
-    private GameObject _currentItemVersion;
+    private bool _isVersion1;
+    private GameObject _itemVersion1;
+    private GameObject _itemVersion2;
 
     // Player Interacting Data
     private PlayerBase _playerHoldingItem; // Player who is currently holding the item
@@ -27,16 +26,21 @@ public class Item : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        // Assign current item version
-        _currentItemVersion = GetComponentInChildren<Transform>().gameObject;
+        // Get item skins, assign current item version and item grouper
+        Collider[] list = GetComponentsInChildren<Collider>();
+        _itemVersion1 = list[0].gameObject;
+        _itemVersion2 = list[1].gameObject;
+        _itemGrouper = transform.parent;
 
-        if (_currentItemVersion == null)
+        if (list.Length == 0)
         {
-            Debug.LogError("Item does not have version skin associated with it");
+            Debug.LogError("Item does not have version skins associated with it");
         }
         else 
         {
-            _version1 = _currentItemVersion == _version1 ? true : false;
+            _isVersion1 = true;
+            _itemVersion1.SetActive(true);
+            _itemVersion2.SetActive(false);
         }
 
         // Get components
@@ -64,7 +68,7 @@ public class Item : MonoBehaviour, IInteractable
     public void BeDropped()
     {
         // Removes the parent-child relationship, making the object independent in the scene
-        SetItemParent(null); 
+        SetItemParent(_itemGrouper);
         _playerHoldingItem.DropItem();
         _playerHoldingItem = null;
     }
@@ -85,10 +89,15 @@ public class Item : MonoBehaviour, IInteractable
 
     public void ChangeItemVersion()
     {
-        Destroy(_currentItemVersion);
+        _isVersion1 = !_isVersion1;
+        _itemVersion1.SetActive(_isVersion1);
+        _itemVersion2.SetActive(!_isVersion1);
+    }
 
-        GameObject newVersion = _version1 ? _itemVersion1 : _itemVersion2;
-        _currentItemVersion = Instantiate(newVersion, transform);
+    public void Transform()
+    {
+        Debug.Log("Transform!");
+        ChangeItemVersion();
     }
 
     #region INTERFACE FUNCTIONS
@@ -110,14 +119,12 @@ public class Item : MonoBehaviour, IInteractable
             // If player is holding this item
             if (_playerHoldingItem.CarriedItem == gameObject)
             {
-                Debug.Log("Item dropped");
                 BeDropped();
             }
         }
         // If a player is near the item
         else
         {
-            Debug.Log("Item picked up");
             BePickedUp(player);
         }
     }
