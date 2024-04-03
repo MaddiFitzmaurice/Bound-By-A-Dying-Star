@@ -129,11 +129,8 @@ public class PlayerBase : MonoBehaviour
         Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactables"));
         List<Collider> colliders = colliderArray.ToList<Collider>();
 
-        Debug.Log(colliders.Count);
-
         foreach (var collider in colliders)
         {
-            Debug.Log(collider);
             IInteractable interactable = collider.GetComponentInParent<IInteractable>();
             if (interactable != null)
             {

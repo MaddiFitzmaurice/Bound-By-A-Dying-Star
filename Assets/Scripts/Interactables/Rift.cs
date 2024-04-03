@@ -50,12 +50,12 @@ public class Rift : MonoBehaviour, IInteractable
             if (itemToSend != null)
             {
                 Item item = itemToSend.GetComponent<Item>();
-                Debug.Log("Item to teleport original position: " + itemToSend.transform.position);
-                Debug.Log("Item to teleport new position: " + itemToSend.transform.position);
+                //Debug.Log("Item to teleport original position: " + itemToSend.transform.position);
+                //Debug.Log("Item to teleport new position: " + itemToSend.transform.position);
                 item.SetTransform(_target);
                 item.ChangeItemVersion();
                 item.BeDropped();
-                Debug.Log("Item teleported to target portal");
+                //Debug.Log("Item teleported to target portal");
             }
         }
     }
