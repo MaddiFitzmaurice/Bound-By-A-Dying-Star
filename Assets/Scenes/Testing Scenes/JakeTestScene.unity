@@ -257,6 +257,10 @@ PrefabInstance:
       value: Pedestal (2)
       objectReference: {fileID: 0}
     - target: {fileID: 1379039469469042465, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
+      propertyPath: _raiseMirrorHeight
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379039469469042465, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
       propertyPath: _mirrorRotationAngle.y
       value: 50
       objectReference: {fileID: 0}
@@ -321,6 +325,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
+--- !u!1 &405664403 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1015829983503132964, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
+  m_PrefabInstance: {fileID: 397892086}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &502818572
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -490,9 +499,8 @@ MonoBehaviour:
   - {fileID: 0}
   _mirrorRotationAngle: {x: 0, y: 100, z: 0}
   _rotationSpeed: 5
-  _portalSizeScale: 0
+  _raiseMirrorHeight: 0
   _pairedPedestals: []
-  _lightEffect: {fileID: 0}
   _lightBeam: {fileID: 0}
   isPortalPlaced: 0
   currentPortal: {fileID: 0}
@@ -659,6 +667,10 @@ PrefabInstance:
       value: Pedestal (3)
       objectReference: {fileID: 0}
     - target: {fileID: 1379039469469042465, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
+      propertyPath: _raiseMirrorHeight
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379039469469042465, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
       propertyPath: _mirrorRotationAngle.y
       value: 180
       objectReference: {fileID: 0}
@@ -669,7 +681,7 @@ PrefabInstance:
     - target: {fileID: 1379039469469042465, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
       propertyPath: _pairedPedestals.Array.data[0]
       value: 
-      objectReference: {fileID: 965317137}
+      objectReference: {fileID: 405664403}
     - target: {fileID: 3955604971440488076, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.5055354

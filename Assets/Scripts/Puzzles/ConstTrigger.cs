@@ -2,6 +2,7 @@ using Ink.Parsed;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class ConstTrigger : MonoBehaviour
@@ -11,7 +12,8 @@ public class ConstTrigger : MonoBehaviour
     private Renderer _diskRenderer;
     [SerializeField] private Vector3 _mirrorRotationAngle;
     [SerializeField] private float _rotationSpeed;
-    [SerializeField] private float _portalSizeScale;
+    [SerializeField] private float _raiseMirrorHeight;
+    //[SerializeField] private float _portalSizeScale;
 
     // The pedestal that forms a pair with this one
     [SerializeField] private GameObject[] _pairedPedestals;
@@ -19,7 +21,7 @@ public class ConstTrigger : MonoBehaviour
     
 
     //Effects
-    [SerializeField] private ParticleSystem _lightEffect;
+    //[SerializeField] private ParticleSystem _lightEffect;
     [SerializeField] private LineRenderer _lightBeam;
 
     public bool isPortalPlaced = false;
@@ -73,7 +75,7 @@ public class ConstTrigger : MonoBehaviour
     private IEnumerator RotateMirror(Transform mirror, PickupableObject pickupableObject)
     {
         // Set the mirror's position and rotation to match the pedestal before starting the rotation
-        mirror.position = transform.position;
+        mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
         mirror.rotation = transform.rotation;
 
         Quaternion targetRotation = Quaternion.Euler(_mirrorRotationAngle + transform.eulerAngles);
@@ -96,7 +98,7 @@ public class ConstTrigger : MonoBehaviour
         // Set laser beam to go in the direction of the mirror (+ 25) then turn beam on
         Vector3 beamDirection = mirror.position + mirror.forward * 10;
         _lightBeam.SetPosition(1, beamDirection);
-        _lightBeam.enabled = true;
+        //_lightBeam.enabled = true;
     }
 
     public void HandlePortalOverlap(GameObject portal, GameObject mirror)
@@ -104,7 +106,7 @@ public class ConstTrigger : MonoBehaviour
         if (mirror != null)
         {
             // Get the mirror's transform scale
-            Vector3 mirrorScale = mirror.GetComponent<Renderer>().bounds.size;
+            //Vector3 mirrorScale = mirror.GetComponent<Renderer>().bounds.size;
 
             // Set the portal's position and rotation to match the mirror
             //MANUAL MOVING OF PORTAL, REMOVE ONCE CENTRE OF OBJECT HAS BEEN FIXED
@@ -155,9 +157,9 @@ public class ConstTrigger : MonoBehaviour
 
     public void ActivateEffect()
     {
-        if (_lightEffect != null)
+        if (_lightBeam != null)
         {
-            _lightEffect.Play();
+            _lightBeam.enabled = true;
         }
     }
 }
