@@ -2,6 +2,7 @@ using Ink.Parsed;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
@@ -24,7 +25,8 @@ public class ConstTrigger : MonoBehaviour
 
     //Effects
     //[SerializeField] private ParticleSystem _lightEffect;
-    [SerializeField] private LineRenderer _lightBeam;
+    //[SerializeField] private LineRenderer _lightBeam;
+    [SerializeField] private GameObject _lightBeam;
     [SerializeField] private float _raiseLightBeam;
     [SerializeField] private float _lightBeamLength;
 
@@ -105,15 +107,16 @@ public class ConstTrigger : MonoBehaviour
         _conController.PedestalHasMirror(this);
 
         // Adjust lightbeam to be in the centre of the mirror
-        _lightBeam.transform.position = new Vector3(mirror.transform.position.x, mirror.transform.position.y + _raiseLightBeam, mirror.transform.position.z);
-        _lightBeam.transform.rotation = mirror.rotation;
-
-        // Start point of the beam in local space
-        _lightBeam.SetPosition(0, Vector3.zero);
-
-        // End point of the beam in local space
-        Vector3 localEndPoint = new Vector3(0, 0, _lightBeamLength);
-        _lightBeam.SetPosition(1, localEndPoint);
+        //_lightBeam.transform.position = new Vector3(mirror.transform.position.x, mirror.transform.position.y + _raiseLightBeam, mirror.transform.position.z);
+        //_lightBeam.transform.rotation = mirror.rotation;
+////
+        //// Start point of the beam in local space
+        //_lightBeam.SetPosition(0, Vector3.zero);
+////
+        //// End point of the beam in local space
+        //Vector3 localEndPoint = new Vector3(0, 0, _lightBeamLength);
+        //_lightBeam.SetPosition(1, localEndPoint);
+        //_lightBeam.enabled = true;
     }
 
     public void HandlePortalOverlap(GameObject portal, GameObject mirror)
@@ -167,11 +170,18 @@ public class ConstTrigger : MonoBehaviour
         return isPortalPlaced;
     }
 
-    public void ActivateEffect()
+    public void ActivateEffect(ConstTrigger otherPedestal)
     {
-        if (_lightBeam != null)
-        {
-            _lightBeam.enabled = true;
-        }
+        //_lightBeam.enabled = true;
+        GameObject newLightbeam = Instantiate(_lightBeam, transform);
+        LineRenderer lineRenderer = newLightbeam.GetComponentInChildren<LineRenderer>();
+
+        // Adjust lightbeam to be in the centre of the mirror
+        lineRenderer.transform.position = new Vector3(transform.position.x, transform.position.y + _raiseLightBeam +_raiseMirrorHeight, transform.position.z);
+
+        // End point of the beam in local space
+        Vector3 localEndPoint = new Vector3(0, 0, _lightBeamLength);
+        lineRenderer.SetPosition(1, transform.InverseTransformPoint(otherPedestal.transform.position));
+        lineRenderer.enabled = true;
     }
 }

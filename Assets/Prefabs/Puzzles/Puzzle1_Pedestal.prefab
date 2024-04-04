@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3955604971440488076}
-  - component: {fileID: 4842560561849276007}
   - component: {fileID: 1379039469469042465}
+  - component: {fileID: 2140296737769682014}
   m_Layer: 0
   m_Name: Puzzle1_Pedestal
   m_TagString: Mirror Pedestal
@@ -32,10 +32,34 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2237349718899911990}
-  - {fileID: 385098048217301486}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4842560561849276007
+--- !u!114 &1379039469469042465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015829983503132964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b82cc30c27201e4ba764a684808644b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  validObjects:
+  - {fileID: 0}
+  _mirrorRotationAngle: {x: 0, y: 100, z: 0}
+  _rotationSpeed: 5
+  _raiseMirrorHeight: 2.5
+  _raisePortalHeight: 0
+  _pairedPedestals:
+  - {fileID: 0}
+  _lightBeam: {fileID: 775294244184712969, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
+  _raiseLightBeam: 1
+  _lightBeamLength: 2
+  isPortalPlaced: 0
+  currentPortal: {fileID: 0}
+--- !u!65 &2140296737769682014
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,31 +80,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1379039469469042465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015829983503132964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b82cc30c27201e4ba764a684808644b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  validObjects:
-  - {fileID: 0}
-  _mirrorRotationAngle: {x: 0, y: 100, z: 0}
-  _rotationSpeed: 5
-  _raiseMirrorHeight: 0
-  _raisePortalHeight: 0
-  _pairedPedestals:
-  - {fileID: 0}
-  _lightBeam: {fileID: 5491094559037168252}
-  _raiseLightBeam: 1
-  _lightBeamLength: 2
-  isPortalPlaced: 0
-  currentPortal: {fileID: 0}
 --- !u!1001 &1767118365167717085
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -158,83 +157,4 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6861d86862b9ba441b26d02c237fe1c8, type: 3}
   m_PrefabInstance: {fileID: 1767118365167717085}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &7955917669374812984
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 3955604971440488076}
-    m_Modifications:
-    - target: {fileID: 775294244184712969, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_Name
-      value: LightLaser
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
---- !u!4 &385098048217301486 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7724021174889784022, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-  m_PrefabInstance: {fileID: 7955917669374812984}
-  m_PrefabAsset: {fileID: 0}
---- !u!120 &5491094559037168252 stripped
-LineRenderer:
-  m_CorrespondingSourceObject: {fileID: 2476225114978089284, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
-  m_PrefabInstance: {fileID: 7955917669374812984}
   m_PrefabAsset: {fileID: 0}

@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class ConstTrigger : MonoBehaviour
+public class ConstTrigger2 : MonoBehaviour
 {
     // List of constellations that will change color
     public List<GameObject> validObjects; 

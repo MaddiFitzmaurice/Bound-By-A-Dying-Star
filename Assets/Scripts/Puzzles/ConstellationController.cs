@@ -44,7 +44,7 @@ public class ConstellationController : MonoBehaviour
                 int otherIndex = Array.IndexOf(_pedestalArray, node._pedestalB);
                 if (_mirroredPedestals[otherIndex] == true)
                 {
-                    node._pedestalA.ActivateEffect();
+                    node._pedestalA.ActivateEffect(node._pedestalB);
                     _activatedNodes[i] = true;
                     ConstellationChecker();
                 }
@@ -54,7 +54,7 @@ public class ConstellationController : MonoBehaviour
                  int otherIndex = Array.IndexOf(_pedestalArray, node._pedestalA);
                 if (_mirroredPedestals[otherIndex] == true)
                 {
-                    node._pedestalB.ActivateEffect();
+                    node._pedestalB.ActivateEffect(node._pedestalA);
                     _activatedNodes[i] = true;
                     ConstellationChecker();
                 }
