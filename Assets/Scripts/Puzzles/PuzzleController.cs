@@ -20,6 +20,10 @@ public class PuzzleController : MonoBehaviour
     private List<PressurePlateB> pressurePlatesB = new List<PressurePlateB>();
     public GameObject[] platformsToAppear; // Assign in Inspector
 
+    public List<Mirror> mirrors = new List<Mirror>(); // Assign all mirrors in the Inspector
+    public GameObject puzzleDoor; // Assign the puzzle door in the Inspector
+    private int emittingMirrorsCount = 0; // Track the number of mirrors currently emitting light
+
     private int activatedPlatesCount = 0;
 
     private void Awake()
@@ -150,10 +154,30 @@ public class PuzzleController : MonoBehaviour
     {
         if (data == null)
         {
-            Debug.LogError("PuzzleDoneHandler is null!");
+            
         }
 
-        // do stuff here 
-        Debug.Log("PUZLE DONE WOOOO");
+        
+        
+    }
+
+    public void MirrorStartedEmittingLight()
+    {
+        emittingMirrorsCount++;
+        CheckAllMirrorsEmittingLight();
+    }
+
+    public void MirrorStoppedEmittingLight()
+    {
+        emittingMirrorsCount--;
+    }
+
+    void CheckAllMirrorsEmittingLight()
+    {
+        // If all mirrors are emitting light, remove the puzzle door
+        if (emittingMirrorsCount == mirrors.Count)
+        {
+            puzzleDoor.SetActive(false);
+        }
     }
 }

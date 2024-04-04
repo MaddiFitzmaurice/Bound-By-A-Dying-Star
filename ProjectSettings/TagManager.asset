@@ -13,6 +13,7 @@ TagManager:
   - LibraConst
   - Mirror
   - Mirror Pedestal
+  - KeyDoor
   layers:
   - Default
   - TransparentFX
