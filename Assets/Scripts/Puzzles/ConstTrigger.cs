@@ -26,15 +26,18 @@ public class ConstTrigger : MonoBehaviour
 
     [SerializeField] private LineRenderer _lightBeam2;
     [SerializeField] private float _raiseLightBeam2;
+    [SerializeField] private float _lightBeamLength;
     [SerializeField] private float _lightBeamLength2;
 
     public bool isPortalPlaced = false;
     public GameObject currentPortal = null;
+    private ConstellationController _conController;
 
     void Start()
     {
         // Get the Renderer component from the disk
         _diskRenderer = GetComponentInChildren<Renderer>();
+        _conController = GetComponentInParent<ConstellationController>(); 
     }
 
     void OnTriggerEnter(Collider other)
@@ -98,6 +101,9 @@ public class ConstTrigger : MonoBehaviour
 
         // Lock the mirror if needed
         pickupableObject.LockObject();
+
+        //tell contreoler that mirror is on pedestal
+        _conController.PedestalHasMirror(this);
 
         // Set laser beam to go in the direction of the mirror (+ 25) then turn beam on
         Vector3 beamDirection = mirror.position + mirror.forward * 10;

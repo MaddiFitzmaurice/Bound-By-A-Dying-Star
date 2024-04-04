@@ -22,6 +22,40 @@ public class PuzzleController : MonoBehaviour
 
     private int activatedPlatesCount = 0;
 
+    private void Awake()
+    {
+        EventManager.EventInitialise(EventType.PUZZLE_DONE);
+    }
+
+        private void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.PUZZLE_DONE, PuzzleDoneHandler);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.PUZZLE_DONE, PuzzleDoneHandler);
+    }
+
+    void Start()
+    {
+        // Initialize platforms as inactive
+        foreach (GameObject platform in platformsToAppear)
+        {
+            platform.SetActive(false);
+        }
+
+        // Initialize pressure plates list from GameObjects
+        foreach (GameObject plateObj in pressurePlatesBObjects)
+        {
+            PressurePlateB plateScript = plateObj.GetComponent<PressurePlateB>();
+            if (plateScript != null)
+            {
+                pressurePlatesB.Add(plateScript);
+                plateScript.puzzleController = this; // Ensure the plate script references back to this controller
+            }
+        }
+    }
 
     void Update()
     {
@@ -112,23 +146,14 @@ public class PuzzleController : MonoBehaviour
         }
     }
 
-    void Start()
+    public void PuzzleDoneHandler(object data)
     {
-        // Initialize platforms as inactive
-        foreach (GameObject platform in platformsToAppear)
+        if (data == null)
         {
-            platform.SetActive(false);
+            Debug.LogError("PuzzleDoneHandler is null!");
         }
 
-        // Initialize pressure plates list from GameObjects
-        foreach (GameObject plateObj in pressurePlatesBObjects)
-        {
-            PressurePlateB plateScript = plateObj.GetComponent<PressurePlateB>();
-            if (plateScript != null)
-            {
-                pressurePlatesB.Add(plateScript);
-                plateScript.puzzleController = this; // Ensure the plate script references back to this controller
-            }
-        }
+        // do stuff here 
+        Debug.Log("PUZLE DONE WOOOO");
     }
 }

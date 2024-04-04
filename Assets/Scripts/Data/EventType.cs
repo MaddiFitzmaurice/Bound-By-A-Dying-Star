@@ -23,6 +23,7 @@ public enum EventType
 
     // Puzzles
     ASSIGNMENT_CODE_TRIGGER,  //trigger code for puzzle features
+    PUZZLE_DONE, // trigger if a puzzle is done to be sent to the puzzle controller
 
     // Narrative
     NPC_SEND_DIALOGUE,
