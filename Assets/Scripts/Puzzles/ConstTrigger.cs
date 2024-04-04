@@ -96,9 +96,11 @@ public class ConstTrigger : MonoBehaviour
         pickupableObject.LockObject();
 
         // Set laser beam to go in the direction of the mirror (+ 25) then turn beam on
-        Vector3 beamDirection = mirror.position + mirror.forward;
+        Vector3 beamDirection = mirror.position + mirror.forward * 10;
+        _lightBeam.transform.rotation = mirror.rotation;
         _lightBeam.SetPosition(1, beamDirection);
         //_lightBeam.enabled = true;
+        
     }
 
     public void HandlePortalOverlap(GameObject portal, GameObject mirror)
