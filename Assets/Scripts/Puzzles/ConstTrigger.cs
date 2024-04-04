@@ -28,6 +28,10 @@ public class ConstTrigger : MonoBehaviour
     [SerializeField] private float _raiseLightBeam;
     [SerializeField] private float _lightBeamLength;
 
+    [SerializeField] private LineRenderer _lightBeam2;
+    [SerializeField] private float _raiseLightBeam2;
+    [SerializeField] private float _lightBeamLength2;
+
     public bool isPortalPlaced = false;
     public GameObject currentPortal = null;
 
@@ -107,8 +111,19 @@ public class ConstTrigger : MonoBehaviour
         _lightBeam.SetPosition(0, Vector3.zero);
 
         // End point of the beam in local space
-        Vector3 localEndPoint = new Vector3(0, 0, _lightBeamLength);
-        _lightBeam.SetPosition(1, localEndPoint);
+        Vector3 lightBeamEndPoint = new Vector3(0, 0, _lightBeamLength);
+        _lightBeam.SetPosition(1, lightBeamEndPoint);
+
+        if (_lightBeam2 != null)
+        {
+            _lightBeam2.transform.position = new Vector3(mirror.transform.position.x, mirror.transform.position.y + _raiseLightBeam2, mirror.transform.position.z);
+            // Start point of the beam in local space
+            _lightBeam2.SetPosition(0, Vector3.zero);
+
+            // End point of the beam in local space
+            Vector3 lightBeam2EndPoint = new Vector3(0, 0, _lightBeamLength2);
+            _lightBeam2.SetPosition(1, lightBeam2EndPoint);
+        }
     }
 
     public void HandlePortalOverlap(GameObject portal, GameObject mirror)
@@ -167,6 +182,10 @@ public class ConstTrigger : MonoBehaviour
         if (_lightBeam != null)
         {
             _lightBeam.enabled = true;
+        }
+        if (_lightBeam2 != null)
+        {
+            _lightBeam2.enabled = true;
         }
     }
 }
