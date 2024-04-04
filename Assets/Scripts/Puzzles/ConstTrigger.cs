@@ -10,23 +10,19 @@ public class ConstTrigger : MonoBehaviour
     // List of constellations that will change color
     public List<GameObject> validObjects; 
     private Renderer _diskRenderer;
-
-    // Moving the mirror once it locks into the pedestal
     [SerializeField] private Vector3 _mirrorRotationAngle;
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _raiseMirrorHeight;
-
-    // move the portal to be in the centre of mirror
-    [SerializeField] private float _raisePortalHeight;
+    //[SerializeField] private float _portalSizeScale;
 
     // The pedestal that forms a pair with this one
     [SerializeField] private GameObject[] _pairedPedestals;
 
+    
+
     //Effects
     //[SerializeField] private ParticleSystem _lightEffect;
     [SerializeField] private LineRenderer _lightBeam;
-    [SerializeField] private float _raiseLightBeam;
-    [SerializeField] private float _lightBeamLength;
 
     [SerializeField] private LineRenderer _lightBeam2;
     [SerializeField] private float _raiseLightBeam2;
@@ -103,8 +99,8 @@ public class ConstTrigger : MonoBehaviour
         // Lock the mirror if needed
         pickupableObject.LockObject();
 
-        // Adjust lightbeam to be in the centre of the mirror
-        _lightBeam.transform.position = new Vector3(mirror.transform.position.x, mirror.transform.position.y + _raiseLightBeam, mirror.transform.position.z);
+        // Set laser beam to go in the direction of the mirror (+ 25) then turn beam on
+        Vector3 beamDirection = mirror.position + mirror.forward * 10;
         _lightBeam.transform.rotation = mirror.rotation;
 
         // Start point of the beam in local space
@@ -130,9 +126,12 @@ public class ConstTrigger : MonoBehaviour
     {
         if (mirror != null)
         {
+            // Get the mirror's transform scale
+            //Vector3 mirrorScale = mirror.GetComponent<Renderer>().bounds.size;
+
             // Set the portal's position and rotation to match the mirror
-            // Adjust portal position to be in centre of mirror object
-            portal.transform.position = new Vector3(mirror.transform.position.x, mirror.transform.position.y + _raisePortalHeight, mirror.transform.position.z);
+            //MANUAL MOVING OF PORTAL, REMOVE ONCE CENTRE OF OBJECT HAS BEEN FIXED
+            portal.transform.position = new Vector3(mirror.transform.position.x, mirror.transform.position.y * 1.5f, mirror.transform.position.z);
             portal.transform.rotation = mirror.transform.rotation;
 
             float targetWidth = mirror.transform.localScale.x;
