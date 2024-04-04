@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3661567052154285865}
   - component: {fileID: 1076745464234087841}
   m_Layer: 0
-  m_Name: ItemSkin2
+  m_Name: TestItemSkin2
   m_TagString: Pickupable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
