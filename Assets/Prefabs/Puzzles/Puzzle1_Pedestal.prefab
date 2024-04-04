@@ -72,11 +72,13 @@ MonoBehaviour:
   - {fileID: 0}
   _mirrorRotationAngle: {x: 0, y: 100, z: 0}
   _rotationSpeed: 5
-  _portalSizeScale: 0.9
+  _raiseMirrorHeight: 0
+  _raisePortalHeight: 0
   _pairedPedestals:
   - {fileID: 0}
-  _lightEffect: {fileID: 0}
   _lightBeam: {fileID: 5491094559037168252}
+  _raiseLightBeam: 1
+  _lightBeamLength: 2
   isPortalPlaced: 0
   currentPortal: {fileID: 0}
 --- !u!1001 &1767118365167717085
