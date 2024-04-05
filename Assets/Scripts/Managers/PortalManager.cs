@@ -139,7 +139,6 @@ public class PortalManager : MonoBehaviour
         {
             // Activate the particle effects
             pedestal1.ActivateEffect(pedestal2);
-            //pedestal2.ActivateEffect();
 
             //Destroy portals
             Destroy(pedestal1.currentPortal);

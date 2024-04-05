@@ -15,9 +15,10 @@ public class PickupableObject : MonoBehaviour
     public void BePickedUp(ItemPickup itemPickup)
     {
         _isCarried = true;
-        itemPickupScript = itemPickup; // Store the reference to the ItemPickup script
+        // Store the reference to the ItemPickup script
+        itemPickupScript = itemPickup; 
         // Set this object as the parent to the pickup point
-        transform.SetParent(itemPickup._pickupPoint);
+        transform.SetParent(itemPickup.pickupPoint);
         transform.localPosition = Vector3.zero;
     }
 
@@ -32,7 +33,8 @@ public class PickupableObject : MonoBehaviour
         {
             itemPickupScript.DropObject();
         }
-        itemPickupScript = null; // Clear the reference
+        // Clear the reference
+        itemPickupScript = null; 
     }
 
     // Start is called before the first frame update

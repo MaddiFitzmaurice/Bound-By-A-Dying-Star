@@ -24,8 +24,6 @@ public class PedestalConstellation : MonoBehaviour
     [SerializeField] private GameObject[] _pairedPedestals;
 
     //Effects
-    //[SerializeField] private ParticleSystem _lightEffect;
-    //[SerializeField] private LineRenderer _lightBeam;
     [SerializeField] private GameObject _lightBeam;
     [SerializeField] private float _raiseLightBeam;
     [SerializeField] private float _lightBeamLength;
@@ -86,9 +84,8 @@ public class PedestalConstellation : MonoBehaviour
         mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
         mirror.rotation = transform.rotation;
 
-        //Quaternion targetRotation = Quaternion.Euler(_mirrorRotationAngle + transform.eulerAngles);
-
         Vector3 targetPosition = _pairedPedestals[0].transform.position;
+
         // Remove the y component from the target position and the mirror's position to avoid tilting
         Vector3 targetDirection = (new Vector3(targetPosition.x, mirror.position.y, targetPosition.z) - mirror.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
@@ -112,17 +109,6 @@ public class PedestalConstellation : MonoBehaviour
         //tell contreoler that mirror is on pedestal
         //_conController.PedestalHasMirror(this);
 
-        // Adjust lightbeam to be in the centre of the mirror
-        //_lightBeam.transform.position = new Vector3(mirror.transform.position.x, mirror.transform.position.y + _raiseLightBeam, mirror.transform.position.z);
-        //_lightBeam.transform.rotation = mirror.rotation;
-////
-        //// Start point of the beam in local space
-        //_lightBeam.SetPosition(0, Vector3.zero);
-////
-        //// End point of the beam in local space
-        //Vector3 localEndPoint = new Vector3(0, 0, _lightBeamLength);
-        //_lightBeam.SetPosition(1, localEndPoint);
-        //_lightBeam.enabled = true;
     }
 
     public void HandlePortalOverlap(GameObject portal, GameObject mirror)
@@ -178,9 +164,6 @@ public class PedestalConstellation : MonoBehaviour
 
     public void ActivateEffect(PedestalConstellation otherPedestal)
     {
-        //_lightBeam.enabled = true;
-        
-
         GameObject newLightbeam = Instantiate(_lightBeam, transform);
         LineRenderer lineRenderer = newLightbeam.GetComponentInChildren<LineRenderer>();
 
