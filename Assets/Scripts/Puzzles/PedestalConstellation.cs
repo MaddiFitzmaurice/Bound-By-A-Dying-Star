@@ -1,6 +1,7 @@
 using Ink.Parsed;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor.PackageManager;
@@ -13,7 +14,6 @@ public class PedestalConstellation : MonoBehaviour
     private Renderer _diskRenderer;
 
     // Moving the mirror once it locks into the pedestal
-    [SerializeField] private Vector3 _mirrorRotationAngle;
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _raiseMirrorHeight;
 
@@ -86,7 +86,12 @@ public class PedestalConstellation : MonoBehaviour
         mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
         mirror.rotation = transform.rotation;
 
-        Quaternion targetRotation = Quaternion.Euler(_mirrorRotationAngle + transform.eulerAngles);
+        //Quaternion targetRotation = Quaternion.Euler(_mirrorRotationAngle + transform.eulerAngles);
+
+        Vector3 targetPosition = _pairedPedestals[0].transform.position;
+        // Remove the y component from the target position and the mirror's position to avoid tilting
+        Vector3 targetDirection = (new Vector3(targetPosition.x, mirror.position.y, targetPosition.z) - mirror.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
         while (Quaternion.Angle(mirror.rotation, targetRotation) > 0.01f)
         {
@@ -97,6 +102,7 @@ public class PedestalConstellation : MonoBehaviour
         // Ensure the mirror snaps to the exact rotation
         mirror.rotation = targetRotation; 
 
+
         // Make the mirror a child of the pedestal to maintain relative positioning
         mirror.SetParent(transform);
 
@@ -104,7 +110,7 @@ public class PedestalConstellation : MonoBehaviour
         pickupableObject.LockObject();
 
         //tell contreoler that mirror is on pedestal
-        _conController.PedestalHasMirror(this);
+        //_conController.PedestalHasMirror(this);
 
         // Adjust lightbeam to be in the centre of the mirror
         //_lightBeam.transform.position = new Vector3(mirror.transform.position.x, mirror.transform.position.y + _raiseLightBeam, mirror.transform.position.z);
@@ -173,6 +179,8 @@ public class PedestalConstellation : MonoBehaviour
     public void ActivateEffect(PedestalConstellation otherPedestal)
     {
         //_lightBeam.enabled = true;
+        
+
         GameObject newLightbeam = Instantiate(_lightBeam, transform);
         LineRenderer lineRenderer = newLightbeam.GetComponentInChildren<LineRenderer>();
 

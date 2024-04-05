@@ -138,7 +138,7 @@ public class PortalManager : MonoBehaviour
         if (pedestal1.IsPortalPlaced() && pedestal2.IsPortalPlaced())
         {
             // Activate the particle effects
-            //pedestal1.ActivateEffect();
+            pedestal1.ActivateEffect(pedestal2);
             //pedestal2.ActivateEffect();
 
             //Destroy portals

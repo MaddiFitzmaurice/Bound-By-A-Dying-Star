@@ -5,7 +5,7 @@ using UnityEngine;
 public class ItemPickup : MonoBehaviour
 {
     // Assign the pick up location of the object in the Inspector
-    [SerializeField] private Transform _pickupPoint;
+    [SerializeField] public Transform _pickupPoint;
     private GameObject _carriedObject = null;
     // Track whether the player is holding an item
     public bool isHoldingItem = false;
@@ -83,10 +83,16 @@ public class ItemPickup : MonoBehaviour
                     PickupableObject pickupableObject = collider.GetComponent<PickupableObject>();
                     if (pickupableObject != null && !pickupableObject.isLocked)
                     {
+                        //Debug.Log(this.name + "Picked Up An Object");
+                        //_carriedObject = collider.gameObject;
+                        //_carriedObject.transform.SetParent(_pickupPoint);
+                        //_carriedObject.transform.localPosition = Vector3.zero;
+                        //isHoldingItem = true;
+                        //break;
+
                         Debug.Log(this.name + "Picked Up An Object");
                         _carriedObject = collider.gameObject;
-                        _carriedObject.transform.SetParent(_pickupPoint);
-                        _carriedObject.transform.localPosition = Vector3.zero;
+                        pickupableObject.BePickedUp(this); // Set the reference to this ItemPickup script
                         isHoldingItem = true;
                         break;
                     }

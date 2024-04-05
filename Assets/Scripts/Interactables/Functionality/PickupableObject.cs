@@ -10,11 +10,29 @@ public class PickupableObject : MonoBehaviour
     private bool _isCarried = false;
     public bool isLocked = false;
 
+    private ItemPickup itemPickupScript; // Reference to the ItemPickup script
+
+    public void BePickedUp(ItemPickup itemPickup)
+    {
+        _isCarried = true;
+        itemPickupScript = itemPickup; // Store the reference to the ItemPickup script
+        // Set this object as the parent to the pickup point
+        transform.SetParent(itemPickup._pickupPoint);
+        transform.localPosition = Vector3.zero;
+    }
+
     public void BeDropped()
     {
         _isCarried = false;
         // Removes the parent-child relationship, making the object independent in the scene
-        transform.SetParent(null); 
+        transform.SetParent(null);
+
+        // Use the stored reference to drop the object
+        if (itemPickupScript != null)
+        {
+            itemPickupScript.DropObject();
+        }
+        itemPickupScript = null; // Clear the reference
     }
 
     // Start is called before the first frame update
