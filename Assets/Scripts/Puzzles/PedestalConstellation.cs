@@ -180,7 +180,6 @@ public class PedestalConstellation : MonoBehaviour
         lineRenderer.transform.position = new Vector3(transform.position.x, transform.position.y + _raiseLightBeam +_raiseMirrorHeight, transform.position.z);
 
         // End point of the beam in local space
-        Vector3 localEndPoint = new Vector3(0, 0, _lightBeamLength);
         lineRenderer.SetPosition(1, transform.InverseTransformPoint(otherPedestal.transform.position));
         lineRenderer.enabled = true;
     }
