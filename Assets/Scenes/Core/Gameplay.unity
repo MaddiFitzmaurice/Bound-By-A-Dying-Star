@@ -1861,11 +1861,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3978597851644723624, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.13019113
+      value: 0.13019946
+      objectReference: {fileID: 0}
+    - target: {fileID: 3978597851644723624, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 17.973637
+      objectReference: {fileID: 0}
+    - target: {fileID: 3978597851644723624, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 132.33434
       objectReference: {fileID: 0}
     - target: {fileID: 4745299710038087838, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
       propertyPath: m_Name
       value: GameplayManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4745299710038087838, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8349620285651214710, guid: 6649a2dc5ed644545875c2acd85c0f51, type: 3}
       propertyPath: m_Targets.Array.data[0].target
