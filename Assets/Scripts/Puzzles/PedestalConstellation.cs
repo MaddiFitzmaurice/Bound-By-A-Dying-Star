@@ -6,7 +6,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class ConstTrigger : MonoBehaviour
+public class PedestalConstellation : MonoBehaviour
 {
     // List of constellations that will change color
     public List<GameObject> validObjects; 
@@ -144,7 +144,7 @@ public class ConstTrigger : MonoBehaviour
             //PortalManager.Instance.CheckForMatchingPortals(this, _pairedPedestal.GetComponent<ConstTrigger>());
             foreach (GameObject pairedPedestal in _pairedPedestals)
             {
-                PortalManager.Instance.CheckForMatchingPortals(this, pairedPedestal.GetComponent<ConstTrigger>());
+                PortalManager.Instance.CheckForMatchingPortals(this, pairedPedestal.GetComponent<PedestalConstellation>());
             }
         }
     }
@@ -170,7 +170,7 @@ public class ConstTrigger : MonoBehaviour
         return isPortalPlaced;
     }
 
-    public void ActivateEffect(ConstTrigger otherPedestal)
+    public void ActivateEffect(PedestalConstellation otherPedestal)
     {
         //_lightBeam.enabled = true;
         GameObject newLightbeam = Instantiate(_lightBeam, transform);

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ConstellationController : MonoBehaviour
 {
-    [SerializeField] private ConstTrigger[] _pedestalArray;
+    [SerializeField] private PedestalConstellation[] _pedestalArray;
     [SerializeField] private List<PedestalNode> _pedestalNodeList;
     private bool[] _mirroredPedestals;
     private bool[] _activatedNodes;
@@ -27,7 +27,7 @@ public class ConstellationController : MonoBehaviour
         }
     }
 
-    public void PedestalHasMirror(ConstTrigger sender)
+    public void PedestalHasMirror(PedestalConstellation sender)
     {
         int senderIndex = Array.IndexOf(_pedestalArray, sender);
         _mirroredPedestals[senderIndex] = true;
@@ -85,6 +85,6 @@ public class ConstellationController : MonoBehaviour
 [Serializable]
 public class PedestalNode
 {
-    public ConstTrigger _pedestalA;
-    public ConstTrigger _pedestalB;
+    public PedestalConstellation _pedestalA;
+    public PedestalConstellation _pedestalB;
 }

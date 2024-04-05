@@ -119,7 +119,7 @@ public class PortalManager : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(portal.transform.position, _checkRadius);
         foreach (var hitCollider in hitColliders)
         {
-            ConstTrigger constTrigger = hitCollider.GetComponent<ConstTrigger>();
+            PedestalConstellation constTrigger = hitCollider.GetComponent<PedestalConstellation>();
             if (constTrigger != null)
             {
                 // Find the mirror on the platform
@@ -132,7 +132,7 @@ public class PortalManager : MonoBehaviour
         }
     }
 
-    public void CheckForMatchingPortals(ConstTrigger pedestal1, ConstTrigger pedestal2)
+    public void CheckForMatchingPortals(PedestalConstellation pedestal1, PedestalConstellation pedestal2)
     {
         //Check to see if both portals have been placed on the pedestal
         if (pedestal1.IsPortalPlaced() && pedestal2.IsPortalPlaced())
