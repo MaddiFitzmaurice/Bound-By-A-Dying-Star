@@ -9,7 +9,6 @@ public class GameplayManager : MonoBehaviour
     void Awake()
     {
         EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
-        EventManager.EventInitialise(EventType.GAMEPLAY_CAMS_INIT);
     }
 
     private void Start()

@@ -33,5 +33,6 @@ public enum EventType
     PORTALSENDEFFECT,
 
     // CameraManager
-    GAMEPLAY_CAMS_INIT
+    GAMEPLAY_CAMS_INIT,
+    GAMEPLAY_CAMS_CHANGE
 };
