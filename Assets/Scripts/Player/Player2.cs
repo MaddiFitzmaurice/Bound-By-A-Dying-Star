@@ -27,7 +27,7 @@ public class Player2 : PlayerBase
 
         // Set move direction
         Vector2 input = (Vector2)data;
-        MoveDirection.Set(input.x, 0, input.y);
+        MoveInput.Set(input.x, 0, input.y);
     }
 
     private void CreatePortalInFrontOfPlayer(object data)

@@ -1,51 +1,61 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Camera))]
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] private List<Transform> _playerObjects;
-    private Camera _camera;
+    #region INTERNAL DATA
+    private CinemachineVirtualCamera _forwardCam;
+    private CinemachineVirtualCamera _leftCam;
+    private CinemachineVirtualCamera _rightCam;
 
-    // Camera Settings
-    private Vector3 _offset;
-    private Vector3 _velocity;
-    [SerializeField] private float _smoothTime = 0.25f;
-    [SerializeField] private float _zoomOutMax = 50f;
-    [SerializeField] private float _zoomInMax = 20f;
-    [SerializeField] private float _zoomDefaultDistance = 20f;
-
-
-    void Start()
+    #endregion
+    private void OnEnable()
     {
-        _offset = transform.position;
-        _camera = GetComponent<Camera>();
+        EventManager.EventSubscribe(EventType.GAMEPLAY_CAMS_INIT, GameplayCamsInit);
     }
 
-    // Update is called once per frame
-    void LateUpdate()
+    private void OnDisable()
     {
-        var bounds = new Bounds(_playerObjects[0].position, Vector3.zero);
-        bounds.Encapsulate(_playerObjects[1].position);
-
-        MoveCamera(bounds.center);
-        ZoomCamera(bounds.size.x);
+        EventManager.EventUnsubscribe(EventType.GAMEPLAY_CAMS_INIT, GameplayCamsInit);
     }
 
-    void MoveCamera(Vector3 playersCentre)
+    #region EVENT HANDLERS
+    // Receive the Gameplay Cameras and set them up
+    public void GameplayCamsInit(object data)
     {
-        Vector3 newPosition = playersCentre + _offset;
+        if (data is not GameObject)
+        {
+            Debug.LogError("CameraManager did not receive a GameObject!");
+        }
 
-        newPosition = new Vector3(newPosition.x, newPosition.y, _offset.z);
+        GameObject cams = data as GameObject;
+        var listOfCams = cams.GetComponentsInChildren<CinemachineVirtualCamera>().ToList();
 
-        transform.position = Vector3.SmoothDamp(transform.position, newPosition, ref _velocity, _smoothTime);
+        // Don't know how else to distinguish them so doing this for now
+        foreach (CinemachineVirtualCamera cam in listOfCams)
+        {
+            if (cam.transform.rotation.y == 0)
+            {
+                _forwardCam = cam;
+            }
+            else if (cam.transform.rotation.y == 90)
+            {
+                _rightCam = cam;
+            }
+            else if (cam.transform.rotation.y == -90)
+            {
+                _leftCam = cam;
+            }
+        }
     }
 
-    void ZoomCamera(float playerDistance)
+    // Change the camera according to the direction the players are heading in
+    public void ChangeGameplayCam(object data)
     {
-        // Note: Change bounds.size.x to distance between the two objects
-        float newZoom = Mathf.Lerp(_zoomInMax, _zoomOutMax, playerDistance / _zoomDefaultDistance);
-        _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, newZoom, Time.deltaTime);
+
     }
+    #endregion
 }

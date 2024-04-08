@@ -14,6 +14,9 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] protected float MoveDecel = 2f;
     [SerializeField] protected float VelocityPower = 2f;
 
+    // Rotation
+    [SerializeField] protected float RotationSpeed = 2f;
+
     // Rift Data
     [Header("Rift Data")]
     [SerializeField] protected float DistanceInFront = 2f;
@@ -31,7 +34,7 @@ public class PlayerBase : MonoBehaviour
 
     // Data
     protected RiftData RiftData;
-    protected Vector3 MoveDirection;
+    protected Vector3 MoveInput;
 
     // Interactables
     List<Collider> _interactablesInRange;
@@ -53,19 +56,19 @@ public class PlayerBase : MonoBehaviour
     private void Update()
     {
         CheckInteract();
+        PlayerRotation();
     }
 
     private void FixedUpdate()
     {
         PlayerMovement();
-        PlayerRotation();
     }
 
     // Movement
     public void PlayerMovement()
     {
         // Calculate desired velocity
-        float targetVelocity = MoveDirection.magnitude * MoveSpeed;
+        float targetVelocity = MoveInput.magnitude * MoveSpeed;
 
         // Find diff between desired velocity and current velocity
         float velocityDif = targetVelocity - _rb.velocity.magnitude;
@@ -78,15 +81,16 @@ public class PlayerBase : MonoBehaviour
         float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, VelocityPower)
             * Mathf.Sign(velocityDif);
 
-        _rb.AddForce(movementForce * MoveDirection);
+        _rb.AddForce(movementForce * transform.forward * MoveInput.z);
     }
 
     public void PlayerRotation()
     {
-        if (MoveDirection.magnitude != 0)
-        {
-            _rb.MoveRotation(Quaternion.LookRotation(MoveDirection, Vector3.up));
-        }
+        Vector3 rotVector = new Vector3(0, MoveInput.x, 0);
+
+        Quaternion playerRotChange = Quaternion.Euler(rotVector * Time.deltaTime * RotationSpeed);
+
+        _rb.MoveRotation(_rb.rotation * playerRotChange);
     }
 
     // Interaction

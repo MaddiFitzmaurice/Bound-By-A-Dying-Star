@@ -31,4 +31,7 @@ public enum EventType
     // PortalManager
     PORTALMANAGER_CREATEPORTAL,
     PORTALSENDEFFECT,
+
+    // CameraManager
+    GAMEPLAY_CAMS_INIT
 };
