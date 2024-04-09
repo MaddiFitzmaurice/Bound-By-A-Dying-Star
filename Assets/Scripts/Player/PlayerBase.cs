@@ -96,6 +96,8 @@ public class PlayerBase : MonoBehaviour
     // Interaction
     public void Interact(object data)
     {
+        // TODO: Maybe make a statemachine for the player so this can be scalable
+
         // If carrying an item and no objects are nearby
         if (CarriedItem != null && _closestInteractable == null)
         {
@@ -110,7 +112,7 @@ public class PlayerBase : MonoBehaviour
             if (CarriedItem == null)
             {
                 // Closest interactable is item or NPC
-                if (interactable is Item || interactable is NPC)
+                if (interactable is Item || interactable is NPC || interactable is Level1Mirror)
                 {
                     _closestInteractable = null;
                     interactable.PlayerStartInteract(this);

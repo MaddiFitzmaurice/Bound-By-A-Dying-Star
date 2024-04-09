@@ -49,10 +49,22 @@ public class CameraManager : MonoBehaviour
         GameObject cams = data as GameObject;
         var listOfCams = cams.GetComponentsInChildren<CinemachineVirtualCamera>().ToList();
 
+        // TEMPORARY CODE BELOW
+        if (listOfCams.Count != 3) 
+        {
+            Debug.LogError("3 Cameras not present!");
+        }
+
+        Vector3 camAngle = listOfCams[0].transform.eulerAngles;
+        listOfCams[0].transform.eulerAngles = new Vector3(camAngle.x, 0, camAngle.z);
+        camAngle = listOfCams[1].transform.eulerAngles;
+        listOfCams[1].transform.eulerAngles = new Vector3(camAngle.x, 90, camAngle.z);
+        camAngle = listOfCams[2].transform.eulerAngles;
+        listOfCams[2].transform.eulerAngles = new Vector3(camAngle.x, 270, camAngle.z);
+
         // Don't know how else to distinguish them so doing this for now
         foreach (CinemachineVirtualCamera cam in listOfCams)
         {
-            Debug.Log(cam.transform.rotation.eulerAngles.y);
             if (cam.transform.rotation.eulerAngles.y == 0)
             {
                 _forwardCam = cam;
