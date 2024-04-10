@@ -70,8 +70,8 @@ public class Rift : MonoBehaviour, IInteractable
             // If the player is currently holding an item
             if (itemToSend != null && itemType != null)
             {
-                itemType.ChangeItemVersion();
-                itemType.BeDropped(_targetRift);
+                itemType.RiftEffect(_targetRift.transform);
+                itemType.BeDropped(null);
             }
         }
     }

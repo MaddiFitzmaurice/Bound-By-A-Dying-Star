@@ -51,11 +51,6 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         _defaultMat = _renderer.material;
     }
 
-    public void SetTransform(Transform newTransform)
-    {
-        transform.position = newTransform.position;
-    }   
-
     public void UnhighlightItem()
     {
         _renderer.material = _defaultMat;
@@ -66,17 +61,12 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         _renderer.material = mat;
     }
 
-    public void ChangeItemVersion()
+    public void RiftEffect(Transform pos)
     {
         _isVersion1 = !_isVersion1;
         _itemVersion1.SetActive(_isVersion1);
         _itemVersion2.SetActive(!_isVersion1);
-    }
-
-    public void Transform()
-    {
-        Debug.Log("Transform!");
-        ChangeItemVersion();
+        transform.position = pos.position;
     }
 
     #region IPICKUPABLE FUNCTIONS
@@ -89,7 +79,8 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     {
         // Removes the parent-child relationship, making the object independent in the scene
         // If an incoming parent is specified, use that. Else, use the default parent assigned in the scene
-        SetParent(newParent);
+        Transform parent = newParent != null ? newParent : _itemGrouper;
+        SetParent(parent);
   
         _playerHoldingItem.DropItem();
         _playerHoldingItem = null;
