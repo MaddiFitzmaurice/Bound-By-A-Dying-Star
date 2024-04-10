@@ -162,12 +162,18 @@ public class PuzzleController : MonoBehaviour
 
     public void PuzzleDoneHandler(object data)
     {
-        if (data == null)
+        if (data is not int)
         {
-            
+            Debug.LogError("PuzzleDone handler has not received an int!");
         }
 
-        
+        int code = (int)data;
+
+        // Remove door
+        if (code == 1)
+        {
+            puzzleDoor.SetActive(false);
+        }
         
     }
 
