@@ -108,6 +108,7 @@ public class ConstellationController : MonoBehaviour
 
         if (done)
         {
+            Debug.Log("Constellation Complete!");
             EventManager.EventTrigger(EventType.PUZZLE_DONE, 1);
         }
     }
