@@ -26,6 +26,14 @@ public class PuzzleController : MonoBehaviour
 
     private int activatedPlatesCount = 0;
 
+    public List<Transform> checkpoints = new List<Transform>(); // Assign in Inspector
+
+    private Transform currentRespawnTransform;
+
+    private Vector3 currentRespawnPoint;
+
+
+
     private void Awake()
     {
         EventManager.EventInitialise(EventType.PUZZLE_DONE);
@@ -59,6 +67,8 @@ public class PuzzleController : MonoBehaviour
                 plateScript.puzzleController = this; // Ensure the plate script references back to this controller
             }
         }
+        currentRespawnPoint = checkpoints.Count > 0 ? checkpoints[0].position : transform.position;
+       
     }
 
     void Update()
@@ -129,7 +139,7 @@ public class PuzzleController : MonoBehaviour
     {
         if (other.CompareTag("Player1") || other.CompareTag("Player2"))
         {
-            other.transform.position = respawnPoint.position; // Teleport player to respawn point
+            RespawnPlayer(other.gameObject); // Direct call without 'puzzleController'
         }
     }
 
@@ -179,5 +189,16 @@ public class PuzzleController : MonoBehaviour
         {
             puzzleDoor.SetActive(false);
         }
+    }
+
+    // Call this method to update the current respawn point when players pass a checkpoint
+    public void UpdateRespawnPoint(Transform newRespawnPoint)
+    {
+        currentRespawnPoint = newRespawnPoint.position;
+    }
+
+    public void RespawnPlayer(GameObject player)
+    {
+        player.transform.position = currentRespawnPoint;
     }
 }
