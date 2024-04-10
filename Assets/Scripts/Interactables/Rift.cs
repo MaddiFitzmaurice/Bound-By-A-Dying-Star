@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Rift : MonoBehaviour, IInteractable
 {
-    #region EXTERNAL DATA
-    [SerializeField] private ParticleSystem _portalSendEffect;
-    #endregion
     #region INTERNAL DATA
     // Target Rift
     private Transform _targetRift; // Link to other Rift if it exists
@@ -16,12 +13,14 @@ public class Rift : MonoBehaviour, IInteractable
 
     // Components
     private Renderer _renderer;
+    private ParticleSystem _riftSendEffect;
     #endregion
 
     private void Awake()
     {
         // Get components
         _renderer = GetComponentInChildren<Renderer>();
+        _riftSendEffect = GetComponentInChildren<ParticleSystem>();
 
         // Set default material
         _defaultMat = _renderer.material;
@@ -55,7 +54,7 @@ public class Rift : MonoBehaviour, IInteractable
     private void PortalEffectHandler(object data)
     {
         //Debug.Log("effect play");
-        _portalSendEffect.Emit(50);
+        _riftSendEffect.Emit(50);
     }
 
     #region IINTERACTABLE FUNCTIONS
