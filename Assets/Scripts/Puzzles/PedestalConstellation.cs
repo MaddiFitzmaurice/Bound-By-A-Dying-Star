@@ -9,9 +9,9 @@ using UnityEngine;
 
 public class PedestalConstellation : MonoBehaviour
 {
-    // List of constellations that will change color
-    public List<GameObject> validObjects; 
-    private Renderer _diskRenderer;
+    #region EXTERNAL DATA
+    // List? of valid interactables that can be placed on the pedestal
+    [SerializeField] private List<GameObject> _validInteractables;
 
     // Moving the mirror once it locks into the pedestal
     [SerializeField] private float _rotationSpeed;
@@ -27,10 +27,16 @@ public class PedestalConstellation : MonoBehaviour
     [SerializeField] private GameObject _lightBeam;
     [SerializeField] private float _raiseLightBeam;
     [SerializeField] private float _lightBeamLength;
+    #endregion
+
+    #region INTERNAL DATA
+    // Components
+    private Renderer _diskRenderer;
+    private ConstellationController _conController;
+    #endregion
 
     public bool isPortalPlaced = false;
     public GameObject currentPortal = null;
-    private ConstellationController _conController;
 
     void Awake()
     {
@@ -41,44 +47,69 @@ public class PedestalConstellation : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // If player enters, check it's pickup point to check for valid object
-        foreach (Transform child in other.transform)
+        PlayerBase player = other.GetComponent<PlayerBase>();
+
+        // Ensure player has entered the trigger
+        if (player != null)
         {
-            foreach (Transform grandChild in child)
+            // Ensure player is holding something and it's the correct interactable to be placed on pedestal
+            if (player.CarriedPickupable != null && _validInteractables.Contains(player.CarriedPickupable))
             {
-                if (validObjects.Contains(grandChild.gameObject))
+                // Change the disk's color to green
+                _diskRenderer.material.color = Color.green;
+
+                // IPickupable manipulation
+                GameObject carriedPickupable = player.CarriedPickupable;
+                IPickupable pickupableType = carriedPickupable.GetComponent<IPickupable>();
+                pickupableType.PickupLocked(true);
+                pickupableType.BeDropped(transform);
+
+                // If a mirror is to be placed on a pedestal
+                if (pickupableType is Level1Mirror)
                 {
-                    // Change the disk's color to green
-                    _diskRenderer.material.color = Color.green;
-
-                    // Start rotating and locking the mirror if it's the correct object
-                    PickupableObject pickupableObject = grandChild.GetComponent<PickupableObject>();
-
-                    if (pickupableObject != null)
-                    {
-                        // Drops the object
-                        pickupableObject.BeDropped();
-                        // Calls the routine to rotate the mirror and lock it
-                        StartCoroutine(RotateMirror(grandChild.transform, pickupableObject));
-                    }
-
-                    break;
+                    StartCoroutine(RotateMirror(carriedPickupable.transform));
                 }
             }
         }
+
+        // If player enters, check it's pickup point to check for valid object
+        //foreach (Transform child in other.transform)
+        //{
+        //    foreach (Transform grandChild in child)
+        //    {
+        //        if (validObjects.Contains(grandChild.gameObject))
+        //        {
+        //            // Change the disk's color to green
+        //            _diskRenderer.material.color = Color.green;
+
+        //            // Start rotating and locking the mirror if it's the correct object
+        //            PickupableObject pickupableObject = grandChild.GetComponent<PickupableObject>();
+
+        //            if (pickupableObject != null)
+        //            {
+        //                // Drops the object
+        //                pickupableObject.BeDropped();
+        //                // Calls the routine to rotate the mirror and lock it
+        //                StartCoroutine(RotateMirror(grandChild.transform, pickupableObject));
+        //            }
+
+        //            break;
+        //        }
+        //    }
+        //}
     }
 
-    void OnTriggerExit(Collider other)
-    {
-        //Reset the disk's color when the object leaves
-        if (validObjects.Contains(other.gameObject))
-        {
-            // Change the disk' color back. THESE ARE ALL TEST COLORS FOR FUNCTIONALITY.
-            _diskRenderer.material.color = Color.red;
-        }
-    }
+    //void OnTriggerExit(Collider other)
+    //{
+    //    //Reset the disk's color when the object leaves
+    //    if (validObjects.Contains(other.gameObject))
+    //    {
+    //        // Change the disk' color back. THESE ARE ALL TEST COLORS FOR FUNCTIONALITY.
+    //        _diskRenderer.material.color = Color.red;
+    //    }
+    //}
 
-    private IEnumerator RotateMirror(Transform mirror, PickupableObject pickupableObject)
+    private IEnumerator RotateMirror(Transform mirror)
     {
         // Set the mirror's position and rotation to match the pedestal before starting the rotation
         mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
@@ -100,11 +131,11 @@ public class PedestalConstellation : MonoBehaviour
         mirror.rotation = targetRotation; 
 
 
-        // Make the mirror a child of the pedestal to maintain relative positioning
-        mirror.SetParent(transform);
+        //// Make the mirror a child of the pedestal to maintain relative positioning
+        //mirror.SetParent(transform);
 
-        // Lock the mirror if needed
-        pickupableObject.LockObject();
+        //// Lock the mirror if needed
+        //pickupableObject.LockObject();
 
         //tell contreoler that mirror is on pedestal
         //_conController.PedestalHasMirror(this);

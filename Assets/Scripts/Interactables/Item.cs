@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Item : MonoBehaviour, IInteractable
+public class Item : MonoBehaviour, IInteractable, IPickupable
 {
     #region INTERNAL DATA
     // Item Grouper
@@ -16,6 +16,7 @@ public class Item : MonoBehaviour, IInteractable
 
     // Player Interacting Data
     private PlayerBase _playerHoldingItem; // Player who is currently holding the item
+    private bool _itemLocked = false;
 
     // Material Data
     private Material _defaultMat;
@@ -65,28 +66,6 @@ public class Item : MonoBehaviour, IInteractable
         _renderer.material = mat;
     }
 
-    public void BeDropped()
-    {
-        // Removes the parent-child relationship, making the object independent in the scene
-        SetItemParent(_itemGrouper);
-        _playerHoldingItem.DropItem();
-        _playerHoldingItem = null;
-    }
-
-    public void BePickedUp(PlayerBase player)
-    {
-        _playerHoldingItem = player;
-        SetItemParent(_playerHoldingItem.PickupPoint);
-        transform.localPosition = Vector3.zero;
-        _playerHoldingItem.PickupItem(gameObject);
-        UnhighlightItem();
-    }
-
-    public void SetItemParent(Transform parent)
-    {
-        transform.SetParent(parent); 
-    }
-
     public void ChangeItemVersion()
     {
         _isVersion1 = !_isVersion1;
@@ -100,7 +79,38 @@ public class Item : MonoBehaviour, IInteractable
         ChangeItemVersion();
     }
 
-    #region INTERFACE FUNCTIONS
+    #region IPICKUPABLE FUNCTIONS
+    public void PickupLocked(bool flag)
+    {
+        _itemLocked = flag;
+    }
+
+    public void BeDropped(Transform newParent)
+    {
+        // Removes the parent-child relationship, making the object independent in the scene
+        // If an incoming parent is specified, use that. Else, use the default parent assigned in the scene
+        SetParent(newParent);
+  
+        _playerHoldingItem.DropItem();
+        _playerHoldingItem = null;
+    }
+
+    public void BePickedUp(PlayerBase player)
+    {
+        _playerHoldingItem = player;
+        SetParent(_playerHoldingItem.PickupPoint);
+        transform.localPosition = Vector3.zero;
+        _playerHoldingItem.PickupItem(gameObject);
+        UnhighlightItem();
+    }
+
+    public void SetParent(Transform parent)
+    {
+        transform.SetParent(parent); 
+    }
+    #endregion
+
+    #region IINTERACTABLE FUNCTIONS
     public void PlayerInRange(PlayerBase player)
     {
         HighlightItem(player.HighlightMat);
@@ -117,9 +127,9 @@ public class Item : MonoBehaviour, IInteractable
         if (_playerHoldingItem != null)
         {
             // If player is holding this item
-            if (_playerHoldingItem.CarriedItem == gameObject)
+            if (_playerHoldingItem.CarriedPickupable == gameObject)
             {
-                BeDropped();
+                BeDropped(_itemGrouper);
             }
         }
         // If a player is near the item

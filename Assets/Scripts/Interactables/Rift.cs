@@ -44,17 +44,16 @@ public class Rift : MonoBehaviour, IInteractable
         // If Rifts are linked and a player is in the trigger
         if (_target != null)
         {
-            GameObject itemToSend = player.GetComponent<PlayerBase>().CarriedItem;
+            GameObject itemToSend = player.GetComponent<PlayerBase>().CarriedPickupable;
+            Item itemType = itemToSend.GetComponent<Item>();
 
             // If the player is currently holding an item
-            if (itemToSend != null)
+            if (itemToSend != null && itemType != null)
             {
-                Item item = itemToSend.GetComponent<Item>();
                 //Debug.Log("Item to teleport original position: " + itemToSend.transform.position);
                 //Debug.Log("Item to teleport new position: " + itemToSend.transform.position);
-                item.SetTransform(_target);
-                item.ChangeItemVersion();
-                item.BeDropped();
+                itemType.ChangeItemVersion();
+                itemType.BeDropped(_target);
                 //Debug.Log("Item teleported to target portal");
             }
         }

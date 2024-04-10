@@ -25,7 +25,7 @@ public class PlayerBase : MonoBehaviour
     [field:Header("Interactable Data")]
     [field:SerializeField] public Material HighlightMat { get; private set; } // Temp material to highlight object to be interacted with
     [field:SerializeField] public Transform PickupPoint { get; private set; } // Assign the pick up location of the object in the Inspector
-    [field:SerializeField] public GameObject CarriedItem { get; private set; } = null;
+    [field:SerializeField] public GameObject CarriedPickupable { get; private set; } = null;
     #endregion
 
     #region INTERNAL DATA
@@ -99,9 +99,9 @@ public class PlayerBase : MonoBehaviour
         // TODO: Maybe make a statemachine for the player so this can be scalable
 
         // If carrying an item and no objects are nearby
-        if (CarriedItem != null && _closestInteractable == null)
+        if (CarriedPickupable != null && _closestInteractable == null)
         {
-            CarriedItem.GetComponent<IInteractable>().PlayerStartInteract(this);
+            CarriedPickupable.GetComponent<IInteractable>().PlayerStartInteract(this);
         }
         // If interactable is nearby
         else if (_closestInteractable != null)
@@ -109,7 +109,7 @@ public class PlayerBase : MonoBehaviour
             IInteractable interactable = _closestInteractable.GetComponentInParent<IInteractable>();
 
             // If not currently carrying item
-            if (CarriedItem == null)
+            if (CarriedPickupable == null)
             {
                 // Closest interactable is item or NPC
                 if (interactable is Item || interactable is NPC || interactable is Level1Mirror)
@@ -133,7 +133,7 @@ public class PlayerBase : MonoBehaviour
     public void CheckInteract()
     {
         Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactables"));
-        List<Collider> colliders = colliderArray.ToList<Collider>();
+        List<Collider> colliders = colliderArray.ToList();
 
         foreach (var collider in colliders)
         {
@@ -142,13 +142,13 @@ public class PlayerBase : MonoBehaviour
             {
                 // If closest interactable hasn't been assigned yet, assign first one in found collider list
                 // Make sure carried item is not included again as a closest interactable
-                if (_closestInteractable == null && collider.transform.parent.gameObject != CarriedItem)
+                if (_closestInteractable == null && collider.transform.parent.gameObject != CarriedPickupable)
                 {
                     _closestInteractable = collider;
                 }
                 else 
                 {
-                    if (collider.transform.parent.gameObject != CarriedItem)
+                    if (collider.transform.parent.gameObject != CarriedPickupable)
                     {
                         if (Vector3.Distance(collider.transform.position, transform.position) < 
                             Vector3.Distance(_closestInteractable.transform.position, transform.position))
@@ -202,11 +202,11 @@ public class PlayerBase : MonoBehaviour
 
     public void DropItem()
     {
-        CarriedItem = null;
+        CarriedPickupable = null;
     }    
 
     public void PickupItem(GameObject item)
     {
-        CarriedItem = item;
+        CarriedPickupable = item;
     }
 }

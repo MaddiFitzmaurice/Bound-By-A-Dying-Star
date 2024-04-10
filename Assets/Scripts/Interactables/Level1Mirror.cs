@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class Level1Mirror : MonoBehaviour, IInteractable
+public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
 {
     #region EXTERNAL DATA
     [SerializeField] private float _maxIntensity = 5f;
@@ -15,11 +15,13 @@ public class Level1Mirror : MonoBehaviour, IInteractable
     private Light _light;
 
     // Player
-    private PlayerBase _playerNearby;
-    private PlayerBase _playerHoldingMirror;
+    private PlayerBase _player;
 
     // Mirror Grouper
     private Transform _mirrorGrouper; // Makes sure that mirror stay in level scene
+
+    // Pedestal
+    private bool _isOnPedestal = false;
     #endregion
 
     private void Awake()
@@ -31,10 +33,11 @@ public class Level1Mirror : MonoBehaviour, IInteractable
         _light.intensity = 0;
     }
 
+    // TODO: MAKE THIS INTO A COROUTINE THAT ADJUSTS INTENSITY WHEN NEARBY INSTEAD OF RELYING ON DISTANCE
     private void AdjustLightIntensity()
     {
         // Calculate the distance between the player and the mirror
-        float distance = Vector3.Distance(_playerNearby.transform.position, transform.position);
+        float distance = Vector3.Distance(_player.transform.position, transform.position);
 
         // Normalize the distance based on maxDistance via the clamp method
         float normalizedDistance = Mathf.Clamp01(distance / _maxDistance);
@@ -43,68 +46,51 @@ public class Level1Mirror : MonoBehaviour, IInteractable
         _light.intensity = _maxIntensity * (1 - normalizedDistance);
     }
 
-    private void OnTriggerEnter(Collider other)
+    #region IPICKUPABLE FUNCTIONS
+    public void PickupLocked(bool flag)
     {
-        if (other.CompareTag("Player1") || other.CompareTag("Player2"))
-        {
-            _playerNearby = other.GetComponent<PlayerBase>();
-        }
+        _isOnPedestal = flag;
     }
 
-    private void OnTriggerStay(Collider other)
+    public void BeDropped(Transform newParent)
     {
-        if (_playerNearby != null)
-        {
-            AdjustLightIntensity();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        _playerNearby = null;
-    }
-
-    public void BeDropped()
-    {
-        // Removes the parent-child relationship, making the object independent in the scene
-        SetItemParent(_mirrorGrouper);
-        _playerHoldingMirror.DropItem();
-        _playerHoldingMirror = null;
+        SetParent(newParent);
+        _player.DropItem();
+        _player = null;
     }
 
     public void BePickedUp(PlayerBase player)
     {
-        _playerHoldingMirror = player;
-        SetItemParent(_playerHoldingMirror.PickupPoint);
+        _player = player;
+        SetParent(_player.PickupPoint);
         transform.localPosition = Vector3.zero;
-        _playerHoldingMirror.PickupItem(gameObject);
+        _player.PickupItem(gameObject);
     }
 
-    public void SetItemParent(Transform parent)
+    public void SetParent(Transform parent)
     {
         transform.SetParent(parent);
     }
+    #endregion
 
-    #region INTERFACE FUNCTIONS
+    #region IINTERACTABLE FUNCTIONS
     public void PlayerInRange(PlayerBase player)
     {
-        //_playerNearby = player;
     }
 
     public void PlayerNotInRange(PlayerBase player)
     {
-        //_playerNearby = null;
     }
 
     public void PlayerStartInteract(PlayerBase player)
     {
         // If a player is holding the mirror
-        if (_playerHoldingMirror != null)
+        if (_player != null)
         {
             // If player is holding this item
-            if (_playerHoldingMirror.CarriedItem == gameObject)
+            if (_player.CarriedPickupable == gameObject)
             {
-                BeDropped();
+                BeDropped(null);
             }
         }
         // If a player is near the item
