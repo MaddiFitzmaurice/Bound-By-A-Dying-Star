@@ -12,8 +12,8 @@ public enum EventType
     PLAYER_1_INTERACT,
     PLAYER_2_INTERACT,
 
-    PLAYER_1_CREATEPORTAL,
-    PLAYER_2_CREATEPORTAL,
+    PLAYER_1_RIFT,
+    PLAYER_2_RIFT,
 
     PLAYER_1_SENDITEM,
     PLAYER_2_SENDITEM,
@@ -22,15 +22,15 @@ public enum EventType
     PLAYER_2_NPC,
 
     // Puzzles
-    ASSIGNMENT_CODE_TRIGGER,  //trigger code for puzzle features
-    PUZZLE_DONE, // trigger if a puzzle is done to be sent to the puzzle controller
+    ASSIGNMENT_CODE_TRIGGER,    //trigger code for puzzle features
+    PUZZLE_DONE,                // trigger if a puzzle is done to be sent to the puzzle controller
 
     // Narrative
     NPC_SEND_DIALOGUE,
 
-    // PortalManager
-    PORTALMANAGER_CREATEPORTAL,
-    PORTALSENDEFFECT,
+    // RiftManager
+    CREATE_RIFT,
+    RIFT_SEND_EFFECT,
 
     // CameraManager
     GAMEPLAY_CAMS_INIT,

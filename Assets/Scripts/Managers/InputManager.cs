@@ -33,8 +33,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         EventManager.EventInitialise(EventType.PLAYER_2_MOVE_VECT);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
-        EventManager.EventInitialise(EventType.PLAYER_1_CREATEPORTAL);
-        EventManager.EventInitialise(EventType.PLAYER_2_CREATEPORTAL);
+        EventManager.EventInitialise(EventType.PLAYER_1_RIFT);
+        EventManager.EventInitialise(EventType.PLAYER_2_RIFT);
         EventManager.EventInitialise(EventType.PLAYER_1_SENDITEM);
         EventManager.EventInitialise(EventType.PLAYER_2_SENDITEM);
         EventManager.EventInitialise(EventType.PLAYER_1_NPC);
@@ -173,7 +173,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     {
         if (context.performed)
         {
-            EventManager.EventTrigger(EventType.PLAYER_1_CREATEPORTAL, "Player 1");
+            EventManager.EventTrigger(EventType.PLAYER_1_RIFT, "Player 1");
         }
     }
 
@@ -181,7 +181,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     {
         if (context.performed)
         {
-            EventManager.EventTrigger(EventType.PLAYER_2_CREATEPORTAL, "Player 2");
+            EventManager.EventTrigger(EventType.PLAYER_2_RIFT, "Player 2");
         }
     }
 

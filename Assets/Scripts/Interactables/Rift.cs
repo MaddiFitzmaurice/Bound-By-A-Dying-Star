@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class Rift : MonoBehaviour, IInteractable
 {
-    // Internal Data
-    private PlayerBase _playerNearby;
-    private Transform _target; // Link to other Rift if it exists
+    #region EXTERNAL DATA
+    [SerializeField] private ParticleSystem _portalSendEffect;
+    #endregion
+    #region INTERNAL DATA
+    // Target Rift
+    private Transform _targetRift; // Link to other Rift if it exists
     
     // Material Data
     private Material _defaultMat;
 
     // Components
     private Renderer _renderer;
+    #endregion
 
     private void Awake()
     {
@@ -23,9 +27,19 @@ public class Rift : MonoBehaviour, IInteractable
         _defaultMat = _renderer.material;
     }
 
-    public void UpdateTarget(Transform newTarget)
+    private void OnEnable()
     {
-        _target = newTarget;
+        EventManager.EventSubscribe(EventType.RIFT_SEND_EFFECT, PortalEffectHandler);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.RIFT_SEND_EFFECT, PortalEffectHandler);
+    }
+
+    public void UpdateTargetRift(Transform newTarget)
+    {
+        _targetRift = newTarget;
     }
 
     public void UnhighlightItem()
@@ -38,11 +52,18 @@ public class Rift : MonoBehaviour, IInteractable
         _renderer.material = mat;
     }
 
+    private void PortalEffectHandler(object data)
+    {
+        //Debug.Log("effect play");
+        _portalSendEffect.Emit(50);
+    }
+
+    #region IINTERACTABLE FUNCTIONS
     // If interact button is pressed near the Rift
     public void PlayerStartInteract(PlayerBase player)
     {   
         // If Rifts are linked and a player is in the trigger
-        if (_target != null)
+        if (_targetRift != null)
         {
             GameObject itemToSend = player.GetComponent<PlayerBase>().CarriedPickupable;
             Item itemType = itemToSend.GetComponent<Item>();
@@ -50,11 +71,8 @@ public class Rift : MonoBehaviour, IInteractable
             // If the player is currently holding an item
             if (itemToSend != null && itemType != null)
             {
-                //Debug.Log("Item to teleport original position: " + itemToSend.transform.position);
-                //Debug.Log("Item to teleport new position: " + itemToSend.transform.position);
                 itemType.ChangeItemVersion();
-                itemType.BeDropped(_target);
-                //Debug.Log("Item teleported to target portal");
+                itemType.BeDropped(_targetRift);
             }
         }
     }
@@ -68,4 +86,5 @@ public class Rift : MonoBehaviour, IInteractable
     {
         UnhighlightItem();
     }
+    #endregion
 }

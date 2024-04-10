@@ -165,15 +165,15 @@ public class PlayerBase : MonoBehaviour
         // If interactable is no longer in range, add to another list to be deleted safely
         if (_interactablesInRange.Count != 0)
         {
-            foreach (var item in _interactablesInRange)
+            foreach (var interactable in _interactablesInRange)
             {
-                if (!colliders.Contains(item))
+                if (!colliders.Contains(interactable))
                 {
-                    _interactablesNotInRange.Add(item);
+                    _interactablesNotInRange.Add(interactable);
 
-                    if (item == _closestInteractable)
+                    if (interactable == _closestInteractable)
                     {
-                        item.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
+                        interactable.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
                         _closestInteractable = null;
                     }
                 }
@@ -183,9 +183,9 @@ public class PlayerBase : MonoBehaviour
         // Remove interactables that are no longer in range
         if (_interactablesNotInRange.Count != 0)
         {
-            foreach (var item in _interactablesNotInRange)
+            foreach (var interactable in _interactablesNotInRange)
             {
-                _interactablesInRange.Remove(item);
+                _interactablesInRange.Remove(interactable);
             }
             _interactablesNotInRange.Clear();
         }

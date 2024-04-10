@@ -7,14 +7,14 @@ public class Player1 : PlayerBase
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
-        EventManager.EventSubscribe(EventType.PLAYER_1_CREATEPORTAL, CreatePortalInFrontOfPlayer);
+        EventManager.EventSubscribe(EventType.PLAYER_1_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventSubscribe(EventType.PLAYER_1_INTERACT, Interact);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
-        EventManager.EventUnsubscribe(EventType.PLAYER_1_CREATEPORTAL, CreatePortalInFrontOfPlayer);
+        EventManager.EventUnsubscribe(EventType.PLAYER_1_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventUnsubscribe(EventType.PLAYER_1_INTERACT, Interact);
     }
 
@@ -35,6 +35,6 @@ public class Player1 : PlayerBase
         RiftData.Position = transform.position + transform.forward * DistanceInFront;
         RiftData.Rotation = Quaternion.LookRotation(transform.forward);
 
-        EventManager.EventTrigger(EventType.PORTALMANAGER_CREATEPORTAL, RiftData);
+        EventManager.EventTrigger(EventType.CREATE_RIFT, RiftData);
     }
 }

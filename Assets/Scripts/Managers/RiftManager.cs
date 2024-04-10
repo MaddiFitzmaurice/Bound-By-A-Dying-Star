@@ -30,12 +30,12 @@ public class RiftManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.PORTALMANAGER_CREATEPORTAL, CreateRift);
+        EventManager.EventSubscribe(EventType.CREATE_RIFT, CreateRift);
     }
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.PORTALMANAGER_CREATEPORTAL, CreateRift);
+        EventManager.EventUnsubscribe(EventType.CREATE_RIFT, CreateRift);
     }
 
    public void CreateRift(object data)
@@ -68,8 +68,8 @@ public class RiftManager : MonoBehaviour
         // Attempt to link Rifts between players if both exist.
         if (_lastRiftPlayer1 != null && _lastRiftPlayer2 != null)
         {
-            _lastRiftPlayer1.GetComponent<Rift>().UpdateTarget(_lastRiftPlayer2.transform);
-            _lastRiftPlayer2.GetComponent<Rift>().UpdateTarget(_lastRiftPlayer1.transform);
+            _lastRiftPlayer1.GetComponent<Rift>().UpdateTargetRift(_lastRiftPlayer2.transform);
+            _lastRiftPlayer2.GetComponent<Rift>().UpdateTargetRift(_lastRiftPlayer1.transform);
         }
     }
 }
