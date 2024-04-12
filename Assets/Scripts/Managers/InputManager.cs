@@ -70,12 +70,12 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player1.AssociateActionsWithUser(_player1Inputs);
         _player2.AssociateActionsWithUser(_player2Inputs);
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
         InputUser.PerformPairingWithDevice(Keyboard.current, _player1);
         InputUser.PerformPairingWithDevice(Keyboard.current, _player2);
         _player1Inputs.Enable();
         _player2Inputs.Enable();
-#endif
+//#endif
 
         // At least find one gamepad device to pair with player 1
         if (Gamepad.current != null)
