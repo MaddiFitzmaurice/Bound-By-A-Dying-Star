@@ -45,22 +45,24 @@ public class SceneSystemManager : MonoBehaviour
         #if UNITY_EDITOR
             int count = SceneManager.loadedSceneCount;
 
-            StartCoroutine(_fader.NormalFadeIn());
+            StartCoroutine(MenuToLevel(2));
+
 
         #else
-            StartCoroutine(LoadScene(_mainMenuIndex));
-        #endif 
+            StartCoroutine(MenuToLevel(2));
+        #endif
     }
 
-    // IEnumerator MenuToLevel(int levelSelected)
-    // {
-    //     EventManager.EventTrigger(EventType.FADING, false);
-    //     yield return StartCoroutine(_fader.NormalFadeOut());
-    //     yield return StartCoroutine(UnloadScene(_mainMenuIndex));
-    //     yield return StartCoroutine(LoadLevel(levelSelected));
-    //     yield return StartCoroutine(_fader.NormalFadeIn());
-    //     EventManager.EventTrigger(EventType.FADING, true);
-    // }
+    IEnumerator MenuToLevel(int levelSelected)
+    {
+        EventManager.EventTrigger(EventType.FADING, false);
+        yield return StartCoroutine(_fader.NormalFadeOut());
+        //yield return StartCoroutine(UnloadScene(_mainMenuIndex));
+        yield return StartCoroutine(LoadScene(1));
+        yield return StartCoroutine(LoadScene(levelSelected));
+        yield return StartCoroutine(_fader.NormalFadeIn());
+        EventManager.EventTrigger(EventType.FADING, true);
+    }
 
     #region SCENE FUNCTIONS
     // Loads specified scene

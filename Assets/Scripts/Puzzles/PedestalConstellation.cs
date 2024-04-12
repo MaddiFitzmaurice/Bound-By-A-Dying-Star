@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class PedestalConstellation : MonoBehaviour
