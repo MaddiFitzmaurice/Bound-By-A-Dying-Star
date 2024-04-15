@@ -45,7 +45,7 @@ public class SceneSystemManager : MonoBehaviour
         #if UNITY_EDITOR
             int count = SceneManager.loadedSceneCount;
 
-            StartCoroutine(MenuToLevel(2));
+            //StartCoroutine(MenuToLevel(2));
 
 
         #else
