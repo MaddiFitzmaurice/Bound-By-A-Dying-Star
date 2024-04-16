@@ -6,8 +6,7 @@ using UnityEngine;
 public class CameraTrigger : MonoBehaviour
 {
     #region EXTERNAL DATA
-    [SerializeField] private CamDirections _changeCamOnEnter;
-    [SerializeField] private CamDirections _changeCamOnExit = CamDirections.FORWARD;
+    
     #endregion
 
     #region INTERNAL DATA
@@ -28,7 +27,7 @@ public class CameraTrigger : MonoBehaviour
 
         if (_player1In && _player2In)
         {
-            EventManager.EventTrigger(EventType.GAMEPLAY_CAMS_CHANGE, _changeCamOnEnter);
+            //EventManager.EventTrigger(EventType.LEVEL_CAMS_CHANGE, _changeCamOnEnter);
         }
     }
 
@@ -45,7 +44,7 @@ public class CameraTrigger : MonoBehaviour
 
         if (!_player1In && !_player2In)
         {
-            EventManager.EventTrigger(EventType.GAMEPLAY_CAMS_CHANGE, _changeCamOnExit);
+            //EventManager.EventTrigger(EventType.LEVEL_CAMS_CHANGE, _changeCamOnExit);
         }
     }
 }

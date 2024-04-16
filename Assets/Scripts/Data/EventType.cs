@@ -32,7 +32,7 @@ public enum EventType
     CREATE_RIFT,
     RIFT_SEND_EFFECT,
 
-    // CameraManager
-    GAMEPLAY_CAMS_INIT,
-    GAMEPLAY_CAMS_CHANGE
+    // Camera
+    LEVEL_CAMS_REQUEST_FOLLOWGROUP,
+    LEVEL_CAMS_SEND_FOLLOWGROUP
 };
