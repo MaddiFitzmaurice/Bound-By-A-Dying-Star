@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player2 : PlayerBase
 {
-    private void OnEnable()
+    protected override void OnEnable()
     {
         base.OnEnable();
         EventManager.EventSubscribe(EventType.PLAYER_2_MOVE_VECT, Player2VectHandler);
@@ -12,7 +12,7 @@ public class Player2 : PlayerBase
         EventManager.EventSubscribe(EventType.PLAYER_2_INTERACT, Interact);
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.PLAYER_2_MOVE_VECT, Player2VectHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_RIFT, CreatePortalInFrontOfPlayer);
