@@ -249,7 +249,6 @@ public class PlayerBase : MonoBehaviour
         }
 
         _tankControls = (bool)data;
-        Debug.Log("HELLO");
     }
     #endregion
 }

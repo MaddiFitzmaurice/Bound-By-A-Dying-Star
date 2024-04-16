@@ -36,6 +36,9 @@ public enum EventType
     LEVEL_CAMS_REQUEST_FOLLOWGROUP,
     LEVEL_CAMS_SEND_FOLLOWGROUP,
 
+    // Teleport
+    TELEPORT_PLAYERS,
+
     // Testing
     TEST_CONTROLS,
 };
