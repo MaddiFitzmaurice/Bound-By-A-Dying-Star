@@ -5,7 +5,8 @@ using UnityEngine;
 public class PuzzleController : MonoBehaviour
 {
     public GameObject boulder;
-    public GameObject movingPlatform; 
+    public GameObject movingPlatform;
+    public bool isPlatformMoving = true;  // Track the movement state of the platform
     public Transform respawnPoint; 
 
     public float platformSpeed = 2f;
@@ -18,19 +19,28 @@ public class PuzzleController : MonoBehaviour
 
     public List<GameObject> pressurePlatesBObjects = new List<GameObject>(); // Assign in Inspector
     private List<PressurePlateB> pressurePlatesB = new List<PressurePlateB>();
+    private int activatedPlatesCount = 0;
+    private Dictionary<string, bool> plateStatus = new Dictionary<string, bool>();
+    private Dictionary<string, Renderer> plateRenderers = new Dictionary<string, Renderer>();
+    private Dictionary<string, bool> pairSuccess = new Dictionary<string, bool>(); // Tracks successful pairings
+
+
     public GameObject[] platformsToAppear; // Assign in Inspector
 
     public List<Mirror> mirrors = new List<Mirror>(); // Assign all mirrors in the Inspector
     public GameObject puzzleDoor; // Assign the puzzle door in the Inspector
     private int emittingMirrorsCount = 0; // Track the number of mirrors currently emitting light
 
-    private int activatedPlatesCount = 0;
+
+   
 
     public List<Transform> checkpoints = new List<Transform>(); // Assign in Inspector
 
     private Transform currentRespawnTransform;
 
     private Vector3 currentRespawnPoint;
+
+
 
 
 
@@ -64,16 +74,30 @@ public class PuzzleController : MonoBehaviour
             if (plateScript != null)
             {
                 pressurePlatesB.Add(plateScript);
-                plateScript.puzzleController = this; // Ensure the plate script references back to this controller
+                plateScript.puzzleController = this; 
             }
         }
         currentRespawnPoint = checkpoints.Count > 0 ? checkpoints[0].position : transform.position;
-       
+        InitializePlates();
+      
     }
 
     void Update()
     {
-        MovePlatform();
+        if (isPlatformMoving)
+        {
+            MovePlatform();  
+        }
+    }
+
+    public void StopPlatform()
+    {
+        isPlatformMoving = false;
+    }
+
+    public void ResumePlatform()
+    {
+        isPlatformMoving = true;
     }
 
     void MovePlatform()
@@ -157,6 +181,94 @@ public class PuzzleController : MonoBehaviour
             {
                 platform.SetActive(true);
             }
+        }
+    }
+
+    private Dictionary<string, Coroutine> plateTimers = new Dictionary<string, Coroutine>();
+
+    public void PlateActivated(string id, Renderer renderer)
+    {
+        plateStatus[id] = true;
+        if (!plateRenderers.ContainsKey(id))
+        {
+            plateRenderers[id] = renderer;
+        }
+        StartCoroutine(CheckPairedPlate(id));
+    }
+
+    // Coroutine to check paired plates
+    IEnumerator CheckPairedPlate(string id)
+    {
+        yield return new WaitForSeconds(2);
+        string pairId = GetPairedId(id);
+        if (plateStatus.ContainsKey(pairId) && plateStatus[pairId])
+        {
+            Color randomColor = new Color(Random.value, Random.value, Random.value);
+            plateRenderers[id].material.color = randomColor;
+            plateRenderers[pairId].material.color = randomColor;
+            pairSuccess[id] = true;
+            pairSuccess[pairId] = true;
+            CheckAllPairs();  // Check if all pairs are successful
+        }
+        else
+        {
+            plateRenderers[id].material.color = Color.white;
+            if (plateRenderers.ContainsKey(pairId))
+            {
+                plateRenderers[pairId].material.color = Color.white;
+            }
+            plateStatus[id] = false;
+            plateStatus[pairId] = false;
+        }
+    }
+
+    void CheckAllPairs()
+    {
+        // Check if all pairs are successfully completed
+        foreach (var pair in pairSuccess)
+        {
+            if (!pair.Value) return;  // If any pair is not successful, immediately exit the method
+        }
+
+        // If all pairs are successful, loop through each platform in the array and set it active
+        foreach (GameObject platform in platformsToAppear)
+        {
+            platform.SetActive(true);  // Correctly apply SetActive to each GameObject in the array
+        }
+    }
+
+    string GetPairedId(string id)
+    {
+        var pairs = new Dictionary<string, string> {
+            {"1", "A"}, {"2", "B"}, {"3", "C"}, {"4", "D"}, {"5", "E"},
+            {"A", "1"}, {"B", "2"}, {"C", "3"}, {"D", "4"}, {"E", "5"}
+        };
+        return pairs.ContainsKey(id) ? pairs[id] : null;
+    }
+
+    void InitializePlates()
+    {
+        string[] ids = new string[] { "1", "2", "3", "4", "5", "A", "B", "C", "D", "E" };
+        foreach (var id in ids)
+        {
+            plateStatus[id] = false;
+            pairSuccess[id] = false;  // Initialize pairing success
+        }
+    }
+
+    public void RegisterPlate(string id, Renderer renderer)
+    {
+        plateRenderers[id] = renderer;
+        plateStatus[id] = false;
+    }
+
+
+    public void UpdatePlateStatus(string id, bool isActive)
+    {
+        if (plateStatus.ContainsKey(id))
+        {
+            plateStatus[id] = isActive;
+            CheckPairedPlate(id);  // Passing the id to the method
         }
     }
 

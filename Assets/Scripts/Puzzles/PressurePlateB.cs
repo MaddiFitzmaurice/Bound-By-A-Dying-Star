@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PressurePlateB : MonoBehaviour
 {
+    public string plateID;
     public PuzzleController puzzleController;
     private Renderer plateRenderer;
-    private bool isActivated = false;
 
     void Start()
     {
@@ -15,16 +15,10 @@ public class PressurePlateB : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isActivated && (other.CompareTag("Player1") || other.CompareTag("Player2")))
+        if (other.CompareTag("Player1") || other.CompareTag("Player2"))
         {
-            isActivated = true;
-            plateRenderer.material.color = Color.green;
-            puzzleController.PressurePlateBActivated();
+            plateRenderer.material.color = Color.green;  // Turn green immediately on step
+            puzzleController.PlateActivated(plateID, plateRenderer);
         }
-    }
-
-    public bool IsActivated()
-    {
-        return isActivated;
     }
 }
