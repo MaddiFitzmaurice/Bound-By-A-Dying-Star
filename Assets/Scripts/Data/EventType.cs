@@ -34,5 +34,8 @@ public enum EventType
 
     // Camera
     LEVEL_CAMS_REQUEST_FOLLOWGROUP,
-    LEVEL_CAMS_SEND_FOLLOWGROUP
+    LEVEL_CAMS_SEND_FOLLOWGROUP,
+
+    // Testing
+    TEST_CONTROLS,
 };

@@ -6,6 +6,7 @@ public class Player2 : PlayerBase
 {
     private void OnEnable()
     {
+        base.OnEnable();
         EventManager.EventSubscribe(EventType.PLAYER_2_MOVE_VECT, Player2VectHandler);
         EventManager.EventSubscribe(EventType.PLAYER_2_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventSubscribe(EventType.PLAYER_2_INTERACT, Interact);
@@ -16,6 +17,7 @@ public class Player2 : PlayerBase
         EventManager.EventUnsubscribe(EventType.PLAYER_2_MOVE_VECT, Player2VectHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_INTERACT, Interact);
+        EventManager.EventUnsubscribe(EventType.TEST_CONTROLS, TestControlHandler);
     }
 
     private void Player2VectHandler(object data)

@@ -7,8 +7,15 @@ using UnityEngine.EventSystems;
 public class PlayerManager : MonoBehaviour
 {
     #region EXTERNAL DATA
-    [SerializeField] CinemachineTargetGroup _targetGroup;
+    [Header("Camera Data")]
+    [SerializeField] CinemachineTargetGroup _targetGroup;    
     #endregion
+
+    private void Awake()
+    {
+        // Event Inits
+        EventManager.EventInitialise(EventType.LEVEL_CAMS_SEND_FOLLOWGROUP);
+    }
 
     private void OnEnable()
     {

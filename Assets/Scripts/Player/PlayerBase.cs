@@ -40,6 +40,9 @@ public class PlayerBase : MonoBehaviour
     List<Collider> _interactablesInRange;
     List<Collider> _interactablesNotInRange;
     Collider _closestInteractable;
+
+    // TEST
+    private bool _tankControls = false;
     #endregion
 
     void Awake()
@@ -51,6 +54,16 @@ public class PlayerBase : MonoBehaviour
         RiftData = new RiftData(transform.position, transform.rotation, tag);
         _interactablesInRange = new List<Collider>();
         _interactablesNotInRange = new List<Collider>();
+    }
+
+    protected virtual void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.TEST_CONTROLS, TestControlHandler);
+    }
+
+    protected virtual void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.TEST_CONTROLS, TestControlHandler);
     }
 
     private void Update()
@@ -81,16 +94,33 @@ public class PlayerBase : MonoBehaviour
         float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, VelocityPower)
             * Mathf.Sign(velocityDif);
 
-        _rb.AddForce(movementForce * transform.forward * MoveInput.z);
+        if (_tankControls)
+        {
+            _rb.AddForce(movementForce * transform.forward * MoveInput.z);
+        }
+        else 
+        {
+            _rb.AddForce(movementForce * MoveInput);
+        }
     }
 
     public void PlayerRotation()
     {
-        Vector3 rotVector = new Vector3(0, MoveInput.x, 0);
+        if (_tankControls)
+        {
+            Vector3 rotVector = new Vector3(0, MoveInput.x, 0);
 
-        Quaternion playerRotChange = Quaternion.Euler(rotVector * Time.deltaTime * RotationSpeed);
+            Quaternion playerRotChange = Quaternion.Euler(rotVector * Time.deltaTime * RotationSpeed);
 
-        _rb.MoveRotation(_rb.rotation * playerRotChange);
+            _rb.MoveRotation(_rb.rotation * playerRotChange);
+        }
+        else 
+        {
+            if (MoveInput.magnitude != 0)
+            {
+                _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.up));
+            }
+        }
     }
 
     // Interaction
@@ -209,4 +239,17 @@ public class PlayerBase : MonoBehaviour
     {
         CarriedPickupable = item;
     }
+
+    #region EVENT HANDLERS
+    public void TestControlHandler(object data)
+    {
+        if (data is not bool)
+        {
+            Debug.LogError("TestControlHandler has not received a bool");
+        }
+
+        _tankControls = (bool)data;
+        Debug.Log("HELLO");
+    }
+    #endregion
 }

@@ -17,6 +17,9 @@ public class LevelManager : MonoBehaviour
     {
         // Get Components
         _vCamClearShot = _levelCams.GetComponent<CinemachineClearShot>();
+
+        // Event Inits
+        EventManager.EventInitialise(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP);
     }
 
     private void OnEnable()
