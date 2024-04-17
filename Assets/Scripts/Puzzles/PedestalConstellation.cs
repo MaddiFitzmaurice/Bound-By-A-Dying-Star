@@ -11,6 +11,7 @@ public class PedestalConstellation : MonoBehaviour
     #region EXTERNAL DATA
     // List? of valid interactables that can be placed on the pedestal
     [SerializeField] private List<GameObject> _validInteractables;
+    [SerializeField] private GameObject _presetPlacedObject = null;
 
     // Moving the mirror once it locks into the pedestal
     [SerializeField] private float _rotationSpeed;
@@ -42,6 +43,43 @@ public class PedestalConstellation : MonoBehaviour
         // Get the Renderer component from the disk
         _diskRenderer = GetComponentInChildren<Renderer>();
         _conController = GetComponentInParent<ConstellationController>();  
+    }
+
+    // Check if Pedestal has a preset object placed on it
+    // if so, place it on the pedestal
+    void Start()
+    {
+        if (_presetPlacedObject != null)
+        {
+            if (_validInteractables.Contains(_presetPlacedObject))
+            {
+                // Change the disk's color to green
+                _diskRenderer.material.color = Color.green;
+
+                // IPickupable manipulation
+                IPickupable pickupableType = _presetPlacedObject.GetComponent<IPickupable>();
+                if (pickupableType != null)
+                {
+                    pickupableType.PickupLocked(true);
+                    //pickupableType.BeDropped(transform);
+
+                    // If a mirror is to be placed on a pedestal
+                    if (pickupableType is Level1Mirror)
+                    {
+                        _mirror = (Level1Mirror)pickupableType;
+                        StartCoroutine(RotateMirror(_mirror.transform));
+                    }
+                }
+                else
+                {
+                    Debug.LogError("WARNING _presetPlacedObject did not have IPickupable");
+                }
+            }
+            else
+            {
+                Debug.LogError("WARNING _presetPlacedObject was not set as valid interactable");
+            }
+        }
     }
 
     void OnTriggerEnter(Collider other)
