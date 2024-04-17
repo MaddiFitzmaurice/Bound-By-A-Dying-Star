@@ -9,10 +9,10 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     // Item Grouper
     private Transform _itemGrouper; // Makes sure that items stay in level scene
 
+
     // Item Version Data
-    private bool _isVersion1;
-    private GameObject _itemVersion1;
-    private GameObject _itemVersion2;
+    private List<GameObject> _itemVersions = new List<GameObject>();
+    private int _currentVersionIndex = 0;
 
     // Player Interacting Data
     private PlayerBase _playerHoldingItem; // Player who is currently holding the item
@@ -29,25 +29,25 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     {
         // Get item skins, assign current item version and item grouper
         Collider[] list = GetComponentsInChildren<Collider>();
-        _itemVersion1 = list[0].gameObject;
-        _itemVersion2 = list[1].gameObject;
-        _itemGrouper = transform.parent;
-
         if (list.Length == 0)
         {
             Debug.LogError("Item does not have version skins associated with it");
         }
-        else 
+        else
         {
-            _isVersion1 = true;
-            _itemVersion1.SetActive(true);
-            _itemVersion2.SetActive(false);
+            foreach (var item in list)
+            {
+                GameObject itemVersion = item.gameObject;
+                // Start with all items inactive
+                itemVersion.SetActive(false);
+                _itemVersions.Add(itemVersion);
+            }
+            // Activate the first version
+            _itemVersions[_currentVersionIndex].SetActive(true);
         }
 
-        // Get components
+        _itemGrouper = transform.parent;
         _renderer = GetComponentInChildren<Renderer>();
-
-        // Set default material
         _defaultMat = _renderer.material;
     }
 
@@ -63,9 +63,15 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     public void RiftEffect(Transform pos)
     {
-        _isVersion1 = !_isVersion1;
-        _itemVersion1.SetActive(_isVersion1);
-        _itemVersion2.SetActive(!_isVersion1);
+        // Update the current item version index. This will loop back to the 1st index once it has reached it's max index
+        _currentVersionIndex = (_currentVersionIndex + 1) % _itemVersions.Count;
+
+        // Deactivate all versions and activate the current one
+        foreach (var item in _itemVersions)
+        {
+            item.SetActive(false);
+        }
+        _itemVersions[_currentVersionIndex].SetActive(true);
         transform.position = pos.position;
     }
 
