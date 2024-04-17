@@ -16,6 +16,8 @@ public class PedestalConstellation : MonoBehaviour
     // Moving the mirror once it locks into the pedestal
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _raiseMirrorHeight;
+    [SerializeField] private Vector3 _targetAngle;
+    [SerializeField] private int _initialAngleOffset;
 
     // move the portal to be in the centre of mirror
     [SerializeField] private float _raisePortalHeight;
@@ -26,13 +28,16 @@ public class PedestalConstellation : MonoBehaviour
     //Effects
     [SerializeField] private GameObject _lightBeam;
     [SerializeField] private float _raiseLightBeam;
-    [SerializeField] private float _lightBeamLength;
+    [SerializeField] private float _beamMaxLength = 25f;
     #endregion
 
     #region INTERNAL DATA
     // Components
     private Renderer _diskRenderer;
     private ConstellationController _conController;
+
+    private LineRenderer _beamRenderer = null;
+    private Vector3 _beamSource;
 
     // Mirror
     private Level1Mirror _mirror = null;
@@ -67,6 +72,7 @@ public class PedestalConstellation : MonoBehaviour
                     if (pickupableType is Level1Mirror)
                     {
                         _mirror = (Level1Mirror)pickupableType;
+                        _beamSource = new Vector3(_mirror.transform.position.x, _mirror.transform.position.y + _raisePortalHeight, _mirror.transform.position.z);
                         StartCoroutine(RotateMirror(_mirror.transform));
                     }
                 }
@@ -80,6 +86,20 @@ public class PedestalConstellation : MonoBehaviour
                 Debug.LogError("WARNING _presetPlacedObject was not set as valid interactable");
             }
         }
+    }
+
+    void FixedUpdate()
+    {
+        //if (_beamRenderer != null)
+        //{
+        //    
+        //    Ray ray = new Ray(_beamSource, _targetAngle);
+        //    bool cast = Physics.Raycast(ray, out RaycastHit hit, _beamMaxLength);
+        //    Vector3 hitPosition = cast ? hit.point : _beamSource + _targetAngle * _beamMaxLength;
+//
+        //    _beamRenderer.SetPosition(0, _beamSource);
+        //    _beamRenderer.SetPosition(1, hitPosition);
+        //}
     }
 
     void OnTriggerEnter(Collider other)
@@ -114,6 +134,7 @@ public class PedestalConstellation : MonoBehaviour
                     if (pickupableType is Level1Mirror)
                     {
                         _mirror = (Level1Mirror)pickupableType;
+                        _beamSource = new Vector3(_mirror.transform.position.x, _mirror.transform.position.y + _raisePortalHeight, _mirror.transform.position.z);
                         StartCoroutine(RotateMirror(_mirror.transform));
                     }
                 }
@@ -143,6 +164,8 @@ public class PedestalConstellation : MonoBehaviour
         Vector3 targetDirection = (new Vector3(targetPosition.x, mirror.position.y, targetPosition.z) - mirror.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
+        //Quaternion targetRotation = Quaternion.Euler(_targetAngle + transform.eulerAngles);
+
         while (Quaternion.Angle(mirror.rotation, targetRotation) > 0.01f)
         {
             mirror.rotation = Quaternion.Lerp(mirror.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
@@ -151,6 +174,7 @@ public class PedestalConstellation : MonoBehaviour
 
         // Ensure the mirror snaps to the exact rotation
         mirror.rotation = targetRotation; 
+        _conController.PedestalHasMirror(this);
     }
 
     public void HandleRift(Rift rift)
@@ -171,20 +195,20 @@ public class PedestalConstellation : MonoBehaviour
             rift.transform.localScale = new Vector3(targetWidth, targetHeight, flattenFactor);
 
             // Send to ConstellationController to manage
-            _conController.PedestalHasMirror(this);
+            //_conController.PedestalHasMirror(this);
         }
     }
 
     public void ActivateEffect(PedestalConstellation otherPedestal)
     {
         GameObject newLightbeam = Instantiate(_lightBeam, transform);
-        LineRenderer lineRenderer = newLightbeam.GetComponentInChildren<LineRenderer>();
+        _beamRenderer = newLightbeam.GetComponentInChildren<LineRenderer>();
 
         // Adjust lightbeam to be in the centre of the mirror
-        lineRenderer.transform.position = new Vector3(transform.position.x, transform.position.y + _raiseLightBeam +_raiseMirrorHeight, transform.position.z);
+        _beamRenderer.transform.position = new Vector3(transform.position.x, transform.position.y + _raiseLightBeam +_raiseMirrorHeight, transform.position.z);
 
         // End point of the beam in local space
-        lineRenderer.SetPosition(1, transform.InverseTransformPoint(otherPedestal.transform.position));
-        lineRenderer.enabled = true;
+        _beamRenderer.SetPosition(1, transform.InverseTransformPoint(otherPedestal.transform.position));
+        _beamRenderer.enabled = true;
     }
 }
