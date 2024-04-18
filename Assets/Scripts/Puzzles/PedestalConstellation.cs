@@ -16,8 +16,8 @@ public class PedestalConstellation : MonoBehaviour
     // Moving the mirror once it locks into the pedestal
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _raiseMirrorHeight;
-    [SerializeField] private Vector3 _targetAngle;
-    [SerializeField] private int _initialAngleOffset;
+    //[SerializeField] private Vector3 _targetAngle;
+    [SerializeField] private float _initialAngleOffset;
 
     // move the portal to be in the centre of mirror
     [SerializeField] private float _raisePortalHeight;
@@ -41,6 +41,10 @@ public class PedestalConstellation : MonoBehaviour
     
     // Mirror
     private Level1Mirror _mirror = null;
+    private Vector3 _targetDir;
+
+
+    public bool YES = false;
     #endregion
 
     void Awake()
@@ -57,17 +61,21 @@ public class PedestalConstellation : MonoBehaviour
     // if so, place it on the pedestal
     void Start()
     {
+        // If the bedestal shoots 1 beam or more than 1 beam
         if(_beamDestinations.Count == 1)
         {
-            Vector3 targetDir = _beamDestinations[0].transform.position -_beamSource.position;
-            targetDir.y = 0f;
-
-            _beamSource.rotation = Quaternion.LookRotation(targetDir);
+            // Set target direction to be the 1 target
+            _targetDir = _beamDestinations[0].transform.position -_beamSource.position;
+            _beamSource.rotation = Quaternion.LookRotation(_targetDir);
+            
+            // Then add initial offset to initial direction
+            Quaternion startRot = _beamSource.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f);
+            _beamSource.rotation = startRot;
         }
         else if(_beamDestinations.Count > 1)
         {
+            // Iterate over each beam destination and calculate the average
             Vector3 meanVector = Vector3.zero;
-
             foreach(GameObject obj in _beamDestinations)
             {
                 Vector3 pos = obj.transform.position;
@@ -76,47 +84,27 @@ public class PedestalConstellation : MonoBehaviour
 
             meanVector = meanVector / _beamDestinations.Count ;
 
-            Vector3 targetDir = meanVector -_beamSource.position;
-            targetDir.y = 0f;
+            // Then turn the average into a direction and set that to be the target
+            _targetDir = meanVector -_beamSource.position;
+            _beamSource.rotation = Quaternion.LookRotation(_targetDir);
 
-            _beamSource.rotation = Quaternion.LookRotation(targetDir);
+            // Then add initial offset to initial direction
+            Quaternion startRot = _beamSource.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f);
+            _beamSource.rotation = startRot;
         }
         else 
         {
             Debug.LogError("_pairedPedestals must not be NULL!");
         }
 
+        
+
+        
+
         // Place mirror that is already set to be on the mirror
         if (_presetPlacedObject != null)
         {
-            if (_validInteractables.Contains(_presetPlacedObject))
-            {
-                // Change the disk's color to green
-                _diskRenderer.material.color = Color.green;
-
-                // IPickupable manipulation
-                IPickupable pickupableType = _presetPlacedObject.GetComponent<IPickupable>();
-                if (pickupableType != null)
-                {
-                    pickupableType.PickupLocked(true);
-                    //pickupableType.BeDropped(transform);
-
-                    // If a mirror is to be placed on a pedestal
-                    if (pickupableType is Level1Mirror)
-                    {
-                        _mirror = (Level1Mirror)pickupableType;
-                        StartCoroutine(RotateMirror(_mirror.transform));
-                    }
-                }
-                else
-                {
-                    Debug.LogError("WARNING _presetPlacedObject did not have IPickupable");
-                }
-            }
-            else
-            {
-                Debug.LogError("WARNING _presetPlacedObject was not set as valid interactable");
-            }
+            PlacePresetObject();
         }
     }
 
@@ -125,6 +113,43 @@ public class PedestalConstellation : MonoBehaviour
         if (_beamRenderer != null)
         {
             SetBeamPositions();
+        }
+
+        float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
+        if(dot > 0.9f) 
+        { 
+
+        }
+    }
+
+    private void PlacePresetObject()
+    {
+        if (_validInteractables.Contains(_presetPlacedObject))
+        {
+            // Change the disk's color to green
+            _diskRenderer.material.color = Color.green;
+
+            // IPickupable manipulation
+            IPickupable pickupableType = _presetPlacedObject.GetComponent<IPickupable>();
+            if (pickupableType != null)
+            {
+                pickupableType.PickupLocked(true);
+
+                // If a mirror is to be placed on a pedestal
+                if (pickupableType is Level1Mirror)
+                {
+                    _mirror = (Level1Mirror)pickupableType;
+                    StartCoroutine(RotateMirror(_mirror.transform));
+                }
+            }
+            else
+            {
+                Debug.LogError("WARNING _presetPlacedObject did not have IPickupable");
+            }
+        }
+        else
+        {
+            Debug.LogError("WARNING _presetPlacedObject was not set as valid interactable");
         }
     }
 
