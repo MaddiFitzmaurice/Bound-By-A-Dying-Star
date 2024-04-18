@@ -35,6 +35,7 @@ public enum EventType
     // Camera
     LEVEL_CAMS_REQUEST_FOLLOWGROUP,
     LEVEL_CAMS_SEND_FOLLOWGROUP,
+    LEVEL_CAMS_YROT,
 
     // Teleport
     TELEPORT_PLAYERS,

@@ -452,7 +452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 964433810869957675, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: RotationSpeed
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 964433810869957675, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: <HighlightMat>k__BackingField
@@ -460,7 +460,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 0d4dbd7018979d843b0e698eebcec528, type: 2}
     - target: {fileID: 2632272185759781231, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: RotationSpeed
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 2632272185759781231, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: <HighlightMat>k__BackingField

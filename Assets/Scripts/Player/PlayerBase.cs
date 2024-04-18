@@ -42,7 +42,8 @@ public class PlayerBase : MonoBehaviour
     Collider _closestInteractable;
 
     // TEST
-    private bool _tankControls = false;
+    private ControlType _controlType = ControlType.NORMAL;
+    private float _camYAngle;
     #endregion
 
     void Awake()
@@ -59,11 +60,13 @@ public class PlayerBase : MonoBehaviour
     protected virtual void OnEnable()
     {
         EventManager.EventSubscribe(EventType.TEST_CONTROLS, TestControlHandler);
+        EventManager.EventSubscribe(EventType.LEVEL_CAMS_YROT, ReceiveNewCamAngle);
     }
 
     protected virtual void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.TEST_CONTROLS, TestControlHandler);
+        EventManager.EventUnsubscribe(EventType.LEVEL_CAMS_YROT, ReceiveNewCamAngle);
     }
 
     private void Update()
@@ -94,19 +97,23 @@ public class PlayerBase : MonoBehaviour
         float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, VelocityPower)
             * Mathf.Sign(velocityDif);
 
-        if (_tankControls)
+        if (_controlType == ControlType.TANK)
         {
             _rb.AddForce(movementForce * transform.forward * MoveInput.z);
         }
-        else 
+        else if (_controlType == ControlType.NORMAL)
         {
             _rb.AddForce(movementForce * MoveInput);
+        }
+        else if (_controlType == ControlType.FIXEDCAM)
+        {
+            _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
         }
     }
 
     public void PlayerRotation()
     {
-        if (_tankControls)
+        if (_controlType == ControlType.TANK)
         {
             Vector3 rotVector = new Vector3(0, MoveInput.x, 0);
 
@@ -114,11 +121,24 @@ public class PlayerBase : MonoBehaviour
 
             _rb.MoveRotation(_rb.rotation * playerRotChange);
         }
-        else 
+        else if (_controlType == ControlType.NORMAL)
         {
             if (MoveInput.magnitude != 0)
             {
                 _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.up));
+            }
+        }
+        else if (_controlType == ControlType.FIXEDCAM)
+        {
+            if (MoveInput.magnitude != 0)
+            {
+                var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _camYAngle, 0));
+                var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
+
+                var relative = (transform.position + skewedInput) - transform.position;
+                var rot = Quaternion.LookRotation(relative, Vector3.up);
+
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, RotationSpeed * Time.deltaTime);
             }
         }
     }
@@ -243,12 +263,22 @@ public class PlayerBase : MonoBehaviour
     #region EVENT HANDLERS
     public void TestControlHandler(object data)
     {
-        if (data is not bool)
+        if (data is not ControlType)
         {
-            Debug.LogError("TestControlHandler has not received a bool");
+            Debug.LogError("TestControlHandler has not received a ControlType");
         }
 
-        _tankControls = (bool)data;
+        _controlType = (ControlType)data;
+    }
+
+    public void ReceiveNewCamAngle(object data)
+    {
+        if (data is not float)
+        {
+            Debug.LogError("PlayerBase has not received a float!");
+        }
+
+        _camYAngle = (float)data;
     }
     #endregion
 }
