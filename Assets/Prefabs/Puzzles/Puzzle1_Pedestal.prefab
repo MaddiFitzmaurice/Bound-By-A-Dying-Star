@@ -54,11 +54,10 @@ MonoBehaviour:
   _targetAngle: {x: 0, y: 0, z: 0}
   _initialAngleOffset: 0
   _raisePortalHeight: 0
-  _pairedPedestals:
-  - {fileID: 0}
+  _beamDestinations: []
   _lightBeam: {fileID: 775294244184712969, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
   _raiseLightBeam: 1
-  _beamMaxLength: 10
+  _beamMaxLength: 5
   _beamSource: {fileID: 7226935078828540022}
 --- !u!65 &2140296737769682014
 BoxCollider:

@@ -71,7 +71,7 @@ public class ConstellationController : MonoBehaviour
                 // if the paired pedestal also has a miror, activate the beam effect
                 if (_mirroredPedestals[otherIndex] == true)
                 {
-                    pedestalA.ActivateEffect(pedestalB);
+                    pedestalB.ActivateEffect(pedestalA);
                     node.NodeMirrored = true;
                     ConstellationChecker();
                 }
@@ -82,7 +82,7 @@ public class ConstellationController : MonoBehaviour
                 // if the paired pedestal also has a miror, activate the beam effect
                 if (_mirroredPedestals[otherIndex] == true)
                 {
-                    pedestalB.ActivateEffect(pedestalA);
+                    pedestalA.ActivateEffect(pedestalB);
                     node.NodeMirrored = true;
                     ConstellationChecker();
                 }
