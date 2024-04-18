@@ -23,12 +23,13 @@ public class PedestalConstellation : MonoBehaviour
     [SerializeField] private float _raisePortalHeight;
 
     // The pedestal that forms a pair with this one
-    [SerializeField] private GameObject[] _pairedPedestals;
+    [SerializeField] private List<GameObject> _beamDestinations;
 
     //Effects
     [SerializeField] private GameObject _lightBeam;
     [SerializeField] private float _raiseLightBeam;
-    [SerializeField] private float _beamMaxLength = 25f;
+    [SerializeField] private float _beamMaxLength = 10f;
+    [SerializeField] private Transform _beamSource;
     #endregion
 
     #region INTERNAL DATA
@@ -37,8 +38,7 @@ public class PedestalConstellation : MonoBehaviour
     private ConstellationController _conController;
 
     private LineRenderer _beamRenderer = null;
-    private Vector3 _beamSource;
-
+    
     // Mirror
     private Level1Mirror _mirror = null;
     #endregion
@@ -48,12 +48,45 @@ public class PedestalConstellation : MonoBehaviour
         // Get the Renderer component from the disk
         _diskRenderer = GetComponentInChildren<Renderer>();
         _conController = GetComponentInParent<ConstellationController>();  
+
+        // Set beam source to be the mirror's position
+        _beamSource.position = new Vector3(transform.position.x, transform.position.y + _raiseLightBeam +_raiseMirrorHeight, transform.position.z);
     }
 
     // Check if Pedestal has a preset object placed on it
     // if so, place it on the pedestal
     void Start()
     {
+        if(_beamDestinations.Count == 1)
+        {
+            Vector3 targetDir = _beamDestinations[0].transform.position -_beamSource.position;
+            targetDir.y = 0f;
+
+            _beamSource.rotation = Quaternion.LookRotation(targetDir);
+        }
+        else if(_beamDestinations.Count > 1)
+        {
+            Vector3 meanVector = Vector3.zero;
+
+            foreach(GameObject obj in _beamDestinations)
+            {
+                Vector3 pos = obj.transform.position;
+                meanVector += pos;
+            }
+
+            meanVector = meanVector / _beamDestinations.Count ;
+
+            Vector3 targetDir = meanVector -_beamSource.position;
+            targetDir.y = 0f;
+
+            _beamSource.rotation = Quaternion.LookRotation(targetDir);
+        }
+        else 
+        {
+            Debug.LogError("_pairedPedestals must not be NULL!");
+        }
+
+        // Place mirror that is already set to be on the mirror
         if (_presetPlacedObject != null)
         {
             if (_validInteractables.Contains(_presetPlacedObject))
@@ -72,7 +105,6 @@ public class PedestalConstellation : MonoBehaviour
                     if (pickupableType is Level1Mirror)
                     {
                         _mirror = (Level1Mirror)pickupableType;
-                        _beamSource = new Vector3(_mirror.transform.position.x, _mirror.transform.position.y + _raisePortalHeight, _mirror.transform.position.z);
                         StartCoroutine(RotateMirror(_mirror.transform));
                     }
                 }
@@ -90,16 +122,30 @@ public class PedestalConstellation : MonoBehaviour
 
     void FixedUpdate()
     {
-        //if (_beamRenderer != null)
-        //{
-        //    
-        //    Ray ray = new Ray(_beamSource, _targetAngle);
-        //    bool cast = Physics.Raycast(ray, out RaycastHit hit, _beamMaxLength);
-        //    Vector3 hitPosition = cast ? hit.point : _beamSource + _targetAngle * _beamMaxLength;
-//
-        //    _beamRenderer.SetPosition(0, _beamSource);
-        //    _beamRenderer.SetPosition(1, hitPosition);
-        //}
+        if (_beamRenderer != null)
+        {
+            SetBeamPositions();
+        }
+    }
+
+    // Set start and end point of the beam in local space
+    private void SetBeamPositions()
+    {
+        // Set starting position
+        Vector3 localSource = transform.InverseTransformPoint(_beamSource.position);
+        _beamRenderer.SetPosition(0, localSource);
+
+        // Set end position with a raycast
+        RaycastHit hit;
+        if (Physics.Raycast(localSource, _beamSource.forward, out hit, _beamMaxLength))
+        {
+            //_beamRenderer.SetPosition(1, hit.point);
+            _beamRenderer.SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength));
+        }
+        else
+        {
+            _beamRenderer.SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength));
+        } 
     }
 
     void OnTriggerEnter(Collider other)
@@ -134,7 +180,6 @@ public class PedestalConstellation : MonoBehaviour
                     if (pickupableType is Level1Mirror)
                     {
                         _mirror = (Level1Mirror)pickupableType;
-                        _beamSource = new Vector3(_mirror.transform.position.x, _mirror.transform.position.y + _raisePortalHeight, _mirror.transform.position.z);
                         StartCoroutine(RotateMirror(_mirror.transform));
                     }
                 }
@@ -142,23 +187,13 @@ public class PedestalConstellation : MonoBehaviour
         }
     }
 
-    //void OnTriggerExit(Collider other)
-    //{
-    //    //Reset the disk's color when the object leaves
-    //    if (validObjects.Contains(other.gameObject))
-    //    {
-    //        // Change the disk' color back. THESE ARE ALL TEST COLORS FOR FUNCTIONALITY.
-    //        _diskRenderer.material.color = Color.red;
-    //    }
-    //}
-
     private IEnumerator RotateMirror(Transform mirror)
     {
         // Set the mirror's position and rotation to match the pedestal before starting the rotation
         mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
         mirror.rotation = transform.rotation;
 
-        Vector3 targetPosition = _pairedPedestals[0].transform.position;
+        Vector3 targetPosition = _beamDestinations[0].transform.position;
 
         // Remove the y component from the target position and the mirror's position to avoid tilting
         Vector3 targetDirection = (new Vector3(targetPosition.x, mirror.position.y, targetPosition.z) - mirror.position).normalized;
@@ -193,9 +228,6 @@ public class PedestalConstellation : MonoBehaviour
 
             // Scale the portal relative to the mirror's scale
             rift.transform.localScale = new Vector3(targetWidth, targetHeight, flattenFactor);
-
-            // Send to ConstellationController to manage
-            //_conController.PedestalHasMirror(this);
         }
     }
 
@@ -203,12 +235,10 @@ public class PedestalConstellation : MonoBehaviour
     {
         GameObject newLightbeam = Instantiate(_lightBeam, transform);
         _beamRenderer = newLightbeam.GetComponentInChildren<LineRenderer>();
-
-        // Adjust lightbeam to be in the centre of the mirror
-        _beamRenderer.transform.position = new Vector3(transform.position.x, transform.position.y + _raiseLightBeam +_raiseMirrorHeight, transform.position.z);
-
-        // End point of the beam in local space
-        _beamRenderer.SetPosition(1, transform.InverseTransformPoint(otherPedestal.transform.position));
+ 
+        SetBeamPositions();
         _beamRenderer.enabled = true;
     }
+
+    
 }

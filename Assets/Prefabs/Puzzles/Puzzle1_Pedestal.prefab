@@ -32,6 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2237349718899911990}
+  - {fileID: 7226935078828540022}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1379039469469042465
@@ -46,19 +47,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b82cc30c27201e4ba764a684808644b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  validObjects:
-  - {fileID: 0}
-  _mirrorRotationAngle: {x: 0, y: 100, z: 0}
+  _validInteractables: []
+  _presetPlacedObject: {fileID: 0}
   _rotationSpeed: 5
   _raiseMirrorHeight: 2.5
+  _targetAngle: {x: 0, y: 0, z: 0}
+  _initialAngleOffset: 0
   _raisePortalHeight: 0
   _pairedPedestals:
   - {fileID: 0}
   _lightBeam: {fileID: 775294244184712969, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
   _raiseLightBeam: 1
-  _lightBeamLength: 2
-  isPortalPlaced: 0
-  currentPortal: {fileID: 0}
+  _beamMaxLength: 10
+  _beamSource: {fileID: 7226935078828540022}
 --- !u!65 &2140296737769682014
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -80,6 +81,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &4997016706320453468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7226935078828540022}
+  m_Layer: 0
+  m_Name: BeamSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7226935078828540022
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4997016706320453468}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3955604971440488076}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1767118365167717085
 PrefabInstance:
   m_ObjectHideFlags: 0
