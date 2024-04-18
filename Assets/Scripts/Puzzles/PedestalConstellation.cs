@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
-public class PedestalConstellation : MonoBehaviour
+public class PedestalConstellation : MonoBehaviour, IInteractable
 {
     #region EXTERNAL DATA
     // List? of valid interactables that can be placed on the pedestal
@@ -37,14 +37,14 @@ public class PedestalConstellation : MonoBehaviour
     private Renderer _diskRenderer;
     private ConstellationController _conController;
 
-    private LineRenderer _beamRenderer = null;
+    private List<LineRenderer> _beamRenderer = new List<LineRenderer>();
     
     // Mirror
     private Level1Mirror _mirror = null;
     private Vector3 _targetDir;
+    private bool _isRotating = false;
 
-
-    public bool YES = false;
+    public bool DEBUG_ACTIVATE = false;
     #endregion
 
     void Awake()
@@ -64,12 +64,17 @@ public class PedestalConstellation : MonoBehaviour
         // If the bedestal shoots 1 beam or more than 1 beam
         if(_beamDestinations.Count == 1)
         {
+            // Set beam length to be distance between ource and destination
+            _beamMaxLength = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[0].transform.position), transform.InverseTransformPoint(_beamSource.position));
+            
             // Set target direction to be the 1 target
-            _targetDir = _beamDestinations[0].transform.position -_beamSource.position;
+            _targetDir = _beamDestinations[0].transform.position - _beamSource.position;
             _beamSource.rotation = Quaternion.LookRotation(_targetDir);
             
             // Then add initial offset to initial direction
             Quaternion startRot = _beamSource.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f);
+            Vector3 startRotEuler = startRot.eulerAngles;
+            startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
             _beamSource.rotation = startRot;
         }
         else if(_beamDestinations.Count > 1)
@@ -90,16 +95,14 @@ public class PedestalConstellation : MonoBehaviour
 
             // Then add initial offset to initial direction
             Quaternion startRot = _beamSource.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f);
+            Vector3 startRotEuler = startRot.eulerAngles;
+            startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
             _beamSource.rotation = startRot;
         }
         else 
         {
             Debug.LogError("_pairedPedestals must not be NULL!");
         }
-
-        
-
-        
 
         // Place mirror that is already set to be on the mirror
         if (_presetPlacedObject != null)
@@ -110,15 +113,15 @@ public class PedestalConstellation : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_beamRenderer != null)
+        if (_beamRenderer.Count != 0)
         {
             SetBeamPositions();
         }
 
-        float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
-        if(dot > 0.9f) 
-        { 
-
+        if(DEBUG_ACTIVATE)
+        {
+            StartCoroutine(RotateBeam());
+            DEBUG_ACTIVATE = false;
         }
     }
 
@@ -140,6 +143,7 @@ public class PedestalConstellation : MonoBehaviour
                 {
                     _mirror = (Level1Mirror)pickupableType;
                     StartCoroutine(RotateMirror(_mirror.transform));
+                    _conController.PedestalPreset(this);
                 }
             }
             else
@@ -158,31 +162,28 @@ public class PedestalConstellation : MonoBehaviour
     {
         // Set starting position
         Vector3 localSource = transform.InverseTransformPoint(_beamSource.position);
-        _beamRenderer.SetPosition(0, localSource);
+        foreach (LineRenderer beamLine in _beamRenderer)
+        {
+            beamLine.SetPosition(0, localSource);
 
-        // Set end position with a raycast
-        RaycastHit hit;
-        if (Physics.Raycast(localSource, _beamSource.forward, out hit, _beamMaxLength))
-        {
-            //_beamRenderer.SetPosition(1, hit.point);
-            _beamRenderer.SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength));
+            // Set end position with a raycast
+            RaycastHit hit;
+            if (Physics.Raycast(localSource, _beamSource.forward, out hit, _beamMaxLength))
+            {
+                //_beamRenderer.SetPosition(1, hit.point);
+                beamLine.SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength));
+            }
+            else
+            {
+                beamLine.SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength));
+            } 
         }
-        else
-        {
-            _beamRenderer.SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength));
-        } 
     }
 
     void OnTriggerEnter(Collider other)
     {
-        // If it's a rift
-        if (other.GetComponentInParent<Rift>() != null)
-        {
-            Rift rift = other.GetComponentInParent<Rift>();
-            HandleRift(rift);
-        }
         // If player has entered the trigger
-        else if (other.CompareTag("Player1") || other.CompareTag("Player2"))
+        if (other.CompareTag("Player1") || other.CompareTag("Player2"))
         {
             PlayerBase player = other.GetComponent<PlayerBase>();
 
@@ -224,8 +225,6 @@ public class PedestalConstellation : MonoBehaviour
         Vector3 targetDirection = (new Vector3(targetPosition.x, mirror.position.y, targetPosition.z) - mirror.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
-        //Quaternion targetRotation = Quaternion.Euler(_targetAngle + transform.eulerAngles);
-
         while (Quaternion.Angle(mirror.rotation, targetRotation) > 0.01f)
         {
             mirror.rotation = Quaternion.Lerp(mirror.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
@@ -237,33 +236,63 @@ public class PedestalConstellation : MonoBehaviour
         _conController.PedestalHasMirror(this);
     }
 
-    public void HandleRift(Rift rift)
-    {
-        if (_mirror != null)
-        {
-            // Set the portal's position and rotation to match the mirror
-            // Adjust portal position to be in centre of mirror object
-            rift.transform.position = new Vector3(_mirror.transform.position.x, _mirror.transform.position.y + _raisePortalHeight, _mirror.transform.position.z);
-            rift.transform.rotation = _mirror.transform.rotation;
-
-            float targetWidth = _mirror.transform.localScale.x;
-            float targetHeight = _mirror.transform.localScale.y;
-            // Adjust this value to control the flatness of portal
-            float flattenFactor = 0.1f;
-
-            // Scale the portal relative to the mirror's scale
-            rift.transform.localScale = new Vector3(targetWidth, targetHeight, flattenFactor);
-        }
-    }
-
     public void ActivateEffect(PedestalConstellation otherPedestal)
     {
         GameObject newLightbeam = Instantiate(_lightBeam, transform);
-        _beamRenderer = newLightbeam.GetComponentInChildren<LineRenderer>();
- 
-        SetBeamPositions();
-        _beamRenderer.enabled = true;
+        _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
     }
 
-    
+    // Patrolling rotate
+    IEnumerator RotateBeam()
+    {
+        _isRotating = true;
+
+        // Calculate new angle to rotate to
+        Quaternion endRot = _beamSource.rotation * Quaternion.Euler(0f, 90f * -1, 0f);
+        Vector3 endRotEuler = endRot.eulerAngles;
+        endRot = Quaternion.Euler(0f, endRotEuler.y, 0f);
+
+        // Keep rotating until enemy has reached new angle
+        while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f)
+        {
+            _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        _beamSource.rotation = endRot;
+        _isRotating = false;
+        CheckAngles();
+    }
+
+    private void CheckAngles()
+    {
+        float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
+        if(dot > 0.8f) 
+        { 
+            Debug.Log("DOT POG");
+            _conController.PedestalHasBeam(this);
+        }
+        else
+        {
+            Debug.Log(dot);
+        }
+    }
+
+    #region IINTERACTABLE FUNCTIONS
+    public void PlayerInRange(PlayerBase player)
+    {
+    }
+
+    public void PlayerNotInRange(PlayerBase player)
+    {
+    }
+
+    public void PlayerStartInteract(PlayerBase player)
+    {
+        if(_isRotating == false && _beamRenderer.Count != 0)
+        {
+            StartCoroutine(RotateBeam());
+        }
+    }
+    #endregion
 }

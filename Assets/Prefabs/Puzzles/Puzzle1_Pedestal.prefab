@@ -49,15 +49,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _validInteractables: []
   _presetPlacedObject: {fileID: 0}
-  _rotationSpeed: 5
+  _rotationSpeed: 40
   _raiseMirrorHeight: 2.5
-  _targetAngle: {x: 0, y: 0, z: 0}
   _initialAngleOffset: 0
   _raisePortalHeight: 1.5
   _beamDestinations: []
   _lightBeam: {fileID: 775294244184712969, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
   _raiseLightBeam: 1
-  _beamMaxLength: 10
+  _beamMaxLength: 5
   _beamSource: {fileID: 7226935078828540022}
   YES: 0
 --- !u!65 &2140296737769682014
