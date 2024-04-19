@@ -112,7 +112,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
 
     void FixedUpdate()
     {
-        if (_beamRenderer.Count != 0)
+        if (_isRotating)
         {
             SetBeamPositions();
         }
@@ -138,6 +138,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
                     StartCoroutine(RotateMirror(_mirror.transform));
                     _conController.PedestalPreset(this);
                 }
+                SetBeamPositions();
             }
             else
             {
@@ -233,6 +234,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
     {
         GameObject newLightbeam = Instantiate(_lightBeam, transform);
         _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
+        SetBeamPositions();
     }
 
     // Patrolling rotate
