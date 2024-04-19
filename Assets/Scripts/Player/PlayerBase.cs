@@ -36,6 +36,7 @@ public class PlayerBase : MonoBehaviour
     // Data
     protected RiftData RiftData;
     protected Vector3 MoveInput;
+    protected float PlayerZAngle;
 
     // Interactables
     List<Collider> _interactablesInRange;
@@ -56,6 +57,8 @@ public class PlayerBase : MonoBehaviour
         RiftData = new RiftData(transform.position, transform.rotation, tag);
         _interactablesInRange = new List<Collider>();
         _interactablesNotInRange = new List<Collider>();
+
+        PlayerZAngle = transform.rotation.eulerAngles.z;
     }
 
     protected virtual void OnEnable()
@@ -116,7 +119,7 @@ public class PlayerBase : MonoBehaviour
     {
         if (_controlType == ControlType.TANK)
         {
-            Vector3 rotVector = new Vector3(0, MoveInput.x, 0);
+            Vector3 rotVector = new Vector3(0, MoveInput.x, PlayerZAngle);
 
             Quaternion playerRotChange = Quaternion.Euler(rotVector * Time.deltaTime * RotationSpeed);
 
@@ -126,7 +129,14 @@ public class PlayerBase : MonoBehaviour
         {
             if (MoveInput.magnitude != 0)
             {
-                _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.up));
+                if (PlayerZAngle == 0)
+                {
+                    _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.up));
+                }
+                else if (PlayerZAngle == -180)
+                {
+                    _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.down));
+                }
             }
         }
         else if (_controlType == ControlType.FIXEDCAM)

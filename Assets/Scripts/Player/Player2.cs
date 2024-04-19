@@ -67,6 +67,7 @@ public class Player2 : PlayerBase
 
         // Ensure the final rotation is exact
         transform.rotation = finalRotation;
+        PlayerZAngle = transform.rotation.eulerAngles.z;
 
         // Wait until the player has "landed" or is sufficiently stable by checking if the velocity is low enough to consider stopped
         yield return new WaitUntil(() => rb.velocity.magnitude < 0.05f);

@@ -28,6 +28,10 @@ public class Player1 : PlayerBase
         }
 
         // Set move direction
+        Debug.Log("local position: " + transform.localPosition);
+        Debug.Log("world position: " + transform.position);
+        Debug.Log("local rotation: " + transform.localRotation.eulerAngles);
+        Debug.Log("world rotation: " + transform.rotation.eulerAngles);
         Vector2 input = (Vector2)data;
         MoveInput.Set(input.x, 0, input.y);
     }
@@ -44,22 +48,24 @@ public class Player1 : PlayerBase
     {
         float rotationDuration = 2f;
         // Disable movement input during rotating and falling
-        EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
         StartCoroutine(RotateOverTime(Vector3.forward, 180f, rotationDuration));
     }
 
     private IEnumerator RotateOverTime(Vector3 axis, float angle, float duration)
     {
+        EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
+        Rigidbody rb = GetComponent<Rigidbody>();
+
         Quaternion originalRotation = transform.rotation;
         Quaternion finalRotation = transform.rotation * Quaternion.Euler(axis * angle);
         float elapsedTime = 0f;
 
         // Get the player's rigid body
-        Rigidbody rb = GetComponent<Rigidbody>();
 
         // Keep rotating player until elapsed time
         while (elapsedTime < duration)
         {
+            Debug.Log(rb.velocity);
             transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -67,6 +73,7 @@ public class Player1 : PlayerBase
 
         // Ensure the final rotation is exact
         transform.rotation = finalRotation;
+        PlayerZAngle = transform.rotation.eulerAngles.z;
 
         // Wait until the player has "landed" or is sufficiently stable by checking if the velocity is low enough to consider stopped
         yield return new WaitUntil(() => rb.velocity.magnitude < 0.05f);

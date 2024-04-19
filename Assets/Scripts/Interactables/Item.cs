@@ -32,6 +32,9 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     private void Awake()
     {
+        // Init Event
+        EventManager.EventInitialise(EventType.GRAVITY_INVERT);
+
         // Get item skins, assign current item version and item grouper
         Collider[] list = GetComponentsInChildren<Collider>();
         if (list.Length == 0)
@@ -156,6 +159,8 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     private void FlipGravityForAllPlayers(bool isFlipped)
     {
         Physics.gravity = new Vector3(0, isFlipped ? -flippedGravityScale : flippedGravityScale, 0);
+
+
 
         PlayerManager playerManager = FindObjectOfType<PlayerManager>(); // Find the PlayerManager in the scene
         if (playerManager != null)

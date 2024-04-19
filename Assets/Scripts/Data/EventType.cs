@@ -40,6 +40,9 @@ public enum EventType
     // Teleport
     TELEPORT_PLAYERS,
 
+    // Gravity 
+    GRAVITY_INVERT,
+
     // Testing
     TEST_CONTROLS,
 };
