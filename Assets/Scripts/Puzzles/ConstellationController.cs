@@ -65,23 +65,7 @@ public class ConstellationController : MonoBehaviour
             _beamedPedestals[senderIndex] = true;
             PedestalChecker(senderIndex);
 
-            // Go through each node 
-            for (int i = 0; i < _pedestalNodeList.Count; i++)
-            {
-                PedestalNode node = _pedestalNodeList[i];
-                PedestalConstellation pedestalA = node.PedestalA;
-                PedestalConstellation pedestalB = node.PedestalB;
-
-                // get the pedestal that are paired with the sender pedestal
-                if (pedestalA == _pedestalList[senderIndex])
-                {
-                    pedestalB.ActivateEffect(pedestalA);
-                }
-                else if(pedestalB == _pedestalList[senderIndex])
-                {
-                    pedestalA.ActivateEffect(pedestalB);
-                }
-            }
+            BeamChecker(senderIndex);
         }
         else
         {
@@ -122,6 +106,35 @@ public class ConstellationController : MonoBehaviour
         }
     }
 
+    private void BeamChecker(int senderIndex)
+    {
+        // Go through each node 
+        for (int i = 0; i < _pedestalNodeList.Count; i++)
+        {
+            PedestalNode node = _pedestalNodeList[i];
+            PedestalConstellation pedestalA = node.PedestalA;
+            PedestalConstellation pedestalB = node.PedestalB;
+            bool inNode = false;
+
+            // get the pedestal that are paired with the sender pedestal
+            if (pedestalA == _pedestalList[senderIndex])
+            {
+                inNode = true;
+            }
+            else if(pedestalB == _pedestalList[senderIndex])
+            {
+                pedestalA = node.PedestalB;
+                pedestalB = node.PedestalA;
+                inNode = true;
+            }
+
+            if (inNode)
+            {
+                pedestalB.ActivateEffect(pedestalA);
+            }
+        }
+    }
+
     // Go through each node and get the pedestal that are paired with the sender pedestal
     // if the paired pedestal also has a miror, activate the beam effect
     // then check if constellation is complete
@@ -149,12 +162,12 @@ public class ConstellationController : MonoBehaviour
 
             if (otherIndex != -1)
             {
-                if (_mirroredPedestals[otherIndex] == true)
+                if (_mirroredPedestals[otherIndex])
                 {
                     node.NodeMirrored = true;
                     ConstellationChecker();
                 }
-                if (_beamedPedestals[otherIndex] == true)
+                if (_beamedPedestals[otherIndex])
                 {
                     node.NodeBeamed = true;
                     ConstellationChecker();
@@ -172,7 +185,7 @@ public class ConstellationController : MonoBehaviour
         // if they are not, returns false
         foreach (var node in _pedestalNodeList)
         {
-            if(node.NodeBeamed != true)
+            if(!node.NodeBeamed)
             {
                 done = false;
                 return;
