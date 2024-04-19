@@ -133,38 +133,29 @@ public class ConstellationController : MonoBehaviour
             PedestalNode node = _pedestalNodeList[i];
             PedestalConstellation pedestalA = node.PedestalA;
             PedestalConstellation pedestalB = node.PedestalB;
+            int otherIndex = -1;
 
             // get the pedestal that are paired with the sender pedestal
             if (pedestalA == _pedestalList[senderIndex])
             {
-                int otherIndex = _pedestalList.IndexOf(pedestalB);
-                // if the paired pedestal also has a miror, activate the beam effect
-                if (_mirroredPedestals[otherIndex] == true)
-                {
-                    //pedestalB.ActivateEffect(pedestalA);
-                    node.NodeMirrored = true;
-                    ConstellationChecker();
-                }
-                if (_beamedPedestals[otherIndex] == true)
-                {
-                    //pedestalB.ActivateEffect(pedestalA);
-                    node.NodeBeamed = true;
-                    ConstellationChecker();
-                }
+                otherIndex = _pedestalList.IndexOf(pedestalB);
             }
             else if(pedestalB == _pedestalList[senderIndex])
             {
-                int otherIndex = _pedestalList.IndexOf(pedestalA);
-                // if the paired pedestal also has a miror, activate the beam effect
+                pedestalA = node.PedestalB;
+                pedestalB = node.PedestalA;
+                otherIndex = _pedestalList.IndexOf(pedestalB);
+            }
+
+            if (otherIndex != -1)
+            {
                 if (_mirroredPedestals[otherIndex] == true)
                 {
-                    //pedestalA.ActivateEffect(pedestalB);
                     node.NodeMirrored = true;
                     ConstellationChecker();
                 }
                 if (_beamedPedestals[otherIndex] == true)
                 {
-                    //pedestalA.ActivateEffect(pedestalB);
                     node.NodeBeamed = true;
                     ConstellationChecker();
                 }
