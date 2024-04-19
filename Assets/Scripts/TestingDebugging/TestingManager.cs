@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public enum ControlType
 {
-    NORMAL,
+    WORLDSTRAFE,
     TANK,
-    FIXEDCAM
+    FIXEDCAM,
+    FIXEDCAM2,
 }
 
 public class TestingManager : MonoBehaviour
@@ -19,7 +20,7 @@ public class TestingManager : MonoBehaviour
     #endregion
 
     #region INTERNAL DATA
-    private ControlType _controlType = ControlType.NORMAL;
+    private ControlType _controlType = ControlType.WORLDSTRAFE;
     #endregion
 
     private void Awake()
@@ -33,7 +34,7 @@ public class TestingManager : MonoBehaviour
     {
         int i = (int)_controlType;
 
-        _ = i == 2 ? i = 0 : i++;
+        _ = i == 3 ? i = 0 : i++;
 
         _controlType = (ControlType)i;
         

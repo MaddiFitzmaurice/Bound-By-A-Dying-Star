@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class PlayerBase : MonoBehaviour
 {
@@ -42,7 +43,7 @@ public class PlayerBase : MonoBehaviour
     Collider _closestInteractable;
 
     // TEST
-    private ControlType _controlType = ControlType.NORMAL;
+    private ControlType _controlType = ControlType.WORLDSTRAFE;
     private float _camYAngle;
     #endregion
 
@@ -101,11 +102,11 @@ public class PlayerBase : MonoBehaviour
         {
             _rb.AddForce(movementForce * transform.forward * MoveInput.z);
         }
-        else if (_controlType == ControlType.NORMAL)
+        else if (_controlType == ControlType.WORLDSTRAFE)
         {
             _rb.AddForce(movementForce * MoveInput);
         }
-        else if (_controlType == ControlType.FIXEDCAM)
+        else if (_controlType == ControlType.FIXEDCAM || _controlType == ControlType.FIXEDCAM2)
         {
             _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
         }
@@ -121,7 +122,7 @@ public class PlayerBase : MonoBehaviour
 
             _rb.MoveRotation(_rb.rotation * playerRotChange);
         }
-        else if (_controlType == ControlType.NORMAL)
+        else if (_controlType == ControlType.WORLDSTRAFE)
         {
             if (MoveInput.magnitude != 0)
             {
@@ -139,6 +140,16 @@ public class PlayerBase : MonoBehaviour
                 var rot = Quaternion.LookRotation(relative, Vector3.up);
 
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, RotationSpeed * Time.deltaTime);
+            }
+        }
+        else if (_controlType == ControlType.FIXEDCAM2)
+        {
+            if (MoveInput.magnitude != 0)
+            {
+                var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _camYAngle, 0));
+                var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
+
+                _rb.MoveRotation(Quaternion.LookRotation(skewedInput, Vector3.up));
             }
         }
     }

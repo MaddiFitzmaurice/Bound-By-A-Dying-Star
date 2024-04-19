@@ -19,6 +19,11 @@ public class CameraManager : MonoBehaviour
         EventManager.EventInitialise(EventType.LEVEL_CAMS_YROT);    
     }
 
+    public void Start()
+    {
+        LevelCameraChangeEvent();
+    }
+
     // Called when Cinemachine Brain detects a camera change
     public void LevelCameraChangeEvent()
     {
