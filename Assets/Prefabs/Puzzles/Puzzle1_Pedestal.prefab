@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3955604971440488076}
   - component: {fileID: 1379039469469042465}
+  - component: {fileID: 245370768940480748}
   m_Layer: 7
   m_Name: Puzzle1_Pedestal
   m_TagString: Mirror Pedestal
@@ -60,6 +61,27 @@ MonoBehaviour:
   _beamMaxLength: 5
   _beamSource: {fileID: 7226935078828540022}
   DEBUG_ACTIVATE: 0
+--- !u!65 &245370768940480748
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015829983503132964}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4997016706320453468
 GameObject:
   m_ObjectHideFlags: 0

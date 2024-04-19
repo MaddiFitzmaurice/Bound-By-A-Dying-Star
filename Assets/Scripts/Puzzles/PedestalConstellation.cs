@@ -43,8 +43,6 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
     private Level1Mirror _mirror = null;
     private Vector3 _targetDir;
     private bool _isRotating = false;
-
-    public bool DEBUG_ACTIVATE = false;
     #endregion
 
     void Awake()
@@ -116,12 +114,6 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         if (_beamRenderer.Count != 0)
         {
             SetBeamPositions();
-        }
-
-        if(DEBUG_ACTIVATE)
-        {
-            StartCoroutine(RotateBeam());
-            DEBUG_ACTIVATE = false;
         }
     }
 
