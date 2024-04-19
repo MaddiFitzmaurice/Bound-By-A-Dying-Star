@@ -173,7 +173,7 @@ public class PlayerBase : MonoBehaviour
             if (CarriedPickupable == null)
             {
                 // Closest interactable is item or NPC
-                if (interactable is Item || interactable is NPC || interactable is Level1Mirror)
+                if (interactable is Item || interactable is NPC || interactable is Level1Mirror || interactable is PedestalConstellation)
                 {
                     _closestInteractable = null;
                     interactable.PlayerStartInteract(this);

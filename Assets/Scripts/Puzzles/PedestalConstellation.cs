@@ -289,6 +289,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
 
     public void PlayerStartInteract(PlayerBase player)
     {
+        Debug.Log("dxrgfxdf");
         if(_isRotating == false && _beamRenderer.Count != 0)
         {
             StartCoroutine(RotateBeam());

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3955604971440488076}
   - component: {fileID: 1379039469469042465}
-  - component: {fileID: 2140296737769682014}
   m_Layer: 0
   m_Name: Puzzle1_Pedestal
   m_TagString: Mirror Pedestal
@@ -58,28 +57,7 @@ MonoBehaviour:
   _raiseLightBeam: 1
   _beamMaxLength: 5
   _beamSource: {fileID: 7226935078828540022}
-  YES: 0
---- !u!65 &2140296737769682014
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015829983503132964}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 0, z: 0}
+  DEBUG_ACTIVATE: 0
 --- !u!1 &4997016706320453468
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,8 +160,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6861d86862b9ba441b26d02c237fe1c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5830967716653251599}
   m_SourcePrefab: {fileID: 100100000, guid: 6861d86862b9ba441b26d02c237fe1c8, type: 3}
+--- !u!1 &1461269764128716684 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6861d86862b9ba441b26d02c237fe1c8, type: 3}
+  m_PrefabInstance: {fileID: 1767118365167717085}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5830967716653251599
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461269764128716684}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.15, y: 0.15, z: 0.15}
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!4 &2237349718899911990 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6861d86862b9ba441b26d02c237fe1c8, type: 3}
