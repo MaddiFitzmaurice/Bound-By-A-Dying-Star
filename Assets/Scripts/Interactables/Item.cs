@@ -23,6 +23,11 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     // Components
     private Renderer _renderer;
+
+    // Gravity Flip Data
+    [SerializeField] private bool isGravityFlipItem = false; // Flag to check if this item flips gravity
+    [SerializeField] private float flippedGravityScale = -9.81f; // The gravity scale when flipped
+    [SerializeField] private float flippedFallingSpeed = 2f; // The falling speed when gravity is flipped
     #endregion
 
     private void Awake()
@@ -90,6 +95,12 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
   
         _playerHoldingItem.DropItem();
         _playerHoldingItem = null;
+
+        if (isGravityFlipItem)
+        {
+            // Reset gravity back to normal when the item is dropped
+            FlipGravityForAllPlayers(false);
+        }
     }
 
     public void BePickedUp(PlayerBase player)
@@ -99,6 +110,12 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         transform.localPosition = Vector3.zero;
         _playerHoldingItem.PickupItem(gameObject);
         UnhighlightItem();
+
+        if (isGravityFlipItem)
+        {
+            // Flip gravity for all players within the player grouper
+            FlipGravityForAllPlayers(true);
+        }
     }
 
     public void SetParent(Transform parent)
@@ -133,6 +150,22 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         else
         {
             BePickedUp(player);
+        }
+    }
+
+    private void FlipGravityForAllPlayers(bool isFlipped)
+    {
+        Physics.gravity = new Vector3(0, isFlipped ? -flippedGravityScale : flippedGravityScale, 0);
+
+        PlayerManager playerManager = FindObjectOfType<PlayerManager>(); // Find the PlayerManager in the scene
+        if (playerManager != null)
+        {
+            playerManager._player1.ModifyGravityAndFallingSpeed();
+            playerManager._player2.ModifyGravityAndFallingSpeed();
+        }
+        else
+        {
+            Debug.LogError("PlayerManager not found in the scene!");
         }
     }
     #endregion

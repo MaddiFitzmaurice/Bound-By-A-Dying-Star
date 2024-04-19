@@ -13,8 +13,8 @@ public class PlayerManager : MonoBehaviour
 
     #region INTERNAL DATA
     // Players
-    private Player1 _player1;
-    private Player2 _player2;
+    public Player1 _player1;
+    public Player2 _player2;
 
     // Camera Data
     private CinemachineTargetGroup _targetGroup;
@@ -82,5 +82,6 @@ public class PlayerManager : MonoBehaviour
             _player2.transform.localPosition = new Vector3(-2, 1, 0);
         }
     }
+
     #endregion
 }
