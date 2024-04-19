@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3955604971440488076}
   - component: {fileID: 1379039469469042465}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Puzzle1_Pedestal
   m_TagString: Mirror Pedestal
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -2.64}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.2667193, y: 2.2667193, z: 2.2667193}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2237349718899911990}
@@ -46,13 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b82cc30c27201e4ba764a684808644b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _validInteractables: []
+  _validInteractables:
+  - {fileID: 0}
   _presetPlacedObject: {fileID: 0}
   _rotationSpeed: 40
   _raiseMirrorHeight: 2.5
-  _initialAngleOffset: 0
+  _initialAngleOffset: 90
   _raisePortalHeight: 1.5
-  _beamDestinations: []
+  _beamDestinations:
+  - {fileID: 0}
   _lightBeam: {fileID: 775294244184712969, guid: d54c8300416038f4b9ac1f1804abaf34, type: 3}
   _raiseLightBeam: 1
   _beamMaxLength: 5
@@ -67,7 +69,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7226935078828540022}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BeamSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,6 +158,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 6861d86862b9ba441b26d02c237fe1c8, type: 3}
       propertyPath: m_Name
       value: Pedestal_FBX
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6861d86862b9ba441b26d02c237fe1c8, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
