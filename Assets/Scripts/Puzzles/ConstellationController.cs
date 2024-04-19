@@ -48,6 +48,8 @@ public class ConstellationController : MonoBehaviour
         {
             _mirroredPedestals[senderIndex] = true;
             PedestalChecker(senderIndex);
+
+            BeamChecker(senderIndex, true);
         }
         else
         {
@@ -65,7 +67,7 @@ public class ConstellationController : MonoBehaviour
             _beamedPedestals[senderIndex] = true;
             PedestalChecker(senderIndex);
 
-            BeamChecker(senderIndex);
+            BeamChecker(senderIndex, false);
         }
         else
         {
@@ -79,7 +81,7 @@ public class ConstellationController : MonoBehaviour
         // check to make sender is in list and that list is not empty
         if(senderIndex != -1 || _pedestalList.Count != 0)
         {
-            _beamedPedestals[senderIndex] = true;
+            //_beamedPedestals[senderIndex] = true;
             PedestalChecker(senderIndex);
 
             // Go through each node 
@@ -106,7 +108,7 @@ public class ConstellationController : MonoBehaviour
         }
     }
 
-    private void BeamChecker(int senderIndex)
+    private void BeamChecker(int senderIndex, bool mirrorMode)
     {
         // Go through each node 
         for (int i = 0; i < _pedestalNodeList.Count; i++)
@@ -114,23 +116,36 @@ public class ConstellationController : MonoBehaviour
             PedestalNode node = _pedestalNodeList[i];
             PedestalConstellation pedestalA = node.PedestalA;
             PedestalConstellation pedestalB = node.PedestalB;
-            bool inNode = false;
+            int otherIndex = -1;
 
             // get the pedestal that are paired with the sender pedestal
             if (pedestalA == _pedestalList[senderIndex])
             {
-                inNode = true;
+                otherIndex = _pedestalList.IndexOf(pedestalB);
             }
             else if(pedestalB == _pedestalList[senderIndex])
             {
                 pedestalA = node.PedestalB;
                 pedestalB = node.PedestalA;
-                inNode = true;
+                otherIndex = _pedestalList.IndexOf(pedestalB);
             }
 
-            if (inNode)
+            if (otherIndex != -1)
             {
-                pedestalB.ActivateEffect(pedestalA);
+                if (mirrorMode)
+                {
+                    if (_mirroredPedestals[senderIndex] && _beamedPedestals[otherIndex])
+                    {
+                        pedestalA.ActivateEffect(pedestalB);
+                    }
+                }
+                else
+                {
+                    if (_mirroredPedestals[otherIndex] && _beamedPedestals[senderIndex])
+                    {
+                        pedestalB.ActivateEffect(pedestalA);
+                    }
+                }
             }
         }
     }
