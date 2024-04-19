@@ -43,6 +43,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
     private Level1Mirror _mirror = null;
     private Vector3 _targetDir;
     private bool _isRotating = false;
+    private bool _correctAngle = false;
     #endregion
 
     void Awake()
@@ -261,12 +262,8 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
         if(dot > 0.8f) 
         { 
-            Debug.Log("DOT POG");
+            _correctAngle = true;
             _conController.PedestalHasBeam(this);
-        }
-        else
-        {
-            Debug.Log(dot);
         }
     }
 
@@ -281,8 +278,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
 
     public void PlayerStartInteract(PlayerBase player)
     {
-        Debug.Log("dxrgfxdf");
-        if(_isRotating == false && _beamRenderer.Count != 0)
+        if(_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
         {
             StartCoroutine(RotateBeam());
         }

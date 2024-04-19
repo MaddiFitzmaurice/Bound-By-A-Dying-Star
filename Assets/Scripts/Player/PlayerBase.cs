@@ -186,7 +186,7 @@ public class PlayerBase : MonoBehaviour
                 if (interactable is Item || interactable is NPC || interactable is Level1Mirror || interactable is PedestalConstellation)
                 {
                     _closestInteractable = null;
-                    Debug.Log(interactable);
+                    //Debug.Log(interactable);
                     interactable.PlayerStartInteract(this);
                 }
             }

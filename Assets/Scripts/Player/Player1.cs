@@ -28,10 +28,10 @@ public class Player1 : PlayerBase
         }
 
         // Set move direction
-        Debug.Log("local position: " + transform.localPosition);
-        Debug.Log("world position: " + transform.position);
-        Debug.Log("local rotation: " + transform.localRotation.eulerAngles);
-        Debug.Log("world rotation: " + transform.rotation.eulerAngles);
+        //Debug.Log("local position: " + transform.localPosition);
+        //Debug.Log("world position: " + transform.position);
+        //Debug.Log("local rotation: " + transform.localRotation.eulerAngles);
+        //Debug.Log("world rotation: " + transform.rotation.eulerAngles);
         Vector2 input = (Vector2)data;
         MoveInput.Set(input.x, 0, input.y);
     }
