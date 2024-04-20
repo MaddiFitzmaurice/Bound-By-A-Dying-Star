@@ -108,6 +108,11 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             Debug.LogError(_beamDestinations + " was not pedestal!!");
         }
 
+        if (_initialAngleOffset == 0f)
+        {
+            _correctAngle = true;
+        }
+
         // Place mirror that is already set to be on the mirror
         if (_presetPlacedObject != null)
         {
@@ -235,11 +240,14 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         _conController.PedestalHasMirror(this);
     }
 
-    public void ActivateEffect(PedestalConstellation otherPedestal)
+    public void ActivateEffect()
     {
-        GameObject newLightbeam = Instantiate(_lightBeam, transform);
-        _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
-        SetBeamPositions();
+        foreach (var item in _beamDestinations)
+        {
+            GameObject newLightbeam = Instantiate(_lightBeam, transform);
+            _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
+            SetBeamPositions();
+        }
     }
 
     // Patrolling rotate

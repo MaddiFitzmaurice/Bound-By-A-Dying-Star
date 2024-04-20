@@ -44,7 +44,7 @@ public class ConstellationController : MonoBehaviour
         if(senderIndex != -1 || _pedestalList.Count != 0)
         {
             _pedestaData[senderIndex].HasMirror = true;
-            PedestalChecker(senderIndex, true);
+            PedestalChecker(senderIndex);
 
             //BeamChecker(senderIndex, true);
         }
@@ -64,7 +64,7 @@ public class ConstellationController : MonoBehaviour
             if(senderIndex != -1 || _pedestalList.Count != 0)
             {
                 _pedestaData[senderIndex].RecieveBeam = true;
-                PedestalChecker(senderIndex, true);
+                PedestalChecker(senderIndex);
 
                 //BeamChecker(senderIndex, false);
             }
@@ -82,7 +82,7 @@ public class ConstellationController : MonoBehaviour
         if(senderIndex != -1 || _pedestalList.Count != 0)
         {
             //_beamedPedestals[senderIndex] = true;
-            PedestalChecker(senderIndex, false);
+            PedestalChecker(senderIndex);
 
             // Go through each node 
             for (int i = 0; i < _pedestalNodeList.Count; i++)
@@ -106,7 +106,7 @@ public class ConstellationController : MonoBehaviour
 
                 if (otherIndex != -1)
                 {
-                    pedestalA.ActivateEffect(pedestalB);
+                    pedestalA.ActivateEffect();
                     _pedestaData[senderIndex].ShootingBeam = true;
                     _pedestaData[senderIndex].RecieveBeam = true;
                 }
@@ -118,52 +118,10 @@ public class ConstellationController : MonoBehaviour
         }
     }
 
-    private void BeamChecker(int senderIndex, bool mirrorMode)
-    {
-        // Go through each node 
-        for (int i = 0; i < _pedestalNodeList.Count; i++)
-        {
-            PedestalNode node = _pedestalNodeList[i];
-            PedestalConstellation pedestalA = node.PedestalA;
-            PedestalConstellation pedestalB = node.PedestalB;
-            int otherIndex = -1;
-
-            // get the pedestal that are paired with the sender pedestal
-            if (pedestalA == _pedestalList[senderIndex])
-            {
-                otherIndex = _pedestalList.IndexOf(pedestalB);
-            }
-            else if(pedestalB == _pedestalList[senderIndex])
-            {
-                pedestalA = node.PedestalB;
-                pedestalB = node.PedestalA;
-                otherIndex = _pedestalList.IndexOf(pedestalB);
-            }
-
-            if (otherIndex != -1)
-            {
-                if (mirrorMode)
-                {
-                    if (_pedestaData[senderIndex].HasMirror && _pedestaData[otherIndex].RecieveBeam)
-                    {
-                        pedestalA.ActivateEffect(pedestalB);
-                    }
-                }
-                else
-                {
-                    if (_pedestaData[otherIndex].HasMirror && _pedestaData[senderIndex].RecieveBeam)
-                    {
-                        pedestalA.ActivateEffect(pedestalB);
-                    }
-                }
-            }
-        }
-    }
-
     // Go through each node and get the pedestal that are paired with the sender pedestal
     // if the paired pedestal also has a miror, activate the beam effect
     // then check if constellation is complete
-    private void PedestalChecker(int senderIndex, bool mirrorMode)
+    private void PedestalChecker(int senderIndex)
     {
         // Go through each node 
         for (int i = 0; i < _pedestalNodeList.Count; i++)
@@ -195,27 +153,16 @@ public class ConstellationController : MonoBehaviour
                     ConstellationChecker();
                 }
                 
-                if (otherData.RecieveBeam && !node.NodeBeamed)
+                if (otherData.RecieveBeam && senderData.RecieveBeam && !node.NodeBeamed)
                 {
                     node.NodeBeamed = true;
                     ConstellationChecker();
                 }
 
-                if (mirrorMode)
+                if (senderData.HasMirror && senderData.RecieveBeam && !senderData.ShootingBeam)
                 {
-                    if (senderData.HasMirror && senderData.RecieveBeam && !senderData.ShootingBeam)
-                    {
-                        pedestalA.ActivateEffect(pedestalB);
-                        senderData.ShootingBeam = true;
-                    }
-                }
-                else
-                {
-                    if (otherData.HasMirror && senderData.RecieveBeam && !otherData.ShootingBeam)
-                    {
-                        pedestalB.ActivateEffect(pedestalA);
-                        otherData.ShootingBeam = true;
-                    }
+                    pedestalA.ActivateEffect();
+                    senderData.ShootingBeam = true;
                 }
             }
         }
