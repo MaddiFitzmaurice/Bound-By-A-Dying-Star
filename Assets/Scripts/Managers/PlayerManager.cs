@@ -13,8 +13,8 @@ public class PlayerManager : MonoBehaviour
 
     #region INTERNAL DATA
     // Players
-    public Player1 _player1;
-    public Player2 _player2;
+    private Player1 _player1;
+    private Player2 _player2;
 
     // Camera Data
     private CinemachineTargetGroup _targetGroup;
