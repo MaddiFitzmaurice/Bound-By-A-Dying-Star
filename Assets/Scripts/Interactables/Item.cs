@@ -26,7 +26,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     // Gravity Flip Data
     [SerializeField] private bool isGravityFlipItem = false; // Flag to check if this item flips gravity
-    [SerializeField] private float flippedGravityScale = -9.81f; // The gravity scale when flipped
+    private float flippedGravityScale = -9.81f; // The gravity scale when flipped
     private bool _currentGravityState = false;  // Default gravity state
     #endregion
 
@@ -102,18 +102,21 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     public void BePickedUp(PlayerBase player)
     {
-        _playerHoldingItem = player;
-        SetParent(_playerHoldingItem.PickupPoint);
-        transform.localPosition = Vector3.zero;
-        _playerHoldingItem.PickupItem(gameObject);
-        UnhighlightItem();
-
-        if (isGravityFlipItem)
+        if (_itemLocked == false)
         {
-            // Toggle the gravity state and apply the new state
-            _currentGravityState = !_currentGravityState;
-            // Flip gravity for all players
-            FlipGravityForAllPlayers(_currentGravityState);
+            _playerHoldingItem = player;
+            SetParent(_playerHoldingItem.PickupPoint);
+            transform.localPosition = Vector3.zero;
+            _playerHoldingItem.PickupItem(gameObject);
+            UnhighlightItem();
+
+            if (isGravityFlipItem)
+            {
+                // Toggle the gravity state and apply the new state
+                _currentGravityState = !_currentGravityState;
+                // Flip gravity for all players
+                FlipGravityForAllPlayers(_currentGravityState);
+            }
         }
     }
 
