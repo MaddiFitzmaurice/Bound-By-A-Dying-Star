@@ -103,6 +103,11 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             Debug.LogError("_pairedPedestals must not be NULL!");
         }
 
+        if (!TryGetComponent<PedestalConstellation>(out PedestalConstellation hinge))
+        {
+            Debug.LogError(_beamDestinations + " was not pedestal!!");
+        }
+
         // Place mirror that is already set to be on the mirror
         if (_presetPlacedObject != null)
         {
@@ -265,7 +270,12 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         if(dot > 0.8f) 
         { 
             _correctAngle = true;
-            _conController.PedestalHasBeam(this);
+            List<PedestalConstellation> pedestalDestinations = new List<PedestalConstellation>();
+            foreach (GameObject dest in _beamDestinations)
+            {
+                pedestalDestinations.Add(dest.GetComponent<PedestalConstellation>());
+            }
+            _conController.PedestalHasBeam(pedestalDestinations);
         }
     }
 

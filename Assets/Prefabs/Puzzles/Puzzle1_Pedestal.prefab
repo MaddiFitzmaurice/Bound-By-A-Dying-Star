@@ -60,7 +60,6 @@ MonoBehaviour:
   _raiseLightBeam: 1
   _beamMaxLength: 5
   _beamSource: {fileID: 7226935078828540022}
-  DEBUG_ACTIVATE: 0
 --- !u!65 &245370768940480748
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -217,7 +216,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.15, z: 0.15}
+  m_Size: {x: 0.12, y: 0.12, z: 0.12}
   m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!4 &2237349718899911990 stripped
 Transform:

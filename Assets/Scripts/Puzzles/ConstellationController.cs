@@ -10,11 +10,8 @@ public class ConstellationController : MonoBehaviour
     [SerializeField] private List<PedestalConstellation> _pedestalList;
     //List of each node data class (connection between two pedestals)
     [SerializeField] private List<PedestalNode> _pedestalNodeList;
-    //list of bools associated with if pedestals have mirrors
-    private List<bool> _mirroredPedestals = new List<bool>();
-    //list of bools associated with if pedestals have mirrors
-    private List<bool> _litPedestals = new List<bool>();
-    private List<bool> _pedestalsWithBeam = new List<bool>();
+
+    private List<PedestalData> _pedestaData = new List<PedestalData>();
     private int _pedestalNum;
     // Awake is called before the first frame update
     void Awake()
@@ -27,9 +24,7 @@ public class ConstellationController : MonoBehaviour
         //set all _mirroredPedestals bools to false
         for (int i = 0; i < _pedestalNum; i++)
         {
-            _mirroredPedestals.Add(false);
-            _litPedestals.Add(false);
-            _pedestalsWithBeam.Add(false);
+            _pedestaData.Add(new PedestalData());
         }
 
         foreach (var item in _pedestalList)
@@ -48,7 +43,7 @@ public class ConstellationController : MonoBehaviour
         // check to make sender is in list and that list is not empty
         if(senderIndex != -1 || _pedestalList.Count != 0)
         {
-            _mirroredPedestals[senderIndex] = true;
+            _pedestaData[senderIndex].HasMirror = true;
             PedestalChecker(senderIndex, true);
 
             //BeamChecker(senderIndex, true);
@@ -59,21 +54,24 @@ public class ConstellationController : MonoBehaviour
         }
     }
 
-    // Set pedestal to have mirror, then run check function
-    public void PedestalHasBeam(PedestalConstellation sender)
+    // Set pedestal to be recieving a beam, then run check function
+    public void PedestalHasBeam(List<PedestalConstellation> pedestalDestinations)
     {
-        int senderIndex = _pedestalList.IndexOf(sender);
-        // check to make sender is in list and that list is not empty
-        if(senderIndex != -1 || _pedestalList.Count != 0)
+        foreach (PedestalConstellation pedestal in pedestalDestinations)
         {
-            _litPedestals[senderIndex] = true;
-            PedestalChecker(senderIndex, false);
+            int senderIndex = _pedestalList.IndexOf(pedestal);
+            // check to make sender is in list and that list is not empty
+            if(senderIndex != -1 || _pedestalList.Count != 0)
+            {
+                _pedestaData[senderIndex].RecieveBeam = true;
+                PedestalChecker(senderIndex, true);
 
-            //BeamChecker(senderIndex, false);
-        }
-        else
-        {
-            Debug.LogError("PedestalHasBeam sender is not in list!! fix this now");
+                //BeamChecker(senderIndex, false);
+            }
+            else
+            {
+                Debug.LogError("PedestalHasBeam sender is not in list!! fix this now");
+            }
         }
     }
 
@@ -92,17 +90,25 @@ public class ConstellationController : MonoBehaviour
                 PedestalNode node = _pedestalNodeList[i];
                 PedestalConstellation pedestalA = node.PedestalA;
                 PedestalConstellation pedestalB = node.PedestalB;
+                int otherIndex = -1;
 
                 // get the pedestal that are paired with the sender pedestal
                 if (pedestalA == _pedestalList[senderIndex])
-                {
-                    pedestalA.ActivateEffect(pedestalB);
-                    _pedestalsWithBeam[senderIndex] = true;
+                { 
+                    otherIndex = _pedestalList.IndexOf(pedestalB);
                 }
                 else if(pedestalB == _pedestalList[senderIndex])
                 {
-                    pedestalB.ActivateEffect(pedestalA);
-                    _pedestalsWithBeam[senderIndex] = true;
+                    pedestalA = node.PedestalB;
+                    pedestalB = node.PedestalA;
+                    otherIndex = _pedestalList.IndexOf(pedestalB);
+                }
+
+                if (otherIndex != -1)
+                {
+                    pedestalA.ActivateEffect(pedestalB);
+                    _pedestaData[senderIndex].ShootingBeam = true;
+                    _pedestaData[senderIndex].RecieveBeam = true;
                 }
             }
         }
@@ -138,16 +144,16 @@ public class ConstellationController : MonoBehaviour
             {
                 if (mirrorMode)
                 {
-                    if (_mirroredPedestals[senderIndex] && _litPedestals[otherIndex])
+                    if (_pedestaData[senderIndex].HasMirror && _pedestaData[otherIndex].RecieveBeam)
                     {
                         pedestalA.ActivateEffect(pedestalB);
                     }
                 }
                 else
                 {
-                    if (_mirroredPedestals[otherIndex] && _litPedestals[senderIndex])
+                    if (_pedestaData[otherIndex].HasMirror && _pedestaData[senderIndex].RecieveBeam)
                     {
-                        pedestalB.ActivateEffect(pedestalA);
+                        pedestalA.ActivateEffect(pedestalB);
                     }
                 }
             }
@@ -181,13 +187,15 @@ public class ConstellationController : MonoBehaviour
 
             if (otherIndex != -1)
             {
-                if (_mirroredPedestals[otherIndex] && !node.NodeMirrored)
+                PedestalData senderData = _pedestaData[senderIndex];
+                PedestalData otherData = _pedestaData[otherIndex];
+                if (otherData.HasMirror && senderData.HasMirror && !node.NodeMirrored)
                 {
                     node.NodeMirrored = true;
                     ConstellationChecker();
                 }
                 
-                if (_litPedestals[otherIndex] && !node.NodeBeamed)
+                if (otherData.RecieveBeam && !node.NodeBeamed)
                 {
                     node.NodeBeamed = true;
                     ConstellationChecker();
@@ -195,18 +203,18 @@ public class ConstellationController : MonoBehaviour
 
                 if (mirrorMode)
                 {
-                    if (_mirroredPedestals[senderIndex] && _litPedestals[otherIndex] && !_pedestalsWithBeam[senderIndex])
+                    if (senderData.HasMirror && senderData.RecieveBeam && !senderData.ShootingBeam)
                     {
                         pedestalA.ActivateEffect(pedestalB);
-                        _pedestalsWithBeam[senderIndex] = true;
+                        senderData.ShootingBeam = true;
                     }
                 }
                 else
                 {
-                    if (_mirroredPedestals[otherIndex] && _litPedestals[senderIndex] && !_pedestalsWithBeam[otherIndex])
+                    if (otherData.HasMirror && senderData.RecieveBeam && !otherData.ShootingBeam)
                     {
                         pedestalB.ActivateEffect(pedestalA);
-                        _pedestalsWithBeam[otherIndex] = true;
+                        otherData.ShootingBeam = true;
                     }
                 }
             }
@@ -222,7 +230,7 @@ public class ConstellationController : MonoBehaviour
         // if they are not, returns false
         foreach (var node in _pedestalNodeList)
         {
-            if(!node.NodeBeamed)
+            if(!node.NodeBeamed || !node.NodeMirrored)
             {
                 done = false;
                 return;
@@ -245,4 +253,15 @@ public class PedestalNode
     public PedestalConstellation PedestalB;
     public bool NodeMirrored = false; //use when a pedestal node has mirror at both ends
     public bool NodeBeamed = false; //use for when mirror and rift system is implemented
+}
+
+// Data class for indivigual pedestals
+public class PedestalData
+{
+    //bools associated with if pedestals have mirrors
+    public bool HasMirror = false; 
+    //bools associated with if pedestals are shooting a beam
+    public bool ShootingBeam = false; 
+    //bools associated with if pedestals are receiving a beam
+    public bool RecieveBeam = false; 
 }
