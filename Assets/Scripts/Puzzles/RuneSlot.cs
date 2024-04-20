@@ -5,7 +5,7 @@ using UnityEngine;
 public class RuneSlot : MonoBehaviour
 {
     #region INTERNAL DATA
-    private GameObject _validRune;
+    [SerializeField] private GameObject _validRune;
     public bool isOccupied;
     [SerializeField] private int _scaleSizeFactor;
     private RuneDoor _runeDoor;

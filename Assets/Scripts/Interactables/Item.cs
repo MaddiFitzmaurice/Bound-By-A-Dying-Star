@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Item : MonoBehaviour, IInteractable, IPickupable
 {
@@ -28,6 +30,12 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     [SerializeField] private bool isGravityFlipItem = false; // Flag to check if this item flips gravity
     private float flippedGravityScale = -9.81f; // The gravity scale when flipped
     private bool _currentGravityState = false;  // Default gravity state
+
+    // Item Float
+    private Transform followTarget;
+    private bool isFollowing = false;
+    private float followSpeed = 5f; 
+
     #endregion
 
     private void Awake()
@@ -57,6 +65,18 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         _itemGrouper = transform.parent;
         _renderer = GetComponentInChildren<Renderer>();
         _defaultMat = _renderer.material;
+    }
+
+    void Update()
+    {
+        if (isFollowing && followTarget != null)
+        {
+            // Calculate the world space position towards which to move
+            Vector3 targetPosition = followTarget.position;
+
+            // Perform the interpolation in world space
+            transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
+        }
     }
 
     public void UnhighlightItem()
@@ -91,12 +111,21 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     public void BeDropped(Transform newParent)
     {
+        isFollowing = false;
+
         // Removes the parent-child relationship, making the object independent in the scene
         // If an incoming parent is specified, use that. Else, use the default parent assigned in the scene
         Transform parent = newParent != null ? newParent : _itemGrouper;
         SetParent(parent);
   
         _playerHoldingItem.DropItem();
+
+        // Start coroutine to smoothly move the item to the ground
+        if (parent.name.Contains("ItemGrouper"))
+        {
+            StartCoroutine(FloatItemToGround(_playerHoldingItem));
+        }
+
         _playerHoldingItem = null;
     }
 
@@ -105,8 +134,10 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         if (_itemLocked == false)
         {
             _playerHoldingItem = player;
-            SetParent(_playerHoldingItem.PickupPoint);
+            followTarget = _playerHoldingItem.PickupPoint;
+            isFollowing = true;
             transform.localPosition = Vector3.zero;
+            transform.position = followTarget.position;
             _playerHoldingItem.PickupItem(gameObject);
             UnhighlightItem();
 
@@ -123,6 +154,42 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     public void SetParent(Transform parent)
     {
         transform.SetParent(parent); 
+    }
+
+    private IEnumerator FloatItemToGround(PlayerBase player)
+    {
+        _playerHoldingItem = player;
+        // Speed at which the item will move to the ground
+        float dropSpeed = 1.5f;
+        // Maximum distance to check for the ground
+        float maxDropHeight = 100.0f;
+        // Get the layer mask for the ground, so the raycast doesn't hit the players
+        int groundLayer = LayerMask.GetMask("Default");
+
+        // Use the direction of gravity to determine the ray direction
+        Vector3 gravityDirection = Physics.gravity.normalized;
+        // Start the ray from the item's position adjusted by half its height in the direction of gravity
+        Vector3 rayStart = transform.position + gravityDirection * (transform.localScale.y / 2);
+
+        RaycastHit hit;
+        if (Physics.Raycast(rayStart, gravityDirection, out hit, maxDropHeight, groundLayer))
+        {
+            // Calculate target position ensuring the item sits on the ground properly
+            // Refactor adjustment based on the current direction of gravity
+            Vector3 adjustment = -gravityDirection * (transform.localScale.y / 2);  
+            Vector3 targetPosition = hit.point + adjustment;
+
+            // Move the item to the target position
+            while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, dropSpeed * Time.deltaTime);
+                yield return null;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Ground not found below item, not moving.");
+        }
     }
     #endregion
 

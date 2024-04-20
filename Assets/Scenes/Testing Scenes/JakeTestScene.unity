@@ -364,7 +364,7 @@ Transform:
   m_GameObject: {fileID: 337225149}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7083544, y: -0, z: -0, w: 0.70585704}
-  m_LocalPosition: {x: -0.29496613, y: 0.486, z: -0.105}
+  m_LocalPosition: {x: -0.29496613, y: 0.63, z: 0.062}
   m_LocalScale: {x: 0.080830686, y: 0.6536055, z: 0.039813794}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -453,9 +453,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 895f25f46408f244ea698d82c1c538d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  validObject: {fileID: 616397939}
+  _validRune: {fileID: 616397939}
   isOccupied: 0
-  scaleSizeFactor: 2
+  _scaleSizeFactor: 2
 --- !u!4 &477188366 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7897156574203068301, guid: 411de50d7d8f23140a542b2529c75fcd, type: 3}
@@ -648,7 +648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d05903d2b1933d4890bcb07c78d5ed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots:
+  _slots:
   - {fileID: 337225155}
   - {fileID: 1778582551}
   - {fileID: 1774439942}
@@ -750,7 +750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5250384877932224323, guid: 411de50d7d8f23140a542b2529c75fcd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7897156574203068301, guid: 411de50d7d8f23140a542b2529c75fcd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -762,7 +762,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7897156574203068301, guid: 411de50d7d8f23140a542b2529c75fcd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -16.38
       objectReference: {fileID: 0}
     - target: {fileID: 7897156574203068301, guid: 411de50d7d8f23140a542b2529c75fcd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1379,9 +1379,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 895f25f46408f244ea698d82c1c538d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  validObject: {fileID: 574731358}
+  _validRune: {fileID: 574731358}
   isOccupied: 0
-  scaleSizeFactor: 2
+  _scaleSizeFactor: 2
 --- !u!65 &1774439943
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1500,9 +1500,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 895f25f46408f244ea698d82c1c538d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  validObject: {fileID: 1079443816}
+  _validRune: {fileID: 1079443816}
   isOccupied: 0
-  scaleSizeFactor: 2
+  _scaleSizeFactor: 2
 --- !u!65 &1778582552
 BoxCollider:
   m_ObjectHideFlags: 0

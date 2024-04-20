@@ -22,6 +22,11 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
 
     // Pedestal
     private bool _isOnPedestal = false;
+
+    // Item Floating
+    private Transform followTarget;
+    private bool isFollowing = false;
+    private float followSpeed = 5f;  // Adjust this value as needed
     #endregion
 
     private void Awake()
@@ -31,6 +36,18 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         _mirrorGrouper = transform.parent;
 
         _light.intensity = 0;
+    }
+
+    void Update()
+    {
+        if (isFollowing && followTarget != null)
+        {
+            // Calculate the world space position towards which to move
+            Vector3 targetPosition = followTarget.position;
+
+            // Perform the interpolation in world space
+            transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
+        }
     }
 
     // TODO: MAKE THIS INTO A COROUTINE THAT ADJUSTS INTENSITY WHEN NEARBY INSTEAD OF RELYING ON DISTANCE
@@ -54,22 +71,75 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
 
     public void BeDropped(Transform newParent)
     {
-        SetParent(newParent);
+        isFollowing = false;
+
+        // Removes the parent-child relationship, making the object independent in the scene
+        // If an incoming parent is specified, use that. Else, use the default parent assigned in the scene
+        Transform parent = newParent != null ? newParent : _mirrorGrouper;
+        SetParent(parent);
+
         _player.DropItem();
+
+        // Start coroutine to smoothly move the item to the ground
+        if (parent.name.Contains("MirrorGrouper"))
+        {
+            StartCoroutine(FloatItemToGround(_player));
+        }
+
         _player = null;
     }
 
     public void BePickedUp(PlayerBase player)
     {
         _player = player;
-        SetParent(_player.PickupPoint);
+        followTarget = _player.PickupPoint;
+        isFollowing = true;
         transform.localPosition = Vector3.zero;
+        transform.position = followTarget.position;
         _player.PickupItem(gameObject);
+        
     }
 
     public void SetParent(Transform parent)
     {
         transform.SetParent(parent);
+    }
+
+    private IEnumerator FloatItemToGround(PlayerBase player)
+    {
+        _player = player;
+        // Speed at which the item will move to the ground
+        float dropSpeed = 1.5f;
+        // Maximum distance to check for the ground
+        float maxDropHeight = 100.0f;
+        // Get the layer mask for the ground, so the raycast doesn't hit the players
+        int groundLayer = LayerMask.GetMask("Default");
+
+        // Calculate the offset position behind the player by using the player's forward direction
+        Vector3 offsetPosition = transform.position - _player.transform.forward * 2; // Offset by 2 units behind the player, for bigger game objects
+
+        // Start the raycast from above the offset position to avoid collisions with the player
+        Vector3 rayStart = offsetPosition + Vector3.up * 5;  // Start 5 units above the offset position
+        RaycastHit hit;
+        if (Physics.Raycast(rayStart, Vector3.down, out hit, maxDropHeight + 5, groundLayer))  // Increase ray distance to account for starting offset
+        {
+            // Adjust position, so the game object sits on the ground
+            Vector3 targetPosition = hit.point + Vector3.up * (transform.localScale.y / 2);
+
+            // Move item directly to offset position to avoid hitting player
+            transform.position = offsetPosition;
+
+            while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, dropSpeed * Time.deltaTime);
+                yield return null;  // Wait for the next frame
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Ground not found below item, not moving.");
+        }
+
     }
     #endregion
 
