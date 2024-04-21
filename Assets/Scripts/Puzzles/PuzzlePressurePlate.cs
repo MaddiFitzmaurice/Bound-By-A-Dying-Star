@@ -5,19 +5,13 @@ using UnityEngine;
 public class PuzzlePressurePlate : MonoBehaviour
 {
     public PuzzleController puzzleController;
-    private Renderer plateRenderer;
-
-    void Start()
-    {
-        plateRenderer = GetComponent<Renderer>();
-    }
+    public string doorID;  // The ID of the door this plate controls
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player1") || other.CompareTag("Player2"))
         {
-            plateRenderer.material.color = Color.green;
-            puzzleController.PlayerSteppedOnPlate(this);
+            puzzleController.UnlockDoor(doorID);
         }
     }
 
@@ -25,8 +19,7 @@ public class PuzzlePressurePlate : MonoBehaviour
     {
         if (other.CompareTag("Player1") || other.CompareTag("Player2"))
         {
-            plateRenderer.material.color = Color.white; 
-            puzzleController.PlayerLeftPlate(this);
+            puzzleController.LockDoor(doorID);
         }
     }
 }

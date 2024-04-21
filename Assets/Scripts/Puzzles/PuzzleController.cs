@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PuzzleController : MonoBehaviour
 {
-    public GameObject boulder;
+    
     public GameObject movingPlatform;
     public bool isPlatformMoving = true;  // Track the movement state of the platform
     public Transform respawnPoint; 
@@ -31,8 +31,9 @@ public class PuzzleController : MonoBehaviour
     public GameObject puzzleDoor; // Assign the puzzle door in the Inspector
     private int emittingMirrorsCount = 0; // Track the number of mirrors currently emitting light
 
+    [SerializeField]
+    private List<Door> doors = new List<Door>();
 
-   
 
     public List<Transform> checkpoints = new List<Transform>(); // Assign in Inspector
 
@@ -41,8 +42,13 @@ public class PuzzleController : MonoBehaviour
     private Vector3 currentRespawnPoint;
 
 
-
-
+    
+    [System.Serializable]
+    public class Door
+    {
+        public string doorID;  // Unique identifier for each door
+        public GameObject doorObject;  
+    }
 
     private void Awake()
     {
@@ -156,10 +162,35 @@ public class PuzzleController : MonoBehaviour
     void SolvePuzzle()
     {
         // Make the boulder disappear permanently
-        Destroy(boulder);
+        //Destroy(boulder);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void UnlockDoor(string doorID)
+    {
+        foreach (Door door in doors)
+        {
+            if (door.doorID == doorID)
+            {
+                door.doorObject.SetActive(false);  
+            }
+        }
+    }
+
+
+    public void LockDoor(string doorID)
+    {
+        foreach (Door door in doors)
+        {
+            if (door.doorID == doorID)
+            {
+                door.doorObject.SetActive(true);  
+            }
+        }
+    }
+
+
+
+private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player1") || other.CompareTag("Player2"))
         {
