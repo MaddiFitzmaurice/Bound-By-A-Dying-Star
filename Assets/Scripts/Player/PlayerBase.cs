@@ -15,7 +15,14 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] protected float MoveDecel = 2f;
     [SerializeField] protected float VelocityPower = 2f;
 
+    [Header("Stairs")]
+    [SerializeField] protected float StepHeight;
+    [SerializeField] protected float StepSmoothing;
+    [SerializeField] protected GameObject UpperBoundRay;
+    [SerializeField] protected GameObject LowerBoundRay;
+
     // Rotation
+    [Header("Rotation")]
     [SerializeField] protected float RotationSpeed = 2f;
 
     // Rift Data
@@ -59,6 +66,12 @@ public class PlayerBase : MonoBehaviour
         _interactablesNotInRange = new List<Collider>();
 
         PlayerZAngle = transform.rotation.eulerAngles.z;
+
+        // Set step height data
+        // Note: Height calc will change depending on height/transform centre of models artists settle on
+        // Current transform centre: 1 unit
+        UpperBoundRay.transform.localPosition = new Vector3(0, -1 + StepHeight, 0);
+        LowerBoundRay.transform.localPosition = new Vector3(0, -1, 0);
     }
 
     protected virtual void OnEnable()
@@ -82,8 +95,10 @@ public class PlayerBase : MonoBehaviour
     private void FixedUpdate()
     {
         PlayerMovement();
+        StepClimb();
     }
 
+    #region MOVEMENT FUNCTIONS
     // Movement
     public void PlayerMovement()
     {
@@ -163,7 +178,23 @@ public class PlayerBase : MonoBehaviour
             }
         }
     }
+    
+    public void StepClimb()
+    {
+        RaycastHit lowerBoundHit;
+        if (Physics.Raycast(LowerBoundRay.transform.position, transform.forward, out lowerBoundHit, 0.6f))
+        {
+            RaycastHit upperBoundHit;
+            if (!Physics.Raycast(UpperBoundRay.transform.position, transform.forward, out upperBoundHit, 0.7f))
+            {
+                _rb.position -= new Vector3(0f, -StepSmoothing * Time.deltaTime, 0f);
+            }
+        }
+    }
+    
+    #endregion
 
+    #region INTERACTION FUNCTIONS
     // Interaction
     public void Interact(object data)
     {
@@ -281,6 +312,7 @@ public class PlayerBase : MonoBehaviour
     {
         CarriedPickupable = item;
     }
+    #endregion
 
     #region EVENT HANDLERS
     public void TestControlHandler(object data)
