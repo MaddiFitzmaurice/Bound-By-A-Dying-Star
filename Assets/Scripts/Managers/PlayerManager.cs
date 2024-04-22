@@ -38,12 +38,14 @@ public class PlayerManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, SendFollowGroup);
         EventManager.EventSubscribe(EventType.TELEPORT_PLAYERS, TeleportPlayers);
+        EventManager.EventSubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, SendFollowGroup);
         EventManager.EventUnsubscribe(EventType.TELEPORT_PLAYERS, TeleportPlayers);
+        EventManager.EventUnsubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
     }
 
     #region EVENT HANDLERS
@@ -58,6 +60,19 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.LogError("No Cinemachine Target Group assigned!");
         }
+    }
+
+    // Have players spawn at a desired location in a specific level
+    public void SpawnInLevel(object data)
+    {
+        if (data is not Transform)
+        {
+            Debug.LogError("PlayerManager has not received a transform!");
+        }
+
+        Transform spawnPoint = (Transform)data;
+        _playerGrouper.transform.position = spawnPoint.position;
+        _playerGrouper.transform.rotation = spawnPoint.rotation;
     }
 
     // Listen to Teleport and assign new position to player grouper
