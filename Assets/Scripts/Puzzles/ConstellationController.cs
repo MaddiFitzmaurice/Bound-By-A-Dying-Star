@@ -87,45 +87,28 @@ public class ConstellationController : MonoBehaviour
         }
     }
 
-    public void PedestalPreset(PedestalConstellation sender)
+    // Sets valuew of preset pedestals
+    public void PedestalPreset(PedestalLinkData linkData)
     {
-        int senderIndex = _pedestalList.IndexOf(sender);
-        // check to make sender is in list and that list is not empty
-        if(senderIndex != -1 || _pedestalList.Count != 0)
-        {
-            PedestalChecker(senderIndex);
+        PedestalConstellation pedestalSender = linkData.sender;
 
-            // Go through each node 
-            for (int i = 0; i < _pedestalNodeList.Count; i++)
+        int senderIndex = _pedestalList.IndexOf(pedestalSender);
+        PedestalChecker(senderIndex);
+
+        foreach (var pedestalB in linkData.pedestalDestinations)
+        {
+            int otherIndex = _pedestalList.IndexOf(pedestalB);
+
+            if (otherIndex != -1 && senderIndex != -1)
             {
-                PedestalNode node = _pedestalNodeList[i];
-                PedestalConstellation pedestalA = node.PedestalA;
-                PedestalConstellation pedestalB = node.PedestalB;
-                int otherIndex = -1;
-
-                // get the pedestal that are paired with the sender pedestal
-                if (pedestalA == _pedestalList[senderIndex])
-                { 
-                    otherIndex = _pedestalList.IndexOf(pedestalB);
-                }
-                else if(pedestalB == _pedestalList[senderIndex])
-                {
-                    pedestalA = node.PedestalB;
-                    pedestalB = node.PedestalA;
-                    otherIndex = _pedestalList.IndexOf(pedestalB);
-                }
-
-                if (otherIndex != -1)
-                {
-                    pedestalA.ActivateEffect();
-                    _pedestaData[senderIndex].ShootingBeam = true;
-                    _pedestaData[senderIndex].RecieveBeam = true;
-                }
+                pedestalSender.ActivateEffect();
+                _pedestaData[senderIndex].ShootingBeam = true;
+                _pedestaData[senderIndex].RecieveBeam = true;
             }
-        }
-        else
-        {
-            Debug.LogError("PedestalHasBeam sender is not in list!! fix this now");
+            else
+            {
+                Debug.LogError("pedestal was not found in _pedestalList");
+            }
         }
     }
 
@@ -157,16 +140,6 @@ public class ConstellationController : MonoBehaviour
             if (otherIndex != -1)
             {
                 PedestalData senderData = _pedestaData[senderIndex];
-                PedestalData otherData = _pedestaData[otherIndex];
-                if (otherData.HasMirror && senderData.HasMirror && !node.NodeMirrored)
-                {
-                    node.NodeMirrored = true;
-                }
-                
-                if (otherData.RecieveBeam && senderData.RecieveBeam && !node.NodeBeamed)
-                {
-                    node.NodeBeamed = true;
-                }
 
                 if (senderData.HasMirror && senderData.RecieveBeam && !senderData.ShootingBeam)
                 {
@@ -182,17 +155,6 @@ public class ConstellationController : MonoBehaviour
     private void ConstellationChecker()
     {
         bool done = true;
-
-        //checks if any nodes are don't have a beam on them
-        // if they are not, returns false
-        //foreach (var node in _pedestalNodeList)
-        //{
-        //    if(!node.NodeBeamed || !node.NodeMirrored || !)
-        //    {
-        //        done = false;
-        //        return;
-        //    }
-        //}
 
         foreach (var PedestalData in _pedestaData)
         {
@@ -217,8 +179,6 @@ public class PedestalNode
 {
     public PedestalConstellation PedestalA;
     public PedestalConstellation PedestalB;
-    public bool NodeMirrored = false; //use when a pedestal node has mirror at both ends
-    public bool NodeBeamed = false; //use for when mirror and rift system is implemented
 }
 
 // Data class for indivigual pedestals
@@ -233,4 +193,17 @@ public class PedestalData
     public bool RecieveBeam = false; 
     //bools associated with if beams are facing their correct direction
     public bool RightBeamDirection = false; 
+}
+
+// Data class for sending 
+//[Serializable]
+public class PedestalLinkData
+{
+    public List<PedestalConstellation> pedestalDestinations;
+    public PedestalConstellation sender;
+    public PedestalLinkData(List<PedestalConstellation> pedestalDestinations, PedestalConstellation sender)
+    {
+        this.pedestalDestinations = pedestalDestinations;
+        this.sender = sender;
+    }
 }
