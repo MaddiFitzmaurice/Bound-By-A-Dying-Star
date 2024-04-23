@@ -146,10 +146,18 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     #region IINTERACTABLE FUNCTIONS
     public void PlayerInRange(PlayerBase player)
     {
+        // set _maxIntensity when the player is close to the mirror
+        LeanTween.value(gameObject, _light.intensity, _maxIntensity, 1f).setOnUpdate((float val) => {
+            _light.intensity = val;
+        }).setEase(LeanTweenType.easeInOutSine);
     }
 
     public void PlayerNotInRange(PlayerBase player)
     {
+        // Fade the light to minimal intensity when the player moves out of range
+        LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
+            _light.intensity = val;
+        }).setEase(LeanTweenType.easeInOutSine);
     }
 
     public void PlayerStartInteract(PlayerBase player)
