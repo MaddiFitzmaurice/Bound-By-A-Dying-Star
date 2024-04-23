@@ -45,8 +45,6 @@ public class ConstellationController : MonoBehaviour
         {
             _pedestaData[senderIndex].HasMirror = true;
             PedestalChecker(senderIndex);
-
-            //BeamChecker(senderIndex, true);
         }
         else
         {
@@ -54,7 +52,23 @@ public class ConstellationController : MonoBehaviour
         }
     }
 
-    // Set pedestal to be recieving a beam, then run check function
+    // Set pedestal be facing right direction
+    public void BeamRightDirection(PedestalConstellation sender)
+    {
+        int senderIndex = _pedestalList.IndexOf(sender);
+        // check to make sender is in list and that list is not empty
+        if(senderIndex != -1 || _pedestalList.Count != 0)
+        {
+            _pedestaData[senderIndex].RightBeamDirection = true;
+            //ConstellationChecker();
+        }
+        else
+        {
+            Debug.LogError("BeamRightDirection sender is not in list!! fix this now");
+        }
+    }
+
+    // Set all pedestal destinations to be recieving beam
     public void PedestalHasBeam(List<PedestalConstellation> pedestalDestinations)
     {
         foreach (PedestalConstellation pedestal in pedestalDestinations)
@@ -65,8 +79,6 @@ public class ConstellationController : MonoBehaviour
             {
                 _pedestaData[senderIndex].RecieveBeam = true;
                 PedestalChecker(senderIndex);
-
-                //BeamChecker(senderIndex, false);
             }
             else
             {
@@ -81,7 +93,6 @@ public class ConstellationController : MonoBehaviour
         // check to make sender is in list and that list is not empty
         if(senderIndex != -1 || _pedestalList.Count != 0)
         {
-            //_beamedPedestals[senderIndex] = true;
             PedestalChecker(senderIndex);
 
             // Go through each node 
@@ -150,13 +161,11 @@ public class ConstellationController : MonoBehaviour
                 if (otherData.HasMirror && senderData.HasMirror && !node.NodeMirrored)
                 {
                     node.NodeMirrored = true;
-                    ConstellationChecker();
                 }
                 
                 if (otherData.RecieveBeam && senderData.RecieveBeam && !node.NodeBeamed)
                 {
                     node.NodeBeamed = true;
-                    ConstellationChecker();
                 }
 
                 if (senderData.HasMirror && senderData.RecieveBeam && !senderData.ShootingBeam)
@@ -164,6 +173,7 @@ public class ConstellationController : MonoBehaviour
                     pedestalA.ActivateEffect();
                     senderData.ShootingBeam = true;
                 }
+                ConstellationChecker();
             }
         }
     }
@@ -175,9 +185,18 @@ public class ConstellationController : MonoBehaviour
 
         //checks if any nodes are don't have a beam on them
         // if they are not, returns false
-        foreach (var node in _pedestalNodeList)
+        //foreach (var node in _pedestalNodeList)
+        //{
+        //    if(!node.NodeBeamed || !node.NodeMirrored || !)
+        //    {
+        //        done = false;
+        //        return;
+        //    }
+        //}
+
+        foreach (var PedestalData in _pedestaData)
         {
-            if(!node.NodeBeamed || !node.NodeMirrored)
+            if(!PedestalData.RightBeamDirection || !PedestalData.RecieveBeam || !PedestalData.HasMirror)
             {
                 done = false;
                 return;
@@ -203,6 +222,7 @@ public class PedestalNode
 }
 
 // Data class for indivigual pedestals
+//[Serializable]
 public class PedestalData
 {
     //bools associated with if pedestals have mirrors
@@ -211,4 +231,6 @@ public class PedestalData
     public bool ShootingBeam = false; 
     //bools associated with if pedestals are receiving a beam
     public bool RecieveBeam = false; 
+    //bools associated with if beams are facing their correct direction
+    public bool RightBeamDirection = false; 
 }

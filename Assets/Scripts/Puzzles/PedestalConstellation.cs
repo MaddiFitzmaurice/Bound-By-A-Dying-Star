@@ -111,6 +111,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         if (_initialAngleOffset == 0f)
         {
             _correctAngle = true;
+            _conController.BeamRightDirection(this);
         }
 
         // Place mirror that is already set to be on the mirror
@@ -283,6 +284,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             {
                 pedestalDestinations.Add(dest.GetComponent<PedestalConstellation>());
             }
+            _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(pedestalDestinations);
         }
     }
