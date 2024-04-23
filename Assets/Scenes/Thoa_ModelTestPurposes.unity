@@ -243,6 +243,16 @@ CapsuleCollider:
   m_Height: 0.30203852
   m_Direction: 1
   m_Center: {x: -0.0021866262, y: 0.06446152, z: 0.03908125}
+--- !u!4 &639963447 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3487294379307793733, guid: ee1d90269df0aab418adde1bd0d0fc85, type: 3}
+  m_PrefabInstance: {fileID: 1115033820}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &808378496 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4069152805265277767, guid: ee1d90269df0aab418adde1bd0d0fc85, type: 3}
+  m_PrefabInstance: {fileID: 1115033820}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &813118867 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9138672024319646162, guid: c4f35abcb02c3e945afc8e41fa6ad069, type: 3}
@@ -4335,7 +4345,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: ee1d90269df0aab418adde1bd0d0fc85, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.071
+      value: 1.722
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ee1d90269df0aab418adde1bd0d0fc85, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4532,7 +4542,7 @@ MonoBehaviour:
   m_Direction: 1
   m_Center: {x: 0, y: 0.1, z: 0}
   m_Bound: 0
-  m_Radius: 0.06
+  m_Radius: 0.03
   m_Height: 0.4
   m_Radius2: 0.06
 --- !u!1 &1555424853 stripped
@@ -4634,7 +4644,7 @@ MonoBehaviour:
   m_Direction: 1
   m_Center: {x: 0, y: 0.1, z: 0}
   m_Bound: 0
-  m_Radius: 0.06
+  m_Radius: 0.03
   m_Height: 0.4
   m_Radius2: 0.06
 --- !u!1 &1798375335 stripped
@@ -4660,7 +4670,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Root: {fileID: 1798375336}
-  m_Roots: []
+  m_Roots:
+  - {fileID: 639963447}
+  - {fileID: 808378496}
   m_UpdateRate: 60
   m_UpdateMode: 3
   m_Damping: 0.3
@@ -4698,17 +4710,35 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0
+  m_Radius: 0.03
   m_RadiusDistrib:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_EndLength: 0
   m_EndOffset: {x: 0, y: 0, z: 0}
   m_Gravity: {x: 0, y: 0, z: 0}
-  m_Force: {x: 0, y: -0.02, z: 0}
+  m_Force: {x: 0, y: -0.01, z: 0}
   m_BlendWeight: 1
   m_Colliders:
   - {fileID: 1699097407}
