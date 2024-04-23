@@ -8,8 +8,6 @@ public class ConstellationController : MonoBehaviour
 {
     //List of pedestals in constellation
     [SerializeField] private List<PedestalConstellation> _pedestalList;
-    //List of each node data class (connection between two pedestals)
-    [SerializeField] private List<PedestalNode> _pedestalNodeList;
 
     private List<PedestalData> _pedestaData = new List<PedestalData>();
     private int _pedestalNum;
@@ -36,6 +34,19 @@ public class ConstellationController : MonoBehaviour
         }
     }
 
+    // Sets value of preset pedestals
+    public void PedestalPreset(PedestalLinkData linkData)
+    {
+        PedestalConstellation pedestalSender = linkData.sender;
+        int senderIndex = _pedestalList.IndexOf(pedestalSender);
+        
+        // Set preset peddestal values so it is shooting beam
+        pedestalSender.ActivateEffect();
+        _pedestaData[senderIndex].ShootingBeam = true;
+        _pedestaData[senderIndex].RecieveBeam = true;
+        PedestalChecker(senderIndex);
+    }
+
     // Set pedestal to have mirror, then run check function
     public void PedestalHasMirror(PedestalConstellation sender)
     {
@@ -60,7 +71,6 @@ public class ConstellationController : MonoBehaviour
         if(senderIndex != -1 || _pedestalList.Count != 0)
         {
             _pedestaData[senderIndex].RightBeamDirection = true;
-            //ConstellationChecker();
         }
         else
         {
@@ -71,6 +81,7 @@ public class ConstellationController : MonoBehaviour
     // Set all pedestal destinations to be recieving beam
     public void PedestalHasBeam(List<PedestalConstellation> pedestalDestinations)
     {
+        // Go through pedestalDestinations list and set the destinations to be recieving beam
         foreach (PedestalConstellation pedestal in pedestalDestinations)
         {
             int senderIndex = _pedestalList.IndexOf(pedestal);
@@ -87,67 +98,25 @@ public class ConstellationController : MonoBehaviour
         }
     }
 
-    // Sets valuew of preset pedestals
-    public void PedestalPreset(PedestalLinkData linkData)
-    {
-        PedestalConstellation pedestalSender = linkData.sender;
-
-        int senderIndex = _pedestalList.IndexOf(pedestalSender);
-        PedestalChecker(senderIndex);
-
-        foreach (var pedestalB in linkData.pedestalDestinations)
-        {
-            int otherIndex = _pedestalList.IndexOf(pedestalB);
-
-            if (otherIndex != -1 && senderIndex != -1)
-            {
-                pedestalSender.ActivateEffect();
-                _pedestaData[senderIndex].ShootingBeam = true;
-                _pedestaData[senderIndex].RecieveBeam = true;
-            }
-            else
-            {
-                Debug.LogError("pedestal was not found in _pedestalList");
-            }
-        }
-    }
-
-    // Go through each node and get the pedestal that are paired with the sender pedestal
-    // if the paired pedestal also has a miror, activate the beam effect
+    // Go through each pedestal
+    // if the pedestal has a mirror, is recieving a beam but not shooting a beam
+    // tell the pedestal to activate the beam effect
     // then check if constellation is complete
     private void PedestalChecker(int senderIndex)
     {
-        // Go through each node 
-        for (int i = 0; i < _pedestalNodeList.Count; i++)
+        PedestalConstellation pedestalSender = _pedestalList[senderIndex];
+        List<PedestalConstellation> pedestalDestinations = pedestalSender.ReturnDestinations();
+
+        foreach (var PedestalOther in pedestalDestinations)
         {
-            PedestalNode node = _pedestalNodeList[i];
-            PedestalConstellation pedestalA = node.PedestalA;
-            PedestalConstellation pedestalB = node.PedestalB;
-            int otherIndex = -1;
+            PedestalData senderData = _pedestaData[senderIndex];
 
-            // get the pedestal that are paired with the sender pedestal
-            if (pedestalA == _pedestalList[senderIndex])
+            if (senderData.HasMirror && senderData.RecieveBeam && !senderData.ShootingBeam)
             {
-                otherIndex = _pedestalList.IndexOf(pedestalB);
+                pedestalSender.ActivateEffect();
+                senderData.ShootingBeam = true;
             }
-            else if(pedestalB == _pedestalList[senderIndex])
-            {
-                pedestalA = node.PedestalB;
-                pedestalB = node.PedestalA;
-                otherIndex = _pedestalList.IndexOf(pedestalB);
-            }
-
-            if (otherIndex != -1)
-            {
-                PedestalData senderData = _pedestaData[senderIndex];
-
-                if (senderData.HasMirror && senderData.RecieveBeam && !senderData.ShootingBeam)
-                {
-                    pedestalA.ActivateEffect();
-                    senderData.ShootingBeam = true;
-                }
-                ConstellationChecker();
-            }
+            ConstellationChecker();
         }
     }
 
@@ -173,14 +142,6 @@ public class ConstellationController : MonoBehaviour
     }
 }
 
-// Data class for pedestal nodes
-[Serializable]
-public class PedestalNode
-{
-    public PedestalConstellation PedestalA;
-    public PedestalConstellation PedestalB;
-}
-
 // Data class for indivigual pedestals
 //[Serializable]
 public class PedestalData
@@ -195,12 +156,14 @@ public class PedestalData
     public bool RightBeamDirection = false; 
 }
 
-// Data class for sending 
+// Data class for sending a peddestal and it's beam destinations to the controller 
 //[Serializable]
 public class PedestalLinkData
 {
-    public List<PedestalConstellation> pedestalDestinations;
+    // Pedestal reference
     public PedestalConstellation sender;
+    // Pedestal's beam destination references
+    public List<PedestalConstellation> pedestalDestinations;
     public PedestalLinkData(List<PedestalConstellation> pedestalDestinations, PedestalConstellation sender)
     {
         this.pedestalDestinations = pedestalDestinations;

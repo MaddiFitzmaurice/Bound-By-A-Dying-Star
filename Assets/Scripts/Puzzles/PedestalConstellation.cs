@@ -259,7 +259,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
     }
 
     // Patrolling rotate
-    IEnumerator RotateBeam()
+    private IEnumerator RotateBeam()
     {
         _isRotating = true;
 
@@ -289,6 +289,11 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
         }
+    }
+
+    public List<PedestalConstellation> ReturnDestinations()
+    {
+        return _pedestalDestinations;
     }
 
     #region IINTERACTABLE FUNCTIONS
