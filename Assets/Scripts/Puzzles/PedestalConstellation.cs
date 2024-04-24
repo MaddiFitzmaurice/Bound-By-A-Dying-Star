@@ -312,5 +312,10 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             StartCoroutine(RotateBeam());
         }
     }
+
+    public void PlayerHoldInteract(PlayerBase player)
+    {
+        throw new System.NotImplementedException();
+    }
     #endregion
 }

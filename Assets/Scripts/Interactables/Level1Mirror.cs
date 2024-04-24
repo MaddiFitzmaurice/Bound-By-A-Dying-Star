@@ -177,5 +177,10 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
             BePickedUp(player);
         }
     }
+
+    public void PlayerHoldInteract(PlayerBase player)
+    {
+        throw new System.NotImplementedException();
+    }
     #endregion
 }

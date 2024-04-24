@@ -88,4 +88,9 @@ public class NPC : MonoBehaviour, IInteractable
     {
         _renderer.material = mat;
     }
+
+    public void PlayerHoldInteract(PlayerBase player)
+    {
+        throw new System.NotImplementedException();
+    }
 }
