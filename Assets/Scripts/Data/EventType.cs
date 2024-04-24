@@ -40,6 +40,9 @@ public enum EventType
     // Teleport
     TELEPORT_PLAYERS,
 
+    // Level
+    LEVEL_SPAWN,
+
     // Gravity 
     GRAVITY_INVERT,
 

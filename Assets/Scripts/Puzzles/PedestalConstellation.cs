@@ -24,6 +24,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
 
     // The pedestal that forms a pair with this one
     [SerializeField] private List<GameObject> _beamDestinations;
+    private List<PedestalConstellation> _pedestalDestinations;
 
     //Effects
     [SerializeField] private GameObject _lightBeam;
@@ -51,6 +52,11 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         // Get the Renderer component from the disk
         _diskRenderer = GetComponentInChildren<Renderer>();
         _conController = GetComponentInParent<ConstellationController>();  
+        _pedestalDestinations = new List<PedestalConstellation>();
+        foreach (GameObject dest in _beamDestinations)
+        {
+            _pedestalDestinations.Add(dest.GetComponent<PedestalConstellation>());
+        }
 
         // Set beam source to be the mirror's position
         _beamSource.position = new Vector3(transform.position.x, transform.position.y + _raiseLightBeam +_raiseMirrorHeight, transform.position.z);
@@ -111,6 +117,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         if (_initialAngleOffset == 0f)
         {
             _correctAngle = true;
+            _conController.BeamRightDirection(this);
         }
 
         // Place mirror that is already set to be on the mirror
@@ -146,7 +153,8 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
                 {
                     _mirror = (Level1Mirror)pickupableType;
                     StartCoroutine(RotateMirror(_mirror.transform));
-                    _conController.PedestalPreset(this);
+                    PedestalLinkData pedestalLinkData = new PedestalLinkData(_pedestalDestinations, this);
+                    _conController.PedestalPreset(pedestalLinkData);
                 }
                 SetBeamPositions();
             }
@@ -251,7 +259,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
     }
 
     // Patrolling rotate
-    IEnumerator RotateBeam()
+    private IEnumerator RotateBeam()
     {
         _isRotating = true;
 
@@ -278,13 +286,14 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         if(dot > 0.8f) 
         { 
             _correctAngle = true;
-            List<PedestalConstellation> pedestalDestinations = new List<PedestalConstellation>();
-            foreach (GameObject dest in _beamDestinations)
-            {
-                pedestalDestinations.Add(dest.GetComponent<PedestalConstellation>());
-            }
-            _conController.PedestalHasBeam(pedestalDestinations);
+            _conController.BeamRightDirection(this);
+            _conController.PedestalHasBeam(_pedestalDestinations);
         }
+    }
+
+    public List<PedestalConstellation> ReturnDestinations()
+    {
+        return _pedestalDestinations;
     }
 
     #region IINTERACTABLE FUNCTIONS
@@ -302,6 +311,11 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         {
             StartCoroutine(RotateBeam());
         }
+    }
+
+    public void PlayerHoldInteract(PlayerBase player)
+    {
+        throw new System.NotImplementedException();
     }
     #endregion
 }

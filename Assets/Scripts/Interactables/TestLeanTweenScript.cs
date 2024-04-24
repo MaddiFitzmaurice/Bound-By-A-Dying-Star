@@ -7,7 +7,7 @@ public class TestLeanTweenScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LeanTween.moveX(gameObject, 5, 3);
+        LeanTween.moveX(gameObject, 10, 6);
     }
 
     // Update is called once per frame

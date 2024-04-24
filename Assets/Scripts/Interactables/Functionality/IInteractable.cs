@@ -8,4 +8,5 @@ public interface IInteractable
     public void PlayerNotInRange(PlayerBase player);
 
     public void PlayerStartInteract(PlayerBase player);
+    public void PlayerHoldInteract(PlayerBase player);
 }

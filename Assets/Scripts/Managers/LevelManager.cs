@@ -6,7 +6,8 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     #region EXTERNAL DATA
-    [SerializeField] GameObject _levelCams;
+    [SerializeField] private GameObject _levelCams;
+    [SerializeField] private GameObject _spawnPoint;
     #endregion
 
     #region INTERNAL DATA
@@ -20,6 +21,7 @@ public class LevelManager : MonoBehaviour
 
         // Event Inits
         EventManager.EventInitialise(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP);
+        EventManager.EventInitialise(EventType.LEVEL_SPAWN);
     }
 
     private void OnEnable()
@@ -41,6 +43,15 @@ public class LevelManager : MonoBehaviour
         else
         {
             Debug.LogError("No Level Cameras have been set up!");
+        }
+
+        if (_spawnPoint != null)
+        {
+            EventManager.EventTrigger(EventType.LEVEL_SPAWN, _spawnPoint.transform);
+        }
+        else
+        {
+            Debug.LogError("Please use SpawnPoint object to assign players' initial spawn in level.");
         }
     }
 

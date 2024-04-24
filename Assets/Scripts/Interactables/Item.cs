@@ -222,6 +222,11 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         }
     }
 
+    public void PlayerHoldInteract(PlayerBase player)
+    {
+        throw new System.NotImplementedException();
+    }
+
     private void FlipGravityForAllPlayers(bool isFlipped)
     {
         // Inverts the gravity
