@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.Table;
 
-public class PlayerBase : MonoBehaviour
+public abstract class PlayerBase : MonoBehaviour
 {
     #region EXTERNAL DATA
     // Movement

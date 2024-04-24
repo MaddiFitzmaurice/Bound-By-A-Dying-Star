@@ -32,9 +32,9 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     private bool _currentGravityState = false;  // Default gravity state
 
     // Item Float
-    private Transform followTarget;
-    private bool isFollowing = false;
-    private float followSpeed = 5f; 
+    private Transform _followTarget;
+    private bool _isFollowing = false;
+    private float _followSpeed = 5f; 
 
     #endregion
 
@@ -69,13 +69,13 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     void Update()
     {
-        if (isFollowing && followTarget != null)
+        if (_isFollowing && _followTarget != null)
         {
             // Calculate the world space position towards which to move
-            Vector3 targetPosition = followTarget.position;
+            Vector3 targetPosition = _followTarget.position;
 
             // Perform the interpolation in world space
-            transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, _followSpeed * Time.deltaTime);
         }
     }
 
@@ -111,7 +111,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     public void BeDropped(Transform newParent)
     {
-        isFollowing = false;
+        _isFollowing = false;
 
         // Removes the parent-child relationship, making the object independent in the scene
         // If an incoming parent is specified, use that. Else, use the default parent assigned in the scene
@@ -134,10 +134,10 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         if (_itemLocked == false)
         {
             _playerHoldingItem = player;
-            followTarget = _playerHoldingItem.PickupPoint;
-            isFollowing = true;
+            _followTarget = _playerHoldingItem.PickupPoint;
+            _isFollowing = true;
             transform.localPosition = Vector3.zero;
-            transform.position = followTarget.position;
+            transform.position = _followTarget.position;
             _playerHoldingItem.PickupItem(gameObject);
             UnhighlightItem();
 
