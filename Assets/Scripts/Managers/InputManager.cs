@@ -152,6 +152,10 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
             Debug.Log("Hold!");
             EventManager.EventTrigger(EventType.PLAYER_1_HOLDINTERACT, "Player 1");
         }
+        else if (context.canceled && context.interaction is HoldInteraction)
+        {
+            Debug.Log("Release!");
+        }
         else if (context.started && context.interaction is PressInteraction)
         {
             Debug.Log("Press!");

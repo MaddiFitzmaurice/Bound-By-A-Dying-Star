@@ -9,4 +9,5 @@ public interface IInteractable
 
     public void PlayerStartInteract(PlayerBase player);
     public void PlayerHoldInteract(PlayerBase player);
+    public void PlayerStopInteract(PlayerBase player);
 }

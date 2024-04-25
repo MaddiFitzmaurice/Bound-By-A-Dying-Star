@@ -88,7 +88,10 @@ public class Rift : MonoBehaviour, IInteractable
 
     public void PlayerHoldInteract(PlayerBase player)
     {
-        throw new System.NotImplementedException();
+    }
+
+    public void PlayerStopInteract(PlayerBase player)
+    {
     }
     #endregion
 }

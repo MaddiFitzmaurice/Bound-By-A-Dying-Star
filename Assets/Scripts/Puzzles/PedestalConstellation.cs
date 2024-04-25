@@ -342,5 +342,10 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         //throw new System.NotImplementedException();
         Debug.Log("Hold");
     }
+
+    public void PlayerStopInteract(PlayerBase player)
+    {
+        throw new System.NotImplementedException();
+    }
     #endregion
 }

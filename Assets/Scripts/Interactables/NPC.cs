@@ -91,6 +91,9 @@ public class NPC : MonoBehaviour, IInteractable
 
     public void PlayerHoldInteract(PlayerBase player)
     {
-        throw new System.NotImplementedException();
+    }
+
+    public void PlayerStopInteract(PlayerBase player)
+    {
     }
 }
