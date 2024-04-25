@@ -20,31 +20,13 @@
                     "id": "4a1a266b-6c7e-452c-9ca6-062c3fa69355",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold,Press",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Player1GeneratePortal",
+                    "name": "Player1GenerateRift",
                     "type": "Button",
                     "id": "adc2d72c-5de1-4b0a-a629-bcf9bd8c2ccd",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Player1SendItem",
-                    "type": "Button",
-                    "id": "24180373-9cde-4611-bb48-faf8f591593d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Player1NPC",
-                    "type": "Button",
-                    "id": "309e9672-0df9-430b-a0e4-f6e0840d0297",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -213,29 +195,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Player1GeneratePortal",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "920c553c-e671-4bdb-9c7f-a974edcdc70d",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player1SendItem",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "366ca77e-69dc-4766-830b-3581d78906ed",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player1NPC",
+                    "action": "Player1GenerateRift",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

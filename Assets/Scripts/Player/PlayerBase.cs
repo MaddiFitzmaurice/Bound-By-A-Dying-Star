@@ -313,6 +313,16 @@ public abstract class PlayerBase : MonoBehaviour
     }
     #endregion
 
+    #region RIFT FUNCTIONS
+    protected void CreatePortalInFrontOfPlayer(object data)
+    {
+        RiftData.Position = transform.position + transform.forward * DistanceInFront;
+        RiftData.Rotation = Quaternion.LookRotation(transform.forward);
+
+        EventManager.EventTrigger(EventType.CREATE_RIFT, RiftData);
+    }
+    #endregion
+
     #region EVENT HANDLERS
     public void TestControlHandler(object data)
     {

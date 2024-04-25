@@ -42,31 +42,13 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""id"": ""4a1a266b-6c7e-452c-9ca6-062c3fa69355"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold,Press"",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Player1GeneratePortal"",
+                    ""name"": ""Player1GenerateRift"",
                     ""type"": ""Button"",
                     ""id"": ""adc2d72c-5de1-4b0a-a629-bcf9bd8c2ccd"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Player1SendItem"",
-                    ""type"": ""Button"",
-                    ""id"": ""24180373-9cde-4611-bb48-faf8f591593d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Player1NPC"",
-                    ""type"": ""Button"",
-                    ""id"": ""309e9672-0df9-430b-a0e4-f6e0840d0297"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -235,29 +217,7 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Player1GeneratePortal"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""920c553c-e671-4bdb-9c7f-a974edcdc70d"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player1SendItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""366ca77e-69dc-4766-830b-3581d78906ed"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player1NPC"",
+                    ""action"": ""Player1GenerateRift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -270,9 +230,7 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Player1Move = m_Gameplay.FindAction("Player1Move", throwIfNotFound: true);
         m_Gameplay_Player1Interact = m_Gameplay.FindAction("Player1Interact", throwIfNotFound: true);
-        m_Gameplay_Player1GeneratePortal = m_Gameplay.FindAction("Player1GeneratePortal", throwIfNotFound: true);
-        m_Gameplay_Player1SendItem = m_Gameplay.FindAction("Player1SendItem", throwIfNotFound: true);
-        m_Gameplay_Player1NPC = m_Gameplay.FindAction("Player1NPC", throwIfNotFound: true);
+        m_Gameplay_Player1GenerateRift = m_Gameplay.FindAction("Player1GenerateRift", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -336,18 +294,14 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Player1Move;
     private readonly InputAction m_Gameplay_Player1Interact;
-    private readonly InputAction m_Gameplay_Player1GeneratePortal;
-    private readonly InputAction m_Gameplay_Player1SendItem;
-    private readonly InputAction m_Gameplay_Player1NPC;
+    private readonly InputAction m_Gameplay_Player1GenerateRift;
     public struct GameplayActions
     {
         private @Player1InputActions m_Wrapper;
         public GameplayActions(@Player1InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Player1Move => m_Wrapper.m_Gameplay_Player1Move;
         public InputAction @Player1Interact => m_Wrapper.m_Gameplay_Player1Interact;
-        public InputAction @Player1GeneratePortal => m_Wrapper.m_Gameplay_Player1GeneratePortal;
-        public InputAction @Player1SendItem => m_Wrapper.m_Gameplay_Player1SendItem;
-        public InputAction @Player1NPC => m_Wrapper.m_Gameplay_Player1NPC;
+        public InputAction @Player1GenerateRift => m_Wrapper.m_Gameplay_Player1GenerateRift;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -363,15 +317,9 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1Interact.started += instance.OnPlayer1Interact;
             @Player1Interact.performed += instance.OnPlayer1Interact;
             @Player1Interact.canceled += instance.OnPlayer1Interact;
-            @Player1GeneratePortal.started += instance.OnPlayer1GeneratePortal;
-            @Player1GeneratePortal.performed += instance.OnPlayer1GeneratePortal;
-            @Player1GeneratePortal.canceled += instance.OnPlayer1GeneratePortal;
-            @Player1SendItem.started += instance.OnPlayer1SendItem;
-            @Player1SendItem.performed += instance.OnPlayer1SendItem;
-            @Player1SendItem.canceled += instance.OnPlayer1SendItem;
-            @Player1NPC.started += instance.OnPlayer1NPC;
-            @Player1NPC.performed += instance.OnPlayer1NPC;
-            @Player1NPC.canceled += instance.OnPlayer1NPC;
+            @Player1GenerateRift.started += instance.OnPlayer1GenerateRift;
+            @Player1GenerateRift.performed += instance.OnPlayer1GenerateRift;
+            @Player1GenerateRift.canceled += instance.OnPlayer1GenerateRift;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -382,15 +330,9 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1Interact.started -= instance.OnPlayer1Interact;
             @Player1Interact.performed -= instance.OnPlayer1Interact;
             @Player1Interact.canceled -= instance.OnPlayer1Interact;
-            @Player1GeneratePortal.started -= instance.OnPlayer1GeneratePortal;
-            @Player1GeneratePortal.performed -= instance.OnPlayer1GeneratePortal;
-            @Player1GeneratePortal.canceled -= instance.OnPlayer1GeneratePortal;
-            @Player1SendItem.started -= instance.OnPlayer1SendItem;
-            @Player1SendItem.performed -= instance.OnPlayer1SendItem;
-            @Player1SendItem.canceled -= instance.OnPlayer1SendItem;
-            @Player1NPC.started -= instance.OnPlayer1NPC;
-            @Player1NPC.performed -= instance.OnPlayer1NPC;
-            @Player1NPC.canceled -= instance.OnPlayer1NPC;
+            @Player1GenerateRift.started -= instance.OnPlayer1GenerateRift;
+            @Player1GenerateRift.performed -= instance.OnPlayer1GenerateRift;
+            @Player1GenerateRift.canceled -= instance.OnPlayer1GenerateRift;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -412,8 +354,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     {
         void OnPlayer1Move(InputAction.CallbackContext context);
         void OnPlayer1Interact(InputAction.CallbackContext context);
-        void OnPlayer1GeneratePortal(InputAction.CallbackContext context);
-        void OnPlayer1SendItem(InputAction.CallbackContext context);
-        void OnPlayer1NPC(InputAction.CallbackContext context);
+        void OnPlayer1GenerateRift(InputAction.CallbackContext context);
     }
 }

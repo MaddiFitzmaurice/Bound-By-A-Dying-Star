@@ -6,16 +6,7 @@
             "id": "3ac3e93b-aa1f-4a0d-bb61-21ad72d0d6c3",
             "actions": [
                 {
-                    "name": "Player2SendItem",
-                    "type": "Button",
-                    "id": "62e28aa5-59b3-43de-b90c-74fe99f3fe4d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Player2GeneratePortal",
+                    "name": "Player2GenerateRift",
                     "type": "Button",
                     "id": "65386f05-4dba-4c71-9fac-18218b7656be",
                     "expectedControlType": "Button",
@@ -38,16 +29,7 @@
                     "id": "f3a5b610-d92f-4c4c-a9f1-0c84bd0f6d1c",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Player2NPC",
-                    "type": "Button",
-                    "id": "25908da3-743f-442e-9802-60980ccb7073",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold,Press",
                     "initialStateCheck": false
                 }
             ],
@@ -213,29 +195,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Player2GeneratePortal",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ddcda487-faa5-45e9-8298-1fcf378ff432",
-                    "path": "<Keyboard>/comma",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2SendItem",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "68b3ddb0-8a1b-4885-b6d9-d2c633d258f3",
-                    "path": "<Keyboard>/m",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2NPC",
+                    "action": "Player2GenerateRift",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

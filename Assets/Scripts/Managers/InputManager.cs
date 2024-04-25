@@ -2,14 +2,12 @@ using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.InputSystem.Utilities;
 
 public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions
 {
-    // Internal data
-    private InputActions _inputs;
-
     // Input Action Assets
     private Player1InputActions _player1Inputs;
     private Player2InputActions _player2Inputs;
@@ -34,10 +32,6 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_1_RIFT);
         EventManager.EventInitialise(EventType.PLAYER_2_RIFT);
-        EventManager.EventInitialise(EventType.PLAYER_1_SENDITEM);
-        EventManager.EventInitialise(EventType.PLAYER_2_SENDITEM);
-        EventManager.EventInitialise(EventType.PLAYER_1_NPC);
-        EventManager.EventInitialise(EventType.PLAYER_2_NPC);
 
         DeviceSetup();
     }
@@ -153,8 +147,14 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     // For testing, if Player 1 uses the interact E key
     public void OnPlayer1Interact(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && context.interaction is HoldInteraction)
         {
+            Debug.Log("Hold!");
+            EventManager.EventTrigger(EventType.PLAYER_1_HOLDINTERACT, "Player 1");
+        }
+        else if (context.started && context.interaction is PressInteraction)
+        {
+            Debug.Log("Press!");
             EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, "Player 1");
         }
     }
@@ -162,13 +162,19 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     // For testing, if Player 2 uses the interract numpad 0 key
     public void OnPlayer2Interact(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && context.interaction is HoldInteraction)
         {
+            Debug.Log("Hold!");
+            EventManager.EventTrigger(EventType.PLAYER_2_HOLDINTERACT, "Player 2");
+        }
+        else if (context.started && context.interaction is PressInteraction)
+        {
+            Debug.Log("Press!");
             EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, "Player 2");
         }
     }
 
-    public void OnPlayer1GeneratePortal(InputAction.CallbackContext context)
+    public void OnPlayer1GenerateRift(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
@@ -176,45 +182,11 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         }
     }
 
-    public void OnPlayer2GeneratePortal(InputAction.CallbackContext context)
+    public void OnPlayer2GenerateRift(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
             EventManager.EventTrigger(EventType.PLAYER_2_RIFT, "Player 2");
-        }
-    }
-
-    public void OnPlayer1SendItem(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            EventManager.EventTrigger(EventType.PLAYER_1_SENDITEM, null);
-            Debug.Log("PLAYER_1_SENDITEM");
-        }
-    }
-
-    public void OnPlayer2SendItem(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            EventManager.EventTrigger(EventType.PLAYER_2_SENDITEM, null);
-            Debug.Log("PLAYER_2_SENDITEM");
-        }
-    }
-
-    public void OnPlayer1NPC(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            EventManager.EventTrigger(EventType.PLAYER_1_NPC, null);
-        }
-    }
-
-    public void OnPlayer2NPC(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            EventManager.EventTrigger(EventType.PLAYER_2_NPC, null);
         }
     }
 }

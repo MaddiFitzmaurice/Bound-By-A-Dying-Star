@@ -34,14 +34,6 @@ public class Player2 : PlayerBase
         MoveInput.Set(input.x, 0, input.y);
     }
 
-    private void CreatePortalInFrontOfPlayer(object data)
-    {
-        RiftData.Position = transform.position + transform.forward * DistanceInFront;
-        RiftData.Rotation = Quaternion.LookRotation(transform.forward);
-        
-        EventManager.EventTrigger(EventType.CREATE_RIFT, RiftData);
-    }
-
     public void ModifyGravityAndFallingSpeed(object data)
     {
         // How long it takes for the player to rotate when falling

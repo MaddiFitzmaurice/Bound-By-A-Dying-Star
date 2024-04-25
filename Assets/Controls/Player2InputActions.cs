@@ -28,16 +28,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
             ""id"": ""3ac3e93b-aa1f-4a0d-bb61-21ad72d0d6c3"",
             ""actions"": [
                 {
-                    ""name"": ""Player2SendItem"",
-                    ""type"": ""Button"",
-                    ""id"": ""62e28aa5-59b3-43de-b90c-74fe99f3fe4d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Player2GeneratePortal"",
+                    ""name"": ""Player2GenerateRift"",
                     ""type"": ""Button"",
                     ""id"": ""65386f05-4dba-4c71-9fac-18218b7656be"",
                     ""expectedControlType"": ""Button"",
@@ -60,16 +51,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""id"": ""f3a5b610-d92f-4c4c-a9f1-0c84bd0f6d1c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Player2NPC"",
-                    ""type"": ""Button"",
-                    ""id"": ""25908da3-743f-442e-9802-60980ccb7073"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold,Press"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -235,29 +217,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Player2GeneratePortal"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ddcda487-faa5-45e9-8298-1fcf378ff432"",
-                    ""path"": ""<Keyboard>/comma"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2SendItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""68b3ddb0-8a1b-4885-b6d9-d2c633d258f3"",
-                    ""path"": ""<Keyboard>/m"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2NPC"",
+                    ""action"": ""Player2GenerateRift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -268,11 +228,9 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
 }");
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_Player2SendItem = m_Gameplay.FindAction("Player2SendItem", throwIfNotFound: true);
-        m_Gameplay_Player2GeneratePortal = m_Gameplay.FindAction("Player2GeneratePortal", throwIfNotFound: true);
+        m_Gameplay_Player2GenerateRift = m_Gameplay.FindAction("Player2GenerateRift", throwIfNotFound: true);
         m_Gameplay_Player2Move = m_Gameplay.FindAction("Player2Move", throwIfNotFound: true);
         m_Gameplay_Player2Interact = m_Gameplay.FindAction("Player2Interact", throwIfNotFound: true);
-        m_Gameplay_Player2NPC = m_Gameplay.FindAction("Player2NPC", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -334,20 +292,16 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     // Gameplay
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
-    private readonly InputAction m_Gameplay_Player2SendItem;
-    private readonly InputAction m_Gameplay_Player2GeneratePortal;
+    private readonly InputAction m_Gameplay_Player2GenerateRift;
     private readonly InputAction m_Gameplay_Player2Move;
     private readonly InputAction m_Gameplay_Player2Interact;
-    private readonly InputAction m_Gameplay_Player2NPC;
     public struct GameplayActions
     {
         private @Player2InputActions m_Wrapper;
         public GameplayActions(@Player2InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Player2SendItem => m_Wrapper.m_Gameplay_Player2SendItem;
-        public InputAction @Player2GeneratePortal => m_Wrapper.m_Gameplay_Player2GeneratePortal;
+        public InputAction @Player2GenerateRift => m_Wrapper.m_Gameplay_Player2GenerateRift;
         public InputAction @Player2Move => m_Wrapper.m_Gameplay_Player2Move;
         public InputAction @Player2Interact => m_Wrapper.m_Gameplay_Player2Interact;
-        public InputAction @Player2NPC => m_Wrapper.m_Gameplay_Player2NPC;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -357,40 +311,28 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
-            @Player2SendItem.started += instance.OnPlayer2SendItem;
-            @Player2SendItem.performed += instance.OnPlayer2SendItem;
-            @Player2SendItem.canceled += instance.OnPlayer2SendItem;
-            @Player2GeneratePortal.started += instance.OnPlayer2GeneratePortal;
-            @Player2GeneratePortal.performed += instance.OnPlayer2GeneratePortal;
-            @Player2GeneratePortal.canceled += instance.OnPlayer2GeneratePortal;
+            @Player2GenerateRift.started += instance.OnPlayer2GenerateRift;
+            @Player2GenerateRift.performed += instance.OnPlayer2GenerateRift;
+            @Player2GenerateRift.canceled += instance.OnPlayer2GenerateRift;
             @Player2Move.started += instance.OnPlayer2Move;
             @Player2Move.performed += instance.OnPlayer2Move;
             @Player2Move.canceled += instance.OnPlayer2Move;
             @Player2Interact.started += instance.OnPlayer2Interact;
             @Player2Interact.performed += instance.OnPlayer2Interact;
             @Player2Interact.canceled += instance.OnPlayer2Interact;
-            @Player2NPC.started += instance.OnPlayer2NPC;
-            @Player2NPC.performed += instance.OnPlayer2NPC;
-            @Player2NPC.canceled += instance.OnPlayer2NPC;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
         {
-            @Player2SendItem.started -= instance.OnPlayer2SendItem;
-            @Player2SendItem.performed -= instance.OnPlayer2SendItem;
-            @Player2SendItem.canceled -= instance.OnPlayer2SendItem;
-            @Player2GeneratePortal.started -= instance.OnPlayer2GeneratePortal;
-            @Player2GeneratePortal.performed -= instance.OnPlayer2GeneratePortal;
-            @Player2GeneratePortal.canceled -= instance.OnPlayer2GeneratePortal;
+            @Player2GenerateRift.started -= instance.OnPlayer2GenerateRift;
+            @Player2GenerateRift.performed -= instance.OnPlayer2GenerateRift;
+            @Player2GenerateRift.canceled -= instance.OnPlayer2GenerateRift;
             @Player2Move.started -= instance.OnPlayer2Move;
             @Player2Move.performed -= instance.OnPlayer2Move;
             @Player2Move.canceled -= instance.OnPlayer2Move;
             @Player2Interact.started -= instance.OnPlayer2Interact;
             @Player2Interact.performed -= instance.OnPlayer2Interact;
             @Player2Interact.canceled -= instance.OnPlayer2Interact;
-            @Player2NPC.started -= instance.OnPlayer2NPC;
-            @Player2NPC.performed -= instance.OnPlayer2NPC;
-            @Player2NPC.canceled -= instance.OnPlayer2NPC;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -410,10 +352,8 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     public GameplayActions @Gameplay => new GameplayActions(this);
     public interface IGameplayActions
     {
-        void OnPlayer2SendItem(InputAction.CallbackContext context);
-        void OnPlayer2GeneratePortal(InputAction.CallbackContext context);
+        void OnPlayer2GenerateRift(InputAction.CallbackContext context);
         void OnPlayer2Move(InputAction.CallbackContext context);
         void OnPlayer2Interact(InputAction.CallbackContext context);
-        void OnPlayer2NPC(InputAction.CallbackContext context);
     }
 }
