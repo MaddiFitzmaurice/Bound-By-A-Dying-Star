@@ -197,8 +197,6 @@ public abstract class PlayerBase : MonoBehaviour
     // Interaction
     public void Interact(object data)
     {
-        // TODO: Maybe make a statemachine for the player so this can be scalable
-
         // If carrying an item and no objects are nearby
         if (CarriedPickupable != null && _closestInteractable == null)
         {
@@ -212,23 +210,10 @@ public abstract class PlayerBase : MonoBehaviour
             // If not currently carrying item
             if (CarriedPickupable == null)
             {
-                // Closest interactable is item or NPC
-                if (interactable is Item || interactable is NPC || interactable is Level1Mirror || interactable is PedestalConstellation)
-                {
-                    _closestInteractable = null;
-                    //Debug.Log(interactable);
-                    interactable.PlayerStartInteract(this);
-                }
+                _closestInteractable = null;
             }
-            // If carrying an item
-            else
-            {
-                // Closest interactable is Rift
-                if (interactable is Rift)
-                {
-                    interactable.PlayerStartInteract(this);
-                }
-            }
+
+            interactable.PlayerStartInteract(this);
         }
     }
 

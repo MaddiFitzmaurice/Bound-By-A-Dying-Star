@@ -206,11 +206,11 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     public void PlayerStartInteract(PlayerBase player)
     {
-        // If a player is holding the item
+        // If a player is holding this item
         if (_playerHoldingItem != null)
         {
-            // If player is holding this item
-            if (_playerHoldingItem.CarriedPickupable == gameObject)
+            // If the player doing the interacting is holding this item
+            if (player.CarriedPickupable == gameObject)
             {
                 BeDropped(_itemGrouper);
             }
@@ -218,7 +218,11 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         // If a player is near the item
         else
         {
-            BePickedUp(player);
+            // If that player is not carrying anything
+            if (player.CarriedPickupable == null)
+            {
+                BePickedUp(player);
+            }
         }
     }
 

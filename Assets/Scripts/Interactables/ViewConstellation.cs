@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ViewConstellation : MonoBehaviour, IInteractable
 {
+    private void Awake()
+    {
+        
+    }
+
     public void PlayerHoldInteract(PlayerBase player)
     {
         throw new System.NotImplementedException();

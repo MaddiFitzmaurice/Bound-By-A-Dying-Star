@@ -71,7 +71,9 @@ public class NPC : MonoBehaviour, IInteractable
     // If one player has started an interaction
     public void PlayerStartInteract(PlayerBase player)
     {
-        if (_canInteract && !_currentlyInteracting)
+        // If both players are nearby, the NPC is not currently in an interaction,
+        // and the player who initiated the interaction is not carrying anything
+        if (_canInteract && !_currentlyInteracting && player.CarriedPickupable == null)
         {
             _currentlyInteracting = true;
             UnhighlightItem();

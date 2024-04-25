@@ -165,8 +165,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         // If a player is holding the mirror
         if (_player != null)
         {
-            // If player is holding this item
-            if (_player.CarriedPickupable == gameObject)
+            // If player initiating the interaction is holding this item
+            if (player.CarriedPickupable == gameObject)
             {
                 BeDropped(null);
             }
@@ -174,7 +174,11 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         // If a player is near the item
         else
         {
-            BePickedUp(player);
+            // If that player is not carrying anything
+            if (player.CarriedPickupable == null)
+            {
+                BePickedUp(player);
+            }
         }
     }
 

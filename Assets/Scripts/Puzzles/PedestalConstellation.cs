@@ -331,9 +331,12 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
 
     public void PlayerStartInteract(PlayerBase player)
     {
-        if(_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
+        if (player.CarriedPickupable == null)
         {
-            StartCoroutine(RotateBeam());
+            if (_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
+            {
+                StartCoroutine(RotateBeam());
+            }
         }
     }
 
