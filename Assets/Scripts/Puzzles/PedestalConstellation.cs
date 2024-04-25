@@ -29,7 +29,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
     //Effects
     [SerializeField] private GameObject _lightBeam;
     [SerializeField] private float _raiseLightBeam;
-    [SerializeField] private float _beamMaxLength = 10f;
+    private List<float> _beamMaxLength = new List<float>();
     [SerializeField] private Transform _beamSource;
     #endregion
 
@@ -57,6 +57,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         foreach (GameObject dest in _beamDestinations)
         {
             _pedestalDestinations.Add(dest.GetComponent<PedestalConstellation>());
+            _beamMaxLength.Add(0f);
         }
 
         // Set beam source to be the mirror's position
@@ -71,7 +72,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         if(_beamDestinations.Count == 1)
         {
             // Set beam length to be distance between ource and destination
-            _beamMaxLength = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[0].transform.position), transform.InverseTransformPoint(_beamSource.position));
+            _beamMaxLength[0] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[0].transform.position), Vector3.zero);
             
             // Set target direction to be the 1 target
             _targetDir = _beamDestinations[0].transform.position - _beamSource.position;
@@ -87,13 +88,16 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         {
             // Iterate over each beam destination and calculate the average
             Vector3 meanVector = Vector3.zero;
-            foreach(GameObject obj in _beamDestinations)
+            for (int i = 0; i < _beamDestinations.Count; i++)
             {
-                Vector3 pos = obj.transform.position;
+                Vector3 pos = _beamDestinations[i].transform.position;
                 meanVector += pos;
+                
+                // Set beam length to be distance between ource and destination
+                _beamMaxLength[i] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[i].transform.position), Vector3.zero);
             }
 
-            meanVector = meanVector / _beamDestinations.Count ;
+            meanVector = meanVector / _beamDestinations.Count;
 
             // Then turn the average into a direction and set that to be the target
             _targetDir = meanVector -_beamSource.position;
@@ -216,33 +220,27 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             {
                 for (int i = 0; i < beamCount; i++)
                 {
-                    //Vector3 localTarget = transform.InverseTransformPoint(_beamDestinations[i].transform.position);
-                    //Vector3 targetDir = localTarget - localSource;
-
-
+                    // Get angle diff
                     Vector3 targetDir = _beamDestinations[i].transform.position - _beamSource.position;
                     float targetDiff = Vector3.Angle(_targetDir, targetDir);
                     if (i == 0)
                     {
                         targetDiff = 360 - targetDiff;
                     }
-                    Debug.Log(targetDiff);
-                    // Then add initial offset to initial direction
+
+                    // Then add diff offset to direction
                     Quaternion startRot = Quaternion.Euler(0f, targetDiff, 0f);
                     Vector3 startRotEuler = startRot.eulerAngles;
                     startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
-//
-                    _beamRenderer[i].SetPosition(0, localSource);
-                    _beamRenderer[i].SetPosition(1, localSource + ((startRot * _beamSource.forward) * _beamMaxLength));
 
-                    //_beamRenderer[i].SetPosition(0, localSource);
-                    //_beamRenderer[i].SetPosition(1, localSource + ((startRot) * _beamMaxLength));
+                    _beamRenderer[i].SetPosition(0, localSource);
+                    _beamRenderer[i].SetPosition(1, localSource + ((startRot * _beamSource.forward) * _beamMaxLength[i]));
                 }
             }
             else
             {
                 _beamRenderer[0].SetPosition(0, localSource);
-                _beamRenderer[0].SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength));
+                _beamRenderer[0].SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength[0]));
             }
         }
         else
