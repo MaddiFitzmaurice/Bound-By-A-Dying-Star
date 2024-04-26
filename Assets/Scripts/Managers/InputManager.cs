@@ -147,26 +147,26 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     // For testing, if Player 1 uses the interact E key
     public void OnPlayer1Interact(InputAction.CallbackContext context)
     {
-        // if (context.performed && context.interaction is HoldInteraction)
-        // {
-        //     // Debug.Log("Hold!");
-        //     EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
-        // }
-        // else if (context.canceled && context.interaction is HoldInteraction)
-        // {
-        //     // Debug.Log("Release!");
-        //     EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
-        // }
-        // else if (context.started && context.interaction is PressInteraction)
-        // {
-        //     // Debug.Log("Press!");
-        //     EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
-        // }
-        if (context.started && context.interaction is PressInteraction)
+        if (context.performed && context.interaction is HoldInteraction)
+        {
+            // Debug.Log("Hold!");
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
+        }
+        else if (context.canceled && context.interaction is HoldInteraction)
+        {
+            // Debug.Log("Release!");
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
+        }
+        else if (context.started && context.interaction is PressInteraction)
         {
             // Debug.Log("Press!");
             EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
         }
+        // if (context.started && context.interaction is PressInteraction)
+        // {
+        //     // Debug.Log("Press!");
+        //     EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
+        // }
     }
 
     // For testing, if Player 2 uses the interract numpad 0 key
