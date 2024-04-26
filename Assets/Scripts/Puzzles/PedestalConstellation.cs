@@ -64,6 +64,12 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         _beamSource.position = new Vector3(transform.position.x, transform.position.y + _raiseLightBeam +_raiseMirrorHeight, transform.position.z);
     }
 
+        // On disabling of the attached GameObject
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
     // Check if Pedestal has a preset object placed on it
     // if so, place it on the pedestal
     void Start()
@@ -74,8 +80,11 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             // Set beam length to be distance between ource and destination
             _beamMaxLength[0] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[0].transform.position), Vector3.zero);
             
+            Vector3 offsetTarget = _beamDestinations[0].transform.position;
+            offsetTarget = new Vector3(offsetTarget.x, offsetTarget.y + _raiseMirrorHeight, offsetTarget.z);
+            
             // Set target direction to be the 1 target
-            _targetDir = _beamDestinations[0].transform.position - _beamSource.position;
+            _targetDir = offsetTarget - _beamSource.position;
             _beamSource.rotation = Quaternion.LookRotation(_targetDir);
             
             // Then add initial offset to initial direction
@@ -91,6 +100,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             for (int i = 0; i < _beamDestinations.Count; i++)
             {
                 Vector3 pos = _beamDestinations[i].transform.position;
+                pos = new Vector3(pos.x, pos.y + _raiseMirrorHeight, pos.z);
                 meanVector += pos;
                 
                 // Set beam length to be distance between ource and destination
@@ -286,32 +296,39 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
     private IEnumerator RotateBeam()
     {
         _isRotating = true;
-
-        // Calculate new angle to rotate to
-        Quaternion endRot = _beamSource.rotation * Quaternion.Euler(0f, 90f * -1, 0f);
-        Vector3 endRotEuler = endRot.eulerAngles;
-        endRot = Quaternion.Euler(0f, endRotEuler.y, 0f);
-
-        // Keep rotating until enemy has reached new angle
-        while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f)
+        while (_isRotating)
         {
-            _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
-            yield return null;
-        }
+            // Calculate new angle to rotate to
+            Quaternion endRot = _beamSource.rotation * Quaternion.Euler(0f, 5f * -1, 0f);
+            Vector3 endRotEuler = endRot.eulerAngles;
+            endRot = Quaternion.Euler(0f, endRotEuler.y, 0f);
 
-        _beamSource.rotation = endRot;
-        _isRotating = false;
-        CheckAngles();
+            // Keep rotating until enemy has reached new angle
+            while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f)
+            {
+                _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
+                yield return null;
+            }
+
+            _beamSource.rotation = endRot;
+            _isRotating = !CheckAngles();
+        }
     }
 
-    private void CheckAngles()
+    private bool CheckAngles()
     {
         float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
-        if(dot > 0.8f) 
+        Debug.Log("" + dot);
+        if(dot > 0.985f) 
         { 
             _correctAngle = true;
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -331,6 +348,13 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
 
     public void PlayerStartInteract(PlayerBase player)
     {
+        
+    }
+
+    public void PlayerHoldInteract(PlayerBase player)
+    {
+        //throw new System.NotImplementedException();
+        Debug.Log("hold");
         if (player.CarriedPickupable == null)
         {
             if (_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
@@ -340,15 +364,14 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         }
     }
 
-    public void PlayerHoldInteract(PlayerBase player)
-    {
-        //throw new System.NotImplementedException();
-        Debug.Log("Hold");
-    }
-
     public void PlayerStopInteract(PlayerBase player)
     {
-        throw new System.NotImplementedException();
+        if (_isRotating)
+        {
+            StopCoroutine(RotateBeam());
+            _isRotating = false;
+            CheckAngles();
+        }
     }
     #endregion
 }

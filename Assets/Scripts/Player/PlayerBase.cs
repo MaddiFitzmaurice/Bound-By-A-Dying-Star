@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
+using UnityEngine.InputSystem.Users;
+using UnityEngine.InputSystem.Utilities;
 
 public abstract class PlayerBase : MonoBehaviour
 {
@@ -197,6 +201,13 @@ public abstract class PlayerBase : MonoBehaviour
     // Interaction
     public void Interact(object data)
     {
+        if (data == null)
+        {
+            Debug.LogError("Interact is null");
+        }
+
+        // Set move direction
+        InputAction.CallbackContext context = (InputAction.CallbackContext)data;
         // If carrying an item and no objects are nearby
         if (CarriedPickupable != null && _closestInteractable == null)
         {
@@ -213,7 +224,18 @@ public abstract class PlayerBase : MonoBehaviour
                 _closestInteractable = null;
             }
 
-            interactable.PlayerStartInteract(this);
+            if (context.performed && context.interaction is HoldInteraction)
+            {
+                interactable.PlayerHoldInteract(this);
+            }
+            else if (context.started && context.interaction is PressInteraction)
+            {
+                interactable.PlayerStartInteract(this);
+            }
+            else if (context.canceled && context.interaction is HoldInteraction)
+            {
+                interactable.PlayerStopInteract(this);
+            }
         }
     }
 
