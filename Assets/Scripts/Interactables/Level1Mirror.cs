@@ -27,6 +27,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     private Transform _followTarget;
     private bool _isFollowing = false;
     private float _followSpeed = 5f;  // Adjust this value as needed
+
+    private bool isIntensityChanging = false;
     #endregion
 
     private void Awake()
@@ -144,6 +146,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     #endregion
 
     #region IINTERACTABLE FUNCTIONS
+    /*
     public void PlayerInRange(PlayerBase player)
     {
         // set _maxIntensity when the player is close to the mirror
@@ -157,8 +160,48 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         // Fade the light to minimal intensity when the player moves out of range
         LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
             _light.intensity = val;
-        }).setEase(LeanTweenType.easeInOutSine);
+        }).setEase(LeanTweenType.easeOutSine);
     }
+    */
+
+    public void PlayerInRange(PlayerBase player)
+    {
+        if (!isIntensityChanging)
+        {
+            isIntensityChanging = true;
+            Debug.Log("Starting to change light intensity towards maximum.");
+
+            LeanTween.value(gameObject, _light.intensity, _maxIntensity, 1f).setOnUpdate((float val) => {
+                _light.intensity = val;
+                Debug.Log("Current light intensity: " + val);
+            }).setEase(LeanTweenType.easeInOutSine)
+            .setOnComplete(() => {
+                Debug.Log("Light intensity change complete. Current intensity: " + _light.intensity);
+                isIntensityChanging = false;
+            });
+        }
+    }
+
+    public void PlayerNotInRange(PlayerBase player)
+    {
+        if (isIntensityChanging)
+        {
+            isIntensityChanging = false;
+            Debug.Log("Starting to decrease light intensity towards minimal.");
+
+            LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
+                _light.intensity = val;
+                Debug.Log("Current light intensity: " + val);
+            }).setEase(LeanTweenType.easeOutSine)
+            .setOnComplete(() => {
+                Debug.Log("Light intensity decrease complete. Current intensity: " + _light.intensity);
+                isIntensityChanging = true;
+            });
+        }
+    }
+
+
+
 
     public void PlayerStartInteract(PlayerBase player)
     {
