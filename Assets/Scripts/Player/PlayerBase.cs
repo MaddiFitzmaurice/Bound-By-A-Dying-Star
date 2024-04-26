@@ -50,7 +50,7 @@ public abstract class PlayerBase : MonoBehaviour
     Collider _closestInteractable;
 
     // TEST
-    private ControlType _controlType = ControlType.WORLDSTRAFE;
+    private ControlType _controlType = ControlType.FIXEDCAM2;
     private float _camYAngle;
     #endregion
 

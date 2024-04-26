@@ -20,7 +20,7 @@ public class TestingManager : MonoBehaviour
     #endregion
 
     #region INTERNAL DATA
-    private ControlType _controlType = ControlType.WORLDSTRAFE;
+    private ControlType _controlType = ControlType.FIXEDCAM2;
     #endregion
 
     private void Awake()
