@@ -19,9 +19,6 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
     //[SerializeField] private Vector3 _targetAngle;
     [SerializeField] private float _initialAngleOffset;
 
-    // move the portal to be in the centre of mirror
-    [SerializeField] private float _raisePortalHeight;
-
     // The pedestal that forms a pair with this one
     [SerializeField] private List<GameObject> _beamDestinations;
 
@@ -84,7 +81,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             _beamMaxLength[0] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[0].transform.position), Vector3.zero);
             
             Vector3 offsetTarget = _beamDestinations[0].transform.position;
-            offsetTarget = new Vector3(offsetTarget.x, offsetTarget.y + _raiseMirrorHeight, offsetTarget.z);
+            offsetTarget = new Vector3(offsetTarget.x, _beamSource.position.y, offsetTarget.z);
             
             // Set target direction to be the 1 target
             _targetDir = offsetTarget - _beamSource.position;
@@ -103,7 +100,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             for (int i = 0; i < _beamDestinations.Count; i++)
             {
                 Vector3 pos = _beamDestinations[i].transform.position;
-                pos = new Vector3(pos.x, pos.y + _raiseMirrorHeight, pos.z);
+                pos = new Vector3(pos.x, _beamSource.position.y, pos.z);
                 meanVector += pos;
                 
                 // Set beam length to be distance between ource and destination
@@ -149,7 +146,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
     {
         if (_isRotating)
         {
-            SetBeamPositions();
+            //SetBeamPositions();
         }
     }
 
@@ -311,16 +308,36 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f || !_isRotating)
             {
                 _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
+                SetBeamPositions();
                 yield return null;
             }
 
             _beamSource.rotation = endRot;
-            _isRotating = !CheckAngles();
+            CheckAngles();
+        }
+        _beamTurningPS.Stop();
+    }
+    
+    private IEnumerator RotateBeamToAngle(Quaternion endRot)
+    {
+        _beamTurningPS.Play();
+        while (_isRotating)
+        {
+            // Keep rotating until enemy has reached new angle
+            while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f)
+            {
+                _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
+                SetBeamPositions();
+                yield return null;
+            }
+
+            _beamSource.rotation = endRot;
+            CheckAngles();
         }
         _beamTurningPS.Stop();
     }
 
-    private bool CheckAngles()
+    private void CheckAngles()
     {
         float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
         // Debug.Log("" + dot);
@@ -329,11 +346,14 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             _correctAngle = true;
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
-            return true;
-        }
-        else
-        {
-            return false;
+            // Debug.Log("" + _correctAngle);
+            _beamSource.rotation = Quaternion.LookRotation(_targetDir);
+            
+            // rotate beam to final bit
+            // Quaternion endRot = Quaternion.Euler(_targetDir.x, _targetDir.y, _targetDir.z);
+            // StartCoroutine(RotateBeamToAngle(endRot));
+            SetBeamPositions();
+            _isRotating = false;
         }
     }
 
@@ -376,8 +396,8 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             Debug.Log("styop");
 
             StopCoroutine(RotateBeam());
-            _isRotating = false;
             CheckAngles();
+            _isRotating = false;
             _beamTurningPS.Stop();
         }
     }
