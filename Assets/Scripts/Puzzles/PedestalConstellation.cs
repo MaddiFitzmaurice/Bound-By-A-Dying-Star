@@ -300,19 +300,20 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         while (_isRotating)
         {
             // Calculate new angle to rotate to
-            Quaternion endRot = _beamSource.rotation * Quaternion.Euler(0f, 5f * -1, 0f);
-            Vector3 endRotEuler = endRot.eulerAngles;
-            endRot = Quaternion.Euler(0f, endRotEuler.y, 0f);
+            // Quaternion endRot = _beamSource.rotation * Quaternion.Euler(0f, -2f, 0f);
+            // Vector3 endRotEuler = endRot.eulerAngles;
+            // endRot = Quaternion.Euler(0f, endRotEuler.y, 0f);
+            Quaternion endRot = Quaternion.Euler(_targetDir.x, _targetDir.y, _targetDir.z);
 
             // Keep rotating until enemy has reached new angle
-            while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f || !_isRotating)
+            while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f && _isRotating)
             {
                 _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
                 SetBeamPositions();
                 yield return null;
             }
 
-            _beamSource.rotation = endRot;
+            //_beamSource.rotation = endRot;
             CheckAngles();
         }
         _beamTurningPS.Stop();
@@ -347,7 +348,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
             // Debug.Log("" + _correctAngle);
-            _beamSource.rotation = Quaternion.LookRotation(_targetDir);
+            // _beamSource.rotation = Quaternion.LookRotation(_targetDir);
             
             // rotate beam to final bit
             // Quaternion endRot = Quaternion.Euler(_targetDir.x, _targetDir.y, _targetDir.z);
