@@ -62,7 +62,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         _beamTurningPS.Stop();
     }
 
-        // On disabling of the attached GameObject
+    // On disabling of the attached GameObject
     private void OnDisable()
     {
         StopAllCoroutines();
@@ -137,14 +137,6 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         if (_presetPlacedObject != null)
         {
             PlacePresetObject();
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if (_isRotating)
-        {
-            //SetBeamPositions();
         }
     }
 
