@@ -231,6 +231,11 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     }
 
+    public void PlayerReleaseHoldInteract(PlayerBase player)
+    {
+
+    }
+
     private void FlipGravityForAllPlayers(bool isFlipped)
     {
         // Inverts the gravity
@@ -238,11 +243,6 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
         // Calls the invert gravity event for the players that rotates the game object
         EventManager.EventTrigger(EventType.GRAVITY_INVERT, null);
-    }
-
-    public void PlayerStopInteract(PlayerBase player)
-    {
-       
     }
     #endregion
 }

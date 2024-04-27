@@ -203,11 +203,11 @@ public abstract class PlayerBase : MonoBehaviour
     {
         if (data == null)
         {
-            Debug.LogError("Interact is null");
+            Debug.LogError("PlayerBase has not received an InteractType!");
         }
 
-        // Set move direction
-        InputAction.CallbackContext context = (InputAction.CallbackContext)data;
+        InteractTypes iType = (InteractTypes)data;
+
         // If carrying an item and no objects are nearby
         if (CarriedPickupable != null && _closestInteractable == null)
         {
@@ -224,17 +224,17 @@ public abstract class PlayerBase : MonoBehaviour
                 _closestInteractable = null;
             }
 
-            if (context.performed && context.interaction is HoldInteraction)
+            if (iType == InteractTypes.HOLD)
             {
                 interactable.PlayerHoldInteract(this);
             }
-            else if (context.started && context.interaction is PressInteraction)
+            else if (iType == InteractTypes.PRESS)
             {
                 interactable.PlayerStartInteract(this);
             }
-            else if (context.canceled && context.interaction is HoldInteraction)
+            else if (iType == InteractTypes.RELEASE_HOLD)
             {
-                interactable.PlayerStopInteract(this);
+                interactable.PlayerReleaseHoldInteract(this);
             }
         }
     }

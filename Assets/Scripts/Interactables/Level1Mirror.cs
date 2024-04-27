@@ -230,7 +230,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         throw new System.NotImplementedException();
     }
 
-    public void PlayerStopInteract(PlayerBase player)
+    public void PlayerReleaseHoldInteract(PlayerBase player)
     {
         throw new System.NotImplementedException();
     }

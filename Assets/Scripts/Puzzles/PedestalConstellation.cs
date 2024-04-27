@@ -369,7 +369,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
         }
     }
 
-    public void PlayerStopInteract(PlayerBase player)
+    public void PlayerReleaseHoldInteract(PlayerBase player)
     {
         if (_isRotating)
         {

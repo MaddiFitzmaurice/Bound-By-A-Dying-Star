@@ -6,6 +6,13 @@ using UnityEngine.InputSystem.Interactions;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.InputSystem.Utilities;
 
+public enum InteractTypes
+{
+    PRESS,
+    HOLD,
+    RELEASE_HOLD
+}
+
 public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions
 {
     // Input Action Assets
@@ -15,6 +22,9 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     // Input Users
     private InputUser _player1;
     private InputUser _player2;
+
+    private bool _holdInteractP1 = false;
+    private bool _holdInteractP2 = false;
 
     void Awake()
     {
@@ -147,40 +157,50 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     // For testing, if Player 1 uses the interact E key
     public void OnPlayer1Interact(InputAction.CallbackContext context)
     {
+        // Hold performed
         if (context.performed && context.interaction is HoldInteraction)
         {
-            // Debug.Log("Hold!");
-            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
+            Debug.Log("Hold!");
+            _holdInteractP1 = true;
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, InteractTypes.HOLD);
         }
-        else if (context.canceled && context.interaction is HoldInteraction)
-        {
-            // Debug.Log("Release!");
-            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
-        }
+        // Press performed
         else if (context.started && context.interaction is PressInteraction)
         {
-            // Debug.Log("Press!");
-            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
+            Debug.Log("Press!");
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, InteractTypes.PRESS);
         }
-        // if (context.started && context.interaction is PressInteraction)
-        // {
-        //     // Debug.Log("Press!");
-        //     EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
-        // }
+        // Hold released
+        else if (context.canceled && _holdInteractP1)
+        {
+            _holdInteractP1 = false;
+            Debug.Log("Hold Release!");
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, InteractTypes.RELEASE_HOLD);
+        }
     }
 
     // For testing, if Player 2 uses the interract numpad 0 key
     public void OnPlayer2Interact(InputAction.CallbackContext context)
     {
+        // Hold performed
         if (context.performed && context.interaction is HoldInteraction)
         {
             Debug.Log("Hold!");
-            EventManager.EventTrigger(EventType.PLAYER_2_HOLDINTERACT, "Player 2");
+            _holdInteractP2 = true;
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
         }
+        // Press performed
         else if (context.started && context.interaction is PressInteraction)
         {
             Debug.Log("Press!");
-            EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, "Player 2");
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
+        }
+        // Hold released
+        else if (context.canceled && _holdInteractP1)
+        {
+            _holdInteractP2 = false;
+            Debug.Log("Hold Release!");
+            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
         }
     }
 

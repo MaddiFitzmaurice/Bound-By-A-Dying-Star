@@ -86,12 +86,13 @@ public class Rift : MonoBehaviour, IInteractable
         UnhighlightItem();
     }
 
-    public void PlayerHoldInteract(PlayerBase player)
+    public void PlayerReleaseHoldInteract(PlayerBase player)
     {
     }
 
-    public void PlayerStopInteract(PlayerBase player)
+    public void PlayerHoldInteract(PlayerBase player)
     {
+        throw new System.NotImplementedException();
     }
     #endregion
 }

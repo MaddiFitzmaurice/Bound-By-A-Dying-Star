@@ -95,7 +95,7 @@ public class NPC : MonoBehaviour, IInteractable
     {
     }
 
-    public void PlayerStopInteract(PlayerBase player)
+    public void PlayerReleaseHoldInteract(PlayerBase player)
     {
     }
 }
