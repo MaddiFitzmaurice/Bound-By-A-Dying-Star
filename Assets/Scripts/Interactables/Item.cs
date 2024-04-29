@@ -71,11 +71,8 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     {
         if (_isFollowing && _followTarget != null)
         {
-            // Calculate the world space position towards which to move
-            Vector3 targetPosition = _followTarget.position;
-
             // Perform the interpolation in world space
-            transform.position = Vector3.Lerp(transform.position, targetPosition, _followSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, _followTarget.position, _followSpeed * Time.deltaTime);
         }
     }
 
@@ -123,7 +120,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         // Start coroutine to smoothly move the item to the ground
         if (parent.name.Contains("ItemGrouper"))
         {
-            StartCoroutine(FloatItemToGround(_playerHoldingItem));
+            StartCoroutine(FloatItemToGround());
         }
 
         _playerHoldingItem = null;
@@ -135,18 +132,21 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         {
             _playerHoldingItem = player;
             _followTarget = _playerHoldingItem.PickupPoint;
-            _isFollowing = true;
-            transform.localPosition = Vector3.zero;
-            transform.position = _followTarget.position;
-            _playerHoldingItem.PickupItem(gameObject);
             UnhighlightItem();
 
             if (isGravityFlipItem)
             {
+                _isFollowing = true;
+                _playerHoldingItem.PickupItem(gameObject);
+
                 // Toggle the gravity state and apply the new state
                 _currentGravityState = !_currentGravityState;
                 // Flip gravity for all players
                 FlipGravityForAllPlayers(_currentGravityState);
+            }
+            else
+            {
+                StartCoroutine(ItemFloatUp());
             }
         }
     }
@@ -156,9 +156,8 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         transform.SetParent(parent); 
     }
 
-    private IEnumerator FloatItemToGround(PlayerBase player)
+    private IEnumerator FloatItemToGround()
     {
-        _playerHoldingItem = player;
         // Speed at which the item will move to the ground
         float dropSpeed = 1.5f;
         // Maximum distance to check for the ground
@@ -190,6 +189,25 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         {
             Debug.LogWarning("Ground not found below item, not moving.");
         }
+    }
+
+
+    // Make the item float upwards, then set it to follow the player
+    private IEnumerator ItemFloatUp()
+    {
+        // Calculate the world space position towards which to move
+        // Should be the mirror's current position, but at the follow target's elevation
+        Vector3 targetPosition = new Vector3(transform.position.x, _followTarget.position.y, transform.position.z);
+
+        while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        {
+            // Perform the interpolation in world space
+            transform.position = Vector3.Lerp(transform.position, targetPosition, _followSpeed * Time.deltaTime);
+            yield return null;  // Wait for the next frame
+        }
+
+        _isFollowing = true;
+        _playerHoldingItem.PickupItem(gameObject);
     }
     #endregion
 

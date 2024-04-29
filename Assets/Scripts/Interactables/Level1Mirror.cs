@@ -44,11 +44,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     {
         if (_isFollowing && _followTarget != null)
         {
-            // Calculate the world space position towards which to move
-            Vector3 targetPosition = _followTarget.position;
-
             // Perform the interpolation in world space
-            transform.position = Vector3.Lerp(transform.position, targetPosition, _followSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, _followTarget.position, _followSpeed * Time.deltaTime);
         }
     }
 
@@ -85,7 +82,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         // Start coroutine to smoothly move the item to the ground
         if (parent.name.Contains("MirrorGrouper"))
         {
-            StartCoroutine(FloatItemToGround(_player));
+            StartCoroutine(FloatItemToGround());
         }
 
         _player = null;
@@ -95,11 +92,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     {
         _player = player;
         _followTarget = _player.PickupPoint;
-        _isFollowing = true;
-        transform.localPosition = Vector3.zero;
-        transform.position = _followTarget.position;
-        _player.PickupItem(gameObject);
-        
+        StartCoroutine(ItemFloatUp());
     }
 
     public void SetParent(Transform parent)
@@ -107,15 +100,16 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         transform.SetParent(parent);
     }
 
-    private IEnumerator FloatItemToGround(PlayerBase player)
+    private IEnumerator FloatItemToGround()
     {
-        _player = player;
         // Speed at which the item will move to the ground
         float dropSpeed = 1.5f;
         // Maximum distance to check for the ground
         float maxDropHeight = 100.0f;
         // Get the layer mask for the ground, so the raycast doesn't hit the players
         int groundLayer = LayerMask.GetMask("Default");
+
+        // ROBIN SUGGESTION: maybe use a lerp like in FloatItemToPlayer so the mirror doesn't just teleport?
 
         // Calculate the offset position behind the player by using the player's forward direction
         Vector3 offsetPosition = transform.position - _player.transform.forward * 2; // Offset by 2 units behind the player, for bigger game objects
@@ -131,6 +125,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
             // Move item directly to offset position to avoid hitting player
             transform.position = offsetPosition;
 
+            // ROBIN SUGGESTION: also maybe use a lerp here too?
+
             while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, dropSpeed * Time.deltaTime);
@@ -141,7 +137,24 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         {
             Debug.LogWarning("Ground not found below item, not moving.");
         }
+    }
 
+    // Make the item float upwards, then set it to follow the player
+    private IEnumerator ItemFloatUp()
+    {
+        // Calculate the world space position towards which to move
+        // Should be the mirror's current position, but at the follow target's elevation
+        Vector3 targetPosition = new Vector3(transform.position.x, _followTarget.position.y, transform.position.z);
+
+        while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        {
+            // Perform the interpolation in world space
+            transform.position = Vector3.Lerp(transform.position, targetPosition, _followSpeed * Time.deltaTime);
+            yield return null;  // Wait for the next frame
+        }
+
+        _isFollowing = true;
+        _player.PickupItem(gameObject);
     }
     #endregion
 
@@ -199,9 +212,6 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
             });
         }
     }
-
-
-
 
     public void PlayerStartInteract(PlayerBase player)
     {
