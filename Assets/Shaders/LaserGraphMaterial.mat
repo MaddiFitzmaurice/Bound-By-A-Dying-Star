@@ -44,13 +44,16 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _alphaNoiseScale: 100
+    - _borderAmount: 0.1
+    - _borderBrightness: 1
     - _distortionAmount: 0.1
     - _height: 2
+    - _lineNoiseSpeed: 0.3
     - _noiseScale: 25
-    - _rainbowSpeed: 0.1
+    - _rainbowSpeed: 0.2
     - _width: 0.83
     m_Colors:
-    - _alphaStretch: {r: 0, g: 1, b: 0, a: 0}
+    - _alphaStretch: {r: 0, g: 2, b: 0, a: 0}
     - _colour: {r: 4, g: 4, b: 4, a: 0}
     - _mainSpeed: {r: -0.5, g: 0, b: 0, a: 0}
     - _noiseSpeed: {r: 0.2, g: 0.1, b: 0, a: 0}

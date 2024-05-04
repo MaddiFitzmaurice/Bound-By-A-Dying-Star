@@ -22,6 +22,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
 
     //Effects
     [SerializeField] private GameObject _lightBeam;
+    [SerializeField] private GameObject _mirrorBeamFX;
     [SerializeField] private float _raiseLightBeam = 1f;
     [SerializeField] private Transform _beamSource;
     [SerializeField] private ParticleSystem _beamTurningPS;
@@ -282,6 +283,7 @@ public class PedestalConstellation : MonoBehaviour, IInteractable
             _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
         }
         SetBeamPositions();
+        _mirrorBeamFX.SetActive(true);
     }
 
     // Rotate beam to target direction anticlockwise
