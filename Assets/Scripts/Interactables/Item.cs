@@ -35,6 +35,8 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     private Transform _followTarget;
     private bool _isFollowing = false;
     private float _followSpeed = 5f; 
+    [SerializeField] private ParticleSystem _itemPassivePS;
+    private ParticleSystem.EmissionModule _emissionPS;
 
     #endregion
 
@@ -65,6 +67,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         _itemGrouper = transform.parent;
         _renderer = GetComponentInChildren<Renderer>();
         _defaultMat = _renderer.material;
+        _emissionPS = _itemPassivePS.emission;
     }
 
     void Update()
@@ -114,6 +117,8 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         // If an incoming parent is specified, use that. Else, use the default parent assigned in the scene
         Transform parent = newParent != null ? newParent : _itemGrouper;
         SetParent(parent);
+
+        _emissionPS.enabled = false;
   
         _playerHoldingItem.DropItem();
 
@@ -146,6 +151,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
             }
             else
             {
+                _emissionPS.enabled = true;
                 StartCoroutine(ItemFloatUp());
             }
         }

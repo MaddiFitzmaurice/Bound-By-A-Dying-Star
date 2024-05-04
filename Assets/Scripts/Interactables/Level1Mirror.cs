@@ -27,6 +27,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     private Transform _followTarget;
     private bool _isFollowing = false;
     private float _followSpeed = 5f;  // Adjust this value as needed
+    [SerializeField] private ParticleSystem _itemPassivePS;
+    private ParticleSystem.EmissionModule _emissionPS;
 
     private bool isIntensityChanging = false;
     #endregion
@@ -38,6 +40,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         _mirrorGrouper = transform.parent;
 
         _light.intensity = 0;
+        _emissionPS = _itemPassivePS.emission;
     }
 
     void Update()
@@ -77,6 +80,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         Transform parent = newParent != null ? newParent : _mirrorGrouper;
         SetParent(parent);
 
+        _emissionPS.enabled = false;
+
         _player.DropItem();
 
         // Start coroutine to smoothly move the item to the ground
@@ -92,6 +97,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     {
         _player = player;
         _followTarget = _player.PickupPoint;
+        _emissionPS.enabled = true;
+
         StartCoroutine(ItemFloatUp());
     }
 
