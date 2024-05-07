@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PressurePlateSystemB : PressurePlateSystem
@@ -8,23 +9,40 @@ public class PressurePlateSystemB : PressurePlateSystem
     [SerializeField] private GameObject _affectedObj; // Object to lock/unlock
     [SerializeField] private bool _onIsUnlock = true; // Does Object unlock or lock when system is completed?
 
-    public override void PlateActivated(IPressurePlateBase plate, bool activated)
+    private void Start()
     {
-        // Only check if pair has been completed
-        if (activated)
+        if (!_onIsUnlock)
         {
-            foreach (IPressurePlateBase pair in PressurePlates)
-            {
-                if (!pair.Activated)
-                {
-                    return; // If any pair is not successful, immediately exit the method (Josh)
-                }
-            }
+            _affectedObj.SetActive(false);
+        }    
+    }
 
-            // Decide what the object should do when the system has been completed
-            bool active = _onIsUnlock ? !activated : activated;
+    protected override void InitAllPressurePlates()
+    {
+        var pairs = GetComponentsInChildren<PressurePlatePair>().ToList(); // Initialise all pressure plate children
+        PressurePlates = new List<IPressurePlateBase>();
 
-            _affectedObj.SetActive(active);
+        foreach (PressurePlatePair pair in pairs)
+        {
+            PressurePlates.Add(pair);
+            pair.InitPlateSystem(this);
         }
+    }
+
+    // Each pair that is activated
+    public override void PlateActivated(IPressurePlateBase plate, bool activated)
+    {        
+        foreach (IPressurePlateBase pair in PressurePlates)
+        {
+            if (!pair.Activated)
+            {
+                return; // If any pair is not successful, immediately exit the method (Josh)
+            }
+        }
+
+        // Decide what the object should do when the system has been completed
+        bool active = _onIsUnlock ? !activated : activated;
+
+        _affectedObj.SetActive(active);
     }
 }

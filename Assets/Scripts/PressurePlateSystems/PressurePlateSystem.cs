@@ -13,7 +13,7 @@ public abstract class PressurePlateSystem : MonoBehaviour
         InitAllPressurePlates();
     }
 
-    protected void InitAllPressurePlates()
+    protected virtual void InitAllPressurePlates()
     {
         PressurePlates = GetComponentsInChildren<IPressurePlateBase>().ToList(); // Initialise all pressure plate children
 
