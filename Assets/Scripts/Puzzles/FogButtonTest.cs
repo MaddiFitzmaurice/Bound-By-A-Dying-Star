@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PressurePlate : MonoBehaviour
+public class FogButton : MonoBehaviour
 {
     [field: Header("Assignment Code Stuff")]
     [field: SerializeField] private int _sentCode = 0;

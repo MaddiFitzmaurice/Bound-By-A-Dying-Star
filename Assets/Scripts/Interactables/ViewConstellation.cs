@@ -2,8 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct PPBPairs
+{
+    public GameObject PP1;
+    public GameObject PP2;
+}
+
 public class ViewConstellation : MonoBehaviour, IInteractable
 {
+    [SerializeField] private List<PPBPairs> _pairs;
     private void Awake()
     {
         
