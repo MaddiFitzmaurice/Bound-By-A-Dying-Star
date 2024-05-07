@@ -17,6 +17,18 @@ public class PressurePlateSystemA : PressurePlateSystem
 
     public override void PlateActivated(IPressurePlateBase plate, bool activated)
     {
+        // If one plate is deactivated, check if other plates are still activated
+        if (!activated) 
+        {
+            foreach (IPressurePlateBase pressurePlate in PressurePlates)
+            {
+                if (pressurePlate != plate && pressurePlate.Activated)
+                {
+                    return; // Do not do anything to the affected object if one plate is still active
+                }
+            }
+        }
+
         // Decide what the object should do when a plate is triggered
         bool active = _onIsUnlock ? !activated : activated;
 
