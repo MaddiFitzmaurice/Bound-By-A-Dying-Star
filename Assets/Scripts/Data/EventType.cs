@@ -20,6 +20,8 @@ public enum EventType
     // Puzzles
     ASSIGNMENT_CODE_TRIGGER,    //trigger code for puzzle features
     PUZZLE_DONE,                // trigger if a puzzle is done to be sent to the puzzle controller
+    LVL1_STAR_ACTIVATE,         // used to get the pedestals to make their associated stars also shoot their beams
+
 
     // Narrative
     NPC_SEND_DIALOGUE,
