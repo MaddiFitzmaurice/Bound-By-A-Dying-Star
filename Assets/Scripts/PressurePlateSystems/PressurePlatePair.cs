@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class PressurePlatePair : PressurePlateSystem, IPressurePlateBase
 
     #region Internal Data
     private PressurePlateSystem _ppSystem;
-    public bool Activated { get; set; }
+    public bool Activated { get; set; } = false;
     #endregion
 
     private void Start()
@@ -26,15 +27,19 @@ public class PressurePlatePair : PressurePlateSystem, IPressurePlateBase
     {
         yield return new WaitForSeconds(_timeToPressPair);
 
-        // If both plates are activated
         if (PressurePlates[0].Activated && PressurePlates[1].Activated)
         {
+            Color randomColor = new Color(Random.value, Random.value, Random.value);
+            PressurePlates[0].ActivateEffect(randomColor);
+            PressurePlates[1].ActivateEffect(randomColor);
             Activated = true;
+            _ppSystem.PlateActivated(this, Activated);
         }
         else
         {
-            PressurePlates[0].Activated = false;
-            PressurePlates[1].Activated = false;
+            PressurePlates[0].ActivateEffect(Color.white);
+            PressurePlates[1].ActivateEffect(Color.white);
+            Activated = false;
         }
     }
 
@@ -53,7 +58,6 @@ public class PressurePlatePair : PressurePlateSystem, IPressurePlateBase
 
     public override void PlateActivated(IPressurePlateBase plate, bool activated)
     {
-        Debug.Log(Activated);
         if (!Activated)
         {
             if (activated)
@@ -74,9 +78,8 @@ public class PressurePlatePair : PressurePlateSystem, IPressurePlateBase
         _ppSystem = system;
     }
 
-    public void ActivateEffect()
+    public void ActivateEffect(Color color)
     {
-        throw new System.NotImplementedException();
     }
     #endregion
 }

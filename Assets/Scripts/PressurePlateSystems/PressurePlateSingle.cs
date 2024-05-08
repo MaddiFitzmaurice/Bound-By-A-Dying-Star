@@ -43,9 +43,9 @@ public class PressurePlateSingle : MonoBehaviour, IPressurePlateBase
         _ppSystem = system;
     }
 
-    public void ActivateEffect()
+    public void ActivateEffect(Color color)
     {
-        throw new System.NotImplementedException();
+        _renderer.material.color = color;
     }
     #endregion
 }

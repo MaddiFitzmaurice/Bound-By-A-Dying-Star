@@ -7,5 +7,5 @@ public interface IPressurePlateBase
     public bool Activated { get; set; }
 
     public void InitPlateSystem(PressurePlateSystem system);
-    public void ActivateEffect();
+    public void ActivateEffect(Color color);
 }

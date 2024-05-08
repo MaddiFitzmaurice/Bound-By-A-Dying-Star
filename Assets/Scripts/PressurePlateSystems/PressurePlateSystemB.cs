@@ -31,12 +31,13 @@ public class PressurePlateSystemB : PressurePlateSystem
 
     // Each pair that is activated
     public override void PlateActivated(IPressurePlateBase plate, bool activated)
-    {        
+    {
+        Debug.Log(activated);
         foreach (IPressurePlateBase pair in PressurePlates)
         {
             if (!pair.Activated)
             {
-                return; // If any pair is not successful, immediately exit the method (Josh)
+                return; // If any pair is not successful, immediately exit the method
             }
         }
 
