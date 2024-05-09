@@ -8,7 +8,6 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     #region EXTERNAL DATA
     [SerializeField] private float _maxIntensity = 5f;
     [SerializeField] private float _maxDistance = 10f;
-    [SerializeField] private Transform _mirrorGrouper; // Makes sure that mirror stay in level scene
     #endregion
 
     #region INTERNAL DATA
@@ -24,6 +23,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     // Soft Puzzle
     private SoftPuzzle _softPuzzle = null;
     public bool HeldInSoftPuzzle { get; set; } = false;
+    private Transform _softPuzzleRewardGrouper; // Makes sure that mirror stay in level scene
 
     // Item Floating
     private Transform _followTarget;
@@ -42,6 +42,15 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         _light = GetComponentInChildren<Light>();
         _light.intensity = 0;
         _emissionPS = _itemPassivePS.emission;
+    }
+
+    private void Start()
+    {
+        // If is not a part of soft puzzle, should be stored in LevelManager's reward grouper
+        if (_softPuzzle == null)
+        {
+            _softPuzzleRewardGrouper = gameObject.transform.parent;
+        }
     }
 
     void Update()
@@ -65,7 +74,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
         // Removes the parent-child relationship, making the object independent in the scene
         // If an incoming parent is specified, use that. Else, use the default parent assigned in the scene
-        Transform parent = newParent != null ? newParent : _mirrorGrouper;
+        Transform parent = newParent != null ? newParent : _softPuzzleRewardGrouper;
         SetParent(parent);
 
         _emissionPS.enabled = false;
@@ -73,7 +82,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         _player.DropItem();
 
         // Start coroutine to smoothly move the item to the ground
-        if (parent.name.Contains("MirrorGrouper"))
+        if (parent == _softPuzzleRewardGrouper)
         {
             StartCoroutine(FloatItemToGround());
         }
@@ -247,11 +256,17 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     {
         throw new System.NotImplementedException();
     }
+    #endregion
 
-
+    #region ISOFTPUZZLEREWARD FUNCTIONS
     public void SetSoftPuzzle(SoftPuzzle softPuzzle)
     {
         _softPuzzle = softPuzzle;
+    }
+
+    public void SetRewardGrouper(Transform transform)
+    {
+        _softPuzzleRewardGrouper = transform;
     }
     #endregion
 }

@@ -6,4 +6,5 @@ public interface ISoftPuzzleReward
 {
     public bool HeldInSoftPuzzle { get; set; }
     public void SetSoftPuzzle(SoftPuzzle softPuzzle);
+    public void SetRewardGrouper(Transform transform);
 }

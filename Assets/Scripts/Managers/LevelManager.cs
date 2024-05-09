@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
 {
     #region EXTERNAL DATA
     [SerializeField] private GameObject _levelCams;
+    [SerializeField] private GameObject _rewardGrouper;
     [SerializeField] private GameObject _spawnPoint; // Where players initially start, and where they get TP'd to after solving a soft puzzle
     [SerializeField] private List<GameObject> _softPuzzles;
     #endregion
@@ -58,13 +59,18 @@ public class LevelManager : MonoBehaviour
             Debug.LogError("Please use SpawnPoint object to assign players' initial spawn in level.");
         }
 
-        // Ensure first soft puzzle is activated
+        // Set reward grouper parent and disable all soft puzzles
         foreach (GameObject softPuzzle in _softPuzzles)
         {
+            softPuzzle.SetActive(true);
+            if (softPuzzle.GetComponent<SoftPuzzle>() != null)
+            {
+                softPuzzle.GetComponent<SoftPuzzle>().SetRewardGrouper(_rewardGrouper.transform);
+            }
             softPuzzle.SetActive(false);
         }
 
-        // Convert soft puzzle list to a queue and enable first soft puzzle
+        // Convert soft puzzle list to a queue and reenable first soft puzzle
         _softPuzzlesQueue = new Queue<GameObject>(_softPuzzles);
         _softPuzzlesQueue.Peek().SetActive(true);
     }

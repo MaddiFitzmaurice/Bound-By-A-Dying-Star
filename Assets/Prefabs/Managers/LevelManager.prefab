@@ -681,6 +681,37 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   m_CustomBlends: {fileID: 0}
+--- !u!1 &6131084060764602886
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4758285641752299580}
+  m_Layer: 0
+  m_Name: SoftPuzzleRewardGrouper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4758285641752299580
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6131084060764602886}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8910302424083675647}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6187926783950974068
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,6 +850,7 @@ Transform:
   - {fileID: 1634430346066953830}
   - {fileID: 5235073032641691360}
   - {fileID: 974818239197276373}
+  - {fileID: 4758285641752299580}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8947550317518353595
@@ -835,6 +867,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levelCams: {fileID: 5222421641577635041}
   _spawnPoint: {fileID: 6675612559867873974}
+  _softPuzzles: []
 --- !u!1 &6936992595897339867
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class SoftPuzzle : MonoBehaviour
     #endregion
 
     #region Internal Data
-    private List<ISoftPuzzleReward> _rewards;
+    private List<ISoftPuzzleReward> _rewards = new List<ISoftPuzzleReward>();
     #endregion
 
     private void Awake()
@@ -19,8 +19,6 @@ public class SoftPuzzle : MonoBehaviour
         {
             Debug.LogError("Please assign either 1 or 2 reward objects to SoftPuzzle!");
         }
-
-        _rewards = new List<ISoftPuzzleReward>();
 
         // Check if objects added subscribe to IReward
         foreach (GameObject obj in _rewardObjs)
@@ -61,5 +59,14 @@ public class SoftPuzzle : MonoBehaviour
         }
 
         EventManager.EventTrigger(EventType.SOFTPUZZLE_COMPLETE, null);
+    }
+
+    public void SetRewardGrouper(Transform transform)
+    {
+        Debug.Log(_rewards.Count);
+        foreach (ISoftPuzzleReward reward in _rewards)
+        {
+            reward.SetRewardGrouper(transform);
+        }
     }
 }
