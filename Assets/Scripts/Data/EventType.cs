@@ -40,6 +40,7 @@ public enum EventType
 
     // Level
     LEVEL_SPAWN,
+    SOFTPUZZLE_COMPLETE,
 
     // Gravity 
     GRAVITY_INVERT,

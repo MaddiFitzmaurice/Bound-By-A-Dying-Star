@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
+public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzzleReward
 {
     #region EXTERNAL DATA
     [SerializeField] private float _maxIntensity = 5f;
     [SerializeField] private float _maxDistance = 10f;
+    [SerializeField] private Transform _mirrorGrouper; // Makes sure that mirror stay in level scene
     #endregion
 
     #region INTERNAL DATA
@@ -17,11 +18,12 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     // Player
     private PlayerBase _player;
 
-    // Mirror Grouper
-    private Transform _mirrorGrouper; // Makes sure that mirror stay in level scene
-
     // Pedestal
     private bool _isOnPedestal = false;
+
+    // Soft Puzzle
+    private SoftPuzzle _softPuzzle = null;
+    public bool HeldInSoftPuzzle { get; set; } = false;
 
     // Item Floating
     private Transform _followTarget;
@@ -31,14 +33,13 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     private ParticleSystem.EmissionModule _emissionPS;
 
     private bool isIntensityChanging = false;
+
     #endregion
 
     private void Awake()
     {
         // Get components
         _light = GetComponentInChildren<Light>();
-        _mirrorGrouper = transform.parent;
-
         _light.intensity = 0;
         _emissionPS = _itemPassivePS.emission;
     }
@@ -50,19 +51,6 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
             // Perform the interpolation in world space
             transform.position = Vector3.Lerp(transform.position, _followTarget.position, _followSpeed * Time.deltaTime);
         }
-    }
-
-    // TODO: MAKE THIS INTO A COROUTINE THAT ADJUSTS INTENSITY WHEN NEARBY INSTEAD OF RELYING ON DISTANCE
-    private void AdjustLightIntensity()
-    {
-        // Calculate the distance between the player and the mirror
-        float distance = Vector3.Distance(_player.transform.position, transform.position);
-
-        // Normalize the distance based on maxDistance via the clamp method
-        float normalizedDistance = Mathf.Clamp01(distance / _maxDistance);
-
-        // Adjust the light intensity
-        _light.intensity = _maxIntensity * (1 - normalizedDistance);
     }
 
     #region IPICKUPABLE FUNCTIONS
@@ -162,6 +150,14 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
 
         _isFollowing = true;
         _player.PickupItem(gameObject);
+        SetParent(_player.transform);
+
+        // If currently associated with a soft puzzle
+        if (_softPuzzle)
+        {
+            HeldInSoftPuzzle = true;
+            _softPuzzle.CheckAllRewardsHeld();
+        }
     }
     #endregion
 
@@ -250,6 +246,12 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
     public void PlayerReleaseHoldInteract(PlayerBase player)
     {
         throw new System.NotImplementedException();
+    }
+
+
+    public void SetSoftPuzzle(SoftPuzzle softPuzzle)
+    {
+        _softPuzzle = softPuzzle;
     }
     #endregion
 }

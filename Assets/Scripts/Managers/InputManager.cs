@@ -187,20 +187,20 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         {
             Debug.Log("Hold!");
             _holdInteractP2 = true;
-            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
+            EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, InteractTypes.HOLD);
         }
         // Press performed
         else if (context.started && context.interaction is PressInteraction)
         {
             Debug.Log("Press!");
-            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
+            EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, InteractTypes.PRESS);
         }
         // Hold released
         else if (context.canceled && _holdInteractP1)
         {
             _holdInteractP2 = false;
             Debug.Log("Hold Release!");
-            EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, context);
+            EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, InteractTypes.RELEASE_HOLD);
         }
     }
 
