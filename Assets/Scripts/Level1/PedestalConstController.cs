@@ -9,7 +9,7 @@ public class PedestalConstController : MonoBehaviour
     //List of pedestals in constellation
     [SerializeField] private List<ConstPedestal> _pedestalList;
 
-    private List<PedestalData> _pedestaData = new List<PedestalData>();
+    [SerializeField] private List<PedestalData> _pedestaData = new List<PedestalData>();
     private int _pedestalNum;
     // Awake is called before the first frame update
     void Awake()
@@ -131,12 +131,16 @@ public class PedestalConstController : MonoBehaviour
     {
         bool done = true;
 
-        foreach (var PedestalData in _pedestaData)
+        for (int i = 0; i < _pedestalNum; i++)
         {
-            if(!PedestalData.RightBeamDirection || !PedestalData.RecieveBeam || !PedestalData.HasMirror)
+            if(!_pedestaData[i].RightBeamDirection || !_pedestaData[i].RecieveBeam || !_pedestaData[i].HasMirror)
             {
                 done = false;
-                return;
+            }
+
+            if(_pedestaData[i].ShootingBeam && _pedestaData[i].RightBeamDirection && _pedestaData[i].RecieveBeam &&_pedestaData[i].HasMirror)
+            {
+                _pedestalList[i].ActivateSkyBeam();
             }
         }
 
@@ -149,7 +153,7 @@ public class PedestalConstController : MonoBehaviour
 }
 
 // Data class for indivigual pedestals
-//[Serializable]
+[Serializable]
 public class PedestalData
 {
     //bools associated with if pedestals have mirrors

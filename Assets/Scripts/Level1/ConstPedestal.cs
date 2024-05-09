@@ -290,6 +290,12 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         }
         SetBeamPositions();
         _mirrorBeamFX.SetActive(true);
+        //EventManager.EventTrigger(EventType.LVL1_STAR_ACTIVATE, _id);
+    }
+
+    // Activate sky beam
+    public void ActivateSkyBeam()
+    {
         EventManager.EventTrigger(EventType.LVL1_STAR_ACTIVATE, _id);
     }
 
