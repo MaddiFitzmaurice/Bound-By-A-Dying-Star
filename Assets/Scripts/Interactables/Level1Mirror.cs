@@ -207,14 +207,14 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable
         if (isIntensityChanging)
         {
             isIntensityChanging = false;
-            Debug.Log("Starting to decrease light intensity towards minimal.");
+            // Debug.Log("Starting to decrease light intensity towards minimal.");
 
             LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
                 _light.intensity = val;
-                Debug.Log("Current light intensity: " + val);
+                // Debug.Log("Current light intensity: " + val);
             }).setEase(LeanTweenType.easeOutSine)
             .setOnComplete(() => {
-                Debug.Log("Light intensity decrease complete. Current intensity: " + _light.intensity);
+                // Debug.Log("Light intensity decrease complete. Current intensity: " + _light.intensity);
                 isIntensityChanging = true;
             });
         }
