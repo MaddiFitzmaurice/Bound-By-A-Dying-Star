@@ -73,6 +73,8 @@ public class PlayerManager : MonoBehaviour
         Transform spawnPoint = (Transform)data;
         _playerGrouper.transform.position = spawnPoint.position;
         _playerGrouper.transform.rotation = spawnPoint.rotation;
+        _player1.transform.localPosition = new Vector3(2, 1, 0);
+        _player2.transform.localPosition = new Vector3(-2, 1, 0);
     }
 
     // Listen to Teleport and assign new position to player grouper
