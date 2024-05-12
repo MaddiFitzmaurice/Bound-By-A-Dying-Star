@@ -48,6 +48,27 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
     }
 
+    private IEnumerator TeleportPlayers(Transform spawnPoint)
+    {
+        Debug.Log("hi");
+        _player1.PlayTeleportEffect();
+        _player2.PlayTeleportEffect();
+        yield return new WaitForSeconds(3);
+        _player1.ToggleVisibility(false);
+        _player2.ToggleVisibility(false);
+        yield return new WaitForSeconds(1);
+        _playerGrouper.transform.position = spawnPoint.position;
+        _playerGrouper.transform.rotation = spawnPoint.rotation;
+        _player1.transform.localPosition = new Vector3(2, 1, 0);
+        _player2.transform.localPosition = new Vector3(-2, 1, 0);
+        _player1.PlayTeleportEffect();
+        _player2.PlayTeleportEffect();
+        yield return new WaitForSeconds(1);
+        _player1.ToggleVisibility(true);
+        _player2.ToggleVisibility(true);
+        yield return new WaitForSeconds(3);
+    }
+
     #region EVENT HANDLERS
     // Send LevelManager the VCamFollowGroup
     public void SendFollowGroup(object data)
@@ -71,10 +92,8 @@ public class PlayerManager : MonoBehaviour
         }
 
         Transform spawnPoint = (Transform)data;
-        _playerGrouper.transform.position = spawnPoint.position;
-        _playerGrouper.transform.rotation = spawnPoint.rotation;
-        _player1.transform.localPosition = new Vector3(2, 1, 0);
-        _player2.transform.localPosition = new Vector3(-2, 1, 0);
+        StopAllCoroutines();
+        StartCoroutine(TeleportPlayers(spawnPoint));
     }
 
     // Listen to Teleport and assign new position to player grouper

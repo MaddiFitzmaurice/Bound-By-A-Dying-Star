@@ -80,6 +80,7 @@ public class LevelManager : MonoBehaviour
         EventManager.EventTrigger(EventType.LEVEL_SPAWN, _spawnPoint.transform);
     }
 
+    // Coruoutine function to delay the teleporting of players to make space 
     private IEnumerator PuzzleTransition()
     {
         // Insert teleport effect trigger here
@@ -97,6 +98,7 @@ public class LevelManager : MonoBehaviour
     // Teleport player and load in next Soft Puzzle
     public void OnSoftPuzzleComplete(object data)
     {
+        StopAllCoroutines();
         StartCoroutine(PuzzleTransition());
     }
 

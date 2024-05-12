@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine.VFX;
 
 public abstract class PlayerBase : MonoBehaviour
 {
@@ -37,11 +38,19 @@ public abstract class PlayerBase : MonoBehaviour
     [field:SerializeField] public Material HighlightMat { get; private set; } // Temp material to highlight object to be interacted with
     [field:SerializeField] public Transform PickupPoint { get; private set; } // Assign the pick up location of the object in the Inspector
     [field:SerializeField] public GameObject CarriedPickupable { get; private set; } = null;
+
+    // Effects
+    [field:Header("Effects Data")]
+    [field:SerializeField] protected VisualEffect _teleportEffect;
+    [field:SerializeField] protected ParticleSystem _flameHeadPS;
+
+
     #endregion
 
     #region INTERNAL DATA
     // Components
     private Rigidbody _rb;
+    private MeshRenderer _meshRenderer;
 
     // Data
     protected RiftData RiftData;
@@ -62,6 +71,7 @@ public abstract class PlayerBase : MonoBehaviour
     {
         // Set components
         _rb = GetComponent<Rigidbody>();
+        _meshRenderer = GetComponent<MeshRenderer>();
 
         // Set data
         RiftData = new RiftData(transform.position, transform.rotation, tag);
@@ -196,6 +206,25 @@ public abstract class PlayerBase : MonoBehaviour
     }
     
     #endregion
+
+    public void PlayTeleportEffect()
+    {
+        _teleportEffect.Play();
+    }
+
+    public void ToggleVisibility(bool mode)
+    {
+        if (mode)
+        {
+            _meshRenderer.enabled = true;
+            _flameHeadPS.Stop();
+        }
+        else
+        {
+            _meshRenderer.enabled = false;
+            _flameHeadPS.Play();
+        }
+    }
 
     #region INTERACTION FUNCTIONS
     // Interaction
