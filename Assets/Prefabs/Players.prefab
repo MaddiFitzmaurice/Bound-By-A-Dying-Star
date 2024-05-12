@@ -713,7 +713,7 @@ MonoBehaviour:
   MoveDecel: 2
   VelocityPower: 2
   StepHeight: 0.5
-  StepSmoothing: 0.2
+  StepSmoothing: 2
   UpperBoundRay: {fileID: 5736588917934954671}
   LowerBoundRay: {fileID: 6613482897681749392}
   RotationSpeed: 300

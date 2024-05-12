@@ -185,10 +185,10 @@ public abstract class PlayerBase : MonoBehaviour
     public void StepClimb()
     {
         RaycastHit lowerBoundHit;
-        if (Physics.Raycast(LowerBoundRay.transform.position, transform.forward, out lowerBoundHit, 0.6f))
+        if (Physics.Raycast(LowerBoundRay.transform.position, transform.forward, out lowerBoundHit, 0.8f))
         {
             RaycastHit upperBoundHit;
-            if (!Physics.Raycast(UpperBoundRay.transform.position, transform.forward, out upperBoundHit, 0.7f))
+            if (!Physics.Raycast(UpperBoundRay.transform.position, transform.forward, out upperBoundHit, 0.9f))
             {
                 _rb.position -= new Vector3(0f, -StepSmoothing * Time.deltaTime, 0f);
             }
