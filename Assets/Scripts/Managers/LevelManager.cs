@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
         // Event Inits
         EventManager.EventInitialise(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP);
         EventManager.EventInitialise(EventType.LEVEL_SPAWN);
+        EventManager.EventInitialise(EventType.PLAYER_TELEPORT);
     }
 
     private void OnEnable()
@@ -80,23 +81,23 @@ public class LevelManager : MonoBehaviour
         EventManager.EventTrigger(EventType.LEVEL_SPAWN, _spawnPoint.transform);
     }
 
+    // Coruoutine function to delay the teleporting of players to make space 
     private IEnumerator PuzzleTransition()
     {
-        // Insert teleport effect trigger here
-        yield return new WaitForSeconds(1);
-        Spawn();
+        EventManager.EventTrigger(EventType.PLAYER_TELEPORT, _spawnPoint.transform);
+        yield return new WaitForSeconds(4);
         _softPuzzlesQueue.Peek().SetActive(false);
         _softPuzzlesQueue.Dequeue();
         _softPuzzlesQueue.Peek().SetActive(true);
-        // Insert teleport effect trigger here
-        yield return new WaitForSeconds(1);
-        // Debug.Log("Teleport Done");
+        // EventManager.EventTrigger(EventType.PLAYER_TELEPORT, _spawnPoint.transform);
+        yield return new WaitForSeconds(4);
     }
 
     #region EVENT HANDLERS
     // Teleport player and load in next Soft Puzzle
     public void OnSoftPuzzleComplete(object data)
     {
+        StopAllCoroutines();
         StartCoroutine(PuzzleTransition());
     }
 
