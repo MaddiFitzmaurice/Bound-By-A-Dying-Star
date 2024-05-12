@@ -41,7 +41,9 @@ public abstract class PlayerBase : MonoBehaviour
 
     // Effects
     [field:Header("Effects Data")]
-    [field:SerializeField] protected VisualEffect _teleportEffect;
+    [field:SerializeField] protected VisualEffect _teleportInEffect;
+    [field:SerializeField] protected VisualEffect _teleportOutEffect;
+    [field:SerializeField] protected VisualEffect _flashEffect;
     [field:SerializeField] protected ParticleSystem _flameHeadPS;
 
 
@@ -85,6 +87,8 @@ public abstract class PlayerBase : MonoBehaviour
         // Current transform centre: 1 unit
         UpperBoundRay.transform.localPosition = new Vector3(0, -1 + StepHeight, 0);
         LowerBoundRay.transform.localPosition = new Vector3(0, -1, 0);
+
+        _flameHeadPS.Play();
     }
 
     protected virtual void OnEnable()
@@ -207,9 +211,21 @@ public abstract class PlayerBase : MonoBehaviour
     
     #endregion
 
-    public void PlayTeleportEffect()
+    public void PlayTeleportEffect(bool mode)
     {
-        _teleportEffect.SendEvent("TeleportPlay");
+        if (mode)
+        {
+            _teleportInEffect.Play();
+        }
+        else
+        {
+            _teleportOutEffect.Play();
+        }
+    }
+
+    public void PlayFlashEffect()
+    {
+        _flashEffect.Play();
     }
 
     public void ToggleVisibility(bool mode)
@@ -217,12 +233,12 @@ public abstract class PlayerBase : MonoBehaviour
         if (mode)
         {
             _meshRenderer.enabled = true;
-            _flameHeadPS.Stop();
+            _flameHeadPS.Play();
         }
         else
         {
             _meshRenderer.enabled = false;
-            _flameHeadPS.Play();
+            _flameHeadPS.Stop();
         }
     }
 

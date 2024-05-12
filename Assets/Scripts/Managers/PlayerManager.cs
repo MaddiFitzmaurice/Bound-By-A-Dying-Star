@@ -52,22 +52,26 @@ public class PlayerManager : MonoBehaviour
 
     private IEnumerator PlayerTeleport(Transform spawnPoint)
     {
-        _player1.PlayTeleportEffect();
-        _player2.PlayTeleportEffect();
-        yield return new WaitForSeconds(3);
+        _player1.PlayTeleportEffect(true);
+        _player2.PlayTeleportEffect(true);
+        yield return new WaitForSeconds(2f);
+        _player1.PlayFlashEffect();
+        _player2.PlayFlashEffect();
         _player1.ToggleVisibility(false);
         _player2.ToggleVisibility(false);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2f);
         _playerGrouper.transform.position = spawnPoint.position;
         _playerGrouper.transform.rotation = spawnPoint.rotation;
-        _player1.transform.localPosition = new Vector3(2, 1, 0);
-        _player2.transform.localPosition = new Vector3(-2, 1, 0);
-        _player1.PlayTeleportEffect();
-        _player2.PlayTeleportEffect();
-        yield return new WaitForSeconds(1);
+        _player1.transform.localPosition = new Vector3(2, -1, 0);
+        _player2.transform.localPosition = new Vector3(-2, -1, 0);
+        _player1.PlayTeleportEffect(false);
+        _player2.PlayTeleportEffect(false);
+        yield return new WaitForSeconds(2);
+        _player1.PlayFlashEffect();
+        _player2.PlayFlashEffect();
         _player1.ToggleVisibility(true);
         _player2.ToggleVisibility(true);
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
     }
 
     #region EVENT HANDLERS
@@ -95,8 +99,8 @@ public class PlayerManager : MonoBehaviour
         Transform spawnPoint = (Transform)data;
         _playerGrouper.transform.position = spawnPoint.position;
         _playerGrouper.transform.rotation = spawnPoint.rotation;
-        _player1.transform.localPosition = new Vector3(2, 1, 0);
-        _player2.transform.localPosition = new Vector3(-2, 1, 0);
+        _player1.transform.localPosition = new Vector3(2, -1, 0);
+        _player2.transform.localPosition = new Vector3(-2, -1, 0);
     }
 
     // Have players make VFX for teleportation then
