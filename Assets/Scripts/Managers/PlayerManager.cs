@@ -39,6 +39,7 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, SendFollowGroup);
         EventManager.EventSubscribe(EventType.TELEPORT_PLAYERS, TeleportPlayers);
         EventManager.EventSubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
+        EventManager.EventSubscribe(EventType.PLAYER_TELEPORT, PlayerTeleport);
     }
 
     private void OnDisable()
@@ -46,11 +47,11 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, SendFollowGroup);
         EventManager.EventUnsubscribe(EventType.TELEPORT_PLAYERS, TeleportPlayers);
         EventManager.EventUnsubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
+        EventManager.EventUnsubscribe(EventType.PLAYER_TELEPORT, PlayerTeleport);
     }
 
-    private IEnumerator TeleportPlayers(Transform spawnPoint)
+    private IEnumerator PlayerTeleport(Transform spawnPoint)
     {
-        Debug.Log("hi");
         _player1.PlayTeleportEffect();
         _player2.PlayTeleportEffect();
         yield return new WaitForSeconds(3);
@@ -92,8 +93,24 @@ public class PlayerManager : MonoBehaviour
         }
 
         Transform spawnPoint = (Transform)data;
+        _playerGrouper.transform.position = spawnPoint.position;
+        _playerGrouper.transform.rotation = spawnPoint.rotation;
+        _player1.transform.localPosition = new Vector3(2, 1, 0);
+        _player2.transform.localPosition = new Vector3(-2, 1, 0);
+    }
+
+    // Have players make VFX for teleportation then
+    // move them to desired location in a specific level
+    public void PlayerTeleport(object data)
+    {
+        if (data is not Transform)
+        {
+            Debug.LogError("PlayerManager has not received a transform!");
+        }
+
+        Transform spawnPoint = (Transform)data;
         StopAllCoroutines();
-        StartCoroutine(TeleportPlayers(spawnPoint));
+        StartCoroutine(PlayerTeleport(spawnPoint));
     }
 
     // Listen to Teleport and assign new position to player grouper
@@ -105,6 +122,8 @@ public class PlayerManager : MonoBehaviour
         }
 
         Transform transform = (Transform)data;
+
+        Debug.Log("TeleportPlayers was used");
 
         if (_playerGrouper == null)
         {

@@ -209,7 +209,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     public void PlayTeleportEffect()
     {
-        _teleportEffect.Play();
+        _teleportEffect.SendEvent("TeleportPlay");
     }
 
     public void ToggleVisibility(bool mode)
