@@ -68,7 +68,6 @@ public class CameraManager : MonoBehaviour
         }
 
         GameObject sceneParent = data as GameObject;
-        Debug.Log(sceneParent);
 
         // Get list of vCams that are childed to the received sceneParent as gameobjects
         List<Transform> vCamTransforms = sceneParent.GetComponentsInChildren<Transform>().ToList();
@@ -87,12 +86,9 @@ public class CameraManager : MonoBehaviour
             {
                 // Add to dict and change parent to ClearShot Cam in Gameplay Scene
                 _activeGameplayCams.Add(vCam, sceneParent);
-                Debug.Log(_gameplayCams);
                 vCam.transform.SetParent(_gameplayCams.transform);
             }
         }
-
-        //LevelCameraChangeEvent();
     }
 
     public void DeleteGameplayCamHandler(object data)

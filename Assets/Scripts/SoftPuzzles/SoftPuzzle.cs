@@ -78,7 +78,6 @@ public class SoftPuzzle : MonoBehaviour
 
     public void SetRewardGrouper(Transform transform)
     {
-        Debug.Log(_rewards.Count);
         foreach (ISoftPuzzleReward reward in _rewards)
         {
             reward.SetRewardGrouper(transform);

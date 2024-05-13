@@ -77,8 +77,8 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         _playerGrouper.transform.position = spawnPoint.position;
         _playerGrouper.transform.rotation = spawnPoint.rotation;
-        _player1.transform.localPosition = new Vector3(2, 1, 0);
-        _player2.transform.localPosition = new Vector3(-2, 1, 0);
+        _player1.transform.localPosition = new Vector3(-2, 2, 0);
+        _player2.transform.localPosition = new Vector3(2, 2, 0);
         _player1.PlayTeleportEffect(false);
         _player2.PlayTeleportEffect(false);
         yield return new WaitForSeconds(2);
@@ -101,8 +101,8 @@ public class PlayerManager : MonoBehaviour
         Transform spawnPoint = (Transform)data;
         _playerGrouper.transform.position = spawnPoint.position;
         _playerGrouper.transform.rotation = spawnPoint.rotation;
-        _player1.transform.localPosition = new Vector3(2, 1, 0);
-        _player2.transform.localPosition = new Vector3(-2, 1, 0);
+        _player1.transform.localPosition = new Vector3(-2, 2, 0);
+        _player2.transform.localPosition = new Vector3(2, 2, 0);
     }
 
     // Have players make VFX for teleportation then
@@ -139,8 +139,8 @@ public class PlayerManager : MonoBehaviour
         {
             // TODO: Adjust height when 3D models are put in
             _playerGrouper.transform.position = transform.position;
-            _player1.transform.localPosition = new Vector3(2, 1, 0);
-            _player2.transform.localPosition = new Vector3(-2, 1, 0);
+            _player1.transform.localPosition = new Vector3(-2, 1, 0);
+            _player2.transform.localPosition = new Vector3(2, 1, 0);
         }
     }
     #endregion
