@@ -31,7 +31,7 @@ public class PlayerManager : MonoBehaviour
 
         // Event Inits
         EventManager.EventInitialise(EventType.LEVEL_CAMS_SEND_FOLLOWGROUP);
-        EventManager.EventInitialise(EventType.TELEPORT_PLAYERS);
+        EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
     }
 
     private void OnEnable()
@@ -39,7 +39,7 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, SendFollowGroup);
         EventManager.EventSubscribe(EventType.TELEPORT_PLAYERS, TeleportPlayers);
         EventManager.EventSubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
-        EventManager.EventSubscribe(EventType.PLAYER_TELEPORT, PlayerTeleport);
+        EventManager.EventSubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
     }
 
     private void OnDisable()
@@ -47,7 +47,7 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, SendFollowGroup);
         EventManager.EventUnsubscribe(EventType.TELEPORT_PLAYERS, TeleportPlayers);
         EventManager.EventUnsubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
-        EventManager.EventUnsubscribe(EventType.PLAYER_TELEPORT, PlayerTeleport);
+        EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
     }
 
     private IEnumerator PlayerTeleport(Transform spawnPoint)

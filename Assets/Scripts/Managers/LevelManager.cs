@@ -25,7 +25,7 @@ public class LevelManager : MonoBehaviour
         // Event Inits
         EventManager.EventInitialise(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP);
         EventManager.EventInitialise(EventType.LEVEL_SPAWN);
-        EventManager.EventInitialise(EventType.PLAYER_TELEPORT);
+        EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
     }
 
     private void OnEnable()
@@ -84,7 +84,7 @@ public class LevelManager : MonoBehaviour
     // Coruoutine function to delay the teleporting of players to make space 
     private IEnumerator PuzzleTransition()
     {
-        EventManager.EventTrigger(EventType.PLAYER_TELEPORT, _spawnPoint.transform);
+        EventManager.EventTrigger(EventType.SOFTPUZZLE_PLAYER_TELEPORT, _spawnPoint.transform);
         yield return new WaitForSeconds(4);
         _softPuzzlesQueue.Peek().SetActive(false);
         _softPuzzlesQueue.Dequeue();

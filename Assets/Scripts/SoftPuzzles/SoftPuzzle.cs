@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,14 +7,21 @@ public class SoftPuzzle : MonoBehaviour
 {
     #region External Data
     [SerializeField] private List<GameObject> _rewardObjs;
+    [SerializeField] private GameObject _softPuzzleCams;
     #endregion
 
     #region Internal Data
     private List<ISoftPuzzleReward> _rewards = new List<ISoftPuzzleReward>();
+    private CinemachineClearShot _vCamClearShot;
     #endregion
 
     private void Awake()
     {
+        // Get Components
+        _vCamClearShot = _softPuzzleCams.GetComponent<CinemachineClearShot>();
+
+        // Event Inits
+        EventManager.EventInitialise(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP);
         // Make sure only 1 or 2 reward objects are assigned
         if (_rewardObjs.Count < 0 || _rewardObjs.Count > 2)
         {
@@ -32,6 +40,18 @@ public class SoftPuzzle : MonoBehaviour
 
             pickupObj.SetSoftPuzzle(this);
             _rewards.Add(pickupObj);
+        }
+    }
+
+    private void Start()
+    {
+        if (_softPuzzleCams != null)
+        {
+            EventManager.EventTrigger(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, null);
+        }
+        else
+        {
+            Debug.LogError("No Soft Puzzle Cameras have been set up!");
         }
     }
 

@@ -37,11 +37,10 @@ public enum EventType
 
     // Teleport
     TELEPORT_PLAYERS,
-    
 
     // Level
     LEVEL_SPAWN,
-    PLAYER_TELEPORT, // The one that creates the VFX effect
+    SOFTPUZZLE_PLAYER_TELEPORT, // The one that creates the VFX effect
     SOFTPUZZLE_COMPLETE,
 
     // Gravity 
