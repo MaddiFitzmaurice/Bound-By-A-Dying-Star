@@ -27,7 +27,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     // Rotation
     [Header("Rotation")]
-    [SerializeField] protected float RotationSpeed = 2f;
+    [SerializeField] protected float RotationSpeed = 100f;
 
     // Rift Data
     [Header("Rift Data")]
@@ -58,7 +58,9 @@ public abstract class PlayerBase : MonoBehaviour
     protected RiftData RiftData;
     protected Vector3 MoveInput;
     protected Vector3 PrevMoveInput;
+    protected InteractTypes MoveType;
     protected float PlayerZAngle;
+    protected bool FacingMoveDir = false;
 
     // Interactables
     List<Collider> _interactablesInRange;
@@ -135,70 +137,117 @@ public abstract class PlayerBase : MonoBehaviour
         float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, VelocityPower)
             * Mathf.Sign(velocityDif);
 
-        if (_controlType == ControlType.TANK)
-        {
-            _rb.AddForce(movementForce * transform.forward * MoveInput.z);
-        }
-        else if (_controlType == ControlType.WORLDSTRAFE)
-        {
-            _rb.AddForce(movementForce * MoveInput);
-        }
-        else if (_controlType == ControlType.FIXEDCAM || _controlType == ControlType.FIXEDCAM2)
+        // OLD MOVEMENT TESTING
+        //if (_controlType == ControlType.TANK)
+        //{
+        //    _rb.AddForce(movementForce * transform.forward * MoveInput.z);
+        //}
+        //else if (_controlType == ControlType.WORLDSTRAFE)
+        //{
+        //    _rb.AddForce(movementForce * MoveInput);
+        //}
+        //else if (_controlType == ControlType.FIXEDCAM || _controlType == ControlType.FIXEDCAM2)
+        //{
+        //    _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
+        //}
+
+        //if (MoveType == InteractTypes.HOLD || MoveType == InteractTypes.RELEASE_HOLD)
+        //{
+        if (FacingMoveDir)
         {
             _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
         }
+        //}
     }
 
     public void PlayerRotation()
     {
-        if (_controlType == ControlType.TANK)
+        // OLD ROTATION TEST
+        //if (_controlType == ControlType.TANK)
+        //{
+        //    Vector3 rotVector = new Vector3(0, MoveInput.x, PlayerZAngle);
+
+        //    Quaternion playerRotChange = Quaternion.Euler(rotVector * Time.deltaTime * RotationSpeed);
+
+        //    _rb.MoveRotation(_rb.rotation * playerRotChange);
+        //}
+        //else if (_controlType == ControlType.WORLDSTRAFE)
+        //{
+        //    if (MoveInput.magnitude != 0)
+        //    {
+        //        if (PlayerZAngle == 0)
+        //        {
+        //            _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.up));
+        //        }
+        //        else if (PlayerZAngle == -180)
+        //        {
+        //            _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.down));
+        //        }
+        //    }
+        //}
+        //else if (_controlType == ControlType.FIXEDCAM)
+        //{
+        //    if (MoveInput.magnitude != 0)
+        //    {
+        //        var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _camYAngle, 0));
+        //        var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
+
+        //        var relative = (transform.position + skewedInput) - transform.position;
+        //        var rot = Quaternion.LookRotation(relative, Vector3.up);
+
+        //        transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, RotationSpeed * Time.deltaTime);
+        //    }
+        //}
+        //else if (_controlType == ControlType.FIXEDCAM2)
+        //{
+        //    if (PrevMoveInput != MoveInput)
+        //    {
+        //        _prevCamYAngle = _camYAngle;
+        //    }
+
+        //    if (MoveInput.magnitude != 0)
+        //    {
+        //        var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCamYAngle, 0));
+        //        var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
+        //        if (PlayerZAngle == 0)
+        //        {
+        //            _rb.MoveRotation(Quaternion.LookRotation(skewedInput, Vector3.up));
+        //        }
+        //        else if (PlayerZAngle == -180)
+        //        {
+        //            _rb.MoveRotation(Quaternion.LookRotation(skewedInput, Vector3.down));
+        //        }
+        //    }
+        //}
+
+        if (PrevMoveInput != MoveInput)
         {
-            Vector3 rotVector = new Vector3(0, MoveInput.x, PlayerZAngle);
-
-            Quaternion playerRotChange = Quaternion.Euler(rotVector * Time.deltaTime * RotationSpeed);
-
-            _rb.MoveRotation(_rb.rotation * playerRotChange);
+            _prevCamYAngle = _camYAngle;
         }
-        else if (_controlType == ControlType.WORLDSTRAFE)
+
+        if (MoveInput.magnitude != 0)
         {
-            if (MoveInput.magnitude != 0)
+            var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCamYAngle, 0));
+            var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
+
+            if (Vector3.Dot(transform.forward, skewedInput) > 0.99f)
             {
+                FacingMoveDir = true;
+            }
+            else
+            {
+                FacingMoveDir = false;
+                Vector3 turnDir = Vector3.RotateTowards(transform.forward, skewedInput, RotationSpeed * Time.deltaTime, 1f);
+
+                // TODO: Check this when testing the gravity change
                 if (PlayerZAngle == 0)
                 {
-                    _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.up));
+                    transform.rotation = Quaternion.LookRotation(turnDir, Vector3.up);
                 }
-                else if (PlayerZAngle == -180)
+                else
                 {
-                    _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.down));
+                    _rb.MoveRotation(Quaternion.LookRotation(turnDir, Vector3.down));
                 }
-            }
-        }
-        else if (_controlType == ControlType.FIXEDCAM)
-        {
-            if (MoveInput.magnitude != 0)
-            {
-                var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _camYAngle, 0));
-                var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
-
-                var relative = (transform.position + skewedInput) - transform.position;
-                var rot = Quaternion.LookRotation(relative, Vector3.up);
-
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, RotationSpeed * Time.deltaTime);
-            }
-        }
-        else if (_controlType == ControlType.FIXEDCAM2)
-        {
-            if (PrevMoveInput != MoveInput)
-            {
-                _prevCamYAngle = _camYAngle;
-            }
-
-            if (MoveInput.magnitude != 0)
-            {
-                var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCamYAngle, 0));
-                var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
-
-                _rb.MoveRotation(Quaternion.LookRotation(skewedInput, Vector3.up));
             }
         }
     }

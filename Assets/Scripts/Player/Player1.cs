@@ -7,7 +7,7 @@ public class Player1 : PlayerBase
     protected override void OnEnable()
     {
         base.OnEnable();
-        EventManager.EventSubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
+        EventManager.EventSubscribe(EventType.PLAYER_1_MOVE, Player1MoveHandler);
         EventManager.EventSubscribe(EventType.PLAYER_1_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventSubscribe(EventType.PLAYER_1_INTERACT, Interact);
         EventManager.EventSubscribe(EventType.GRAVITY_INVERT, ModifyGravityAndFallingSpeed);
@@ -16,17 +16,17 @@ public class Player1 : PlayerBase
     protected override void OnDisable()
     {
         base.OnDisable();
-        EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
+        EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE, Player1MoveHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_1_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventUnsubscribe(EventType.PLAYER_1_INTERACT, Interact);
         EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, ModifyGravityAndFallingSpeed);
     }
 
-    private void Player1VectHandler(object data)
+    private void Player1MoveHandler(object data)
     {
-        if (data == null)
+        if (data is not Vector2)
         {
-            Debug.LogError("Player1VectHandler is null");
+            Debug.LogError("Player1 did not receive a Vector2!");
         }
 
         // Set move direction
@@ -44,7 +44,7 @@ public class Player1 : PlayerBase
     private IEnumerator RotateOverTime(Vector3 axis, float angle, float duration)
     {
         // Stop input from occuring to avoid the object going flying
-        EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
+        EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE, Player1MoveHandler);
 
         // In case the player is moving while picking up the object. Will bring the player to a stop
         MoveInput = Vector3.zero;
@@ -77,6 +77,6 @@ public class Player1 : PlayerBase
         yield return new WaitUntil(() => rb.velocity.magnitude < 0.05f);
 
         // Re-enable movement input
-        EventManager.EventSubscribe(EventType.PLAYER_1_MOVE_VECT, Player1VectHandler);
+        EventManager.EventSubscribe(EventType.PLAYER_1_MOVE, Player1MoveHandler);
     }
 }

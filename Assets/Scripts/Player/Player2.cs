@@ -7,7 +7,7 @@ public class Player2 : PlayerBase
     protected override void OnEnable()
     {
         base.OnEnable();
-        EventManager.EventSubscribe(EventType.PLAYER_2_MOVE_VECT, Player2VectHandler);
+        EventManager.EventSubscribe(EventType.PLAYER_2_MOVE, Player2MoveHandler);
         EventManager.EventSubscribe(EventType.PLAYER_2_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventSubscribe(EventType.PLAYER_2_INTERACT, Interact);
         EventManager.EventSubscribe(EventType.GRAVITY_INVERT, ModifyGravityAndFallingSpeed);
@@ -15,14 +15,14 @@ public class Player2 : PlayerBase
 
     protected override void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.PLAYER_2_MOVE_VECT, Player2VectHandler);
+        EventManager.EventUnsubscribe(EventType.PLAYER_2_MOVE, Player2MoveHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_INTERACT, Interact);
         EventManager.EventUnsubscribe(EventType.TEST_CONTROLS, TestControlHandler);
         EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, ModifyGravityAndFallingSpeed);
     }
 
-    private void Player2VectHandler(object data)
+    private void Player2MoveHandler(object data)
     {
         if (data == null)
         {
@@ -44,7 +44,7 @@ public class Player2 : PlayerBase
     private IEnumerator RotateOverTime(Vector3 axis, float angle, float duration)
     {
         // Stop input from occuring to avoid the object going flying
-        EventManager.EventUnsubscribe(EventType.PLAYER_2_MOVE_VECT, Player2VectHandler);
+        EventManager.EventUnsubscribe(EventType.PLAYER_2_MOVE, Player2MoveHandler);
 
         // In case the player is moving while picking up the object. Will bring the player to a stop
         MoveInput = Vector3.zero;
@@ -77,7 +77,7 @@ public class Player2 : PlayerBase
         yield return new WaitUntil(() => rb.velocity.magnitude < 0.05f);
 
         // Re-enable movement input
-        EventManager.EventSubscribe(EventType.PLAYER_2_MOVE_VECT, Player2VectHandler);
+        EventManager.EventSubscribe(EventType.PLAYER_2_MOVE, Player2MoveHandler);
     }
 
 }

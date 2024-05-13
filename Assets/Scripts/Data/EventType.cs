@@ -6,8 +6,8 @@ public enum EventType
     QUIT_GAME,  
 
     // Inputs
-    PLAYER_1_MOVE_VECT,
-    PLAYER_2_MOVE_VECT,
+    PLAYER_1_MOVE,
+    PLAYER_2_MOVE,
 
     PLAYER_1_INTERACT,
     PLAYER_1_HOLDINTERACT,

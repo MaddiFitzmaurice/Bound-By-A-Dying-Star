@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     private InputUser _player1;
     private InputUser _player2;
 
+    // Hold flags
     private bool _holdInteractP1 = false;
     private bool _holdInteractP2 = false;
 
@@ -36,8 +37,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player1Inputs.Gameplay.SetCallbacks(this);
         _player2Inputs.Gameplay.SetCallbacks(this);
 
-        EventManager.EventInitialise(EventType.PLAYER_1_MOVE_VECT);
-        EventManager.EventInitialise(EventType.PLAYER_2_MOVE_VECT);
+        EventManager.EventInitialise(EventType.PLAYER_1_MOVE);
+        EventManager.EventInitialise(EventType.PLAYER_2_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_1_RIFT);
@@ -145,16 +146,16 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     // Player 1 movement
     public void OnPlayer1Move(InputAction.CallbackContext context)
     {
-        EventManager.EventTrigger(EventType.PLAYER_1_MOVE_VECT, context.ReadValue<Vector2>());
+        EventManager.EventTrigger(EventType.PLAYER_1_MOVE, context.ReadValue<Vector2>());
     }
 
     // Player 2 movement
     public void OnPlayer2Move(InputAction.CallbackContext context)
     {
-        EventManager.EventTrigger(EventType.PLAYER_2_MOVE_VECT, context.ReadValue<Vector2>());
+        EventManager.EventTrigger(EventType.PLAYER_2_MOVE, context.ReadValue<Vector2>());
     }
-
-    // For testing, if Player 1 uses the interact E key
+    
+    // Player 1 interact
     public void OnPlayer1Interact(InputAction.CallbackContext context)
     {
         // Hold performed
@@ -179,7 +180,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         }
     }
 
-    // For testing, if Player 2 uses the interract numpad 0 key
+    // Player 2 interact
     public void OnPlayer2Interact(InputAction.CallbackContext context)
     {
         // Hold performed
