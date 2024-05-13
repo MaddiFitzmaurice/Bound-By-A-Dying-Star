@@ -57,6 +57,7 @@ public abstract class PlayerBase : MonoBehaviour
     // Data
     protected RiftData RiftData;
     protected Vector3 MoveInput;
+    protected Vector3 PrevMoveInput;
     protected float PlayerZAngle;
 
     // Interactables
@@ -67,6 +68,7 @@ public abstract class PlayerBase : MonoBehaviour
     // TEST
     private ControlType _controlType = ControlType.FIXEDCAM2;
     private float _camYAngle;
+    private float _prevCamYAngle;
     #endregion
 
     void Awake()
@@ -186,9 +188,14 @@ public abstract class PlayerBase : MonoBehaviour
         }
         else if (_controlType == ControlType.FIXEDCAM2)
         {
+            if (PrevMoveInput != MoveInput)
+            {
+                _prevCamYAngle = _camYAngle;
+            }
+
             if (MoveInput.magnitude != 0)
             {
-                var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _camYAngle, 0));
+                var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCamYAngle, 0));
                 var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
 
                 _rb.MoveRotation(Quaternion.LookRotation(skewedInput, Vector3.up));
@@ -393,6 +400,8 @@ public abstract class PlayerBase : MonoBehaviour
             Debug.LogError("PlayerBase has not received a float!");
         }
 
+        PrevMoveInput = MoveInput; // Record previous Move Input so it can continue until player input changes
+        _prevCamYAngle = _camYAngle; // Record previous CamY so it can continue until player input changes
         _camYAngle = (float)data;
     }
     #endregion
