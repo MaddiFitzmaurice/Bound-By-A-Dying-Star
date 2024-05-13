@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Rift : MonoBehaviour, IInteractable
 {
+    #region EXTERNAL DATA
+    public bool InteractLocked { get; set; } = false;
+    #endregion
     #region INTERNAL DATA
     // Target Rift
     private Transform _targetRift; // Link to other Rift if it exists

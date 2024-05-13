@@ -8,14 +8,15 @@ public class PedestalConstController : MonoBehaviour
 {
     //List of pedestals in constellation
     [SerializeField] private List<ConstPedestal> _pedestalList;
-
     [SerializeField] private List<PedestalData> _pedestaData = new List<PedestalData>();
     private int _pedestalNum;
+
     // Awake is called before the first frame update
     void Awake()
     {
         _pedestalNum = _pedestalList.Count;
         EventManager.EventInitialise(EventType.LVL1_STAR_ACTIVATE);
+        EventManager.EventInitialise(EventType.LVL1_DOOR_FINALPUZZLE);
     }
 
     void Start()
@@ -147,12 +148,12 @@ public class PedestalConstController : MonoBehaviour
         if (done)
         {
             Debug.Log("Constellation Complete!");
-            EventManager.EventTrigger(EventType.PUZZLE_DONE, 1);
+            EventManager.EventTrigger(EventType.LVL1_DOOR_FINALPUZZLE, null);
         }
     }
 }
 
-// Data class for indivigual pedestals
+// Data class for individual pedestals
 [Serializable]
 public class PedestalData
 {

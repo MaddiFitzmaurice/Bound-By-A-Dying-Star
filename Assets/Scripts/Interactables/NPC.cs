@@ -5,10 +5,14 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour, IInteractable
 {
+    #region EXTERNAL DATA
+    public bool InteractLocked { get; set; } = false;
     [SerializeField] TextAsset _dialogue;
-
     [SerializeField] Material _highlightMat;
+    #endregion
 
+    #region INTERNAL DATA
+    #endregion
     // Components
     private Renderer _renderer;
 

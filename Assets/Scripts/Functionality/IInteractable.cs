@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IInteractable
 {
+    public bool InteractLocked { get; set; }
     public void PlayerInRange(PlayerBase player);
     public void PlayerNotInRange(PlayerBase player);
 

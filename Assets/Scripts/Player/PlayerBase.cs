@@ -302,21 +302,25 @@ public abstract class PlayerBase : MonoBehaviour
             if (interactable != null)
             {
                 // If closest interactable hasn't been assigned yet, assign first one in found collider list
-                // Make sure carried item is not included again as a closest interactable
-                if (_closestInteractable == null && collider.transform.parent.gameObject != CarriedPickupable)
+                // Make sure locked interactable is not included as closest interactable
+                if (!interactable.InteractLocked)
                 {
-                    _closestInteractable = collider;
-                }
-                else 
-                {
-                    if (collider.transform.parent.gameObject != CarriedPickupable)
+                    // Make sure picked up interactable is not included again as a closest interactable
+                    if (_closestInteractable == null && collider.transform.parent.gameObject != CarriedPickupable)
                     {
-                        if (Vector3.Distance(collider.transform.position, transform.position) < 
-                            Vector3.Distance(_closestInteractable.transform.position, transform.position))
+                        _closestInteractable = collider;
+                    }
+                    else
+                    {
+                        if (collider.transform.parent.gameObject != CarriedPickupable)
                         {
-                            // Dehighlight previous closest interactable then assign new closest one
-                            _closestInteractable.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
-                            _closestInteractable = collider;
+                            if (Vector3.Distance(collider.transform.position, transform.position) <
+                                Vector3.Distance(_closestInteractable.transform.position, transform.position))
+                            {
+                                // Unhighlight previous closest interactable then assign new closest one
+                                _closestInteractable.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
+                                _closestInteractable = collider;
+                            }
                         }
                     }
                 }

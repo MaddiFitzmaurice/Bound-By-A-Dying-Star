@@ -10,6 +10,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
 {
     private int _id = 0;
     #region EXTERNAL DATA
+    public bool InteractLocked { get; set; } = false;
     [SerializeField] private List<GameObject> _validInteractables;
     [SerializeField] private GameObject _presetPlacedObject = null;    
     [SerializeField] private float _raiseMirrorHeight = 2.5f;
@@ -103,7 +104,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 pos = new Vector3(pos.x, _beamSource.position.y, pos.z);
                 meanVector += pos;
                 
-                // Set beam length to be distance between ource and destination
+                // Set beam length to be distance between source and destination
                 _beamMaxLength[i] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[i].transform.position), Vector3.zero);
             }
 
@@ -147,12 +148,24 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         _id = id;
     }
 
+    private void LockPlacedMirror(GameObject mirror)
+    {
+        IInteractable interactable = mirror.GetComponent<IInteractable>();
+        if (interactable != null)
+        {
+            interactable.InteractLocked = true;
+        }
+    }
+
     private void PlacePresetObject()
     {
         if (_validInteractables.Contains(_presetPlacedObject))
         {
             // Change the disk's color to green
             _diskRenderer.material.color = Color.green;
+
+            // Lock Interaction
+            LockPlacedMirror(_presetPlacedObject);
 
             // IPickupable manipulation
             IPickupable pickupableType = _presetPlacedObject.GetComponent<IPickupable>();
@@ -197,8 +210,9 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                     // Change the disk's color to green
                     _diskRenderer.material.color = Color.green;
 
-                    // IPickupable manipulation
+                    // IPickupable and IInteractable manipulation
                     GameObject carriedPickupable = player.CarriedPickupable;
+                    LockPlacedMirror(carriedPickupable);
                     IPickupable pickupableType = carriedPickupable.GetComponent<IPickupable>();
                     pickupableType.PickupLocked(true);
                     pickupableType.BeDropped(transform);

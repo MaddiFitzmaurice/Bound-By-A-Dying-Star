@@ -52,17 +52,17 @@ public class PuzzleController : MonoBehaviour
 
     private void Awake()
     {
-        EventManager.EventInitialise(EventType.PUZZLE_DONE);
+        //EventManager.EventInitialise(EventType.PUZZLE_DONE);
     }
 
-        private void OnEnable()
+    private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.PUZZLE_DONE, PuzzleDoneHandler);
+        //EventManager.EventSubscribe(EventType.PUZZLE_DONE, PuzzleDoneHandler);
     }
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.PUZZLE_DONE, PuzzleDoneHandler);
+        //EventManager.EventUnsubscribe(EventType.PUZZLE_DONE, PuzzleDoneHandler);
     }
 
     void Start()

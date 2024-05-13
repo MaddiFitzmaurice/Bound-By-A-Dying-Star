@@ -7,10 +7,12 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Item : MonoBehaviour, IInteractable, IPickupable
 {
+    #region EXTERNAL DATA
+    public bool InteractLocked { get; set; } = false;
+    #endregion
     #region INTERNAL DATA
     // Item Grouper
     private Transform _itemGrouper; // Makes sure that items stay in level scene
-
 
     // Item Version Data
     private List<GameObject> _itemVersions = new List<GameObject>();
