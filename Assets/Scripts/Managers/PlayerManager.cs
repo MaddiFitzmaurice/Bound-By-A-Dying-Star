@@ -30,13 +30,12 @@ public class PlayerManager : MonoBehaviour
         _player2 = _playerGrouper.GetComponentInChildren<Player2>();
 
         // Event Inits
-        EventManager.EventInitialise(EventType.LEVEL_CAMS_SEND_FOLLOWGROUP);
+        EventManager.EventInitialise(EventType.CLEARSHOT_CAMS_SEND_FOLLOWGROUP);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
     }
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, SendFollowGroup);
         EventManager.EventSubscribe(EventType.TELEPORT_PLAYERS, TeleportPlayers);
         EventManager.EventSubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
         EventManager.EventSubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
@@ -44,10 +43,26 @@ public class PlayerManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, SendFollowGroup);
         EventManager.EventUnsubscribe(EventType.TELEPORT_PLAYERS, TeleportPlayers);
         EventManager.EventUnsubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
         EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
+    }
+
+    private void Start()
+    {
+        SendFollowGroup();
+    }
+
+    public void SendFollowGroup()
+    {
+        if (_targetGroup != null)
+        {
+            EventManager.EventTrigger(EventType.CLEARSHOT_CAMS_SEND_FOLLOWGROUP, _targetGroup);
+        }
+        else
+        {
+            Debug.LogError("No Cinemachine Target Group assigned!");
+        }
     }
 
     private IEnumerator PlayerTeleport(Transform spawnPoint)
@@ -75,19 +90,6 @@ public class PlayerManager : MonoBehaviour
     }
 
     #region EVENT HANDLERS
-    // Send LevelManager the VCamFollowGroup
-    public void SendFollowGroup(object data)
-    {
-        if (_targetGroup != null)
-        {
-            EventManager.EventTrigger(EventType.LEVEL_CAMS_SEND_FOLLOWGROUP, _targetGroup);
-        }
-        else 
-        {
-            Debug.LogError("No Cinemachine Target Group assigned!");
-        }
-    }
-
     // Have players spawn at a desired location in a specific level
     public void SpawnInLevel(object data)
     {
@@ -141,6 +143,5 @@ public class PlayerManager : MonoBehaviour
             _player2.transform.localPosition = new Vector3(-2, 1, 0);
         }
     }
-
     #endregion
 }

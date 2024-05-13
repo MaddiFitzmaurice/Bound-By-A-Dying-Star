@@ -94,13 +94,13 @@ public abstract class PlayerBase : MonoBehaviour
     protected virtual void OnEnable()
     {
         EventManager.EventSubscribe(EventType.TEST_CONTROLS, TestControlHandler);
-        EventManager.EventSubscribe(EventType.LEVEL_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventSubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
     }
 
     protected virtual void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.TEST_CONTROLS, TestControlHandler);
-        EventManager.EventUnsubscribe(EventType.LEVEL_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventUnsubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
     }
 
     private void Update()

@@ -2,55 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class LevelManager : MonoBehaviour
 {
-    #region EXTERNAL DATA
-    [SerializeField] private GameObject _levelCams;
-    [SerializeField] private GameObject _rewardGrouper;
+    #region EXTERNAL DATA 
+    [Header("Level Cam Parent")]
+    [SerializeField] private GameObject _levelCamParent;
+    [Header("Spawn Data")]
     [SerializeField] private GameObject _spawnPoint; // Where players initially start, and where they get TP'd to after solving a soft puzzle
+    [Header("Soft Puzzle Data")]
+    [SerializeField] private GameObject _rewardGrouper;
     [SerializeField] private List<GameObject> _softPuzzles;
     #endregion
 
     #region INTERNAL DATA
-    private CinemachineClearShot _vCamClearShot;
     private Queue<GameObject> _softPuzzlesQueue;
     #endregion
 
     private void Awake()
     {
-        // Get Components
-        _vCamClearShot = _levelCams.GetComponent<CinemachineClearShot>();
-
         // Event Inits
-        EventManager.EventInitialise(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP);
         EventManager.EventInitialise(EventType.LEVEL_SPAWN);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
+
+        // Data Checks
+        if (_levelCamParent == null)
+        {
+            Debug.LogError("Please assign a level cam parent!");
+        }
     }
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.LEVEL_CAMS_SEND_FOLLOWGROUP, ReceiveFollowGroup);
         EventManager.EventSubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
     }
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.LEVEL_CAMS_SEND_FOLLOWGROUP, ReceiveFollowGroup);
         EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
+        EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, _levelCamParent);
     }
 
     private void Start()
     {
-        if (_levelCams != null)
-        {
-            EventManager.EventTrigger(EventType.LEVEL_CAMS_REQUEST_FOLLOWGROUP, null);
-        }
-        else
-        {
-            Debug.LogError("No Level Cameras have been set up!");
-        }
-
         if (_spawnPoint != null)
         {
             Spawn();
@@ -59,6 +54,9 @@ public class LevelManager : MonoBehaviour
         {
             Debug.LogError("Please use SpawnPoint object to assign players' initial spawn in level.");
         }
+
+        // Send Level Cams
+        EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, _levelCamParent);
 
         // Set reward grouper parent and disable all soft puzzles
         foreach (GameObject softPuzzle in _softPuzzles)
@@ -71,9 +69,23 @@ public class LevelManager : MonoBehaviour
             softPuzzle.SetActive(false);
         }
 
-        // Convert soft puzzle list to a queue and reenable first soft puzzle
+        // Convert soft puzzle list to a queue
         _softPuzzlesQueue = new Queue<GameObject>(_softPuzzles);
-        _softPuzzlesQueue.Peek().SetActive(true);
+
+        // Enable first soft puzzle and send its cams
+        ActivateSoftPuzzle(_softPuzzlesQueue.Peek());
+    }
+
+    private void ActivateSoftPuzzle(GameObject softPuzzleToActivate)
+    {
+        EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, softPuzzleToActivate.GetComponent<SoftPuzzle>().SendReceiveCams());
+        softPuzzleToActivate.SetActive(true);
+    }
+
+    private void DeactivateSoftPuzzle(GameObject softPuzzleToDeactivate)
+    {
+        EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, softPuzzleToDeactivate.GetComponent<SoftPuzzle>().SendReceiveCams());
+        softPuzzleToDeactivate.SetActive(false);
     }
 
     private void Spawn()
@@ -86,10 +98,9 @@ public class LevelManager : MonoBehaviour
     {
         EventManager.EventTrigger(EventType.SOFTPUZZLE_PLAYER_TELEPORT, _spawnPoint.transform);
         yield return new WaitForSeconds(4);
-        _softPuzzlesQueue.Peek().SetActive(false);
+        DeactivateSoftPuzzle(_softPuzzlesQueue.Peek());
         _softPuzzlesQueue.Dequeue();
-        _softPuzzlesQueue.Peek().SetActive(true);
-        // EventManager.EventTrigger(EventType.PLAYER_TELEPORT, _spawnPoint.transform);
+        ActivateSoftPuzzle(_softPuzzlesQueue.Peek());
         yield return new WaitForSeconds(4);
     }
 
@@ -99,17 +110,6 @@ public class LevelManager : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(PuzzleTransition());
-    }
-
-    public void ReceiveFollowGroup(object data)
-    {
-        if (data is not CinemachineTargetGroup)
-        {
-            Debug.LogError("LevelManager has not received a CinemachineTargetGroup!");
-        }
-
-        CinemachineTargetGroup target = (CinemachineTargetGroup)data;
-        _vCamClearShot.LookAt = target.transform;
     }
     #endregion
 }
