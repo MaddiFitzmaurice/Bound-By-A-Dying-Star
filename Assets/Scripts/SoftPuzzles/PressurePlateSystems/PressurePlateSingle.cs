@@ -6,6 +6,8 @@ public class PressurePlateSingle : MonoBehaviour, IPressurePlateBase
 {
     #region External Data
     public bool Activated { get; set; }
+    [SerializeField] private ParticleSystem _pressurePlatePS; 
+
     #endregion
 
     #region InternalData
@@ -25,6 +27,7 @@ public class PressurePlateSingle : MonoBehaviour, IPressurePlateBase
         {
             Activated = true;
             _ppSystem.PlateActivated(this, Activated);
+            _pressurePlatePS.Play();
         }
     }
 
@@ -34,6 +37,7 @@ public class PressurePlateSingle : MonoBehaviour, IPressurePlateBase
         {
             Activated = false;
             _ppSystem.PlateActivated(this, Activated);
+            _pressurePlatePS.Stop(); //Warning! May cause issue if two players are on pressure plate and one walks off
         }
     }
 
