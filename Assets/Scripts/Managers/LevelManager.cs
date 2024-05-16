@@ -97,11 +97,10 @@ public class LevelManager : MonoBehaviour
     private IEnumerator PuzzleTransition()
     {
         EventManager.EventTrigger(EventType.SOFTPUZZLE_PLAYER_TELEPORT, _spawnPoint.transform);
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(3.5f);
         DeactivateSoftPuzzle(_softPuzzlesQueue.Peek());
         _softPuzzlesQueue.Dequeue();
         ActivateSoftPuzzle(_softPuzzlesQueue.Peek());
-        yield return new WaitForSeconds(4);
     }
 
     #region EVENT HANDLERS

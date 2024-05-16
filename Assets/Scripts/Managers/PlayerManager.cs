@@ -74,19 +74,18 @@ public class PlayerManager : MonoBehaviour
         _player2.PlayFlashEffect();
         _player1.ToggleVisibility(false);
         _player2.ToggleVisibility(false);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
         _playerGrouper.transform.position = spawnPoint.position;
         _playerGrouper.transform.rotation = spawnPoint.rotation;
         _player1.transform.localPosition = new Vector3(-2, 2, 0);
         _player2.transform.localPosition = new Vector3(2, 2, 0);
         _player1.PlayTeleportEffect(false);
         _player2.PlayTeleportEffect(false);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         _player1.PlayFlashEffect();
         _player2.PlayFlashEffect();
         _player1.ToggleVisibility(true);
         _player2.ToggleVisibility(true);
-        yield return new WaitForSeconds(2);
     }
 
     #region EVENT HANDLERS
