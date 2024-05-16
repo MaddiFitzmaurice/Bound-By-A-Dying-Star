@@ -18,7 +18,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     // Input Action Assets
     private Player1InputActions _player1Inputs;
     private Player2InputActions _player2Inputs;
-    
+
     // Input Users
     private InputUser _player1;
     private InputUser _player2;
@@ -50,20 +50,25 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     void OnEnable()
     {
         //_inputs.Gameplay.Enable();
-
+        EnablePlayerInput(null);
         // Subscription to listen for device changes
         InputSystem.onDeviceChange += DeviceChangeHandler;
+
+        // Event Subscriptions
+        EventManager.EventSubscribe(EventType.CINEMATIC_START, DisablePlayerInput);
+        EventManager.EventSubscribe(EventType.CINEMATIC_FINISH, EnablePlayerInput);
     }
 
     void OnDisable()
     {
-        //_inputs.Gameplay.Disable();
+        DisablePlayerInput(null);
 
-        _player1Inputs.Disable();
-        _player2Inputs.Disable();
-   
         // Unsubscribing from listening to device changes
         InputSystem.onDeviceChange -= DeviceChangeHandler;
+
+        // Event Unsubscriptions
+        EventManager.EventUnsubscribe(EventType.CINEMATIC_START, DisablePlayerInput);
+        EventManager.EventUnsubscribe(EventType.CINEMATIC_FINISH, EnablePlayerInput);
     }
 
     #region DEVICE FUNCTIONS
@@ -75,12 +80,11 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player1.AssociateActionsWithUser(_player1Inputs);
         _player2.AssociateActionsWithUser(_player2Inputs);
 
-//#if UNITY_EDITOR
+        //#if UNITY_EDITOR
         InputUser.PerformPairingWithDevice(Keyboard.current, _player1);
         InputUser.PerformPairingWithDevice(Keyboard.current, _player2);
-        _player1Inputs.Enable();
-        _player2Inputs.Enable();
-//#endif
+        EnablePlayerInput(null);
+        //#endif
 
         // At least find one gamepad device to pair with player 1
         if (Gamepad.current != null)
@@ -88,7 +92,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
             InputUser.PerformPairingWithDevice(Gamepad.current, _player1);
             _player1Inputs.Enable();
         }
-        else 
+        else
         {
             Debug.Log("Please connect a gamepad to the game!");
         }
@@ -125,7 +129,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
                 {
                     _player1Inputs.Disable();
                 }
-                 // Else if device has been disconnected from player 2
+                // Else if device has been disconnected from player 2
                 if (_player1.pairedDevices.ToList().Contains(device))
                 {
                     _player2Inputs.Disable();
@@ -140,7 +144,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
                 break;
         }
     }
-#endregion
+    #endregion
 
     #region ACTIONMAP INTERFACES
     // Player 1 movement
@@ -154,28 +158,25 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     {
         EventManager.EventTrigger(EventType.PLAYER_2_MOVE, context.ReadValue<Vector2>());
     }
-    
+
     // Player 1 interact
     public void OnPlayer1Interact(InputAction.CallbackContext context)
     {
         // Hold performed
         if (context.performed && context.interaction is HoldInteraction)
         {
-            Debug.Log("Hold!");
             _holdInteractP1 = true;
             EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, InteractTypes.HOLD);
         }
         // Press performed
         else if (context.started && context.interaction is PressInteraction)
         {
-            Debug.Log("Press!");
             EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, InteractTypes.PRESS);
         }
         // Hold released
         else if (context.canceled && _holdInteractP1)
         {
             _holdInteractP1 = false;
-            Debug.Log("Hold Release!");
             EventManager.EventTrigger(EventType.PLAYER_1_INTERACT, InteractTypes.RELEASE_HOLD);
         }
     }
@@ -186,21 +187,18 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         // Hold performed
         if (context.performed && context.interaction is HoldInteraction)
         {
-            Debug.Log("Hold!");
             _holdInteractP2 = true;
             EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, InteractTypes.HOLD);
         }
         // Press performed
         else if (context.started && context.interaction is PressInteraction)
         {
-            Debug.Log("Press!");
             EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, InteractTypes.PRESS);
         }
         // Hold released
         else if (context.canceled && _holdInteractP1)
         {
             _holdInteractP2 = false;
-            Debug.Log("Hold Release!");
             EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, InteractTypes.RELEASE_HOLD);
         }
     }
@@ -220,5 +218,19 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
             EventManager.EventTrigger(EventType.PLAYER_2_RIFT, "Player 2");
         }
     }
+    #endregion
+
+    #region EVENT HANDLERS
+    public void EnablePlayerInput(object data)
+    {
+        _player1Inputs.Enable();
+        _player2Inputs.Enable();
+    }
+
+    public void DisablePlayerInput(object data)
+    {
+        _player1Inputs.Disable();
+        _player2Inputs.Disable();
+    }
+    #endregion
 }
-#endregion

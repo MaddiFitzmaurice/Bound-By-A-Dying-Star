@@ -22,7 +22,6 @@ public enum EventType
 
     // Level 1
     LVL1_STAR_ACTIVATE,         // used to get the pedestals to make their associated stars also shoot their beams
-    LVL1_DOOR_FINALPUZZLE,      // To remove door from final puzzle to get to end of level
 
     // Narrative
     NPC_SEND_DIALOGUE,
@@ -40,6 +39,10 @@ public enum EventType
 
     // Teleport
     TELEPORT_PLAYERS,
+
+    // Cinematics
+    CINEMATIC_START,
+    CINEMATIC_FINISH,
 
     // Level
     LEVEL_SPAWN,

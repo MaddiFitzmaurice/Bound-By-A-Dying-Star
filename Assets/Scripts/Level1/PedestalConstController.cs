@@ -3,20 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class PedestalConstController : MonoBehaviour
 {
+    #region EXTERNAL DATA
     //List of pedestals in constellation
+    [Header("Pedestal Data")]
     [SerializeField] private List<ConstPedestal> _pedestalList;
     [SerializeField] private List<PedestalData> _pedestaData = new List<PedestalData>();
-    private int _pedestalNum;
+    [Header("Cinematics")]
+    [SerializeField] PlayableAsset _cutsceneDoor;
+    #endregion
 
-    // Awake is called before the first frame update
+    #region INTERNAL DATA
+    private int _pedestalNum;
+    #endregion
+
     void Awake()
     {
         _pedestalNum = _pedestalList.Count;
         EventManager.EventInitialise(EventType.LVL1_STAR_ACTIVATE);
-        EventManager.EventInitialise(EventType.LVL1_DOOR_FINALPUZZLE);
     }
 
     void Start()
@@ -148,7 +155,7 @@ public class PedestalConstController : MonoBehaviour
         if (done)
         {
             Debug.Log("Constellation Complete!");
-            EventManager.EventTrigger(EventType.LVL1_DOOR_FINALPUZZLE, null);
+            EventManager.EventTrigger(EventType.CINEMATIC_START, _cutsceneDoor);
         }
     }
 }
