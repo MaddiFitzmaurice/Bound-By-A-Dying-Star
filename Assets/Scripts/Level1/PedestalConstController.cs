@@ -155,7 +155,7 @@ public class PedestalConstController : MonoBehaviour
         if (done)
         {
             Debug.Log("Constellation Complete!");
-            EventManager.EventTrigger(EventType.CINEMATIC_START, _cutsceneDoor);
+            EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _cutsceneDoor);
         }
     }
 }

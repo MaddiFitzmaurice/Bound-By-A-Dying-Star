@@ -52,7 +52,7 @@ public abstract class PlayerBase : MonoBehaviour
     #region INTERNAL DATA
     // Components
     private Rigidbody _rb;
-    private MeshRenderer _meshRenderer;
+    private SkinnedMeshRenderer _meshRenderer;
 
     // Data
     protected RiftData RiftData;
@@ -77,7 +77,7 @@ public abstract class PlayerBase : MonoBehaviour
     {
         // Set components
         _rb = GetComponent<Rigidbody>();
-        _meshRenderer = GetComponent<MeshRenderer>();
+        _meshRenderer = GetComponent<SkinnedMeshRenderer>();
 
         // Set data
         RiftData = new RiftData(transform.position, transform.rotation, tag);

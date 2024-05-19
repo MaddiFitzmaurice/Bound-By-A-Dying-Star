@@ -14,25 +14,24 @@ public class CinematicsManager : MonoBehaviour
         _director = GetComponent<PlayableDirector>();
 
         // Init Events
-        EventManager.EventInitialise(EventType.CINEMATIC_FINISH);
-        EventManager.EventInitialise(EventType.CINEMATIC_START);
+        EventManager.EventInitialise(EventType.PLAY_CINEMATIC);
     }
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.CINEMATIC_START, PlayCinematicHandler);
+        EventManager.EventSubscribe(EventType.PLAY_CINEMATIC, PlayCinematicHandler);
         _director.stopped += CinematicFinished;
     }
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.CINEMATIC_START, PlayCinematicHandler);
+        EventManager.EventUnsubscribe(EventType.PLAY_CINEMATIC, PlayCinematicHandler);
         _director.stopped -= CinematicFinished;
     }
 
     public void CinematicFinished(PlayableDirector director)
     {
-        EventManager.EventTrigger(EventType.CINEMATIC_FINISH, null);
+        EventManager.EventTrigger(EventType.ENABLE_INPUTS, null);
     }
 
     #region EVENT HANDLERS
@@ -44,6 +43,7 @@ public class CinematicsManager : MonoBehaviour
         }
 
         PlayableAsset cinematic = (PlayableAsset)data;
+        EventManager.EventTrigger(EventType.DISABLE_INPUTS, null);
         _director.Play(cinematic); 
     }
     #endregion

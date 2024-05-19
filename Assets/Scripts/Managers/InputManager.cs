@@ -37,6 +37,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player1Inputs.Gameplay.SetCallbacks(this);
         _player2Inputs.Gameplay.SetCallbacks(this);
 
+        EventManager.EventInitialise(EventType.ENABLE_INPUTS);
+        EventManager.EventInitialise(EventType.DISABLE_INPUTS);
         EventManager.EventInitialise(EventType.PLAYER_1_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_2_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
@@ -55,8 +57,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         InputSystem.onDeviceChange += DeviceChangeHandler;
 
         // Event Subscriptions
-        EventManager.EventSubscribe(EventType.CINEMATIC_START, DisablePlayerInput);
-        EventManager.EventSubscribe(EventType.CINEMATIC_FINISH, EnablePlayerInput);
+        EventManager.EventSubscribe(EventType.DISABLE_INPUTS, DisablePlayerInput);
+        EventManager.EventSubscribe(EventType.ENABLE_INPUTS, EnablePlayerInput);
     }
 
     void OnDisable()
@@ -67,8 +69,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         InputSystem.onDeviceChange -= DeviceChangeHandler;
 
         // Event Unsubscriptions
-        EventManager.EventUnsubscribe(EventType.CINEMATIC_START, DisablePlayerInput);
-        EventManager.EventUnsubscribe(EventType.CINEMATIC_FINISH, EnablePlayerInput);
+        EventManager.EventUnsubscribe(EventType.DISABLE_INPUTS, DisablePlayerInput);
+        EventManager.EventUnsubscribe(EventType.ENABLE_INPUTS, EnablePlayerInput);
     }
 
     #region DEVICE FUNCTIONS

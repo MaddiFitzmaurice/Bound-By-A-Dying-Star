@@ -6,6 +6,9 @@ public enum EventType
     QUIT_GAME,  
 
     // Inputs
+    ENABLE_INPUTS,
+    DISABLE_INPUTS,
+
     PLAYER_1_MOVE,
     PLAYER_2_MOVE,
 
@@ -41,8 +44,7 @@ public enum EventType
     TELEPORT_PLAYERS,
 
     // Cinematics
-    CINEMATIC_START,
-    CINEMATIC_FINISH,
+    PLAY_CINEMATIC,
 
     // Level
     LEVEL_SPAWN,
