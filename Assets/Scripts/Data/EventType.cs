@@ -1,7 +1,8 @@
 // Enum with all the events in the game
 public enum EventType
 {
-    // SceneManagement                       
+    // Scene Management                       
+    PLAY_GAME,
     FADING, 
     QUIT_GAME,  
 

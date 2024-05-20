@@ -45,8 +45,6 @@ public abstract class PlayerBase : MonoBehaviour
     [field:SerializeField] protected VisualEffect _teleportOutEffect;
     [field:SerializeField] protected VisualEffect _flashEffect;
     [field:SerializeField] protected ParticleSystem _flameHeadPS;
-
-
     #endregion
 
     #region INTERNAL DATA

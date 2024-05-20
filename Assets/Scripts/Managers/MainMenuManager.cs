@@ -8,7 +8,11 @@ using System.Linq;
 public class MainMenuUIManager : MonoBehaviour
 {
     private bool _buttonPressed = false; // Stops multiple clicking of same button
-
+    
+    public void Start()
+    {
+        _buttonPressed = false;
+    }
 
     // Starts event sequence which exits the game
     public void QuitButton()
@@ -17,12 +21,12 @@ public class MainMenuUIManager : MonoBehaviour
     }
 
     // Starts the event sequence which opens the game scene
-    //public void StartGameButton(int levelNum)
-    //{
-    //    if (!_buttonPressed)
-    //    {
-    //        EventManager.EventTrigger(EventType.LEVEL_SELECTED, levelNum);
-    //        _buttonPressed = true;
-    //    }
-    //}
+    public void PlayButton(int levelNum)
+    {
+        if (!_buttonPressed)
+        {
+            EventManager.EventTrigger(EventType.PLAY_GAME, levelNum);
+            _buttonPressed = true;
+        }
+    }
 }

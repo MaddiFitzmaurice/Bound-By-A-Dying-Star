@@ -9,12 +9,17 @@ using UnityEditor;
 public class SceneSystemManager : MonoBehaviour
 {
     // Scene Fader
+    #region EXTERNAL DATA
     [SerializeField] private Fader _fader;
+    #endregion
 
+    #region INTERNAL DATA
     // Scene Tracking
-    Scene _currentLevel;
-    int _numOfScenes; // Number of total scenes in the game
-    int _mainMenuIndex;
+    private Scene _currentLevel;
+    private int _numOfScenes; // Number of total scenes in the game
+    private int _mainMenuIndex;
+    private int _gameplayIndex;
+    #endregion
 
     private void Awake()
     {
@@ -23,48 +28,120 @@ public class SceneSystemManager : MonoBehaviour
 
         // Get total number of scenes in game and indexes for main menu and gameplay scenes
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
-        _mainMenuIndex = 1;
+        _mainMenuIndex = GetBuildIndex("MainMenu");
+        _gameplayIndex = GetBuildIndex("Gameplay");
 
+        // Init Events
         EventManager.EventInitialise(EventType.FADING);
     }
 
     private void OnEnable()
     {
+        EventManager.EventSubscribe(EventType.PLAY_GAME, PlayGameHandler);
         EventManager.EventSubscribe(EventType.QUIT_GAME, QuitGameHandler);
     }
 
     private void OnDisable()
     {
+        EventManager.EventUnsubscribe(EventType.PLAY_GAME, PlayGameHandler);
         EventManager.EventUnsubscribe(EventType.QUIT_GAME, QuitGameHandler);
     }
 
     // After Services Scene is loaded in, additively load in the MainMenu scene
     private void Start()
     {
-        // If unity is in the editor, load current scene, otherwise load main menu scene
-        #if UNITY_EDITOR
-            int count = SceneManager.loadedSceneCount;
-
-            //StartCoroutine(MenuToLevel(2));
-
-
+        // If build is running, load in the main menu
+        #if !UNITY_EDITOR
+            StartCoroutine(LoadScene(_mainMenuIndex));
+            StartCoroutine(_fader.NormalFadeIn());
         #else
-            StartCoroutine(MenuToLevel(2));
+
         #endif
     }
 
-    IEnumerator MenuToLevel(int levelSelected)
+    #region LEVEL AND MENU FUNCTIONALITY
+    IEnumerator LevelChanger(int prevLevel, int newLevel)
     {
         EventManager.EventTrigger(EventType.FADING, false);
         yield return StartCoroutine(_fader.NormalFadeOut());
-        //yield return StartCoroutine(UnloadScene(_mainMenuIndex));
-        yield return StartCoroutine(LoadScene(1));
-        yield return StartCoroutine(LoadScene(levelSelected));
+        yield return StartCoroutine(UnloadLevel(prevLevel));
+        yield return StartCoroutine(LoadLevel(newLevel));
         yield return StartCoroutine(_fader.NormalFadeIn());
         EventManager.EventTrigger(EventType.FADING, true);
     }
 
-    #region SCENE FUNCTIONS
+    // Level to Menu Change Sequence
+    IEnumerator LevelToMenu()
+    {
+        EventManager.EventTrigger(EventType.FADING, false);
+        yield return StartCoroutine(_fader.NormalFadeOut());
+        yield return StartCoroutine(UnloadLevel(_currentLevel.buildIndex));
+        yield return StartCoroutine(UnloadScene(_gameplayIndex));
+        yield return StartCoroutine(LoadScene(_mainMenuIndex));
+        yield return StartCoroutine(_fader.NormalFadeIn());
+        EventManager.EventTrigger(EventType.FADING, true);
+    }
+
+    // Menu to Level Change Sequence
+    IEnumerator MenuToLevel(int levelSelected)
+    {
+        EventManager.EventTrigger(EventType.FADING, false);
+        yield return StartCoroutine(_fader.NormalFadeOut());
+        yield return StartCoroutine(UnloadScene(_mainMenuIndex));
+        yield return StartCoroutine(LoadScene(_gameplayIndex));
+        yield return StartCoroutine(LoadLevel(levelSelected));
+        yield return StartCoroutine(_fader.NormalFadeIn());
+        EventManager.EventTrigger(EventType.FADING, true);
+    }
+
+    // Only loads levels, does not load MainMenu scene or core scenes
+    IEnumerator LoadLevel(int index)
+    {
+        yield return StartCoroutine(LoadScene(index));
+        //EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
+        _currentLevel = SceneManager.GetSceneByBuildIndex(index);
+    }
+
+    // Only unloads levels, does not load MainMenu scene or core scenes
+    IEnumerator UnloadLevel(int index)
+    {
+        //EventManager.EventTrigger(EventType.LEVEL_ENDED, null);
+        yield return StartCoroutine(UnloadScene(index));
+    }
+    #endregion
+
+    #region BUILD FUNCTIONALITY
+    public int GetBuildIndex(string name)
+    {
+        for (int index = 0; index < _numOfScenes; index++)
+        {
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(index));
+
+            if (sceneName == name)
+            {
+                return index;
+            }
+        }
+
+        Debug.LogError("Scene name not found");
+        return -1;
+    }
+
+    // Quits game in either build or editor
+    IEnumerator QuitGame()
+    {
+        yield return StartCoroutine(_fader.NormalFadeOut());
+        yield return null;
+
+        #if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+        #else
+	    	Application.Quit();
+        #endif
+    }
+    #endregion
+
+    #region SCENE LOADING/UNLOADING FUNCTIONALITY
     // Loads specified scene
     IEnumerator LoadScene(int index)
     {
@@ -92,24 +169,35 @@ public class SceneSystemManager : MonoBehaviour
             yield return null;
         }
     }
+    #endregion
+
+    #region EVENT HANDLERS
+    // Starts PlayGame Coroutine
+    public void PlayGameHandler(object data)
+    {
+        if (data is not int)
+        {
+            Debug.LogError("SceneSystemManager has not received a level num int!");
+        }
+
+        int levelNum = (int)data;
+
+        // For now, start at level 1 when play is clicked in main menu
+        if (levelNum != 1)
+        {
+            Debug.LogError("For now, we're starting at level 1 when play button is clicked.");
+        }
+
+        int levelIndex = levelNum + 2; // First level is actually index 3 in build
+        StartCoroutine(MenuToLevel(levelIndex));
+    }
 
     // Starts QuitGame Coroutine
     public void QuitGameHandler(object data)
     {
         StartCoroutine(QuitGame());
     }
-
-    // Quits game in either build or editor
-    IEnumerator QuitGame()
-    {
-        yield return StartCoroutine(_fader.NormalFadeOut());
-        yield return null;
-
-        #if UNITY_EDITOR
-            EditorApplication.isPlaying = false;
-        #else
-	    	Application.Quit();
-        #endif
-    }
     #endregion
+
+    
 }
