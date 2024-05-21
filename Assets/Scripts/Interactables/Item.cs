@@ -119,7 +119,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         Transform parent = newParent != null ? newParent : _itemGrouper;
         SetParent(parent);
 
-        _emissionPS.enabled = false;
+        //_emissionPS.enabled = false;
   
         _playerHoldingItem.DropItem();
 
@@ -152,7 +152,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
             }
             else
             {
-                _emissionPS.enabled = true;
+                //_emissionPS.enabled = true;
                 StartCoroutine(ItemFloatUp());
             }
         }
