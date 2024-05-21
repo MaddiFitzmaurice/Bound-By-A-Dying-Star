@@ -23,7 +23,7 @@ public class PedestalConstControllerOLD : MonoBehaviour
     void Awake()
     {
         _pedestalNum = _pedestalList.Count;
-        EventManager.EventInitialise(EventType.LVL1_STAR_ACTIVATE);
+        EventManager.EventInitialise(EventType.LVL1_STARBEAM_ACTIVATE);
     }
 
     void Start()

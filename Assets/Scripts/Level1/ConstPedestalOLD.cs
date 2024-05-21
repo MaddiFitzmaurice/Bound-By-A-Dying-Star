@@ -310,7 +310,7 @@ public class ConstPedestalOLD : MonoBehaviour, IInteractable
     // Activate sky beam
     public void ActivateSkyBeam()
     {
-        EventManager.EventTrigger(EventType.LVL1_STAR_ACTIVATE, _id);
+        EventManager.EventTrigger(EventType.LVL1_STARBEAM_ACTIVATE, _id);
     }
 
     // Rotate beam to target direction anticlockwise

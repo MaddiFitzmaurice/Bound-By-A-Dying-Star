@@ -42,6 +42,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 5272872108836146517}
     m_Modifications:
     - target: {fileID: 1433421783439489341, guid: a1070b0f728598c43b7b482e9830d2d7, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1433421783439489341, guid: a1070b0f728598c43b7b482e9830d2d7, type: 3}
       propertyPath: ShapeModule.m_Scale.x
       value: 1.7
       objectReference: {fileID: 0}

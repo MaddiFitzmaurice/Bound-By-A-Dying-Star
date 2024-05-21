@@ -25,7 +25,8 @@ public class PedestalConstController : MonoBehaviour
     void Awake()
     {
         _pedestalNum = _pedestalList.Count;
-        EventManager.EventInitialise(EventType.LVL1_STAR_ACTIVATE);
+        EventManager.EventInitialise(EventType.LVL1_STARBEAM_ACTIVATE);
+        EventManager.EventInitialise(EventType.LVL1_STARTWINKLE_ACTIVATE);
     }
 
     void Start()
@@ -80,6 +81,10 @@ public class PedestalConstController : MonoBehaviour
     public void PedestalHasMirror(ConstPedestal sender)
     {
         int senderIndex = _pedestalList.IndexOf(sender);
+
+        // Send star twinkle event
+        EventManager.EventTrigger(EventType.LVL1_STARTWINKLE_ACTIVATE, senderIndex);
+
         // check to make sender is in list and that list is not empty
         if(senderIndex != -1 || _pedestalList.Count != 0)
         {
