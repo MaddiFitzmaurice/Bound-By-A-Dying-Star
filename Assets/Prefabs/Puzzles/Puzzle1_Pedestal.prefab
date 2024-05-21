@@ -51,7 +51,7 @@ MonoBehaviour:
   _validInteractables:
   - {fileID: 0}
   _presetPlacedObject: {fileID: 0}
-  _raiseMirrorHeight: 2.5
+  _raiseMirrorHeight: 1.5
   _rotationSpeed: 40
   _initialAngleOffset: 90
   _beamDestinations:
