@@ -148,6 +148,12 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         _id = id;
     }
 
+    public PedestalLinkData GetPedestalLinkData()
+    {
+        PedestalLinkData pedestalLinkData = new PedestalLinkData(_pedestalDestinations, this);
+        return pedestalLinkData;
+    }
+
     private void LockPlacedMirror(GameObject mirror)
     {
         IInteractable interactable = mirror.GetComponent<IInteractable>();
@@ -178,10 +184,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 {
                     _mirror = (Level1Mirror)pickupableType;
                     StartCoroutine(RotateMirror(_mirror.transform));
-                    PedestalLinkData pedestalLinkData = new PedestalLinkData(_pedestalDestinations, this);
-                    _conController.PedestalPreset(pedestalLinkData);
                 }
-                SetBeamPositions();
             }
             else
             {
@@ -266,7 +269,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         }
         else
         {
-            Debug.LogError("WARNING NOT _beamRenderer.Count == _beamDestinations.Count");
+            Debug.LogError("WARNING NOT _beamRenderer.Count != _beamDestinations.Count");
         }
     }
 
