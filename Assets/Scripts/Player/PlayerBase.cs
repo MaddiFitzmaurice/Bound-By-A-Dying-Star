@@ -50,7 +50,7 @@ public abstract class PlayerBase : MonoBehaviour
     #region INTERNAL DATA
     // Components
     private Rigidbody _rb;
-    private SkinnedMeshRenderer _meshRenderer;
+    private List<SkinnedMeshRenderer> _meshRenderers;
 
     // Data
     protected RiftData RiftData;
@@ -75,7 +75,7 @@ public abstract class PlayerBase : MonoBehaviour
     {
         // Set components
         _rb = GetComponent<Rigidbody>();
-        _meshRenderer = GetComponent<SkinnedMeshRenderer>();
+        _meshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
 
         // Set data
         RiftData = new RiftData(transform.position, transform.rotation, tag);
@@ -286,12 +286,18 @@ public abstract class PlayerBase : MonoBehaviour
     {
         if (mode)
         {
-            _meshRenderer.enabled = true;
+            foreach (SkinnedMeshRenderer renderer in _meshRenderers)
+            {
+                renderer.enabled = true;
+            }
             _flameHeadPS.Play();
         }
         else
         {
-            _meshRenderer.enabled = false;
+            foreach (SkinnedMeshRenderer renderer in _meshRenderers)
+            {
+                renderer.enabled = false;
+            }
             _flameHeadPS.Stop();
         }
     }
