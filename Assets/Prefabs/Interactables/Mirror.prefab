@@ -145,7 +145,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.8683596, y: 0.102, z: 10.787}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1770682620382302427}
@@ -246,15 +246,15 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 078806d6a7817ca408b720b8829bf7cb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4607136939457042206}
+      addedObject: {fileID: 6093993689248518637}
   m_SourcePrefab: {fileID: 100100000, guid: 078806d6a7817ca408b720b8829bf7cb, type: 3}
 --- !u!1 &4714780454939722217 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 078806d6a7817ca408b720b8829bf7cb, type: 3}
   m_PrefabInstance: {fileID: 5597739083858066616}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &4607136939457042206
-BoxCollider:
+--- !u!64 &6093993689248518637
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -271,9 +271,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.12253469, y: 0.12029695, z: 0.01815837}
-  m_Center: {x: 0.011800798, y: 0.0616463, z: -0.0015033891}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5667254692090823640, guid: 078806d6a7817ca408b720b8829bf7cb, type: 3}
 --- !u!4 &5342838661921856339 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 078806d6a7817ca408b720b8829bf7cb, type: 3}

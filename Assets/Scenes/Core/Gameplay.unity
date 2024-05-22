@@ -218,7 +218,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 11615a874404f1d42b19705d10be9884, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 116837643716693808, guid: 7a055fcb46ba21c449a692b79ff8bd56, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -4081,7 +4082,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 5224555091972627699, guid: f4091d7503416cc48bdbfc4985abcc28, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 116837643716693808, guid: f4091d7503416cc48bdbfc4985abcc28, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -7144,9 +7150,9 @@ Cloth:
   - maxDistance: 0
     collisionSphereDistance: 3.4028235e+38
   m_CapsuleColliders:
-  - {fileID: 1979420172}
-  - {fileID: 884034663}
-  - {fileID: 2107053870}
+  - {fileID: 1887010440}
+  - {fileID: 1374091523}
+  - {fileID: 1923725115}
   m_SphereColliders: []
   m_SelfCollisionDistance: 0
   m_SelfCollisionStiffness: 0.2

@@ -12,18 +12,21 @@ public class PedestalConstController : MonoBehaviour
     [Header("Pedestal Data")]
     [SerializeField] private List<ConstPedestal> _pedestalList;
     [SerializeField] private List<PedestalData> _pedestaData = new List<PedestalData>();
+    [SerializeField] private BeamEmitter _affordanceBeam;
     [Header("Cinematics")]
     [SerializeField] PlayableAsset _cutsceneDoor;
     #endregion
 
     #region INTERNAL DATA
     private int _pedestalNum;
+    private bool _affordanceBeamActivated = false;
     #endregion
 
     void Awake()
     {
         _pedestalNum = _pedestalList.Count;
-        EventManager.EventInitialise(EventType.LVL1_STAR_ACTIVATE);
+        EventManager.EventInitialise(EventType.LVL1_STARBEAM_ACTIVATE);
+        EventManager.EventInitialise(EventType.LVL1_STARTWINKLE_ACTIVATE);
     }
 
     void Start()
@@ -48,6 +51,19 @@ public class PedestalConstController : MonoBehaviour
         }
     }
 
+    // Activate Affordance beam
+    public void AffordanceBeamActivate(PedestalLinkData linkData)
+    {
+        ConstPedestal pedestalSender = linkData.sender;
+        int senderIndex = _pedestalList.IndexOf(pedestalSender);
+        
+        // Set preset peddestal values so it is shooting beam
+        pedestalSender.ActivateEffect();
+        _pedestaData[senderIndex].ShootingBeam = true;
+        _pedestaData[senderIndex].RecieveBeam = true;
+        PedestalChecker(senderIndex);
+    }
+
     // Sets value of preset pedestals
     public void PedestalPreset(PedestalLinkData linkData)
     {
@@ -65,6 +81,10 @@ public class PedestalConstController : MonoBehaviour
     public void PedestalHasMirror(ConstPedestal sender)
     {
         int senderIndex = _pedestalList.IndexOf(sender);
+
+        // Send star twinkle event
+        EventManager.EventTrigger(EventType.LVL1_STARTWINKLE_ACTIVATE, senderIndex);
+
         // check to make sender is in list and that list is not empty
         if(senderIndex != -1 || _pedestalList.Count != 0)
         {
@@ -138,9 +158,15 @@ public class PedestalConstController : MonoBehaviour
     private void ConstellationChecker()
     {
         bool done = true;
+        bool mirrorsDone = true;
 
         for (int i = 0; i < _pedestalNum; i++)
         {
+            if(!_pedestaData[i].HasMirror)
+            {
+                mirrorsDone = false;
+            }
+
             if(!_pedestaData[i].RightBeamDirection || !_pedestaData[i].RecieveBeam || !_pedestaData[i].HasMirror)
             {
                 done = false;
@@ -150,6 +176,14 @@ public class PedestalConstController : MonoBehaviour
             {
                 _pedestalList[i].ActivateSkyBeam();
             }
+        }
+
+        if (mirrorsDone & !_affordanceBeamActivated)
+        {
+            _affordanceBeamActivated = true;
+            _affordanceBeam.SetBeamStatus(true);
+            PedestalLinkData linkData = _pedestalList[0].GetPedestalLinkData();
+            AffordanceBeamActivate(linkData);
         }
 
         if (done)

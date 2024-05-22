@@ -148,6 +148,12 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         _id = id;
     }
 
+    public PedestalLinkData GetPedestalLinkData()
+    {
+        PedestalLinkData pedestalLinkData = new PedestalLinkData(_pedestalDestinations, this);
+        return pedestalLinkData;
+    }
+
     private void LockPlacedMirror(GameObject mirror)
     {
         IInteractable interactable = mirror.GetComponent<IInteractable>();
@@ -177,11 +183,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 if (pickupableType is Level1Mirror)
                 {
                     _mirror = (Level1Mirror)pickupableType;
-                    StartCoroutine(RotateMirror(_mirror.transform));
-                    PedestalLinkData pedestalLinkData = new PedestalLinkData(_pedestalDestinations, this);
-                    _conController.PedestalPreset(pedestalLinkData);
+                    StartCoroutine(InitialRotateMirror(_mirror.transform));
                 }
-                SetBeamPositions();
             }
             else
             {
@@ -221,7 +224,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                     if (pickupableType is Level1Mirror)
                     {
                         _mirror = (Level1Mirror)pickupableType;
-                        StartCoroutine(RotateMirror(_mirror.transform));
+                        StartCoroutine(InitialRotateMirror(_mirror.transform));
                     }
                 }
             }
@@ -266,12 +269,12 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         }
         else
         {
-            Debug.LogError("WARNING NOT _beamRenderer.Count == _beamDestinations.Count");
+            Debug.LogError("WARNING NOT _beamRenderer.Count != _beamDestinations.Count");
         }
     }
 
-    // Rotate mirror to angle
-    private IEnumerator RotateMirror(Transform mirror)
+    // Rotate mirror to angle on placing on pedestal
+    private IEnumerator InitialRotateMirror(Transform mirror)
     {
         // Set the mirror's position and rotation to match the pedestal before starting the rotation
         mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
@@ -310,7 +313,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     // Activate sky beam
     public void ActivateSkyBeam()
     {
-        EventManager.EventTrigger(EventType.LVL1_STAR_ACTIVATE, _id);
+        EventManager.EventTrigger(EventType.LVL1_STARBEAM_ACTIVATE, _id);
     }
 
     // Rotate beam to target direction anticlockwise

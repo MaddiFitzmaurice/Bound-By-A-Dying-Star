@@ -6,6 +6,7 @@ using UnityEngine;
 public class SkyConstController : MonoBehaviour
 {
     [SerializeField] private List<BeamEmitter> _beamList;
+    [SerializeField] private List<ParticleSystem> _twinkleList;
 
     void Awake()
     {
@@ -18,23 +19,24 @@ public class SkyConstController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.LVL1_STAR_ACTIVATE, StarActivateHandler);
+        EventManager.EventSubscribe(EventType.LVL1_STARBEAM_ACTIVATE, StarBeamActivateHandler);
+        EventManager.EventSubscribe(EventType.LVL1_STARTWINKLE_ACTIVATE, StarTwinkleActivateHandler);
     }
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.LVL1_STAR_ACTIVATE, StarActivateHandler);
+        EventManager.EventUnsubscribe(EventType.LVL1_STARBEAM_ACTIVATE, StarBeamActivateHandler);
+        EventManager.EventUnsubscribe(EventType.LVL1_STARTWINKLE_ACTIVATE, StarTwinkleActivateHandler);
     }
 
-    public void StarActivateHandler(object data)
+    public void StarBeamActivateHandler(object data)
     {
         if (data is not int)
         {
-            Debug.LogError("StarActivateHandler has not received a int.");
+            Debug.LogError("StarBeamActivateHandler has not received a int.");
         }
 
         int beamId = (int)data;
-        Debug.Log(beamId);
 
         switch (beamId)
         {
@@ -62,5 +64,17 @@ public class SkyConstController : MonoBehaviour
                 Debug.Log("beamId was " + beamId);
             break;
         }
+    }
+
+    public void StarTwinkleActivateHandler(object data)
+    {
+        if (data is not int)
+        {
+            Debug.LogError("StarTwinkleActivateHandler has not received a int.");
+        }
+
+        int twinkleId = (int)data;
+
+        _twinkleList[twinkleId].Play();
     }
 }
