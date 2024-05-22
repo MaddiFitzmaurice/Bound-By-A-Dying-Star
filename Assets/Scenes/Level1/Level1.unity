@@ -36496,7 +36496,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1389457601}
-  - {fileID: 85508370}
   m_Father: {fileID: 739614791}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &132396390
@@ -46300,12 +46299,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d3984c96c00c464394a530dc243a254, type: 3}
       insertIndex: -1
       addedObject: {fileID: 675363275}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d3984c96c00c464394a530dc243a254, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 675363277}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d3984c96c00c464394a530dc243a254, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 675363278}
   m_SourcePrefab: {fileID: 100100000, guid: 8d3984c96c00c464394a530dc243a254, type: 3}
 --- !u!1 &675363274 stripped
 GameObject:
@@ -50420,10 +50413,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1379039469469042465, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1015829983503132964, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1047659011}
     - targetCorrespondingSourceObject: {fileID: 1015829983503132964, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1047659009}
@@ -50480,6 +50477,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1047659011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047659008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08237401cb8e754aac9982d3254a455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _validInteractables:
+  - {fileID: 132396388}
+  _presetPlacedObject: {fileID: 0}
+  _rotationSpeed: 0
+  _raiseMirrorHeight: 0
+  _targetAngle: {x: 0, y: 0, z: 0}
+  _initialAngleOffset: 0
+  _raisePortalHeight: 0
+  _pairedPedestals: []
 --- !u!43 &1049978853
 Mesh:
   m_ObjectHideFlags: 0
@@ -99420,6 +99438,7 @@ Transform:
   - {fileID: 1047659007}
   - {fileID: 953110644}
   - {fileID: 1203177197}
+  - {fileID: 739614791}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1904027486
