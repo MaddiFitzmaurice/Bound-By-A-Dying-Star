@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6258084185101212141}
   - component: {fileID: 8331599143475888856}
   m_Layer: 0
-  m_Name: BeamTurnVFX
+  m_Name: BeamTurnPS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
