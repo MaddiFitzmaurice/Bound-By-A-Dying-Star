@@ -218,7 +218,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                     LockPlacedMirror(carriedPickupable);
                     IPickupable pickupableType = carriedPickupable.GetComponent<IPickupable>();
                     pickupableType.PickupLocked(true);
-                    pickupableType.BeDropped(transform);
+                    pickupableType.BeDropped(_beamSource);
 
                     // If a mirror is to be placed on a pedestal
                     if (pickupableType is Level1Mirror)
