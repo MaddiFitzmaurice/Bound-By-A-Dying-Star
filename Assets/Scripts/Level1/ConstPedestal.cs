@@ -173,6 +173,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             // Lock Interaction
             LockPlacedMirror(_presetPlacedObject);
 
+            _presetPlacedObject.transform.SetParent(_beamSource, false);
+
             // IPickupable manipulation
             IPickupable pickupableType = _presetPlacedObject.GetComponent<IPickupable>();
             if (pickupableType != null)
