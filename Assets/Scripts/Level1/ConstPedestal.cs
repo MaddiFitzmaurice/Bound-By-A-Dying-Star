@@ -181,7 +181,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 if (pickupableType is Level1Mirror)
                 {
                     _mirror = (Level1Mirror)pickupableType;
-                    StartCoroutine(InitialRotateMirror(_mirror.transform));
+                    InitialRotateMirror(_mirror.transform);
                 }
             }
             else
@@ -222,7 +222,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                     if (pickupableType is Level1Mirror)
                     {
                         _mirror = (Level1Mirror)pickupableType;
-                        StartCoroutine(InitialRotateMirror(_mirror.transform));
+                        InitialRotateMirror(_mirror.transform);
                     }
                 }
             }
@@ -274,23 +274,21 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     }
 
     // Rotate mirror to angle on placing on pedestal
-    private IEnumerator InitialRotateMirror(Transform mirror)
+    private void InitialRotateMirror(Transform mirror)
     {
         // Set the mirror's position and rotation to match the pedestal before starting the rotation
         mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
         mirror.rotation = transform.rotation;
 
+        // Get position of beam destination (eventually should get average pos when multiple)
         Vector3 targetPosition = _beamDestinations[0].transform.position;
 
         // Remove the y component from the target position and the mirror's position to avoid tilting
         Vector3 targetDirection = (new Vector3(targetPosition.x, mirror.position.y, targetPosition.z) - mirror.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
-        while (Quaternion.Angle(mirror.rotation, targetRotation) > 0.01f)
-        {
-            mirror.rotation = Quaternion.Lerp(mirror.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
-            yield return null;
-        }
+        // Combine target rotation with the initial offset
+        targetRotation = targetRotation * (mirror.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f));
 
         // Ensure the mirror snaps to the exact rotation
         mirror.rotation = targetRotation; 
