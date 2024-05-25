@@ -72,6 +72,8 @@
 		</relationship>
 		<relationship name="markers">
 			<destination>{5d40d3ef-c119-44f0-90ce-117858e3a3b0}</destination>
+			<destination>{355b8ea5-22b0-49c3-bd66-b6e95a20f2c9}</destination>
+			<destination>{d2ad891b-023f-4c14-b491-ef3e7b837c1a}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{69a3fd16-e86b-4884-951a-ef9837422f34}">
@@ -119,6 +121,37 @@
 		</property>
 		<property name="length">
 			<value>52</value>
+		</property>
+		<property name="looping">
+			<value>0</value>
+		</property>
+		<relationship name="timeline">
+			<destination>{b148c012-2630-4025-9c1a-4d577c116027}</destination>
+		</relationship>
+		<relationship name="markerTrack">
+			<destination>{2dd4a096-2a30-43cb-9e2a-5b863a505934}</destination>
+		</relationship>
+	</object>
+	<object class="LoopRegion" id="{355b8ea5-22b0-49c3-bd66-b6e95a20f2c9}">
+		<property name="position">
+			<value>1.5</value>
+		</property>
+		<property name="length">
+			<value>3.4000000000000004</value>
+		</property>
+		<property name="looping">
+			<value>0</value>
+		</property>
+		<relationship name="timeline">
+			<destination>{b148c012-2630-4025-9c1a-4d577c116027}</destination>
+		</relationship>
+		<relationship name="markerTrack">
+			<destination>{2dd4a096-2a30-43cb-9e2a-5b863a505934}</destination>
+		</relationship>
+	</object>
+	<object class="TempoMarker" id="{d2ad891b-023f-4c14-b491-ef3e7b837c1a}">
+		<property name="position">
+			<value>0</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{b148c012-2630-4025-9c1a-4d577c116027}</destination>

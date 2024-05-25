@@ -6,10 +6,10 @@ using FMODUnity;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField] private EventReference musicEvent;
-    [SerializeField] private EventReference sfxEvent;
-    private FMOD.Studio.EventInstance musicInstance;
-    private FMOD.Studio.EventInstance sfxInstance;
+    [SerializeField] private EventReference _musicEvent;
+    [SerializeField] private EventReference _sfxEvent;
+    private FMOD.Studio.EventInstance _musicInstance;
+    private FMOD.Studio.EventInstance _sfxInstance;
 
     private void Awake()
     {
@@ -31,23 +31,23 @@ public class AudioManager : MonoBehaviour
 
     private void MusicEventHandler(object data)
     {
-        if (musicInstance.isValid())
+        if (_musicInstance.isValid())
         {
-            musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            musicInstance.release();
+            _musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            _musicInstance.release();
         }
 
-        musicInstance = RuntimeManager.CreateInstance(musicEvent);
-        musicInstance.start();
+        _musicInstance = RuntimeManager.CreateInstance(_musicEvent);
+        _musicInstance.start();
     }
 
     private void SFXEventHandler(object data)
     {
         if (data is string sfxName)
         {
-            sfxInstance = RuntimeManager.CreateInstance(sfxName);
-            sfxInstance.start();
-            sfxInstance.release();
+            _sfxInstance = RuntimeManager.CreateInstance(sfxName);
+            _sfxInstance.start();
+            _sfxInstance.release();
         }
         else
         {
