@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using FMODUnity;
 
 public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzzleReward
 {
@@ -11,8 +10,6 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     [SerializeField] private float _maxDistance = 10f;
     public bool InteractLocked { get; set; } = false;
 
-    // FMOD Event Reference
-    [SerializeField] private EventReference sound;
     #endregion
 
     #region INTERNAL DATA
@@ -216,7 +213,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     {
 
         // Play the FMOD event
-        RuntimeManager.PlayOneShot(sound, gameObject.transform.position);
+        EventManager.EventTrigger(EventType.ITEM_PICKUP, null);
+
         // If a player is holding the mirror
         if (_player != null)
         {
@@ -246,7 +244,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     {
         throw new System.NotImplementedException();
         // Play the FMOD event
-        RuntimeManager.PlayOneShot(sound, gameObject.transform.position);
+        EventManager.EventTrigger(EventType.ITEM_PICKUP, null);
     }
     #endregion
 

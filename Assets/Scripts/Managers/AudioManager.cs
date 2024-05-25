@@ -6,13 +6,20 @@ using FMODUnity;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField] private EventReference _musicEvent;
-    [SerializeField] private EventReference _sfxEvent;
+    private FMODEventManager _fmodEventManager;
     private FMOD.Studio.EventInstance _musicInstance;
     private FMOD.Studio.EventInstance _sfxInstance;
 
     private void Awake()
     {
+        // Find the FMODEventManager in the scene
+        _fmodEventManager = FindObjectOfType<FMODEventManager>();
+
+        if (_fmodEventManager == null)
+        {
+            Debug.LogError("FMODEventManager not found in the scene.");
+        }
+
         EventManager.EventInitialise(EventType.MUSIC);
         EventManager.EventInitialise(EventType.SFX);
     }
@@ -37,8 +44,11 @@ public class AudioManager : MonoBehaviour
             _musicInstance.release();
         }
 
-        _musicInstance = RuntimeManager.CreateInstance(_musicEvent);
-        _musicInstance.start();
+        if (_fmodEventManager != null)
+        {
+            _musicInstance = RuntimeManager.CreateInstance(_fmodEventManager.BackgroundMusic);
+            _musicInstance.start();
+        }
     }
 
     private void SFXEventHandler(object data)

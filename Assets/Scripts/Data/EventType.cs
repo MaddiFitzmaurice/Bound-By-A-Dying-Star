@@ -63,4 +63,7 @@ public enum EventType
     MUSIC,
     SFX,
     INTRO,
+    ITEM_PICKUP,
+    ITEM_DROP,
+    BACKGROUND_MUSIC,
 };
