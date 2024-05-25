@@ -242,29 +242,22 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             {
                 for (int i = 0; i < beamCount; i++)
                 {
-                    // Get angle diff
-                    Vector3 targetDir = _beamDestinations[i].transform.position - _beamSource.position;
-                    float targetDiff = Vector3.Angle(_targetDir, targetDir);
-                    if (i == 0)
-                    {
-                        targetDiff = 360 - targetDiff;
-                    }
-
-                    // Then add diff offset to direction
-                    Quaternion startRot = Quaternion.Euler(0f, targetDiff, 0f);
-                    Vector3 startRotEuler = startRot.eulerAngles;
-                    startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
-
+                    Vector3 offsetTarget = transform.InverseTransformPoint(_beamDestinations[i].transform.position);
+                    offsetTarget = new Vector3(offsetTarget.x, _beamSource.position.y, offsetTarget.z);
+                    
                     _beamRenderer[i].gameObject.transform.parent.gameObject.SetActive(true);
                     _beamRenderer[i].SetPosition(0, localSource);
-                    _beamRenderer[i].SetPosition(1, localSource + ((startRot * _beamSource.forward) * _beamMaxLength[i]));
+                    _beamRenderer[i].SetPosition(1, offsetTarget);
                 }
             }
             else
             {
+                Vector3 offsetTarget = transform.InverseTransformPoint(_beamDestinations[0].transform.position);
+                offsetTarget = new Vector3(offsetTarget.x, _beamSource.position.y, offsetTarget.z);
+
                 _beamRenderer[0].gameObject.transform.parent.gameObject.SetActive(true);
                 _beamRenderer[0].SetPosition(0, localSource);
-                _beamRenderer[0].SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength[0]));
+                _beamRenderer[0].SetPosition(1, offsetTarget);
             }
         }
         else
@@ -304,7 +297,6 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
             newLightbeam.SetActive(false);
         }
-        // SetBeamPositions();
     }
 
     // Activate mirror orb effects
@@ -320,7 +312,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     }
 
     // Rotate beam to target direction anticlockwise
-    private IEnumerator RotateBeam(Vector3 targetDir)
+    private IEnumerator RotateMirror(Vector3 targetDir)
     {
         _isRotating = true;
         _beamTurningPS.Play();
@@ -341,7 +333,6 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f && _isRotating)
             {
                 _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
-                // SetBeamPositions();
                 yield return null;
             }
 
@@ -396,7 +387,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             if (_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
             {
-                StartCoroutine(RotateBeam(_targetDir));
+                StartCoroutine(RotateMirror(_targetDir));
             }
         }
     }
