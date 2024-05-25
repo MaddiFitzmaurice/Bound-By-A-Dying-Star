@@ -58,4 +58,9 @@ public enum EventType
 
     // Testing
     TEST_CONTROLS,
+
+    // Audio
+    BACKGROUND,
+    SFX,
+    MUTEMUSIC_TOGGLE,
 };
