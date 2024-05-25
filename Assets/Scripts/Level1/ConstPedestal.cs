@@ -1,9 +1,5 @@
-using Ink.Parsed;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class ConstPedestal : MonoBehaviour, IInteractable
@@ -259,12 +255,14 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                     Vector3 startRotEuler = startRot.eulerAngles;
                     startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
 
+                    _beamRenderer[i].gameObject.transform.parent.gameObject.SetActive(true);
                     _beamRenderer[i].SetPosition(0, localSource);
                     _beamRenderer[i].SetPosition(1, localSource + ((startRot * _beamSource.forward) * _beamMaxLength[i]));
                 }
             }
             else
             {
+                _beamRenderer[0].gameObject.transform.parent.gameObject.SetActive(true);
                 _beamRenderer[0].SetPosition(0, localSource);
                 _beamRenderer[0].SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength[0]));
             }
@@ -306,10 +304,15 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             GameObject newLightbeam = Instantiate(_lightBeam, transform);
             _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
+            newLightbeam.SetActive(false);
         }
-        SetBeamPositions();
+        // SetBeamPositions();
+    }
+
+    // Activate mirror orb effects
+    public void ActivateOrb()
+    {
         _mirrorBeamFX.SetActive(true);
-        //EventManager.EventTrigger(EventType.LVL1_STAR_ACTIVATE, _id);
     }
 
     // Activate sky beam
@@ -340,7 +343,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f && _isRotating)
             {
                 _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
-                SetBeamPositions();
+                // SetBeamPositions();
                 yield return null;
             }
 
@@ -358,6 +361,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         if(dot > 0.985f) 
         { 
             _correctAngle = true;
+            SetBeamPositions();
+
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
             return false;
