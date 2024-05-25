@@ -60,7 +60,7 @@ public enum EventType
     TEST_CONTROLS,
 
     // Audio
-    BACKGROUND,
+    MUSIC,
     SFX,
-    MUTEMUSIC_TOGGLE,
+    INTRO,
 };

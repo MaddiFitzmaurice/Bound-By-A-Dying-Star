@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{b3c1be35-e303-4c01-a442-789fe0fd73f8}">
+		<property name="assetPath">
+			<value>Sim of a Dying Star_#1 70bpm DRAFT 1.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>120</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{3823f13f-0d6c-4558-bd50-88013e0c251e}</destination>
+		</relationship>
+	</object>
+</objects>

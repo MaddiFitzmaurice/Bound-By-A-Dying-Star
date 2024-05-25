@@ -12,6 +12,7 @@ public class MainMenuUIManager : MonoBehaviour
     public void Start()
     {
         _buttonPressed = false;
+        // EventManager.EventTrigger(EventType.MUSIC, null); // Start music
     }
 
     // Starts event sequence which exits the game

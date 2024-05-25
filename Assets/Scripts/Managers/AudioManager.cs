@@ -1,74 +1,57 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField] private StudioEventEmitter musicEmitter;
-    [SerializeField] private StudioEventEmitter sfxEmitter;
-    private bool isMusicMuted = false;
+    [SerializeField] private EventReference musicEvent;
+    [SerializeField] private EventReference sfxEvent;
+    private FMOD.Studio.EventInstance musicInstance;
+    private FMOD.Studio.EventInstance sfxInstance;
 
     private void Awake()
     {
-        EventManager.EventInitialise(EventType.BACKGROUND);
+        EventManager.EventInitialise(EventType.MUSIC);
         EventManager.EventInitialise(EventType.SFX);
-        EventManager.EventInitialise(EventType.MUTEMUSIC_TOGGLE);
     }
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.BACKGROUND, PlayBackgroundMusic);
-        EventManager.EventSubscribe(EventType.SFX, PlaySFX);
-        EventManager.EventSubscribe(EventType.MUTEMUSIC_TOGGLE, ToggleMusicMute);
+        EventManager.EventSubscribe(EventType.MUSIC, MusicEventHandler);
+        EventManager.EventSubscribe(EventType.SFX, SFXEventHandler);
     }
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.BACKGROUND, PlayBackgroundMusic);
-        EventManager.EventUnsubscribe(EventType.SFX, PlaySFX);
-        EventManager.EventUnsubscribe(EventType.MUTEMUSIC_TOGGLE, ToggleMusicMute);
+        EventManager.EventUnsubscribe(EventType.MUSIC, MusicEventHandler);
+        EventManager.EventUnsubscribe(EventType.SFX, SFXEventHandler);
     }
 
-    private void PlayBackgroundMusic(object data)
+    private void MusicEventHandler(object data)
     {
-        if (isMusicMuted)
-            return;
-
-        if (data is string path)
+        if (musicInstance.isValid())
         {
-            musicEmitter.Event = path;
-            musicEmitter.Play();
+            musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            musicInstance.release();
+        }
+
+        musicInstance = RuntimeManager.CreateInstance(musicEvent);
+        musicInstance.start();
+    }
+
+    private void SFXEventHandler(object data)
+    {
+        if (data is string sfxName)
+        {
+            sfxInstance = RuntimeManager.CreateInstance(sfxName);
+            sfxInstance.start();
+            sfxInstance.release();
         }
         else
         {
-            Debug.LogError("Invalid data for PlayBackgroundMusic");
-        }
-    }
-
-    private void PlaySFX(object data)
-    {
-        if (data is string path)
-        {
-            sfxEmitter.Event = path;
-            sfxEmitter.Play();
-        }
-        else
-        {
-            Debug.LogError("Invalid data for PlaySFX");
-        }
-    }
-
-    private void ToggleMusicMute(object data)
-    {
-        isMusicMuted = !isMusicMuted;
-        if (isMusicMuted)
-        {
-            musicEmitter.Stop();
-        }
-        else
-        {
-            musicEmitter.Play();
+            Debug.LogError("SFX Event received invalid data.");
         }
     }
 }
