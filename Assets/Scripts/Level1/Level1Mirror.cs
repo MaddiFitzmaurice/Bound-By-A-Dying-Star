@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using FMODUnity;
 
 public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzzleReward
 {
@@ -9,6 +10,9 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     [SerializeField] private float _maxIntensity = 5f;
     [SerializeField] private float _maxDistance = 10f;
     public bool InteractLocked { get; set; } = false;
+
+    // FMOD Event Reference
+    [SerializeField] private EventReference sound;
     #endregion
 
     #region INTERNAL DATA
@@ -194,9 +198,9 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     {
         if (isIntensityChanging)
         {
+
             isIntensityChanging = false;
             // Debug.Log("Starting to decrease light intensity towards minimal.");
-
             LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
                 _light.intensity = val;
                 // Debug.Log("Current light intensity: " + val);
@@ -210,6 +214,9 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     public void PlayerStartInteract(PlayerBase player)
     {
+
+        // Play the FMOD event
+        RuntimeManager.PlayOneShot(sound, gameObject.transform.position);
         // If a player is holding the mirror
         if (_player != null)
         {
@@ -238,6 +245,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     public void PlayerReleaseHoldInteract(PlayerBase player)
     {
         throw new System.NotImplementedException();
+        // Play the FMOD event
+        RuntimeManager.PlayOneShot(sound, gameObject.transform.position);
     }
     #endregion
 
