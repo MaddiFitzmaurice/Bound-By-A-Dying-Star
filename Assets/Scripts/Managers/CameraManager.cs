@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -11,6 +12,7 @@ public class CameraManager : MonoBehaviour
     private CinemachineBrain _cmBrain;
     private GameObject _gameplayCams; // Transform to parent child vCams to it
     private Dictionary<GameObject, GameObject> _activeGameplayCams; // Key: VCam gameObj, Value: Level/Softpuzzle gameObj parent
+    private CinemachineTargetGroup _playerFollowGroup;
     #endregion
     private void Awake()
     {
@@ -26,6 +28,7 @@ public class CameraManager : MonoBehaviour
 
     private void OnEnable()
     {
+        EventManager.EventSubscribe(EventType.CAMERAMANAGER_SEND_FOLLOWGROUP, ReceiveFollowGroupHandler);
         EventManager.EventSubscribe(EventType.RECEIVE_GAMEPLAY_CAM_PARENT, ReceiveGameplayCamParentHandler);
         EventManager.EventSubscribe(EventType.ADD_GAMEPLAY_CAM, AddGameplayCamHandler);
         EventManager.EventSubscribe(EventType.DELETE_GAMEPLAY_CAM, DeleteGameplayCamHandler);
@@ -33,6 +36,7 @@ public class CameraManager : MonoBehaviour
 
     private void OnDisable()
     {
+        EventManager.EventUnsubscribe(EventType.CAMERAMANAGER_SEND_FOLLOWGROUP, ReceiveFollowGroupHandler);
         EventManager.EventUnsubscribe(EventType.RECEIVE_GAMEPLAY_CAM_PARENT, ReceiveGameplayCamParentHandler);
         EventManager.EventUnsubscribe(EventType.ADD_GAMEPLAY_CAM, AddGameplayCamHandler);
         EventManager.EventUnsubscribe(EventType.DELETE_GAMEPLAY_CAM, DeleteGameplayCamHandler);
@@ -50,6 +54,19 @@ public class CameraManager : MonoBehaviour
     }
 
     #region EVENT FUNCTIONS
+    // Receive follow group that ClearShot will look at
+    public void ReceiveFollowGroupHandler(object data)
+    {
+        if (data is not CinemachineTargetGroup)
+        {
+            Debug.LogError("LevelManager has not received a CinemachineTargetGroup!");
+        }
+
+        CinemachineTargetGroup target = (CinemachineTargetGroup)data;
+        _playerFollowGroup = target;
+    }
+
+    // Receive gameplay cam parent to swap out active cameras as they are received
     public void ReceiveGameplayCamParentHandler(object data)
     {
         if (data is not GameObject)
@@ -82,11 +99,20 @@ public class CameraManager : MonoBehaviour
         foreach (GameObject vCam in vCams)
         {
             // Make sure a virtual camera is attached to it
-            if (vCam.GetComponent<CinemachineVirtualCamera>() != null)
+            CinemachineVirtualCamera vCamSettings = vCam.GetComponent<CinemachineVirtualCamera>();
+            if (vCamSettings != null)
             {
                 // Add to dict and change parent to ClearShot Cam in Gameplay Scene
                 _activeGameplayCams.Add(vCam, sceneParent);
                 vCam.transform.SetParent(_gameplayCams.transform);
+                vCamSettings.LookAt = _playerFollowGroup.transform;
+
+                // Check if it is a dolly cam
+                if (vCamSettings.GetCinemachineComponent<CinemachineTrackedDolly>() != null)
+                {
+                    // Set follow to the players, and lookat to null
+                    vCamSettings.Follow = _playerFollowGroup.transform;
+                }
             }
         }
     }

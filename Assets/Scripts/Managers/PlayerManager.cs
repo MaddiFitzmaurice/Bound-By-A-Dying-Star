@@ -30,12 +30,13 @@ public class PlayerManager : MonoBehaviour
         _player2 = _playerGrouper.GetComponentInChildren<Player2>();
 
         // Event Inits
-        EventManager.EventInitialise(EventType.CLEARSHOT_CAMS_SEND_FOLLOWGROUP);
+        EventManager.EventInitialise(EventType.CAMERAMANAGER_SEND_FOLLOWGROUP);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
     }
 
     private void OnEnable()
     {
+        SendFollowGroup(); // Temp
         EventManager.EventSubscribe(EventType.TELEPORT_PLAYERS, TeleportPlayers);
         EventManager.EventSubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
         EventManager.EventSubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
@@ -50,14 +51,13 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        SendFollowGroup();
     }
 
     public void SendFollowGroup()
     {
         if (_targetGroup != null)
         {
-            EventManager.EventTrigger(EventType.CLEARSHOT_CAMS_SEND_FOLLOWGROUP, _targetGroup);
+            EventManager.EventTrigger(EventType.CAMERAMANAGER_SEND_FOLLOWGROUP, _targetGroup);
         }
         else
         {
