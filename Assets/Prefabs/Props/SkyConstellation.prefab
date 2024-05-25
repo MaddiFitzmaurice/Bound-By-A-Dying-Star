@@ -110,6 +110,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8833599975267649023}
     m_Modifications:
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4128319155838466208, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_Name
       value: ConstellationStar (5)
@@ -128,15 +140,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -205,6 +217,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8833599975267649023}
     m_Modifications:
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4128319155838466208, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_Name
       value: ConstellationStar (2)
@@ -223,15 +247,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -367,6 +391,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8833599975267649023}
     m_Modifications:
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4128319155838466208, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_Name
       value: ConstellationStar (3)
@@ -385,15 +421,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -462,6 +498,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8833599975267649023}
     m_Modifications:
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4128319155838466208, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_Name
       value: ConstellationStar (6)
@@ -480,15 +528,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -712,6 +760,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8833599975267649023}
     m_Modifications:
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4128319155838466208, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_Name
       value: ConstellationStar (4)
@@ -730,15 +790,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -807,6 +867,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8833599975267649023}
     m_Modifications:
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496353509684420937, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4128319155838466208, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_Name
       value: ConstellationStar (1)
@@ -825,15 +897,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5272872108836146517, guid: 70d7a2514fc3a3341af4e17f5deb82c1, type: 3}
       propertyPath: m_LocalPosition.x

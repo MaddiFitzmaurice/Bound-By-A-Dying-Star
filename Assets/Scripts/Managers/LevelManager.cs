@@ -41,7 +41,7 @@ public class LevelManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
-        EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, _levelCamParent);
+        EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, _levelCamParent); 
     }
 
     private void Start()
