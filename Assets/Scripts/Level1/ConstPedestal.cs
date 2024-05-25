@@ -1,9 +1,5 @@
-using Ink.Parsed;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class ConstPedestal : MonoBehaviour, IInteractable
@@ -308,8 +304,12 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
         }
         SetBeamPositions();
+    }
+
+    // Activate mirror orb effects
+    public void ActivateOrb()
+    {
         _mirrorBeamFX.SetActive(true);
-        //EventManager.EventTrigger(EventType.LVL1_STAR_ACTIVATE, _id);
     }
 
     // Activate sky beam

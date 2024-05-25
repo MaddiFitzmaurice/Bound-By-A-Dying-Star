@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -59,6 +57,11 @@ public class PedestalConstController : MonoBehaviour
         
         // Set preset peddestal values so it is shooting beam
         pedestalSender.ActivateEffect();
+        foreach (ConstPedestal pedestal in _pedestalList)
+        {
+            pedestal.ActivateOrb();
+        }
+
         _pedestaData[senderIndex].ShootingBeam = true;
         _pedestaData[senderIndex].RecieveBeam = true;
         PedestalChecker(senderIndex);
