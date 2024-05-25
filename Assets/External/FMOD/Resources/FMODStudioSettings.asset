@@ -289,8 +289,8 @@ MonoBehaviour:
     HasValue: 0
   displaySortOrder: 0
   childIdentifiers:
-  - 52eb9df5db46521439908db3a29a1bbb
   - b7716510a1f36934c87976f3a81dbf3d
+  - 52eb9df5db46521439908db3a29a1bbb
   - 2c5177b11d81d824dbb064f9ac8527da
   codecChannels:
     Value: []
@@ -383,8 +383,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: 
-  sourceBankPath: 
+  sourceProjectPath: Assets/Audio/FMOD_Audio-System/FMOD_Audio-System.fspro
+  sourceBankPath: Assets/Audio/FMOD_Audio-System/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
@@ -423,8 +423,8 @@ MonoBehaviour:
   LastEventReferenceScanVersion: 131617
   Platforms:
   - {fileID: -8580520953744483272}
-  - {fileID: -577038940769921572}
-  - {fileID: -2169969479894501647}
   - {fileID: -8462853012315792649}
+  - {fileID: -2169969479894501647}
+  - {fileID: -577038940769921572}
   - {fileID: -113605632641883700}
   MigratedPlatforms: 080000000a000000090000000200000001000000
