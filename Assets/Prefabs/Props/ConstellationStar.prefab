@@ -117,10 +117,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4323913557137770503, guid: a1070b0f728598c43b7b482e9830d2d7, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6402676237711279424, guid: a1070b0f728598c43b7b482e9830d2d7, type: 3}
       propertyPath: m_Name
       value: StarLinesPS
@@ -195,6 +191,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 692acb7cb36b7434f92b3d986bdc82fc, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b87f5be797e140e419bc15022c1bb722, type: 2}
     - target: {fileID: 919132149155446097, guid: 692acb7cb36b7434f92b3d986bdc82fc, type: 3}
       propertyPath: m_Name
       value: Star_FBX
