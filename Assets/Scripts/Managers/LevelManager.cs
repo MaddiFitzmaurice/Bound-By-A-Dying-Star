@@ -61,6 +61,8 @@ public class LevelManager : MonoBehaviour
         EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, _levelCamParent);
         EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _introCutscene);
 
+        EventManager.EventTrigger(EventType.MUSIC, "Calm"); // Ensure transition to Calm section
+
         // Set reward grouper parent and disable all soft puzzles
         foreach (GameObject softPuzzle in _softPuzzles)
         {
