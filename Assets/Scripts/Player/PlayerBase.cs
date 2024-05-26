@@ -218,6 +218,8 @@ public abstract class PlayerBase : MonoBehaviour
         //    }
         //}
 
+        // Change to new skew angle based on changed camera if player has let go of
+        // the movement buttons
         if (PrevMoveInput != MoveInput)
         {
             _prevCamYAngle = _camYAngle;

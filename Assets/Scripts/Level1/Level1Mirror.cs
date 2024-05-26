@@ -98,6 +98,13 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         _followTarget = _player.PickupPoint;
         _emissionPS.enabled = true;
 
+        // If currently associated with a soft puzzle
+        if (_softPuzzle)
+        {
+            HeldInSoftPuzzle = true;
+            _softPuzzle.CheckAllRewardsHeld();
+        }
+
         StartCoroutine(ItemFloatUp());
     }
 
@@ -163,12 +170,12 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         _player.PickupItem(gameObject);
         SetParent(_player.transform);
 
-        // If currently associated with a soft puzzle
-        if (_softPuzzle)
-        {
-            HeldInSoftPuzzle = true;
-            _softPuzzle.CheckAllRewardsHeld();
-        }
+        //// If currently associated with a soft puzzle
+        //if (_softPuzzle)
+        //{
+        //    HeldInSoftPuzzle = true;
+        //    _softPuzzle.CheckAllRewardsHeld();
+        //}
     }
     #endregion
 

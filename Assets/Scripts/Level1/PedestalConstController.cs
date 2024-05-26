@@ -136,7 +136,7 @@ public class PedestalConstController : MonoBehaviour
     }
 
     // Go through each pedestal
-    // if the pedestal has a mirror, is recieving a beam but not shooting a beam
+    // if the pedestal has a mirror and is recieving a beam but not shooting a beam
     // tell the pedestal to activate the beam effect
     // then check if constellation is complete
     private void PedestalChecker(int senderIndex)
@@ -165,22 +165,27 @@ public class PedestalConstController : MonoBehaviour
 
         for (int i = 0; i < _pedestalNum; i++)
         {
+            // Check if each pedestal has a mirror
             if(!_pedestaData[i].HasMirror)
             {
                 mirrorsDone = false;
             }
 
+            // Check if each pedestal has a mirror, recieving a beam and it's beam is facing the right direction
             if(!_pedestaData[i].RightBeamDirection || !_pedestaData[i].RecieveBeam || !_pedestaData[i].HasMirror)
             {
                 done = false;
             }
 
+            // Check if each pedestal has a mirror, recieving a beam, shooting a beam and it's beam is facing the right direction
             if(_pedestaData[i].ShootingBeam && _pedestaData[i].RightBeamDirection && _pedestaData[i].RecieveBeam &&_pedestaData[i].HasMirror)
             {
                 _pedestalList[i].ActivateSkyBeam();
             }
         }
 
+        // Activate affordance beam from the arch to the 1st pedestal
+        // Also activate all the orbs
         if (mirrorsDone & !_affordanceBeamActivated)
         {
             _affordanceBeamActivated = true;
@@ -189,6 +194,7 @@ public class PedestalConstController : MonoBehaviour
             AffordanceBeamActivate(linkData);
         }
 
+        // Main puzzle is complete!
         if (done)
         {
             Debug.Log("Constellation Complete!");

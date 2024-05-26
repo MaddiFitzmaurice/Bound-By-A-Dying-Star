@@ -30,6 +30,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     #region INTERNAL DATA
     private List<ConstPedestal> _pedestalDestinations;
     private List<float> _beamMaxLength = new List<float>();
+    
     // Components
     private Renderer _diskRenderer;
     private PedestalConstController _conController;
@@ -238,23 +239,30 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             Vector3 localSource = transform.InverseTransformPoint(_beamSource.position);
             
+            // If there are two beams
             if (beamCount == 2)
             {
+                // Iterate over both the two beams
                 for (int i = 0; i < beamCount; i++)
                 {
+                    // Calculate destination in local space
                     Vector3 offsetTarget = transform.InverseTransformPoint(_beamDestinations[i].transform.position);
-                    offsetTarget = new Vector3(offsetTarget.x, _beamSource.position.y, offsetTarget.z);
+                    offsetTarget = new Vector3(offsetTarget.x, localSource.y, offsetTarget.z);
                     
+                    // Set Beam start and endpoints
                     _beamRenderer[i].gameObject.transform.parent.gameObject.SetActive(true);
                     _beamRenderer[i].SetPosition(0, localSource);
                     _beamRenderer[i].SetPosition(1, offsetTarget);
                 }
             }
-            else
+            else // If there is just the one beam
             {
+                // Calculate destination in local space
                 Vector3 offsetTarget = transform.InverseTransformPoint(_beamDestinations[0].transform.position);
-                offsetTarget = new Vector3(offsetTarget.x, _beamSource.position.y, offsetTarget.z);
 
+                offsetTarget = new Vector3(offsetTarget.x, localSource.y, offsetTarget.z);
+
+                // Set Beam start and endpoints
                 _beamRenderer[0].gameObject.transform.parent.gameObject.SetActive(true);
                 _beamRenderer[0].SetPosition(0, localSource);
                 _beamRenderer[0].SetPosition(1, offsetTarget);
