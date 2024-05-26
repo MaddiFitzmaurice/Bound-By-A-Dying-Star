@@ -66,7 +66,7 @@ Material:
     - _QueueOffset: 0
     - _SpotStrength: 0.1
     m_Colors:
-    - _Color: {r: 13.433962, g: 11.570353, b: 1.9517261, a: 1}
+    - _Color: {r: 13.433967, g: 11.570356, b: 1.9517268, a: 1}
     - _MainSpeed: {r: -0.5, g: 0, b: 0, a: 0}
     - _NoiseSpeed: {r: -0.7, g: 0, b: 0, a: 0}
     - _OffsetSpeed: {r: 1.5, g: 0, b: 0, a: 0}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -13,6 +14,7 @@ public class PedestalConstController : MonoBehaviour
     [SerializeField] private BeamEmitter _affordanceBeam;
     [Header("Cinematics")]
     [SerializeField] PlayableAsset _cutsceneDoor;
+    [SerializeField] PlayableAsset _cutsceneBeam;
     #endregion
 
     #region INTERNAL DATA
@@ -188,10 +190,11 @@ public class PedestalConstController : MonoBehaviour
         // Also activate all the orbs
         if (mirrorsDone & !_affordanceBeamActivated)
         {
-            _affordanceBeamActivated = true;
-            _affordanceBeam.SetBeamStatus(true);
-            PedestalLinkData linkData = _pedestalList[0].GetPedestalLinkData();
-            AffordanceBeamActivate(linkData);
+            //_affordanceBeamActivated = true;
+            //_affordanceBeam.SetBeamStatus(true);
+            //PedestalLinkData linkData = _pedestalList[0].GetPedestalLinkData();
+            //AffordanceBeamActivate(linkData);
+            StartCoroutine(BeamActivationSequence());
         }
 
         // Main puzzle is complete!
@@ -200,6 +203,16 @@ public class PedestalConstController : MonoBehaviour
             Debug.Log("Constellation Complete!");
             EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _cutsceneDoor);
         }
+    }
+
+    private IEnumerator BeamActivationSequence()
+    {
+        EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _cutsceneBeam);
+        yield return new WaitForSeconds(2f);
+        _affordanceBeamActivated = true;
+        _affordanceBeam.SetBeamStatus(true);
+        PedestalLinkData linkData = _pedestalList[0].GetPedestalLinkData();
+        AffordanceBeamActivate(linkData);
     }
 }
 

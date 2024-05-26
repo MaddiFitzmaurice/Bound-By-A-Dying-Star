@@ -18,7 +18,7 @@ public class PressurePlateSystemC : PressurePlateSystem
     private bool _movingToEnd;
     #endregion
 
-    private void Start()
+    private void OnEnable()
     {
         // Decide what the object should do when the system has been completed
         if (!_onIsMove)

@@ -493,6 +493,14 @@ PrefabInstance:
       propertyPath: RotationSpeed
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 964433810869957675, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: StepSmoothing
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445001021237656109, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_Radius
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 2632272185759781231, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: StepHeight
       value: 0.3
@@ -500,6 +508,10 @@ PrefabInstance:
     - target: {fileID: 2632272185759781231, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: RotationSpeed
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2632272185759781231, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: StepSmoothing
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2879832383240433885, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -520,6 +532,10 @@ PrefabInstance:
     - target: {fileID: 5508234846743703259, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005445842385754779, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_Radius
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 6288577921789816059, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_IsActive
@@ -565,7 +581,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 194728842448310920, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 488366337}
+    - targetCorrespondingSourceObject: {fileID: 194728842448310920, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 488366333}
+    - targetCorrespondingSourceObject: {fileID: 6741481978794199614, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2090097892}
     - targetCorrespondingSourceObject: {fileID: 6741481978794199614, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2090097888}
@@ -720,6 +742,29 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000000029802322, y: 0.2939999, z: -0.00010301173}
     m_Extent: {x: 0.5230917, y: 0.59985673, z: 0.49892306}
   m_DirtyAABB: 0
+--- !u!136 &488366337
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488366329}
+  m_Material: {fileID: 13400000, guid: 659396416b25c8d40b63b132b22119ac, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.98
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &501633743 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1805604429902880925, guid: 7a055fcb46ba21c449a692b79ff8bd56, type: 3}
@@ -7720,6 +7765,29 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000000029802322, y: 0.2939999, z: -0.00010301173}
     m_Extent: {x: 0.5230917, y: 0.59985673, z: 0.49892306}
   m_DirtyAABB: 0
+--- !u!136 &2090097892
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090097884}
+  m_Material: {fileID: 13400000, guid: 659396416b25c8d40b63b132b22119ac, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.98
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &2107053869 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5742638217090858669, guid: f4091d7503416cc48bdbfc4985abcc28, type: 3}
