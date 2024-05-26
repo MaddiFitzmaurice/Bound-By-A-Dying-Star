@@ -17,6 +17,10 @@ public class FMODEventManager : MonoBehaviour
     private EventInstance _itemDropInstance;
     private EventInstance _backgroundMusicInstance;
 
+    private const int AMBIENT_POSITION = 0; 
+    private const int CALM_POSITION = 3428; 
+    private const int DEEP_POSITION = 58287; 
+
     private void Awake()
     {
         // Initialize events
@@ -29,15 +33,15 @@ public class FMODEventManager : MonoBehaviour
         _itemDropInstance = RuntimeManager.CreateInstance(ItemDrop);
         _backgroundMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
 
-        // Pre-start instances to load resources (but do not release them)
+        // Pre-start instances to load resources
         _itemPickupInstance.start();
-        _itemPickupInstance.setPaused(true); // Pause immediately after starting
+        _itemPickupInstance.setPaused(true);
 
         _itemDropInstance.start();
-        _itemDropInstance.setPaused(true); // Pause immediately after starting
+        _itemDropInstance.setPaused(true);
 
         _backgroundMusicInstance.start();
-        _backgroundMusicInstance.setPaused(true); // Pause immediately after starting
+        _backgroundMusicInstance.setPaused(true);
     }
 
     private void OnEnable()
@@ -58,23 +62,73 @@ public class FMODEventManager : MonoBehaviour
 
     private void HandleItemPickup(object data)
     {
-        PlayEvent(ItemPickup);
+        PlayEvent(_itemPickupInstance);
     }
 
     private void HandleItemDrop(object data)
     {
-        PlayEvent(ItemDrop);
+        PlayEvent(_itemDropInstance);
     }
 
-    private void HandleBackgroundMusic(object data)
+    public void HandleBackgroundMusic(object data)
     {
-        PlayEvent(BackgroundMusic);
+        if (data is string marker)
+        {
+            _backgroundMusicInstance.setPaused(false);
+            int position = GetMarkerPosition(marker);
+            if (position >= 0)
+            {
+                _backgroundMusicInstance.setTimelinePosition(position);
+                _backgroundMusicInstance.start();
+                SetLoopRegion(marker);
+            }
+        }
     }
 
-    private void PlayEvent(EventReference eventReference)
+    private void PlayEvent(EventInstance eventInstance)
     {
-        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        eventInstance.setPaused(false);
         eventInstance.start();
-        eventInstance.release();
+    }
+
+    private int GetMarkerPosition(string marker)
+    {
+        switch (marker)
+        {
+            case "Ambient":
+                return AMBIENT_POSITION;
+            case "Calm":
+                return CALM_POSITION;
+            case "Deep":
+                return DEEP_POSITION;
+            default:
+                return -1;
+        }
+    }
+
+    private void SetLoopRegion(string marker)
+    {
+        
+        switch (marker)
+        {
+            case "Ambient":
+                // Enable Ambient loop
+                _backgroundMusicInstance.setParameterByName("AmbientLoop", 1);
+                _backgroundMusicInstance.setParameterByName("CalmLoop", 0);
+                _backgroundMusicInstance.setParameterByName("DeepLoop", 0);
+                break;
+            case "Calm":
+                // Enable Calm loop
+                _backgroundMusicInstance.setParameterByName("AmbientLoop", 0);
+                _backgroundMusicInstance.setParameterByName("CalmLoop", 1);
+                _backgroundMusicInstance.setParameterByName("DeepLoop", 0);
+                break;
+            case "Deep":
+                // Enable Deep loop
+                _backgroundMusicInstance.setParameterByName("AmbientLoop", 0);
+                _backgroundMusicInstance.setParameterByName("CalmLoop", 0);
+                _backgroundMusicInstance.setParameterByName("DeepLoop", 1);
+                break;
+        }
     }
 }

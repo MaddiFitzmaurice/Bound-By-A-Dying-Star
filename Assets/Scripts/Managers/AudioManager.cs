@@ -44,10 +44,9 @@ public class AudioManager : MonoBehaviour
             _musicInstance.release();
         }
 
-        if (_fmodEventManager != null)
+        if (_fmodEventManager != null && data is string marker)
         {
-            _musicInstance = RuntimeManager.CreateInstance(_fmodEventManager.BackgroundMusic);
-            _musicInstance.start();
+            _fmodEventManager.HandleBackgroundMusic(marker);
         }
     }
 
