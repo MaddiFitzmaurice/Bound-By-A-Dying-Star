@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Playables;
 
 public class LevelManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class LevelManager : MonoBehaviour
     [Header("Soft Puzzle Data")]
     [SerializeField] private GameObject _rewardGrouper;
     [SerializeField] private List<GameObject> _softPuzzles;
+    [SerializeField] private PlayableAsset _introCutscene;
     #endregion
 
     #region INTERNAL DATA
@@ -57,6 +59,7 @@ public class LevelManager : MonoBehaviour
 
         // Send Level Cams
         EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, _levelCamParent);
+        EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _introCutscene);
 
         // Set reward grouper parent and disable all soft puzzles
         foreach (GameObject softPuzzle in _softPuzzles)

@@ -154,7 +154,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 91050f8617423194e8c3f002c297b13a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 07a107330a3306340a83606ae19c56ca, type: 2}
+      objectReference: {fileID: 2100000, guid: c92ab7707d7586c4ba6324e06d9bc2ae, type: 2}
     - target: {fileID: 919132149155446097, guid: 91050f8617423194e8c3f002c297b13a, type: 3}
       propertyPath: m_Name
       value: PressurePlate_TypeC_NoTexture03
