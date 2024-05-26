@@ -376,18 +376,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ItemPickup>k__BackingField:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: -1521397063
+      Data2: 1125280914
+      Data3: 1337427844
+      Data4: -1042647547
+    Path: event:/Radiant2
   <ItemDrop>k__BackingField:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: -1521397063
+      Data2: 1125280914
+      Data3: 1337427844
+      Data4: -1042647547
+    Path: event:/Radiant2
   <BackgroundMusic>k__BackingField:
     Guid:
       Data1: 1844927654
