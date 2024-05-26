@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
+using FMOD.Studio;
 
 public class FMODEventManager : MonoBehaviour
 {
@@ -38,16 +39,23 @@ public class FMODEventManager : MonoBehaviour
 
     private void HandleItemPickup(object data)
     {
-        RuntimeManager.PlayOneShot(ItemPickup, transform.position);
+        PlayEvent(ItemPickup);
     }
 
     private void HandleItemDrop(object data)
     {
-        RuntimeManager.PlayOneShot(ItemDrop, transform.position);
+        PlayEvent(ItemDrop);
     }
 
     private void HandleBackgroundMusic(object data)
     {
-        RuntimeManager.PlayOneShot(BackgroundMusic, transform.position);
+        PlayEvent(BackgroundMusic);
+    }
+
+    private void PlayEvent(EventReference eventReference)
+    {
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        eventInstance.start();
+        eventInstance.release();
     }
 }
