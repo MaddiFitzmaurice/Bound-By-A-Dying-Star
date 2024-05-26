@@ -34,6 +34,8 @@ public class PressurePlatePair : PressurePlateSystem, IPressurePlateBase
             //PressurePlates[1].ActivateEffect(randomColor);
             Activated = true;
             _ppSystem.PlateActivated(this, Activated);
+            PressurePlates[0].ActivateColour(0);
+            PressurePlates[1].ActivateColour(0);
         }
         else
         {
@@ -78,7 +80,7 @@ public class PressurePlatePair : PressurePlateSystem, IPressurePlateBase
         _ppSystem = system;
     }
 
-    public void ActivateEffect(Color color)
+    public void ActivateColour(int colorMode)
     {
     }
     #endregion

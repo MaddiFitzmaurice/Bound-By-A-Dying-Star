@@ -49,6 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pressurePlatePS: {fileID: 4199590739887379953}
+  _player1Colour: {r: 1, g: 0.56078434, b: 0, a: 1}
+  _player2Colour: {r: 0, g: 0.5137255, b: 1, a: 1}
 --- !u!65 &1503952058743595317
 BoxCollider:
   m_ObjectHideFlags: 0
