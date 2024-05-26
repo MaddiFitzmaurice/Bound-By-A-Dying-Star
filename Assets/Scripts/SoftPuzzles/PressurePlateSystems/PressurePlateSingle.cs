@@ -49,7 +49,7 @@ public class PressurePlateSingle : MonoBehaviour, IPressurePlateBase
 
     public void ActivateEffect(Color color)
     {
-        _renderer.material.color = color;
+        //_renderer.material.color = color;
     }
     #endregion
 }
