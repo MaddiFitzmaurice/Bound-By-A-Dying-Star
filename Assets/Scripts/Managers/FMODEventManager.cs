@@ -13,12 +13,31 @@ public class FMODEventManager : MonoBehaviour
     [field: Header("Music Events")]
     [field: SerializeField] public EventReference BackgroundMusic { get; private set; }
 
+    private EventInstance _itemPickupInstance;
+    private EventInstance _itemDropInstance;
+    private EventInstance _backgroundMusicInstance;
+
     private void Awake()
     {
         // Initialize events
         EventManager.EventInitialise(EventType.ITEM_PICKUP);
         EventManager.EventInitialise(EventType.ITEM_DROP);
         EventManager.EventInitialise(EventType.BACKGROUND_MUSIC);
+
+        // Preload FMOD event instances
+        _itemPickupInstance = RuntimeManager.CreateInstance(ItemPickup);
+        _itemDropInstance = RuntimeManager.CreateInstance(ItemDrop);
+        _backgroundMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
+
+        // Pre-start instances to load resources (but do not release them)
+        _itemPickupInstance.start();
+        _itemPickupInstance.setPaused(true); // Pause immediately after starting
+
+        _itemDropInstance.start();
+        _itemDropInstance.setPaused(true); // Pause immediately after starting
+
+        _backgroundMusicInstance.start();
+        _backgroundMusicInstance.setPaused(true); // Pause immediately after starting
     }
 
     private void OnEnable()
