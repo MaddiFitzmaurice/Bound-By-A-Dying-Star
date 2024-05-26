@@ -376,25 +376,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ItemPickup>k__BackingField:
     Guid:
-      Data1: -439031867
-      Data2: 1136528851
-      Data3: -368457838
-      Data4: 1765257795
-    Path: event:/Tile_Scrape_Sound
+      Data1: 519979859
+      Data2: 1285762104
+      Data3: -703447921
+      Data4: 497503598
+    Path: event:/Local_Tile_Shift
   <ItemDrop>k__BackingField:
     Guid:
-      Data1: -439031867
-      Data2: 1136528851
-      Data3: -368457838
-      Data4: 1765257795
-    Path: event:/Tile_Scrape_Sound
+      Data1: 519979859
+      Data2: 1285762104
+      Data3: -703447921
+      Data4: 497503598
+    Path: event:/Local_Tile_Shift
   <BackgroundMusic>k__BackingField:
     Guid:
-      Data1: -505310753
-      Data2: 1323639456
-      Data3: 1781861285
-      Data4: 582124308
-    Path: event:/70BPM Background Music
+      Data1: 1844927654
+      Data2: 1174657659
+      Data3: 1496675478
+      Data4: 1048179752
+    Path: event:/70 BPM BGM Track
 --- !u!114 &431485567 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6698046749758996672, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
