@@ -299,7 +299,7 @@ MonoBehaviour:
   updateITimeControl: 1
   searchHierarchy: 0
   active: 1
-  postPlayback: 2
+  postPlayback: 1
 --- !u!74 &5405467199263682755
 AnimationClip:
   m_ObjectHideFlags: 0

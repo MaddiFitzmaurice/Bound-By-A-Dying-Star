@@ -165,7 +165,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         if (_validInteractables.Contains(_presetPlacedObject))
         {
             // Change the disk's color to green
-            _diskRenderer.material.color = Color.green;
+            //_diskRenderer.material.color = Color.green;
 
             // Lock Interaction
             LockPlacedMirror(_presetPlacedObject);
@@ -210,7 +210,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 if (player.CarriedPickupable != null && _validInteractables.Contains(player.CarriedPickupable))
                 {
                     // Change the disk's color to green
-                    _diskRenderer.material.color = Color.green;
+                    //_diskRenderer.material.color = Color.green;
 
                     // IPickupable and IInteractable manipulation
                     GameObject carriedPickupable = player.CarriedPickupable;
