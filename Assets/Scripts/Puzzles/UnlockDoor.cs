@@ -46,6 +46,7 @@ public class UnlockDoor : MonoBehaviour, IInteractable
         // Deactivates the door and the key
         this.gameObject.SetActive(false);
         _KeyObject.SetActive(false);
+        EventManager.EventTrigger(EventType.QUIT_GAME, null);
     }
 
     #region IINTERACTABLE FUNCTIONS
