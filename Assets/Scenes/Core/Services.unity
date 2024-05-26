@@ -257,56 +257,112 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -6.45
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 9.19
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -18.93
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.96225023
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0.08418603
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.25783417
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.022557575
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: field of view
-      value: 40
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: far clip plane
-      value: 5000
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: near clip plane
-      value: 0.1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: orthographic size
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 886701702458840434, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 431485561}
+    - targetCorrespondingSourceObject: {fileID: 886701702458840434, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 431485566}
     - targetCorrespondingSourceObject: {fileID: 5826652312068473386, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       insertIndex: -1
       addedObject: {fileID: 528208207}
   m_SourcePrefab: {fileID: 100100000, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
+--- !u!1 &431485560 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 886701702458840434, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
+  m_PrefabInstance: {fileID: 431485559}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &431485561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431485560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1cdfd2a7e1a33043ad37c746835faca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &431485566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431485560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9def40be75835c04593dbee8d0355bb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ItemPickup>k__BackingField:
+    Guid:
+      Data1: -102051700
+      Data2: 1104092061
+      Data3: 104611201
+      Data4: 1165467340
+    Path: event:/Tile Drag
+  <ItemDrop>k__BackingField:
+    Guid:
+      Data1: -102051700
+      Data2: 1104092061
+      Data3: 104611201
+      Data4: 1165467340
+    Path: event:/Tile Drag
+  <BackgroundMusic>k__BackingField:
+    Guid:
+      Data1: 1514814426
+      Data2: 1146154974
+      Data3: -319956060
+      Data4: 1601896979
+    Path: event:/2D BGM
 --- !u!1 &528208201 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5826652312068473386, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
