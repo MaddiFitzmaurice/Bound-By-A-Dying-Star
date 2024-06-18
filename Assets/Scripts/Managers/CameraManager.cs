@@ -42,8 +42,8 @@ public class CameraManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.DELETE_GAMEPLAY_CAM, DeleteGameplayCamHandler);
     }
 
-    // Called when Cinemachine Brain detects a camera change
-    public void LevelCameraChangeEvent()
+    // Called when Cinemachine Brain detects a camera activating
+    public void LevelCameraActivateEvent()
     {
         // Make sure active camera is one contained within a Level or SoftPuzzle
         if (_cmBrain.ActiveVirtualCamera.VirtualCameraGameObject.transform.parent.GetComponentInParent<GameplayCamerasManager>())

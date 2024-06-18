@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -15,6 +14,7 @@ public class PedestalConstController : MonoBehaviour
     [SerializeField] private BeamEmitter _affordanceBeam;
     [Header("Cinematics")]
     [SerializeField] PlayableAsset _cutsceneDoor;
+    [SerializeField] PlayableAsset _cutsceneBeam;
     #endregion
 
     #region INTERNAL DATA
@@ -59,6 +59,11 @@ public class PedestalConstController : MonoBehaviour
         
         // Set preset peddestal values so it is shooting beam
         pedestalSender.ActivateEffect();
+        foreach (ConstPedestal pedestal in _pedestalList)
+        {
+            pedestal.ActivateOrb();
+        }
+
         _pedestaData[senderIndex].ShootingBeam = true;
         _pedestaData[senderIndex].RecieveBeam = true;
         PedestalChecker(senderIndex);
@@ -133,7 +138,7 @@ public class PedestalConstController : MonoBehaviour
     }
 
     // Go through each pedestal
-    // if the pedestal has a mirror, is recieving a beam but not shooting a beam
+    // if the pedestal has a mirror and is recieving a beam but not shooting a beam
     // tell the pedestal to activate the beam effect
     // then check if constellation is complete
     private void PedestalChecker(int senderIndex)
@@ -162,35 +167,52 @@ public class PedestalConstController : MonoBehaviour
 
         for (int i = 0; i < _pedestalNum; i++)
         {
+            // Check if each pedestal has a mirror
             if(!_pedestaData[i].HasMirror)
             {
                 mirrorsDone = false;
             }
 
+            // Check if each pedestal has a mirror, recieving a beam and it's beam is facing the right direction
             if(!_pedestaData[i].RightBeamDirection || !_pedestaData[i].RecieveBeam || !_pedestaData[i].HasMirror)
             {
                 done = false;
             }
 
+            // Check if each pedestal has a mirror, recieving a beam, shooting a beam and it's beam is facing the right direction
             if(_pedestaData[i].ShootingBeam && _pedestaData[i].RightBeamDirection && _pedestaData[i].RecieveBeam &&_pedestaData[i].HasMirror)
             {
                 _pedestalList[i].ActivateSkyBeam();
             }
         }
 
+        // Activate affordance beam from the arch to the 1st pedestal
+        // Also activate all the orbs
         if (mirrorsDone & !_affordanceBeamActivated)
         {
-            _affordanceBeamActivated = true;
-            _affordanceBeam.SetBeamStatus(true);
-            PedestalLinkData linkData = _pedestalList[0].GetPedestalLinkData();
-            AffordanceBeamActivate(linkData);
+            //_affordanceBeamActivated = true;
+            //_affordanceBeam.SetBeamStatus(true);
+            //PedestalLinkData linkData = _pedestalList[0].GetPedestalLinkData();
+            //AffordanceBeamActivate(linkData);
+            StartCoroutine(BeamActivationSequence());
         }
 
+        // Main puzzle is complete!
         if (done)
         {
             Debug.Log("Constellation Complete!");
             EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _cutsceneDoor);
         }
+    }
+
+    private IEnumerator BeamActivationSequence()
+    {
+        EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _cutsceneBeam);
+        yield return new WaitForSeconds(2f);
+        _affordanceBeamActivated = true;
+        _affordanceBeam.SetBeamStatus(true);
+        PedestalLinkData linkData = _pedestalList[0].GetPedestalLinkData();
+        AffordanceBeamActivate(linkData);
     }
 }
 

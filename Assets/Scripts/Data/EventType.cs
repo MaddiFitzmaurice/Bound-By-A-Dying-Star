@@ -58,4 +58,12 @@ public enum EventType
 
     // Testing
     TEST_CONTROLS,
+
+    // Audio
+    MUSIC,
+    SFX,
+    INTRO,
+    ITEM_PICKUP,
+    ITEM_DROP,
+    BACKGROUND_MUSIC,
 };

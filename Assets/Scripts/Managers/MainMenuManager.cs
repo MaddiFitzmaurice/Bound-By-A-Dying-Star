@@ -8,10 +8,11 @@ using System.Linq;
 public class MainMenuUIManager : MonoBehaviour
 {
     private bool _buttonPressed = false; // Stops multiple clicking of same button
-    
+
     public void Start()
     {
         _buttonPressed = false;
+        // EventManager.EventTrigger(EventType.MUSIC, "Ambient"); // Start music looping Ambient section
     }
 
     // Starts event sequence which exits the game
@@ -26,6 +27,7 @@ public class MainMenuUIManager : MonoBehaviour
         if (!_buttonPressed)
         {
             EventManager.EventTrigger(EventType.PLAY_GAME, levelNum);
+            // EventManager.EventTrigger(EventType.MUSIC, "Calm"); // Transition to Calm section
             _buttonPressed = true;
         }
     }

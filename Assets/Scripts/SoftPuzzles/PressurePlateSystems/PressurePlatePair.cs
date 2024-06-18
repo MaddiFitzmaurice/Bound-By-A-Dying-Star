@@ -29,16 +29,18 @@ public class PressurePlatePair : PressurePlateSystem, IPressurePlateBase
 
         if (PressurePlates[0].Activated && PressurePlates[1].Activated)
         {
-            Color randomColor = new Color(Random.value, Random.value, Random.value);
-            PressurePlates[0].ActivateEffect(randomColor);
-            PressurePlates[1].ActivateEffect(randomColor);
+            //Color randomColor = new Color(Random.value, Random.value, Random.value);
+            //PressurePlates[0].ActivateEffect(randomColor);
+            //PressurePlates[1].ActivateEffect(randomColor);
             Activated = true;
             _ppSystem.PlateActivated(this, Activated);
+            PressurePlates[0].ActivateColour(0);
+            PressurePlates[1].ActivateColour(0);
         }
         else
         {
-            PressurePlates[0].ActivateEffect(Color.white);
-            PressurePlates[1].ActivateEffect(Color.white);
+            //PressurePlates[0].ActivateEffect(Color.white);
+            //PressurePlates[1].ActivateEffect(Color.white);
             Activated = false;
         }
     }
@@ -78,7 +80,7 @@ public class PressurePlatePair : PressurePlateSystem, IPressurePlateBase
         _ppSystem = system;
     }
 
-    public void ActivateEffect(Color color)
+    public void ActivateColour(int colorMode)
     {
     }
     #endregion

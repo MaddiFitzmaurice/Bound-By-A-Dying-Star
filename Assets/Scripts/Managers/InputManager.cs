@@ -27,6 +27,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     private bool _holdInteractP1 = false;
     private bool _holdInteractP2 = false;
 
+    #region FRAMEWORK FUNCTIONS
     void Awake()
     {
         //_inputs = new InputActions();
@@ -72,6 +73,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         EventManager.EventUnsubscribe(EventType.DISABLE_INPUTS, DisablePlayerInput);
         EventManager.EventUnsubscribe(EventType.ENABLE_INPUTS, EnablePlayerInput);
     }
+    #endregion
 
     #region DEVICE FUNCTIONS
     public void DeviceSetup()
@@ -82,6 +84,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player1.AssociateActionsWithUser(_player1Inputs);
         _player2.AssociateActionsWithUser(_player2Inputs);
 
+        // Enable keyboard input if using Unity Editor instead of build
         //#if UNITY_EDITOR
         InputUser.PerformPairingWithDevice(Keyboard.current, _player1);
         InputUser.PerformPairingWithDevice(Keyboard.current, _player2);
@@ -91,8 +94,15 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         // At least find one gamepad device to pair with player 1
         if (Gamepad.current != null)
         {
-            InputUser.PerformPairingWithDevice(Gamepad.current, _player1);
+            InputUser.PerformPairingWithDevice(Gamepad.all[0], _player1);
             _player1Inputs.Enable();
+            
+            // If another gamepad, pair device with player 2
+            if (Gamepad.all.Count > 1)
+            {
+                InputUser.PerformPairingWithDevice(Gamepad.all[1], _player2);
+                _player2Inputs.Enable();
+            }
         }
         else
         {
@@ -106,22 +116,51 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         switch (change)
         {
             case InputDeviceChange.Added:
-                // If player 1 has no currently paired devices
-                if (_player1.pairedDevices.Count == 0)
+                // Make sure incoming device is not a keyboard or mouse
+                if (device.description.deviceClass != "Keyboard" || device.description.deviceClass != "Mouse")
                 {
-                    if (device.description.deviceClass != "Keyboard" || device.description.deviceClass != "Mouse")
+                    bool p1HasDevice = false;
+
+                    // Check devices connected to player 1
+                    foreach (InputDevice p1ConDevice in _player1.pairedDevices)
                     {
+                        // If same device class, break out of for loop
+                        if (p1ConDevice.description.deviceClass == device.description.deviceClass)
+                        {
+                            p1HasDevice = true;
+                            break;
+                        }
+                    }
+
+                    // Assign device to player 1 and break out of switch
+                    if (!p1HasDevice)
+                    {
+                        Debug.Log("Player 1: " + device.description);
                         InputUser.PerformPairingWithDevice(device, _player1);
                         _player1Inputs.Enable();
+                        break;
                     }
-                }
-                // If player 2 has no currently paired devices
-                else if (_player2.pairedDevices.Count == 0)
-                {
-                    if (device.description.deviceClass != "Keyboard" || device.description.deviceClass != "Mouse")
+
+                    bool p2HasDevice = false;
+
+                    // Check devices connected to player 2
+                    foreach (InputDevice p1ConDevice in _player2.pairedDevices)
                     {
+                        // If same device class, break out of for loop
+                        if (p1ConDevice.description.deviceClass == device.description.deviceClass)
+                        {
+                            p2HasDevice = true;
+                            break;
+                        }
+                    }
+
+                    // Assign device to player 2 and break out of switch
+                    if (!p2HasDevice)
+                    {
+                        Debug.Log("Player 2: " + device.description);
                         InputUser.PerformPairingWithDevice(device, _player2);
                         _player2Inputs.Enable();
+                        break;
                     }
                 }
                 break;
@@ -129,12 +168,12 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
                 // If device has been disconnected from player 1
                 if (_player1.pairedDevices.ToList().Contains(device))
                 {
-                    _player1Inputs.Disable();
+                    //_player1Inputs.Disable();
                 }
                 // Else if device has been disconnected from player 2
-                if (_player1.pairedDevices.ToList().Contains(device))
+                if (_player2.pairedDevices.ToList().Contains(device))
                 {
-                    _player2Inputs.Disable();
+                    //_player2Inputs.Disable();
                 }
                 break;
             case InputDeviceChange.Reconnected:

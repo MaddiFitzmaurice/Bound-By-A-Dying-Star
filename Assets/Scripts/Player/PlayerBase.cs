@@ -71,6 +71,7 @@ public abstract class PlayerBase : MonoBehaviour
     private float _prevCamYAngle;
     #endregion
 
+    #region FRAMEWORK FUNCTIONS
     void Awake()
     {
         // Set components
@@ -116,6 +117,7 @@ public abstract class PlayerBase : MonoBehaviour
         PlayerMovement();
         StepClimb();
     }
+    #endregion
 
     #region MOVEMENT FUNCTIONS
     // Movement
@@ -218,7 +220,10 @@ public abstract class PlayerBase : MonoBehaviour
         //    }
         //}
 
-        if (PrevMoveInput != MoveInput)
+        // Change to new skew angle based on changed camera if player has let go of
+        // the movement buttons or slightly changed direction if using a gamepad
+        //if (PrevMoveInput != MoveInput)
+        if (Vector3.Dot(PrevMoveInput, MoveInput) < 0.85f)
         {
             _prevCamYAngle = _camYAngle;
         }
@@ -253,10 +258,10 @@ public abstract class PlayerBase : MonoBehaviour
     public void StepClimb()
     {
         RaycastHit lowerBoundHit;
-        if (Physics.Raycast(LowerBoundRay.transform.position, transform.forward, out lowerBoundHit, 0.8f))
+        if (Physics.Raycast(LowerBoundRay.transform.position, transform.forward, out lowerBoundHit, 0.6f))
         {
             RaycastHit upperBoundHit;
-            if (!Physics.Raycast(UpperBoundRay.transform.position, transform.forward, out upperBoundHit, 0.9f))
+            if (!Physics.Raycast(UpperBoundRay.transform.position, transform.forward, out upperBoundHit, 0.7f))
             {
                 _rb.position -= new Vector3(0f, -StepSmoothing * Time.deltaTime, 0f);
             }

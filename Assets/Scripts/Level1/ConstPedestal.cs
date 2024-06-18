@@ -1,9 +1,5 @@
-using Ink.Parsed;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class ConstPedestal : MonoBehaviour, IInteractable
@@ -34,6 +30,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     #region INTERNAL DATA
     private List<ConstPedestal> _pedestalDestinations;
     private List<float> _beamMaxLength = new List<float>();
+    
     // Components
     private Renderer _diskRenderer;
     private PedestalConstController _conController;
@@ -168,7 +165,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         if (_validInteractables.Contains(_presetPlacedObject))
         {
             // Change the disk's color to green
-            _diskRenderer.material.color = Color.green;
+            //_diskRenderer.material.color = Color.green;
 
             // Lock Interaction
             LockPlacedMirror(_presetPlacedObject);
@@ -185,7 +182,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 if (pickupableType is Level1Mirror)
                 {
                     _mirror = (Level1Mirror)pickupableType;
-                    StartCoroutine(InitialRotateMirror(_mirror.transform));
+                    InitialRotateMirror(_mirror.transform);
                 }
             }
             else
@@ -213,7 +210,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 if (player.CarriedPickupable != null && _validInteractables.Contains(player.CarriedPickupable))
                 {
                     // Change the disk's color to green
-                    _diskRenderer.material.color = Color.green;
+                    //_diskRenderer.material.color = Color.green;
 
                     // IPickupable and IInteractable manipulation
                     GameObject carriedPickupable = player.CarriedPickupable;
@@ -226,7 +223,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                     if (pickupableType is Level1Mirror)
                     {
                         _mirror = (Level1Mirror)pickupableType;
-                        StartCoroutine(InitialRotateMirror(_mirror.transform));
+                        InitialRotateMirror(_mirror.transform);
                     }
                 }
             }
@@ -242,31 +239,33 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             Vector3 localSource = transform.InverseTransformPoint(_beamSource.position);
             
+            // If there are two beams
             if (beamCount == 2)
             {
+                // Iterate over both the two beams
                 for (int i = 0; i < beamCount; i++)
                 {
-                    // Get angle diff
-                    Vector3 targetDir = _beamDestinations[i].transform.position - _beamSource.position;
-                    float targetDiff = Vector3.Angle(_targetDir, targetDir);
-                    if (i == 0)
-                    {
-                        targetDiff = 360 - targetDiff;
-                    }
-
-                    // Then add diff offset to direction
-                    Quaternion startRot = Quaternion.Euler(0f, targetDiff, 0f);
-                    Vector3 startRotEuler = startRot.eulerAngles;
-                    startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
-
+                    // Calculate destination in local space
+                    Vector3 offsetTarget = transform.InverseTransformPoint(_beamDestinations[i].transform.position);
+                    offsetTarget = new Vector3(offsetTarget.x, localSource.y, offsetTarget.z);
+                    
+                    // Set Beam start and endpoints
+                    _beamRenderer[i].gameObject.transform.parent.gameObject.SetActive(true);
                     _beamRenderer[i].SetPosition(0, localSource);
-                    _beamRenderer[i].SetPosition(1, localSource + ((startRot * _beamSource.forward) * _beamMaxLength[i]));
+                    _beamRenderer[i].SetPosition(1, offsetTarget);
                 }
             }
-            else
+            else // If there is just the one beam
             {
+                // Calculate destination in local space
+                Vector3 offsetTarget = transform.InverseTransformPoint(_beamDestinations[0].transform.position);
+
+                offsetTarget = new Vector3(offsetTarget.x, localSource.y, offsetTarget.z);
+
+                // Set Beam start and endpoints
+                _beamRenderer[0].gameObject.transform.parent.gameObject.SetActive(true);
                 _beamRenderer[0].SetPosition(0, localSource);
-                _beamRenderer[0].SetPosition(1, localSource + (_beamSource.forward * _beamMaxLength[0]));
+                _beamRenderer[0].SetPosition(1, offsetTarget);
             }
         }
         else
@@ -276,23 +275,21 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     }
 
     // Rotate mirror to angle on placing on pedestal
-    private IEnumerator InitialRotateMirror(Transform mirror)
+    private void InitialRotateMirror(Transform mirror)
     {
         // Set the mirror's position and rotation to match the pedestal before starting the rotation
         mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
         mirror.rotation = transform.rotation;
 
+        // Get position of beam destination (eventually should get average pos when multiple)
         Vector3 targetPosition = _beamDestinations[0].transform.position;
 
         // Remove the y component from the target position and the mirror's position to avoid tilting
         Vector3 targetDirection = (new Vector3(targetPosition.x, mirror.position.y, targetPosition.z) - mirror.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
-        while (Quaternion.Angle(mirror.rotation, targetRotation) > 0.01f)
-        {
-            mirror.rotation = Quaternion.Lerp(mirror.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
-            yield return null;
-        }
+        // Combine target rotation with the initial offset
+        targetRotation = targetRotation * (mirror.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f));
 
         // Ensure the mirror snaps to the exact rotation
         mirror.rotation = targetRotation; 
@@ -306,10 +303,14 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             GameObject newLightbeam = Instantiate(_lightBeam, transform);
             _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
+            newLightbeam.SetActive(false);
         }
-        SetBeamPositions();
+    }
+
+    // Activate mirror orb effects
+    public void ActivateOrb()
+    {
         _mirrorBeamFX.SetActive(true);
-        //EventManager.EventTrigger(EventType.LVL1_STAR_ACTIVATE, _id);
     }
 
     // Activate sky beam
@@ -319,7 +320,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     }
 
     // Rotate beam to target direction anticlockwise
-    private IEnumerator RotateBeam(Vector3 targetDir)
+    private IEnumerator RotateMirror(Vector3 targetDir)
     {
         _isRotating = true;
         _beamTurningPS.Play();
@@ -340,7 +341,6 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f && _isRotating)
             {
                 _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
-                SetBeamPositions();
                 yield return null;
             }
 
@@ -358,6 +358,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         if(dot > 0.985f) 
         { 
             _correctAngle = true;
+            SetBeamPositions();
+
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
             return false;
@@ -393,7 +395,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             if (_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
             {
-                StartCoroutine(RotateBeam(_targetDir));
+                StartCoroutine(RotateMirror(_targetDir));
             }
         }
     }

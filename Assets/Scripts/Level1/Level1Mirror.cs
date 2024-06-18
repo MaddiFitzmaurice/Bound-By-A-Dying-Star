@@ -9,6 +9,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     [SerializeField] private float _maxIntensity = 5f;
     [SerializeField] private float _maxDistance = 10f;
     public bool InteractLocked { get; set; } = false;
+
     #endregion
 
     #region INTERNAL DATA
@@ -97,6 +98,13 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         _followTarget = _player.PickupPoint;
         _emissionPS.enabled = true;
 
+        // If currently associated with a soft puzzle
+        if (_softPuzzle)
+        {
+            HeldInSoftPuzzle = true;
+            _softPuzzle.CheckAllRewardsHeld();
+        }
+
         StartCoroutine(ItemFloatUp());
     }
 
@@ -162,12 +170,12 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         _player.PickupItem(gameObject);
         SetParent(_player.transform);
 
-        // If currently associated with a soft puzzle
-        if (_softPuzzle)
-        {
-            HeldInSoftPuzzle = true;
-            _softPuzzle.CheckAllRewardsHeld();
-        }
+        //// If currently associated with a soft puzzle
+        //if (_softPuzzle)
+        //{
+        //    HeldInSoftPuzzle = true;
+        //    _softPuzzle.CheckAllRewardsHeld();
+        //}
     }
     #endregion
 
@@ -194,9 +202,9 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     {
         if (isIntensityChanging)
         {
+
             isIntensityChanging = false;
             // Debug.Log("Starting to decrease light intensity towards minimal.");
-
             LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
                 _light.intensity = val;
                 // Debug.Log("Current light intensity: " + val);
@@ -210,6 +218,10 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     public void PlayerStartInteract(PlayerBase player)
     {
+
+        // Play the FMOD event
+        EventManager.EventTrigger(EventType.ITEM_PICKUP, null);
+
         // If a player is holding the mirror
         if (_player != null)
         {
@@ -238,6 +250,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     public void PlayerReleaseHoldInteract(PlayerBase player)
     {
         throw new System.NotImplementedException();
+        // Play the FMOD event
+        EventManager.EventTrigger(EventType.ITEM_PICKUP, null);
     }
     #endregion
 
