@@ -763,16 +763,16 @@ Cloth:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 601858119}
   m_Enabled: 1
-  m_StretchingStiffness: 0.7
+  m_StretchingStiffness: 1
   m_BendingStiffness: 0.7
   m_UseTethers: 0
   m_UseGravity: 1
   m_Damping: 0.7
   m_ExternalAcceleration: {x: 0, y: 0, z: 0}
   m_RandomAcceleration: {x: 0, y: 0, z: 0}
-  m_WorldVelocityScale: 0.7
+  m_WorldVelocityScale: 1
   m_WorldAccelerationScale: 1
-  m_Friction: 0.7
+  m_Friction: 1
   m_CollisionMassScale: 0
   m_UseContinuousCollision: 1
   m_UseVirtualParticles: 1
@@ -4153,16 +4153,16 @@ Cloth:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1160609730}
   m_Enabled: 1
-  m_StretchingStiffness: 0.7
+  m_StretchingStiffness: 1
   m_BendingStiffness: 0.7
   m_UseTethers: 0
   m_UseGravity: 1
   m_Damping: 0.7
   m_ExternalAcceleration: {x: 0, y: 0, z: 0}
   m_RandomAcceleration: {x: 0, y: 0, z: 0}
-  m_WorldVelocityScale: 0.7
+  m_WorldVelocityScale: 1
   m_WorldAccelerationScale: 1
-  m_Friction: 0.7
+  m_Friction: 1
   m_CollisionMassScale: 0
   m_UseContinuousCollision: 1
   m_UseVirtualParticles: 1
