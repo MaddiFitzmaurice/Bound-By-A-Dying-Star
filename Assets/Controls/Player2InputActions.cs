@@ -28,15 +28,6 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
             ""id"": ""3ac3e93b-aa1f-4a0d-bb61-21ad72d0d6c3"",
             ""actions"": [
                 {
-                    ""name"": ""Player2GenerateRift"",
-                    ""type"": ""Button"",
-                    ""id"": ""65386f05-4dba-4c71-9fac-18218b7656be"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Player2Move"",
                     ""type"": ""Value"",
                     ""id"": ""969d9365-6b8e-4309-a5cb-71feb2630eb6"",
@@ -52,6 +43,15 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold,Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player2GenerateRift"",
+                    ""type"": ""Button"",
+                    ""id"": ""65386f05-4dba-4c71-9fac-18218b7656be"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],
@@ -116,29 +116,7 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""id"": ""29788d14-017c-453f-96e0-c15273d44fac"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e1bb6216-2f4d-4226-8f64-c326959136a0"",
-                    ""path"": ""<Joystick>/stick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2663d2cf-869d-4edb-9bf7-fbaf4fcba196"",
-                    ""path"": ""<XRController>/{Primary2DAxis}"",
-                    ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone(min=0.5)"",
                     ""groups"": """",
                     ""action"": ""Player2Move"",
                     ""isComposite"": false,
@@ -157,52 +135,8 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7a294303-5ca4-418d-94b5-714d41512942"",
-                    ""path"": ""<XRController>/{PrimaryAction}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e051d41f-ac20-47a8-a9d9-7e3017bb67c6"",
-                    ""path"": ""<Joystick>/trigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f13696a7-b6cd-44c1-86da-961eeebefdb9"",
-                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1b5ced6b-4767-4445-9cc5-cdfcca2f4ed3"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""9c6d440a-3184-43e4-aae9-7976682dcd03"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -220,6 +154,17 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Player2GenerateRift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06f725a2-fde3-4f8f-b55b-15d123ee4ef9"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2GenerateRift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -228,9 +173,9 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
 }");
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_Player2GenerateRift = m_Gameplay.FindAction("Player2GenerateRift", throwIfNotFound: true);
         m_Gameplay_Player2Move = m_Gameplay.FindAction("Player2Move", throwIfNotFound: true);
         m_Gameplay_Player2Interact = m_Gameplay.FindAction("Player2Interact", throwIfNotFound: true);
+        m_Gameplay_Player2GenerateRift = m_Gameplay.FindAction("Player2GenerateRift", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -292,16 +237,16 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     // Gameplay
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
-    private readonly InputAction m_Gameplay_Player2GenerateRift;
     private readonly InputAction m_Gameplay_Player2Move;
     private readonly InputAction m_Gameplay_Player2Interact;
+    private readonly InputAction m_Gameplay_Player2GenerateRift;
     public struct GameplayActions
     {
         private @Player2InputActions m_Wrapper;
         public GameplayActions(@Player2InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Player2GenerateRift => m_Wrapper.m_Gameplay_Player2GenerateRift;
         public InputAction @Player2Move => m_Wrapper.m_Gameplay_Player2Move;
         public InputAction @Player2Interact => m_Wrapper.m_Gameplay_Player2Interact;
+        public InputAction @Player2GenerateRift => m_Wrapper.m_Gameplay_Player2GenerateRift;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -311,28 +256,28 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
-            @Player2GenerateRift.started += instance.OnPlayer2GenerateRift;
-            @Player2GenerateRift.performed += instance.OnPlayer2GenerateRift;
-            @Player2GenerateRift.canceled += instance.OnPlayer2GenerateRift;
             @Player2Move.started += instance.OnPlayer2Move;
             @Player2Move.performed += instance.OnPlayer2Move;
             @Player2Move.canceled += instance.OnPlayer2Move;
             @Player2Interact.started += instance.OnPlayer2Interact;
             @Player2Interact.performed += instance.OnPlayer2Interact;
             @Player2Interact.canceled += instance.OnPlayer2Interact;
+            @Player2GenerateRift.started += instance.OnPlayer2GenerateRift;
+            @Player2GenerateRift.performed += instance.OnPlayer2GenerateRift;
+            @Player2GenerateRift.canceled += instance.OnPlayer2GenerateRift;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
         {
-            @Player2GenerateRift.started -= instance.OnPlayer2GenerateRift;
-            @Player2GenerateRift.performed -= instance.OnPlayer2GenerateRift;
-            @Player2GenerateRift.canceled -= instance.OnPlayer2GenerateRift;
             @Player2Move.started -= instance.OnPlayer2Move;
             @Player2Move.performed -= instance.OnPlayer2Move;
             @Player2Move.canceled -= instance.OnPlayer2Move;
             @Player2Interact.started -= instance.OnPlayer2Interact;
             @Player2Interact.performed -= instance.OnPlayer2Interact;
             @Player2Interact.canceled -= instance.OnPlayer2Interact;
+            @Player2GenerateRift.started -= instance.OnPlayer2GenerateRift;
+            @Player2GenerateRift.performed -= instance.OnPlayer2GenerateRift;
+            @Player2GenerateRift.canceled -= instance.OnPlayer2GenerateRift;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -352,8 +297,8 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     public GameplayActions @Gameplay => new GameplayActions(this);
     public interface IGameplayActions
     {
-        void OnPlayer2GenerateRift(InputAction.CallbackContext context);
         void OnPlayer2Move(InputAction.CallbackContext context);
         void OnPlayer2Interact(InputAction.CallbackContext context);
+        void OnPlayer2GenerateRift(InputAction.CallbackContext context);
     }
 }

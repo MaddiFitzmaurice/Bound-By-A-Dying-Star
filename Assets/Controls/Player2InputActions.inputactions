@@ -6,15 +6,6 @@
             "id": "3ac3e93b-aa1f-4a0d-bb61-21ad72d0d6c3",
             "actions": [
                 {
-                    "name": "Player2GenerateRift",
-                    "type": "Button",
-                    "id": "65386f05-4dba-4c71-9fac-18218b7656be",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Player2Move",
                     "type": "Value",
                     "id": "969d9365-6b8e-4309-a5cb-71feb2630eb6",
@@ -30,6 +21,15 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Hold,Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Player2GenerateRift",
+                    "type": "Button",
+                    "id": "65386f05-4dba-4c71-9fac-18218b7656be",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
                     "initialStateCheck": false
                 }
             ],
@@ -94,29 +94,7 @@
                     "id": "29788d14-017c-453f-96e0-c15273d44fac",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e1bb6216-2f4d-4226-8f64-c326959136a0",
-                    "path": "<Joystick>/stick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2663d2cf-869d-4edb-9bf7-fbaf4fcba196",
-                    "path": "<XRController>/{Primary2DAxis}",
-                    "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone(min=0.5)",
                     "groups": "",
                     "action": "Player2Move",
                     "isComposite": false,
@@ -135,52 +113,8 @@
                 },
                 {
                     "name": "",
-                    "id": "7a294303-5ca4-418d-94b5-714d41512942",
-                    "path": "<XRController>/{PrimaryAction}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e051d41f-ac20-47a8-a9d9-7e3017bb67c6",
-                    "path": "<Joystick>/trigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f13696a7-b6cd-44c1-86da-961eeebefdb9",
-                    "path": "<Touchscreen>/primaryTouch/tap",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1b5ced6b-4767-4445-9cc5-cdfcca2f4ed3",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "9c6d440a-3184-43e4-aae9-7976682dcd03",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -192,6 +126,17 @@
                     "name": "",
                     "id": "45ecb988-76d3-4511-9967-93423110d662",
                     "path": "<Keyboard>/period",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2GenerateRift",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "06f725a2-fde3-4f8f-b55b-15d123ee4ef9",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
