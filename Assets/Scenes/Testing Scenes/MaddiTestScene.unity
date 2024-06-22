@@ -732,6 +732,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Puzzle1_Pedestal (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1100995330893583961, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1100995330893583961, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6661a195247b5634096fe4cc9f6dd714, type: 2}
     - target: {fileID: 1379039469469042465, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
       propertyPath: validObjects.Array.data[0]
       value: 
@@ -748,6 +756,10 @@ PrefabInstance:
       propertyPath: _validInteractables.Array.data[0]
       value: 
       objectReference: {fileID: 441016318}
+    - target: {fileID: 2237349718899911990, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.05
+      objectReference: {fileID: 0}
     - target: {fileID: 3955604971440488076, guid: 7c4f71cee37a74a48935dfbf50c7eb6a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.1974223
@@ -1030,6 +1042,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6516356440000340028, guid: f7e249b4bd538264eb7c54579c83d0f1, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6516356440000340028, guid: f7e249b4bd538264eb7c54579c83d0f1, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 637b78c236eb44043b0cd9f480d73115, type: 2}
+    - target: {fileID: 6516356440000340028, guid: f7e249b4bd538264eb7c54579c83d0f1, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 57eeff81edd821846aeb8a9694c2f280, type: 2}
     - target: {fileID: 8852804476506635420, guid: f7e249b4bd538264eb7c54579c83d0f1, type: 3}
       propertyPath: m_Name
       value: Mirror
