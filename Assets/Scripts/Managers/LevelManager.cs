@@ -59,7 +59,11 @@ public class LevelManager : MonoBehaviour
 
         // Send Level Cams
         EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, _levelCamParent);
-        EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _introCutscene);
+        
+        if (_introCutscene != null)
+        {
+            EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _introCutscene);
+        }
 
         EventManager.EventTrigger(EventType.MUSIC, "Calm"); // Ensure transition to Calm section
 
