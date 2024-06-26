@@ -18,7 +18,6 @@ public class Player2 : PlayerBase
         EventManager.EventUnsubscribe(EventType.PLAYER_2_MOVE, Player2MoveHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_INTERACT, Interact);
-        EventManager.EventUnsubscribe(EventType.TEST_CONTROLS, TestControlHandler);
         EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, ModifyGravityAndFallingSpeed);
     }
 

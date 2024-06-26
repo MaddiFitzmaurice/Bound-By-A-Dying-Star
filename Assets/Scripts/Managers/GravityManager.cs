@@ -30,7 +30,7 @@ public class GravityManager : MonoBehaviour
             isFlipped = true;
 
             // Optionally trigger an event if needed
-            EventManager.EventTrigger(EventType.GRAVITY_INVERT, null);
+            EventManager.EventTrigger(EventType.GRAVITY_INVERT, isFlipped);
         }
     }
 
@@ -44,7 +44,7 @@ public class GravityManager : MonoBehaviour
             isFlipped = false;
 
             // Optionally trigger an event if needed
-            EventManager.EventTrigger(EventType.GRAVITY_INVERT, null);
+            EventManager.EventTrigger(EventType.GRAVITY_INVERT, isFlipped);
         }
     }
 

@@ -59,14 +59,14 @@ public abstract class PlayerBase : MonoBehaviour
     protected InteractTypes MoveType;
     protected float PlayerZAngle;
     protected bool FacingMoveDir = false;
+    private Vector3 _orientation = Vector3.up;
 
     // Interactables
     List<Collider> _interactablesInRange;
     List<Collider> _interactablesNotInRange;
     Collider _closestInteractable;
 
-    // TEST
-    private ControlType _controlType = ControlType.FIXEDCAM2;
+    // Camera Data
     private float _camYAngle;
     private float _prevCamYAngle;
     #endregion
@@ -96,14 +96,14 @@ public abstract class PlayerBase : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.TEST_CONTROLS, TestControlHandler);
         EventManager.EventSubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventSubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
     }
 
     protected virtual void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.TEST_CONTROLS, TestControlHandler);
         EventManager.EventUnsubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
     }
 
     private void Update()
@@ -137,92 +137,14 @@ public abstract class PlayerBase : MonoBehaviour
         float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, VelocityPower)
             * Mathf.Sign(velocityDif);
 
-        // OLD MOVEMENT TESTING
-        //if (_controlType == ControlType.TANK)
-        //{
-        //    _rb.AddForce(movementForce * transform.forward * MoveInput.z);
-        //}
-        //else if (_controlType == ControlType.WORLDSTRAFE)
-        //{
-        //    _rb.AddForce(movementForce * MoveInput);
-        //}
-        //else if (_controlType == ControlType.FIXEDCAM || _controlType == ControlType.FIXEDCAM2)
-        //{
-        //    _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
-        //}
-
-        //if (MoveType == InteractTypes.HOLD || MoveType == InteractTypes.RELEASE_HOLD)
-        //{
         if (FacingMoveDir)
         {
             _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
         }
-        //}
     }
 
     public void PlayerRotation()
     {
-        // OLD ROTATION TEST
-        //if (_controlType == ControlType.TANK)
-        //{
-        //    Vector3 rotVector = new Vector3(0, MoveInput.x, PlayerZAngle);
-
-        //    Quaternion playerRotChange = Quaternion.Euler(rotVector * Time.deltaTime * RotationSpeed);
-
-        //    _rb.MoveRotation(_rb.rotation * playerRotChange);
-        //}
-        //else if (_controlType == ControlType.WORLDSTRAFE)
-        //{
-        //    if (MoveInput.magnitude != 0)
-        //    {
-        //        if (PlayerZAngle == 0)
-        //        {
-        //            _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.up));
-        //        }
-        //        else if (PlayerZAngle == -180)
-        //        {
-        //            _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.down));
-        //        }
-        //    }
-        //}
-        //else if (_controlType == ControlType.FIXEDCAM)
-        //{
-        //    if (MoveInput.magnitude != 0)
-        //    {
-        //        var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _camYAngle, 0));
-        //        var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
-
-        //        var relative = (transform.position + skewedInput) - transform.position;
-        //        var rot = Quaternion.LookRotation(relative, Vector3.up);
-
-        //        transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, RotationSpeed * Time.deltaTime);
-        //    }
-        //}
-        //else if (_controlType == ControlType.FIXEDCAM2)
-        //{
-        //    if (PrevMoveInput != MoveInput)
-        //    {
-        //        _prevCamYAngle = _camYAngle;
-        //    }
-
-        //    if (MoveInput.magnitude != 0)
-        //    {
-        //        var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCamYAngle, 0));
-        //        var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
-        //        if (PlayerZAngle == 0)
-        //        {
-        //            _rb.MoveRotation(Quaternion.LookRotation(skewedInput, Vector3.up));
-        //        }
-        //        else if (PlayerZAngle == -180)
-        //        {
-        //            _rb.MoveRotation(Quaternion.LookRotation(skewedInput, Vector3.down));
-        //        }
-        //    }
-        //}
-
-        // Change to new skew angle based on changed camera if player has let go of
-        // the movement buttons or slightly changed direction if using a gamepad
-        //if (PrevMoveInput != MoveInput)
         if (Vector3.Dot(PrevMoveInput, MoveInput) < 0.85f)
         {
             _prevCamYAngle = _camYAngle;
@@ -243,14 +165,15 @@ public abstract class PlayerBase : MonoBehaviour
                 Vector3 turnDir = Vector3.RotateTowards(transform.forward, skewedInput, RotationSpeed * Time.deltaTime, 1f);
 
                 // TODO: Check this when testing the gravity change
-                if (PlayerZAngle == 0)
-                {
-                    transform.rotation = Quaternion.LookRotation(turnDir, Vector3.up);
-                }
-                else
-                {
-                    _rb.MoveRotation(Quaternion.LookRotation(turnDir, Vector3.down));
-                }
+                //if (PlayerZAngle == 0)
+                //{
+                    transform.rotation = Quaternion.LookRotation(turnDir, _orientation);
+                //}
+                //else
+                //{
+                //    Debug.Log("HELLO");
+                //    _rb.MoveRotation(Quaternion.LookRotation(turnDir, Vector3.down));
+                //}
             }
         }
     }
@@ -445,14 +368,17 @@ public abstract class PlayerBase : MonoBehaviour
     #endregion
 
     #region EVENT HANDLERS
-    public void TestControlHandler(object data)
+    public void GravityChangeHandler(object data) 
     {
-        if (data is not ControlType)
+        if (data is bool isInverted)
         {
-            Debug.LogError("TestControlHandler has not received a ControlType");
+            // If movement is inverted, change orientation for movement
+            _orientation = isInverted ? Vector3.down : Vector3.up;
         }
-
-        _controlType = (ControlType)data;
+        else
+        {
+            Debug.LogError("GravityChangeHandler did not receive a bool");
+        }
     }
 
     public void ReceiveNewCamAngle(object data)
