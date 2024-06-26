@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class Item : MonoBehaviour, IInteractable, IPickupable
 {
@@ -140,6 +141,16 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
             _followTarget = _playerHoldingItem.PickupPoint;
             UnhighlightItem();
 
+            // Disable colliders for all item versions
+            foreach (GameObject itemVersion in _itemVersions)
+            {
+                Collider collider = itemVersion.GetComponent<Collider>();
+                if (collider != null)
+                {
+                    collider.enabled = false;
+                }
+            }
+
             if (isGravityFlipItem)
             {
                 _isFollowing = true;
@@ -190,6 +201,16 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, dropSpeed * Time.deltaTime);
                 yield return null;
+            }
+
+            // Disable colliders for all item versions
+            foreach (GameObject itemVersion in _itemVersions)
+            {
+                Collider collider = itemVersion.GetComponent<Collider>();
+                if (collider != null)
+                {
+                    collider.enabled = true;
+                }
             }
         }
         else
