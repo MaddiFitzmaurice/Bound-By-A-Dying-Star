@@ -229,9 +229,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 078806d6a7817ca408b720b8829bf7cb, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 078806d6a7817ca408b720b8829bf7cb, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 57eeff81edd821846aeb8a9694c2f280, type: 2}
+      objectReference: {fileID: 2100000, guid: 9c5bd8274fcdabd448283365e38a3895, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 078806d6a7817ca408b720b8829bf7cb, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: d8b8e4fc8651103459181a010c3ff1ea, type: 2}
     - target: {fileID: 919132149155446097, guid: 078806d6a7817ca408b720b8829bf7cb, type: 3}
       propertyPath: m_Name
       value: Mirror_FBX
