@@ -51,6 +51,7 @@ public abstract class PlayerBase : MonoBehaviour
     // Components
     private Rigidbody _rb;
     private List<SkinnedMeshRenderer> _meshRenderers;
+    private Cloth _clothPhysics;
 
     // Data
     protected RiftData RiftData;
@@ -60,6 +61,7 @@ public abstract class PlayerBase : MonoBehaviour
     protected float PlayerZAngle;
     protected bool FacingMoveDir = false;
     private Vector3 _orientation = Vector3.up;
+    private Vector3 _clothAccelMod = new Vector3(0f, 19.62f, 0f); // When player is upside down, cloth accel reverses gravity
 
     // Interactables
     List<Collider> _interactablesInRange;
@@ -77,6 +79,7 @@ public abstract class PlayerBase : MonoBehaviour
         // Set components
         _rb = GetComponent<Rigidbody>();
         _meshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+        _clothPhysics = GetComponentInChildren<Cloth>();
 
         // Set data
         RiftData = new RiftData(transform.position, transform.rotation, tag);
@@ -372,8 +375,17 @@ public abstract class PlayerBase : MonoBehaviour
     {
         if (data is bool isInverted)
         {
-            // If movement is inverted, change orientation for movement
-            _orientation = isInverted ? Vector3.down : Vector3.up;
+            // If movement is inverted, change orientation for movement and gravity for cloth
+            if (isInverted)
+            {
+                _orientation = Vector3.down;
+                _clothPhysics.externalAcceleration = _clothAccelMod;
+            }
+            else
+            {
+                _orientation = Vector3.up;
+                _clothPhysics.externalAcceleration = Vector3.zero;
+            }
         }
         else
         {
