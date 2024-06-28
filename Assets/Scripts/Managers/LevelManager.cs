@@ -11,7 +11,8 @@ public class LevelManager : MonoBehaviour
     [Header("Level Cam Parent")]
     [SerializeField] private GameObject _levelCamParent;
     [Header("Spawn Data")]
-    [SerializeField] private GameObject _spawnPoint; // Where players initially start, and where they get TP'd to after solving a soft puzzle
+    [SerializeField] private GameObject _startSpawnPoint; // Where players first spawn in
+    [SerializeField] private GameObject _spawnPoint; // Where players get TP'd to after solving a soft puzzle or if they fall
     [Header("Soft Puzzle Data")]
     [SerializeField] private GameObject _rewardGrouper;
     [SerializeField] private List<GameObject> _softPuzzles;
@@ -48,9 +49,10 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        if (_spawnPoint != null)
+        // Spawn players in
+        if (_startSpawnPoint != null)
         {
-            Spawn();
+            EventManager.EventTrigger(EventType.LEVEL_SPAWN, _startSpawnPoint.transform);
         }
         else
         {
@@ -95,11 +97,6 @@ public class LevelManager : MonoBehaviour
     {
         EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, softPuzzleToDeactivate.GetComponent<SoftPuzzle>().SendReceiveCams());
         softPuzzleToDeactivate.SetActive(false);
-    }
-
-    private void Spawn()
-    {
-        EventManager.EventTrigger(EventType.LEVEL_SPAWN, _spawnPoint.transform);
     }
 
     // Coruoutine function to delay the teleporting of players to make space 
