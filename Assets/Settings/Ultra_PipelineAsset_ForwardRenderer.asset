@@ -75,12 +75,12 @@ MonoBehaviour:
     m_Bits: 648
   outlineSettings:
     outlineColor: {r: 0, g: 0, b: 0, a: 1}
-    outlineScale: 0.4
-    depthThreshold: 10
+    outlineScale: 0.85
+    depthThreshold: 50
     robertsCrossMultiplier: 150
-    normalThreshold: 0.2
-    steepAngleThreshold: 0.2
-    steepAngleMultiplier: 25
+    normalThreshold: 0.5
+    steepAngleThreshold: 0.5
+    steepAngleMultiplier: 50
     colorFormat: 0
     depthBufferBits: 0
     filterMode: 1
