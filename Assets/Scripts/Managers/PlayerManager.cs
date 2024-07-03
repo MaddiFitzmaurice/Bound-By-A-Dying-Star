@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviour
         _player2 = _playerGrouper.GetComponentInChildren<Player2>();
 
         // Event Inits
-        EventManager.EventInitialise(EventType.CAMERAMANAGER_SEND_FOLLOWGROUP);
+        EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_FOLLOWGROUP);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
     }
 
@@ -49,15 +49,11 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
     }
 
-    private void Start()
-    {
-    }
-
     public void SendFollowGroup()
     {
         if (_targetGroup != null)
         {
-            EventManager.EventTrigger(EventType.CAMERAMANAGER_SEND_FOLLOWGROUP, _targetGroup);
+            EventManager.EventTrigger(EventType.PLAYERMANAGER_SEND_FOLLOWGROUP, _targetGroup);
         }
         else
         {

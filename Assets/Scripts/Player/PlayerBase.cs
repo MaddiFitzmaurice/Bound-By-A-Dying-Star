@@ -99,13 +99,13 @@ public abstract class PlayerBase : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventSubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
         EventManager.EventSubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
     }
 
     protected virtual void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventUnsubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
         EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
     }
 
