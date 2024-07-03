@@ -5,42 +5,32 @@ using UnityEngine;
 
 public class CamTrigger : MonoBehaviour
 {
-    #region EXTERNAL DATA
-    [Tooltip("Camera to trigger on/off")]
-    [SerializeField] private CinemachineVirtualCamera _cam;
-    #endregion
-
     #region INTERNAL DATA
+    // Components
+    private FixedCamSystem _system;
     // Are both Players inside the trigger?
     private bool _player1In = false;
     private bool _player2In = false;
+    // Gizmo color
+    private Color _color = Color.blue;
     #endregion
 
-    public void OnEnable()
+    #region FRAMEWORK FUNCTIONS
+    private void Awake()
     {
-        // Register camera to CameraManager
-        if (_cam != null)
-        {
-            EventManager.EventTrigger(EventType.CAMERA_REGISTER, _cam);
-        }
-        else
-        {
-            Debug.LogError("No camera assigned to this trigger!");
-        }
+        // Set up Components
+        _system = GetComponentInParent<FixedCamSystem>();
     }
 
-    public void OnDisable()
+    // Draw the colliders in editor so we can see them even if they're not selected
+#if UNITY_EDITOR
+    public void OnDrawGizmos()
     {
-        // Deregister camera from CameraManager
-        if (_cam != null)
-        {
-            EventManager.EventTrigger(EventType.CAMERA_DEREGISTER, _cam);
-        }
-        else
-        {
-            Debug.LogError("No camera assigned to this trigger!");
-        }
+        Gizmos.color = _color;
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
     }
+#endif
 
     public void OnTriggerEnter(Collider other)
     {
@@ -54,7 +44,7 @@ public class CamTrigger : MonoBehaviour
             // If both players are in trigger, activate camera
             if (_player2In)
             {
-                EventManager.EventTrigger(EventType.CAMERA_ACTIVATE, _cam);
+                _system.Triggered();
             }
 
             return;
@@ -70,7 +60,7 @@ public class CamTrigger : MonoBehaviour
             // If both players are in trigger, activate camera
             if (_player1In)
             {
-                EventManager.EventTrigger(EventType.CAMERA_ACTIVATE, _cam);
+                _system.Triggered();
             }
 
             return;
@@ -97,4 +87,13 @@ public class CamTrigger : MonoBehaviour
             return;
         }
     }
+    #endregion
+
+    // Changes color if parent or cam is selected
+#if UNITY_EDITOR
+    public void IsSelected(bool selected)
+    {
+        _color = selected ? Color.green : Color.blue;
+    }
+#endif
 }
