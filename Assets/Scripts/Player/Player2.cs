@@ -15,6 +15,7 @@ public class Player2 : PlayerBase
 
     protected override void OnDisable()
     {
+        base.OnDisable();
         EventManager.EventUnsubscribe(EventType.PLAYER_2_MOVE, Player2MoveHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_INTERACT, Interact);

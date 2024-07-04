@@ -10,11 +10,11 @@ public class CameraManager : MonoBehaviour
     #region INTERNAL DATA
     // Components
     private CinemachineBrain _cmBrain;
-    //private GameObject _gameplayCams; // Transform to parent child vCams to it
-    //private Dictionary<GameObject, GameObject> _activeGameplayCams; // Key: VCam gameObj, Value: Level/Softpuzzle gameObj parent
     private List<CinemachineVirtualCamera> _registeredCameras;
     private CinemachineTargetGroup _playerFollowGroup;
     #endregion
+
+    #region FRAMEWORK FUNCTIONS
     private void Awake()
     {
         // Get Components
@@ -27,7 +27,6 @@ public class CameraManager : MonoBehaviour
         EventManager.EventInitialise(EventType.CAMERA_ACTIVATE);
 
         // Init Data
-        //_activeGameplayCams = new Dictionary<GameObject, GameObject>();
         _registeredCameras = new List<CinemachineVirtualCamera>();
     }
 
@@ -37,9 +36,6 @@ public class CameraManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.CAMERA_REGISTER, RegisterCameraHandler);
         EventManager.EventSubscribe(EventType.CAMERA_DEREGISTER, DeregisterCameraHandler);
         EventManager.EventSubscribe(EventType.CAMERA_ACTIVATE, ActivateCameraHandler);
-        //EventManager.EventSubscribe(EventType.RECEIVE_GAMEPLAY_CAM_PARENT, ReceiveGameplayCamParentHandler);
-        //EventManager.EventSubscribe(EventType.ADD_GAMEPLAY_CAM, AddGameplayCamHandler);
-        //EventManager.EventSubscribe(EventType.DELETE_GAMEPLAY_CAM, DeleteGameplayCamHandler);
     }
 
     private void OnDisable()
@@ -48,10 +44,8 @@ public class CameraManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.CAMERA_REGISTER, RegisterCameraHandler);
         EventManager.EventUnsubscribe(EventType.CAMERA_DEREGISTER, DeregisterCameraHandler);
         EventManager.EventUnsubscribe(EventType.CAMERA_ACTIVATE, ActivateCameraHandler);
-        //EventManager.EventUnsubscribe(EventType.RECEIVE_GAMEPLAY_CAM_PARENT, ReceiveGameplayCamParentHandler);
-        //EventManager.EventUnsubscribe(EventType.ADD_GAMEPLAY_CAM, AddGameplayCamHandler);
-        //EventManager.EventUnsubscribe(EventType.DELETE_GAMEPLAY_CAM, DeleteGameplayCamHandler);
     }
+    #endregion
 
     // Called when Cinemachine Brain detects a camera activating
     public void LevelCameraActivateEvent()
@@ -79,7 +73,7 @@ public class CameraManager : MonoBehaviour
     }
 
     #region EVENT HANDLERS
-    // Receive follow group that ClearShot will look at
+    // Receive follow group that cinemachine will use to follow or look at the players
     public void ReceiveFollowGroupHandler(object data)
     {
         if (data is not CinemachineTargetGroup)
@@ -93,21 +87,32 @@ public class CameraManager : MonoBehaviour
 
     public void RegisterCameraHandler(object data)
     {
-        if (data is CinemachineVirtualCamera cam)
-        {
-            _registeredCameras.Add(cam);
+        //if (data is CameraData camData)
+        //{
+        //    _registeredCameras.Add(camData.VirtualCamera);
 
-            // Check if it is a dolly cam
-            if (cam.GetCinemachineComponent<CinemachineTrackedDolly>() != null)
-            {
-                // Set follow to the players
-                cam.Follow = _playerFollowGroup.transform;
-            }
-        }
-        else
+        //    // Check if camera needs to follow player
+        //    if (camData.CameraType == CameraType.DOLLY || camData.CameraType == CameraType.DOLLY_LOOK)
+        //    {
+        //        // Set follow to the players
+        //        camData.VirtualCamera.Follow = _playerFollowGroup.transform;
+        //    }
+
+        //    // Check if camera needs to look at player
+        //    if (camData.CameraType == CameraType.DOLLY_LOOK)
+        //    {
+        //        camData.VirtualCamera.LookAt = _playerFollowGroup.transform;
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.LogError("Did not receive CameraData");
+        //}
+
+        if (data is CinemachineVirtualCamera camData)
         {
-            Debug.LogError("Did not receive a VirtualCamera");
-        }    
+            _registeredCameras.Add(camData);
+        }
     }
 
     public void DeregisterCameraHandler(object data)
@@ -133,77 +138,23 @@ public class CameraManager : MonoBehaviour
             Debug.LogError("Did not receive a VirtualCamera");
         }
     }
-
-    //// Receive gameplay cam parent to swap out active cameras as they are received
-    //public void ReceiveGameplayCamParentHandler(object data)
-    //{
-    //    if (data is not GameObject)
-    //    {
-    //        Debug.LogError("CameraManager did not receive a GameObject!");
-    //    }
-
-    //    _gameplayCams = data as GameObject;
-    //}
-
-    //public void AddGameplayCamHandler(object data)
-    //{
-    //    if (data is not GameObject)
-    //    {
-    //        Debug.LogError("CameraManager did not receive a GameObject Cam parent!");
-    //    }
-
-    //    GameObject sceneParent = data as GameObject;
-
-    //    // Get list of vCams that are childed to the received sceneParent as gameobjects
-    //    List<Transform> vCamTransforms = sceneParent.GetComponentsInChildren<Transform>().ToList();
-    //    List<GameObject> vCams = new List<GameObject>();
-
-    //    foreach (Transform child in  vCamTransforms)
-    //    {
-    //        vCams.Add(child.gameObject);
-    //    }
-
-    //    // Then add to Active Gameplay Cams Dictionary
-    //    foreach (GameObject vCam in vCams)
-    //    {
-    //        // Make sure a virtual camera is attached to it
-    //        CinemachineVirtualCamera vCamSettings = vCam.GetComponent<CinemachineVirtualCamera>();
-    //        if (vCamSettings != null)
-    //        {
-    //            // Add to dict and change parent to ClearShot Cam in Gameplay Scene
-    //            _activeGameplayCams.Add(vCam, sceneParent);
-    //            vCam.transform.SetParent(_gameplayCams.transform);
-    //            vCamSettings.LookAt = _playerFollowGroup.transform;
-
-    //            // Check if it is a dolly cam
-    //            if (vCamSettings.GetCinemachineComponent<CinemachineTrackedDolly>() != null)
-    //            {
-    //                // Set follow to the players, and lookat to null
-    //                vCamSettings.Follow = _playerFollowGroup.transform;
-    //            }
-    //        }
-    //    }
-    //}
-
-    //public void DeleteGameplayCamHandler(object data)
-    //{
-    //    if (data is not GameObject)
-    //    {
-    //        Debug.LogError("CameraManager did not receive a GameObject Cam parent!");
-    //    }
-
-    //    GameObject sceneParent = data as GameObject;
-    //    List<GameObject> vCams = _activeGameplayCams.Keys.ToList(); // Get all active vcams
-
-    //    // Remove vcams associated with received Scene parent
-    //    foreach (GameObject vCam in vCams)
-    //    {
-    //        if (_activeGameplayCams[vCam] ==  sceneParent)
-    //        {
-    //            vCam.transform.SetParent(sceneParent.transform);
-    //            _activeGameplayCams.Remove(vCam);
-    //        }
-    //    }
-    //}
     #endregion
 }
+
+// FIXED - Stationary, no looking at players
+// DOLLY - Moving, no looking at players
+// DOLLY_LOOK - Moving, looking at players
+public enum CameraType { FIXED, DOLLY, DOLLY_LOOK }
+
+// Data Class to distinguish what type of camera is being registered
+//public class CameraData
+//{
+//    public CinemachineVirtualCamera VirtualCamera { get; }
+//    public CameraType CameraType { get; }
+
+//    public CameraData(CinemachineVirtualCamera virtualCamera, CameraType cameraType)
+//    {
+//        VirtualCamera = virtualCamera;
+//        CameraType = cameraType;
+//    }
+//}

@@ -64,7 +64,7 @@ public class SceneSystemManager : MonoBehaviour
         StartCoroutine(_fader.NormalFadeIn());
 #else
         int loadedScenesCount = SceneManager.loadedSceneCount;
-        Queue<int> loadedScenes = new Queue<int>(); 
+        Queue<int> loadedScenes = new Queue<int>();
 
         for (int i = 0; i < loadedScenesCount; i++)
         {
@@ -78,7 +78,7 @@ public class SceneSystemManager : MonoBehaviour
         }
 
         StartCoroutine(ReloadAllScenes(loadedScenes));
-        
+
 #endif
     }
 

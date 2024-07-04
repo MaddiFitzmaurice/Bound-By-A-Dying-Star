@@ -4,12 +4,22 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [ExecuteAlways]
+#endif
 public class FixedCamSystem : MonoBehaviour
 {
+    #region EXTERNAL DATA
+    [Tooltip("FIXED: Stationary, not looking at players.\n" +
+        "DOLLY: Movement, not looking at players.\n" +
+        "DOLLY_LOOK: Movement, looking at players.")]
+    [SerializeField] private CameraType _camType = CameraType.FIXED;
+    #endregion
+
     #region INTERNAL DATA
     private CinemachineVirtualCamera _cam;
     private CamTrigger _trigger;
+    //private CameraData _camData;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
@@ -18,6 +28,18 @@ public class FixedCamSystem : MonoBehaviour
         // Set up components
         _cam = GetComponentInChildren<CinemachineVirtualCamera>();
         _trigger = GetComponentInChildren<CamTrigger>();
+
+        // Set up camera data
+        // Check if dolly track is present if camera is set to follow players
+        if (_camType == CameraType.DOLLY || _camType == CameraType.DOLLY_LOOK)
+        {
+            if (_cam.GetCinemachineComponent<CinemachineTrackedDolly>() == null)
+            {
+                Debug.LogError("Camera is set to follow players but has no dolly track!");
+            }
+        }
+
+        //_camData = new CameraData(_cam, _camType);
     }
 
     public void OnEnable()
