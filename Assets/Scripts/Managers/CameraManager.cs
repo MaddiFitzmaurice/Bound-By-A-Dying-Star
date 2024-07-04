@@ -87,31 +87,26 @@ public class CameraManager : MonoBehaviour
 
     public void RegisterCameraHandler(object data)
     {
-        //if (data is CameraData camData)
-        //{
-        //    _registeredCameras.Add(camData.VirtualCamera);
-
-        //    // Check if camera needs to follow player
-        //    if (camData.CameraType == CameraType.DOLLY || camData.CameraType == CameraType.DOLLY_LOOK)
-        //    {
-        //        // Set follow to the players
-        //        camData.VirtualCamera.Follow = _playerFollowGroup.transform;
-        //    }
-
-        //    // Check if camera needs to look at player
-        //    if (camData.CameraType == CameraType.DOLLY_LOOK)
-        //    {
-        //        camData.VirtualCamera.LookAt = _playerFollowGroup.transform;
-        //    }
-        //}
-        //else
-        //{
-        //    Debug.LogError("Did not receive CameraData");
-        //}
-
-        if (data is CinemachineVirtualCamera camData)
+        if (data is CameraData camData)
         {
-            _registeredCameras.Add(camData);
+            _registeredCameras.Add(camData.VirtualCamera);
+
+            // Check if camera needs to follow player
+            if (camData.CameraType == CameraType.DOLLY || camData.CameraType == CameraType.DOLLY_LOOK)
+            {
+                // Set follow to the players
+                camData.VirtualCamera.Follow = _playerFollowGroup.transform;
+            }
+
+            // Check if camera needs to look at player
+            if (camData.CameraType == CameraType.DOLLY_LOOK)
+            {
+                camData.VirtualCamera.LookAt = _playerFollowGroup.transform;
+            }
+        }
+        else
+        {
+            Debug.LogError("Did not receive CameraData");
         }
     }
 
@@ -147,14 +142,14 @@ public class CameraManager : MonoBehaviour
 public enum CameraType { FIXED, DOLLY, DOLLY_LOOK }
 
 // Data Class to distinguish what type of camera is being registered
-//public class CameraData
-//{
-//    public CinemachineVirtualCamera VirtualCamera { get; }
-//    public CameraType CameraType { get; }
+public class CameraData
+{
+    public CinemachineVirtualCamera VirtualCamera { get; }
+    public CameraType CameraType { get; }
 
-//    public CameraData(CinemachineVirtualCamera virtualCamera, CameraType cameraType)
-//    {
-//        VirtualCamera = virtualCamera;
-//        CameraType = cameraType;
-//    }
-//}
+    public CameraData(CinemachineVirtualCamera virtualCamera, CameraType cameraType)
+    {
+        VirtualCamera = virtualCamera;
+        CameraType = cameraType;
+    }
+}

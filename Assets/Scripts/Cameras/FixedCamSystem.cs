@@ -19,7 +19,7 @@ public class FixedCamSystem : MonoBehaviour
     #region INTERNAL DATA
     private CinemachineVirtualCamera _cam;
     private CamTrigger _trigger;
-    //private CameraData _camData;
+    private CameraData _camData;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
@@ -39,7 +39,7 @@ public class FixedCamSystem : MonoBehaviour
             }
         }
 
-        //_camData = new CameraData(_cam, _camType);
+        _camData = new CameraData(_cam, _camType);
     }
 
     public void OnEnable()
@@ -47,7 +47,7 @@ public class FixedCamSystem : MonoBehaviour
         // Register camera to CameraManager
         if (_cam != null)
         {
-            EventManager.EventTrigger(EventType.CAMERA_REGISTER, _cam);
+            EventManager.EventTrigger(EventType.CAMERA_REGISTER, _camData);
         }
         else
         {
@@ -95,6 +95,11 @@ public class FixedCamSystem : MonoBehaviour
             || selectedObj == _trigger.gameObject)
         {
             isSelected = true;
+            _cam.Priority = 1;
+        }
+        else
+        {
+            _cam.Priority = 0;
         }
 
         // Change color of trigger box depending on if selected or not
