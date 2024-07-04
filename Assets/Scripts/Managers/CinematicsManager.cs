@@ -6,7 +6,9 @@ using UnityEngine.Playables;
 [RequireComponent(typeof(PlayableDirector))]
 public class CinematicsManager : MonoBehaviour
 {
+    #region INTERNAL DATA
     private PlayableDirector _director;
+    #endregion
 
     private void Awake()
     {
@@ -20,21 +22,21 @@ public class CinematicsManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.PLAY_CINEMATIC, PlayCinematicHandler);
-        _director.stopped += CinematicFinished;
+        _director.stopped += CinematicFinishedHandler;
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.PLAY_CINEMATIC, PlayCinematicHandler);
-        _director.stopped -= CinematicFinished;
+        _director.stopped -= CinematicFinishedHandler;
     }
 
-    public void CinematicFinished(PlayableDirector director)
+    #region EVENT HANDLERS
+    public void CinematicFinishedHandler(PlayableDirector director)
     {
         EventManager.EventTrigger(EventType.ENABLE_INPUTS, null);
     }
 
-    #region EVENT HANDLERS
     public void PlayCinematicHandler(object data)
     {
         if (data is not PlayableAsset)

@@ -1,6 +1,11 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
+using System;
+using System.Collections.Generic;
+
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -19,6 +24,7 @@ public class SceneSystemManager : MonoBehaviour
     private int _numOfScenes; // Number of total scenes in the game
     private int _mainMenuIndex;
     private int _gameplayIndex;
+    private int _servicesIndex;
     #endregion
 
     private void Awake()
@@ -26,10 +32,11 @@ public class SceneSystemManager : MonoBehaviour
         // If using the Unity editor or development build, enable debug logs
         Debug.unityLogger.logEnabled = Debug.isDebugBuild;
 
-        // Get total number of scenes in game and indexes for main menu and gameplay scenes
+        // Get total number of scenes in game and indexes for main menu, gameplay, and services scenes
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
         _mainMenuIndex = GetBuildIndex("MainMenu");
         _gameplayIndex = GetBuildIndex("Gameplay");
+        _servicesIndex = GetBuildIndex("Services");
 
         // Init Events
         EventManager.EventInitialise(EventType.FADING);
@@ -51,15 +58,40 @@ public class SceneSystemManager : MonoBehaviour
     private void Start()
     {
         // If build is running, load in the main menu
-        #if !UNITY_EDITOR
-            StartCoroutine(LoadScene(_mainMenuIndex));
-            StartCoroutine(_fader.NormalFadeIn());
-        #else
+        // Otherwise, unload all scenes except Services and reload in order of their layer architecture
+#if !UNITY_EDITOR
+        StartCoroutine(LoadScene(_mainMenuIndex));
+        StartCoroutine(_fader.NormalFadeIn());
+#else
+        int loadedScenesCount = SceneManager.loadedSceneCount;
+        Queue<int> loadedScenes = new Queue<int>();
 
-        #endif
+        for (int i = 0; i < loadedScenesCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+
+            if (scene.buildIndex != _servicesIndex)
+            {
+                loadedScenes.Enqueue(scene.buildIndex);
+                SceneManager.UnloadSceneAsync(scene);
+            }
+        }
+
+        StartCoroutine(ReloadAllScenes(loadedScenes));
+
+#endif
     }
 
     #region LEVEL AND MENU FUNCTIONALITY
+    // To simulate when the build boots up for the first time
+    IEnumerator ReloadAllScenes(Queue<int> scenesToReload)
+    {
+        foreach (int i in scenesToReload)
+        {
+            yield return StartCoroutine(LoadScene(i));
+        }
+    }
+
     IEnumerator LevelChanger(int prevLevel, int newLevel)
     {
         EventManager.EventTrigger(EventType.FADING, false);
@@ -198,6 +230,4 @@ public class SceneSystemManager : MonoBehaviour
         StartCoroutine(QuitGame());
     }
     #endregion
-
-    
 }

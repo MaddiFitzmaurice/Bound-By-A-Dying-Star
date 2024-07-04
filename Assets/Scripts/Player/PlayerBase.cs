@@ -99,13 +99,13 @@ public abstract class PlayerBase : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventSubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
         EventManager.EventSubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
     }
 
     protected virtual void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventUnsubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
         EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
     }
 
@@ -166,17 +166,7 @@ public abstract class PlayerBase : MonoBehaviour
             {
                 FacingMoveDir = false;
                 Vector3 turnDir = Vector3.RotateTowards(transform.forward, skewedInput, RotationSpeed * Time.deltaTime, 1f);
-
-                // TODO: Check this when testing the gravity change
-                //if (PlayerZAngle == 0)
-                //{
-                    transform.rotation = Quaternion.LookRotation(turnDir, _orientation);
-                //}
-                //else
-                //{
-                //    Debug.Log("HELLO");
-                //    _rb.MoveRotation(Quaternion.LookRotation(turnDir, Vector3.down));
-                //}
+                transform.rotation = Quaternion.LookRotation(turnDir, _orientation);
             }
         }
     }

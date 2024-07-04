@@ -8,8 +8,6 @@ using UnityEngine.Playables;
 public class LevelManager : MonoBehaviour
 {
     #region EXTERNAL DATA 
-    [Header("Level Cam Parent")]
-    [SerializeField] private GameObject _levelCamParent;
     [Header("Spawn Data")]
     [SerializeField] private GameObject _startSpawnPoint; // Where players first spawn in
     [SerializeField] private GameObject _spawnPoint; // Where players get TP'd to after solving a soft puzzle or if they fall
@@ -28,12 +26,6 @@ public class LevelManager : MonoBehaviour
         // Event Inits
         EventManager.EventInitialise(EventType.LEVEL_SPAWN);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
-
-        // Data Checks
-        if (_levelCamParent == null)
-        {
-            Debug.LogError("Please assign a level cam parent!");
-        }
     }
 
     private void OnEnable()
@@ -44,7 +36,6 @@ public class LevelManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
-        EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, _levelCamParent); 
     }
 
     private void Start()
@@ -58,10 +49,8 @@ public class LevelManager : MonoBehaviour
         {
             Debug.LogError("Please use SpawnPoint object to assign players' initial spawn in level.");
         }
-
-        // Send Level Cams
-        EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, _levelCamParent);
         
+        // Play cutscene if assigned
         if (_introCutscene != null)
         {
             EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _introCutscene);
@@ -89,13 +78,13 @@ public class LevelManager : MonoBehaviour
 
     private void ActivateSoftPuzzle(GameObject softPuzzleToActivate)
     {
-        EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, softPuzzleToActivate.GetComponent<SoftPuzzle>().SendReceiveCams());
+        //EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, softPuzzleToActivate.GetComponent<SoftPuzzle>().SendReceiveCams());
         softPuzzleToActivate.SetActive(true);
     }
 
     private void DeactivateSoftPuzzle(GameObject softPuzzleToDeactivate)
     {
-        EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, softPuzzleToDeactivate.GetComponent<SoftPuzzle>().SendReceiveCams());
+        //EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, softPuzzleToDeactivate.GetComponent<SoftPuzzle>().SendReceiveCams());
         softPuzzleToDeactivate.SetActive(false);
     }
 

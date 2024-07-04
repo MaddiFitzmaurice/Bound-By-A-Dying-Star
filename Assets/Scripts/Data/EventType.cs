@@ -21,11 +21,8 @@ public enum EventType
     PLAYER_1_RIFT,
     PLAYER_2_RIFT,
 
-    // Puzzles
-    ASSIGNMENT_CODE_TRIGGER,    //trigger code for puzzle features
-
     // Level 1
-    LVL1_STARTWINKLE_ACTIVATE,         // used to get the pedestals to make their associated stars start twinkling
+    LVL1_STARTWINKLE_ACTIVATE,      // used to get the pedestals to make their associated stars start twinkling
     LVL1_STARBEAM_ACTIVATE,         // used to get the pedestals to make their associated stars also shoot their beams
 
     // Narrative
@@ -36,11 +33,11 @@ public enum EventType
     RIFT_SEND_EFFECT,
 
     // Camera
-    CAMERAMANAGER_SEND_FOLLOWGROUP,
-    CLEARSHOT_CAMS_YROT,
-    RECEIVE_GAMEPLAY_CAM_PARENT,
-    ADD_GAMEPLAY_CAM,
-    DELETE_GAMEPLAY_CAM,
+    PLAYERMANAGER_SEND_FOLLOWGROUP, // Send the transform that Cinemachine will use to track both players
+    CAMERA_NEW_FWD_DIR,             // Send new forward direction vector to change what orientation forward is for input movement
+    CAMERA_REGISTER,                // Register Cam to CameraManager
+    CAMERA_DEREGISTER,              // Deregister Cam to CameraManager
+    CAMERA_ACTIVATE,                // Activate (make live) a registered Camera
 
     // Teleport
     TELEPORT_PLAYERS,
@@ -50,7 +47,7 @@ public enum EventType
 
     // Level
     LEVEL_SPAWN,
-    SOFTPUZZLE_PLAYER_TELEPORT, // The one that creates the VFX effect
+    SOFTPUZZLE_PLAYER_TELEPORT,     // The one that creates the VFX effect
     SOFTPUZZLE_COMPLETE,
 
     // Gravity 
