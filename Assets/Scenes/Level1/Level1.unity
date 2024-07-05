@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.01068664, g: 0.009676899, b: 0.020424925, a: 1}
+  m_IndirectSpecularColor: {r: 0.010686655, g: 0.009676899, b: 0.020424925, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -38646,7 +38646,7 @@ GameObject:
   - component: {fileID: 249199574}
   - component: {fileID: 249199576}
   - component: {fileID: 249199575}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39225,7 +39225,7 @@ GameObject:
   - component: {fileID: 261540433}
   - component: {fileID: 261540435}
   - component: {fileID: 261540434}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41318,7 +41318,7 @@ GameObject:
   - component: {fileID: 563956030}
   - component: {fileID: 563956032}
   - component: {fileID: 563956031}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42156,7 +42156,7 @@ GameObject:
   - component: {fileID: 632880250}
   - component: {fileID: 632880252}
   - component: {fileID: 632880251}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48544,7 +48544,7 @@ GameObject:
   - component: {fileID: 1267021045}
   - component: {fileID: 1267021047}
   - component: {fileID: 1267021046}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48908,7 +48908,7 @@ GameObject:
   - component: {fileID: 1284070934}
   - component: {fileID: 1284070936}
   - component: {fileID: 1284070935}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88065,7 +88065,7 @@ GameObject:
   - component: {fileID: 1618772524}
   - component: {fileID: 1618772526}
   - component: {fileID: 1618772525}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93379,7 +93379,7 @@ GameObject:
   - component: {fileID: 7904918791022878187}
   - component: {fileID: 8348281912513121536}
   - component: {fileID: 5108748335340415285}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93713,7 +93713,7 @@ GameObject:
   - component: {fileID: 465145468845136103}
   - component: {fileID: 3666060536670432909}
   - component: {fileID: 3457429513022031710}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93850,7 +93850,7 @@ GameObject:
   - component: {fileID: 2427823975342185283}
   - component: {fileID: 4600913982321183656}
   - component: {fileID: 785701404866867101}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

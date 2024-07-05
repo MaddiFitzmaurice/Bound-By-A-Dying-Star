@@ -36,6 +36,10 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     private bool isIntensityChanging = false;
 
+    // Item Bobbing
+    private bool isBobbingAllowed = true;
+    private Vector3 finalRestingPosition;
+    private bool hasSettled = false;
     #endregion
 
     private void Awake()
@@ -44,6 +48,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         _light = GetComponentInChildren<Light>();
         _light.intensity = 0;
         _emissionPS = _itemPassivePS.emission;
+
     }
 
     private void Start()
@@ -55,12 +60,18 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         }
     }
 
+
     void Update()
     {
         if (_isFollowing && _followTarget != null)
         {
             // Perform the interpolation in world space
             transform.position = Vector3.Lerp(transform.position, _followTarget.position, _followSpeed * Time.deltaTime);
+        }
+
+        if (isBobbingAllowed && _isOnPedestal == false)
+        {
+            BobbingEffect(finalRestingPosition);
         }
     }
 
@@ -88,16 +99,11 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         {
             StartCoroutine(FloatItemToGround());
         }
-
         _player = null;
     }
 
     public void BePickedUp(PlayerBase player)
     {
-        _player = player;
-        _followTarget = _player.PickupPoint;
-        _emissionPS.enabled = true;
-
         // If currently associated with a soft puzzle
         if (_softPuzzle)
         {
@@ -105,7 +111,16 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             _softPuzzle.CheckAllRewardsHeld();
         }
 
-        StartCoroutine(ItemFloatUp());
+        _player = player;
+        _followTarget = _player.PickupPoint;   
+
+        Collider[] childColliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in childColliders)
+        {
+            collider.enabled = false;
+        }
+
+        StartCoroutine(ItemFloatUp(_followTarget));
     }
 
     public void SetParent(Transform parent)
@@ -115,14 +130,15 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     private IEnumerator FloatItemToGround()
     {
+        // Disables bobbing function
+        isBobbingAllowed = false;
+
         // Speed at which the item will move to the ground
         float dropSpeed = 1.5f;
         // Maximum distance to check for the ground
         float maxDropHeight = 100.0f;
         // Get the layer mask for the ground, so the raycast doesn't hit the players
         int groundLayer = LayerMask.GetMask("Default");
-
-        // ROBIN SUGGESTION: maybe use a lerp like in FloatItemToPlayer so the mirror doesn't just teleport?
 
         // Calculate the offset position behind the player by using the player's forward direction
         Vector3 offsetPosition = transform.position - _player.transform.forward * 2; // Offset by 2 units behind the player, for bigger game objects
@@ -138,44 +154,98 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             // Move item directly to offset position to avoid hitting player
             transform.position = offsetPosition;
 
-            // ROBIN SUGGESTION: also maybe use a lerp here too?
-
+            // Moves item to the ground
             while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, dropSpeed * Time.deltaTime);
-                yield return null;  // Wait for the next frame
+                yield return null; 
+            }
+
+            // Gets the latest position to be sent to bobbing function. This is because of how coroutines behave with the Update() function.
+            finalRestingPosition = transform.position; 
+            hasSettled = true; // Mark that the item has settled
+
+            //Enables all the coliders attached to the object
+            Collider[] childColliders = GetComponentsInChildren<Collider>();
+            foreach (Collider collider in childColliders)
+            {
+                collider.enabled = true;
             }
         }
         else
         {
             Debug.LogWarning("Ground not found below item, not moving.");
         }
+
+        // Re-enable bobbing.
+        isBobbingAllowed = true; 
     }
 
     // Make the item float upwards, then set it to follow the player
-    private IEnumerator ItemFloatUp()
+    private IEnumerator ItemFloatUp(Transform pickUpPoint)
     {
-        // Calculate the world space position towards which to move
-        // Should be the mirror's current position, but at the follow target's elevation
-        Vector3 targetPosition = new Vector3(transform.position.x, _followTarget.position.y, transform.position.z);
+        // Stop bobbing function
+        isBobbingAllowed = false;
 
-        while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        // Variables to adjust how high and how often the item bounces
+        float riseTime = 1.0f;
+        float elapsedTime = 0;
+
+        // Ensure startPosition is the current position at the very start of the coroutine
+        Vector3 startPosition = transform.position;
+        Vector3 verticalOffset = Vector3.up * (transform.localScale.y / 2);
+        float anticipatoryOffset = 0.9f;
+
+        // Moves the object downwards
+        while (elapsedTime < riseTime)
         {
-            // Perform the interpolation in world space
-            transform.position = Vector3.Lerp(transform.position, targetPosition, _followSpeed * Time.deltaTime);
-            yield return null;  // Wait for the next frame
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / riseTime;
+            Vector3 endPosition = pickUpPoint.position + verticalOffset - new Vector3(0, anticipatoryOffset, 0);
+
+            Vector3 nextPosition = Vector3.Lerp(startPosition, endPosition, progress);
+            transform.position = nextPosition;
+            yield return null;
         }
 
+        // Set item to follow player and adjust the parent
         _isFollowing = true;
         _player.PickupItem(gameObject);
         SetParent(_player.transform);
 
-        //// If currently associated with a soft puzzle
-        //if (_softPuzzle)
-        //{
-        //    HeldInSoftPuzzle = true;
-        //    _softPuzzle.CheckAllRewardsHeld();
-        //}
+        // Gets the latest position to be sent to bobbing function. This is because of how coroutines behave with the Update() function.
+        finalRestingPosition = transform.position;
+
+        // Re-enable bobbing.
+        isBobbingAllowed = true;  
+    }
+
+    private void BobbingEffect(Vector3 finalRestingPosition)
+    {
+        // Determine the correct base height for bobbing
+        float baseHeight;
+        if (hasSettled)
+        {
+            baseHeight = finalRestingPosition.y;  // Use the final resting position if the item has settled
+        }
+        else if (_followTarget != null)
+        {
+            baseHeight = _followTarget.position.y; // Use the follow target's position if following
+        }
+        else
+        {
+            baseHeight = transform.position.y; // Default to current position if not settled or following
+        }
+
+        // Adjust the bobbing parameters based on whether there is a follow target
+        float bobbingAmplitude = _followTarget != null ? 0.2f : 0.0050f;
+        float bobbingFrequency = 2.0f;
+
+        // Calculate the bobbing offset using a sine wave
+        float bobbingOffset = Mathf.Sin(Time.time * bobbingFrequency) * bobbingAmplitude;
+
+        // Apply the bobbing offset to the y-axis of the base position
+        transform.position = new Vector3(transform.position.x, baseHeight + bobbingOffset, transform.position.z);
     }
     #endregion
 

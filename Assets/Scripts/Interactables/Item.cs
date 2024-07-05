@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEditor.Progress;
 
 public class Item : MonoBehaviour, IInteractable, IPickupable
@@ -40,13 +41,14 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     [SerializeField] private ParticleSystem _itemPassivePS;
     private ParticleSystem.EmissionModule _emissionPS;
 
+    // Item Bobbing
+    private bool isBobbingAllowed = true;
+    private Vector3 finalRestingPosition;
+    private bool hasSettled = false;
     #endregion
 
     private void Awake()
     {
-        // Init Event
-        EventManager.EventInitialise(EventType.GRAVITY_INVERT);
-
         // Get item skins, assign current item version and item grouper
         Collider[] list = GetComponentsInChildren<Collider>();
         if (list.Length == 0)
@@ -78,6 +80,10 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         {
             // Perform the interpolation in world space
             transform.position = Vector3.Lerp(transform.position, _followTarget.position, _followSpeed * Time.deltaTime);
+        }
+        if (isBobbingAllowed)
+        {
+            BobbingEffect(finalRestingPosition);
         }
     }
 
@@ -120,15 +126,12 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         Transform parent = newParent != null ? newParent : _itemGrouper;
         SetParent(parent);
 
-        //_emissionPS.enabled = false;
-  
+        _emissionPS.enabled = false;
+
         _playerHoldingItem.DropItem();
 
         // Start coroutine to smoothly move the item to the ground
-        if (parent.name.Contains("ItemGrouper"))
-        {
-            StartCoroutine(FloatItemToGround());
-        }
+        StartCoroutine(FloatItemToGround());
 
         _playerHoldingItem = null;
     }
@@ -151,21 +154,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
                 }
             }
 
-            if (isGravityFlipItem)
-            {
-                _isFollowing = true;
-                _playerHoldingItem.PickupItem(gameObject);
-
-                // Toggle the gravity state and apply the new state
-                _currentGravityState = !_currentGravityState;
-                // Flip gravity for all players
-                FlipGravityForAllPlayers(_currentGravityState);
-            }
-            else
-            {
-                //_emissionPS.enabled = true;
-                StartCoroutine(ItemFloatUp());
-            }
+            StartCoroutine(ItemFloatUp(_followTarget));
         }
     }
 
@@ -176,6 +165,9 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 
     private IEnumerator FloatItemToGround()
     {
+        // Disables bobbing function
+        isBobbingAllowed = false;
+
         // Speed at which the item will move to the ground
         float dropSpeed = 1.5f;
         // Maximum distance to check for the ground
@@ -183,25 +175,30 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         // Get the layer mask for the ground, so the raycast doesn't hit the players
         int groundLayer = LayerMask.GetMask("Default");
 
-        // Use the direction of gravity to determine the ray direction
-        Vector3 gravityDirection = Physics.gravity.normalized;
-        // Start the ray from the item's position adjusted by half its height in the direction of gravity
-        Vector3 rayStart = transform.position + gravityDirection * (transform.localScale.y / 2);
+        // Calculate the offset position behind the player by using the player's forward direction
+        Vector3 offsetPosition = transform.position - _playerHoldingItem.transform.forward * 2; // Offset by 2 units behind the player, for bigger game objects
 
+        // Start the raycast from above the offset position to avoid collisions with the player
+        Vector3 rayStart = offsetPosition + Vector3.up * 5;  // Start 5 units above the offset position
         RaycastHit hit;
-        if (Physics.Raycast(rayStart, gravityDirection, out hit, maxDropHeight, groundLayer))
+        if (Physics.Raycast(rayStart, Vector3.down, out hit, maxDropHeight + 5, groundLayer))  // Increase ray distance to account for starting offset
         {
-            // Calculate target position ensuring the item sits on the ground properly
-            // Refactor adjustment based on the current direction of gravity
-            Vector3 adjustment = -gravityDirection * (transform.localScale.y / 2);  
-            Vector3 targetPosition = hit.point + adjustment;
+            // Adjust position, so the game object sits on the ground
+            Vector3 targetPosition = hit.point + Vector3.up * (transform.localScale.y / 2);
 
-            // Move the item to the target position
+            // Move item directly to offset position to avoid hitting player
+            transform.position = offsetPosition;
+
+            // Moves item to the ground
             while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, dropSpeed * Time.deltaTime);
                 yield return null;
             }
+
+            // Gets the latest position to be sent to bobbing function. This is because of how coroutines behave with the Update() function.
+            finalRestingPosition = transform.position;
+            hasSettled = true; // Mark that the item has settled
 
             // Disable colliders for all item versions
             foreach (GameObject itemVersion in _itemVersions)
@@ -217,26 +214,79 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         {
             Debug.LogWarning("Ground not found below item, not moving.");
         }
+
+        // Re-enable bobbing.
+        isBobbingAllowed = true;
     }
 
 
     // Make the item float upwards, then set it to follow the player
-    private IEnumerator ItemFloatUp()
+    private IEnumerator ItemFloatUp(Transform pickUpPoint)
     {
-        // Calculate the world space position towards which to move
-        // Should be the mirror's current position, but at the follow target's elevation
-        Vector3 targetPosition = new Vector3(transform.position.x, _followTarget.position.y, transform.position.z);
+        // Stop bobbing function
+        isBobbingAllowed = false;
 
-        while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        // Variables to adjust how high and how often the item bounces
+        float riseTime = 1.0f;
+        float elapsedTime = 0;
+
+        // Ensure startPosition is the current position at the very start of the coroutine
+        Vector3 startPosition = transform.position;
+        Vector3 verticalOffset = Vector3.up * (transform.localScale.y / 2);
+        float anticipatoryOffset = 0.9f;
+
+        // Moves the object downwards
+        while (elapsedTime < riseTime)
         {
-            // Perform the interpolation in world space
-            transform.position = Vector3.Lerp(transform.position, targetPosition, _followSpeed * Time.deltaTime);
-            yield return null;  // Wait for the next frame
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / riseTime;
+            Vector3 endPosition = pickUpPoint.position + verticalOffset - new Vector3(0, anticipatoryOffset, 0);
+
+            Vector3 nextPosition = Vector3.Lerp(startPosition, endPosition, progress);
+            transform.position = nextPosition;
+            yield return null;
         }
 
+        // Set item to follow player and adjust the parent
         _isFollowing = true;
         _playerHoldingItem.PickupItem(gameObject);
+        SetParent(_playerHoldingItem.transform);
+
+        // Gets the latest position to be sent to bobbing function. This is because of how coroutines behave with the Update() function.
+        finalRestingPosition = transform.position;
+
+        // Re-enable bobbing.
+        isBobbingAllowed = true;
     }
+
+    private void BobbingEffect(Vector3 finalRestingPosition)
+    {
+        // Determine the correct base height for bobbing
+        float baseHeight;
+        if (hasSettled)
+        {
+            baseHeight = finalRestingPosition.y;  // Use the final resting position if the item has settled
+        }
+        else if (_followTarget != null)
+        {
+            baseHeight = _followTarget.position.y; // Use the follow target's position if following
+        }
+        else
+        {
+            baseHeight = transform.position.y; // Default to current position if not settled or following
+        }
+
+        // Adjust the bobbing parameters based on whether there is a follow target
+        float bobbingAmplitude = _followTarget != null ? 0.2f : 0.0050f;
+        float bobbingFrequency = 2.0f;
+
+        // Calculate the bobbing offset using a sine wave
+        float bobbingOffset = Mathf.Sin(Time.time * bobbingFrequency) * bobbingAmplitude;
+
+        // Apply the bobbing offset to the y-axis of the base position
+        transform.position = new Vector3(transform.position.x, baseHeight + bobbingOffset, transform.position.z);
+    }
+
     #endregion
 
     #region IINTERACTABLE FUNCTIONS
@@ -280,15 +330,6 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     public void PlayerReleaseHoldInteract(PlayerBase player)
     {
 
-    }
-
-    private void FlipGravityForAllPlayers(bool isFlipped)
-    {
-        // Inverts the gravity
-        Physics.gravity = new Vector3(0, isFlipped ? -flippedGravityScale : flippedGravityScale, 0);
-
-        // Calls the invert gravity event for the players that rotates the game object
-        EventManager.EventTrigger(EventType.GRAVITY_INVERT, null);
     }
     #endregion
 }
