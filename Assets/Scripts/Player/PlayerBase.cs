@@ -52,6 +52,7 @@ public abstract class PlayerBase : MonoBehaviour
     private Rigidbody _rb;
     private List<SkinnedMeshRenderer> _meshRenderers;
     private Cloth _clothPhysics;
+    private Animator _animator;
 
     // Data
     protected RiftData RiftData;
@@ -80,8 +81,10 @@ public abstract class PlayerBase : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _meshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
         _clothPhysics = GetComponentInChildren<Cloth>();
+        _animator = GetComponentInChildren<Animator>();
 
         // Set data
+        _animator.SetBool("IsRunning", false);
         RiftData = new RiftData(transform.position, transform.rotation, tag);
         _interactablesInRange = new List<Collider>();
         _interactablesNotInRange = new List<Collider>();
@@ -143,6 +146,15 @@ public abstract class PlayerBase : MonoBehaviour
         if (FacingMoveDir)
         {
             _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
+        }
+
+        if (MoveInput.magnitude != 0)
+        {
+            _animator.SetBool("IsRunning", true);
+        }
+        else
+        {
+            _animator.SetBool("IsRunning", false);
         }
     }
 
