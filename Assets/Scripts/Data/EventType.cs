@@ -39,9 +39,6 @@ public enum EventType
     CAMERA_DEREGISTER,              // Deregister Cam to CameraManager
     CAMERA_ACTIVATE,                // Activate (make live) a registered Camera
 
-    // Teleport
-    TELEPORT_PLAYERS,
-
     // Cinematics
     PLAY_CINEMATIC,
 

@@ -55,7 +55,7 @@ public class Teleport : MonoBehaviour
         {
             _lastTeleport = trigger;
             Transform target = trigger == _telePos1 ? _telePos2.transform : _telePos1.transform;
-            EventManager.EventTrigger(EventType.TELEPORT_PLAYERS, target);
+            //EventManager.EventTrigger(EventType.TELEPORT_PLAYERS, target);
         }
     }
 

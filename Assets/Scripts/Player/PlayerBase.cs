@@ -223,6 +223,11 @@ public abstract class PlayerBase : MonoBehaviour
         }
     }
 
+    public void ToggleClothPhysics(bool toggle)
+    {
+        _clothPhysics.enabled = toggle;
+    }
+
     #region INTERACTION FUNCTIONS
     // Interaction
     public void Interact(object data)
