@@ -305,31 +305,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.49
+      value: -81.114395
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.85
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -31.01
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9893088
+      value: 0.7071067
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.07364729
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.12558259
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00856214
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: field of view
@@ -337,7 +337,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: far clip plane
-      value: 500
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_TargetDisplay
