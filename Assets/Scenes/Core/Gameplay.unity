@@ -622,7 +622,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 6f5ec5ae4daee4a4d8bb4b9be6706850, type: 2}
     - target: {fileID: 5866666021909216657, guid: 79387863c79e116479905669908c0139, type: 3}
       propertyPath: m_ApplyRootMotion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7038382090663792101, guid: 79387863c79e116479905669908c0139, type: 3}
       propertyPath: m_Layer
@@ -10756,7 +10756,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 6f5ec5ae4daee4a4d8bb4b9be6706850, type: 2}
     - target: {fileID: 5866666021909216657, guid: 79387863c79e116479905669908c0139, type: 3}
       propertyPath: m_ApplyRootMotion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7038382090663792101, guid: 79387863c79e116479905669908c0139, type: 3}
       propertyPath: m_Layer
