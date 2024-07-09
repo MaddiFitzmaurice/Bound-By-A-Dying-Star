@@ -1,6 +1,8 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,7 +20,7 @@ public class FixedCamSystem : MonoBehaviour
 
     #region INTERNAL DATA
     private CinemachineVirtualCamera _cam;
-    private CamTrigger _trigger;
+    private List<CamTrigger> _triggers;
     private CameraData _camData;
     #endregion
 
@@ -27,7 +29,7 @@ public class FixedCamSystem : MonoBehaviour
     {
         // Set up components
         _cam = GetComponentInChildren<CinemachineVirtualCamera>();
-        _trigger = GetComponentInChildren<CamTrigger>();
+        _triggers = GetComponentsInChildren<CamTrigger>().ToList();
 
         // Set up camera data
         // Check if dolly track is present if camera is set to follow players
@@ -84,18 +86,33 @@ public class FixedCamSystem : MonoBehaviour
     #endregion
 
     #region EVENT FUNCTIONS
-    // Check if this or camera has been selected in hierarchy
+    // Check if this, triggers, or camera has been selected in hierarchy
+    // If yes, make the camera and triggers active/highlighted in editor
 #if UNITY_EDITOR
     public void OnSelectionChange()
     {
         var selectedObj = Selection.activeObject;
         bool isSelected = false;
 
-        if (selectedObj == _cam.gameObject || selectedObj == this.gameObject 
-            || selectedObj == _trigger.gameObject)
+        // If selected obj is the parent or camera
+        if (selectedObj == _cam.gameObject || selectedObj == this.gameObject)
         {
             isSelected = true;
             _cam.Priority = 1;
+        }
+        // Else if selected obj is one of the triggers
+        else if (selectedObj.GetComponent<CamTrigger>() != null)
+        {
+            foreach (CamTrigger trigger in _triggers)
+            {
+                if (selectedObj == trigger.gameObject)
+                {
+                    isSelected = true;
+                    break;
+                }
+            }
+
+            _cam.Priority = isSelected ? 1 : 0;
         }
         else
         {
@@ -103,7 +120,10 @@ public class FixedCamSystem : MonoBehaviour
         }
 
         // Change color of trigger box depending on if selected or not
-        _trigger.IsSelected(isSelected);
+        foreach (CamTrigger trigger in _triggers)
+        {
+            trigger.IsSelected(isSelected);
+        }
     }
 #endif
     #endregion
