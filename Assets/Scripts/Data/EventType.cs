@@ -43,12 +43,12 @@ public enum EventType
     PLAY_CINEMATIC,
 
     // Level
-    LEVEL_SPAWN,
-    SOFTPUZZLE_PLAYER_TELEPORT,     // The one that creates the VFX effect
+    LEVEL_SPAWN,                    // Spawn players into level for the first time
+    SOFTPUZZLE_PLAYER_TELEPORT,     // Teleport players after completing a soft puzzle
     SOFTPUZZLE_COMPLETE,
 
     // Gravity 
-    GRAVITY_INVERT,
+    GRAVITY_INVERT,                 // Send whether gravity is inverted for players
 
     // Testing
     TEST_CONTROLS,

@@ -50,7 +50,7 @@ public class CameraManager : MonoBehaviour
     // Called when Cinemachine Brain detects a camera activating
     public void LevelCameraActivateEvent()
     {
-        EventManager.EventTrigger(EventType.CAMERA_NEW_FWD_DIR, _cmBrain.ActiveVirtualCamera.VirtualCameraGameObject.transform.localEulerAngles.y);
+        EventManager.EventTrigger(EventType.CAMERA_NEW_FWD_DIR, _cmBrain.ActiveVirtualCamera.VirtualCameraGameObject);
     }
 
     private void ActivateSelectedCamera(CinemachineVirtualCamera cam)

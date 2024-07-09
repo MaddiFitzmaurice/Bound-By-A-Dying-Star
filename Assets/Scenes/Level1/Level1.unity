@@ -91951,7 +91951,7 @@ MonoBehaviour:
     pathColor: {r: 0, g: 1, b: 0, a: 1}
     inactivePathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     width: 2
-  m_Looped: 0
+  m_Looped: 1
   m_Waypoints:
   - position: {x: 0, y: 0, z: 0}
     roll: 0
@@ -91965,7 +91965,9 @@ MonoBehaviour:
     roll: 0
   - position: {x: 22.302963, y: 0, z: 8.257863}
     roll: 0
-  - position: {x: 17.386597, y: 0, z: 0.15669897}
+  - position: {x: 17.732609, y: -0.00000029005378, z: 0.23115885}
+    roll: 0
+  - position: {x: 8.687685, y: -0.00000029005378, z: -2.7536163}
     roll: 0
 --- !u!1 &2015569857
 GameObject:

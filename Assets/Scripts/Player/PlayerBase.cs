@@ -70,8 +70,10 @@ public abstract class PlayerBase : MonoBehaviour
     Collider _closestInteractable;
 
     // Camera Data
-    private float _camYAngle;
-    private float _prevCamYAngle;
+    private GameObject _currentCam;
+    private GameObject _prevCam;
+    //private float _camYAngle;
+    //private float _prevCamYAngle;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
@@ -162,12 +164,12 @@ public abstract class PlayerBase : MonoBehaviour
     {
         if (Vector3.Dot(PrevMoveInput, MoveInput) < 0.85f)
         {
-            _prevCamYAngle = _camYAngle;
+            _prevCam = _currentCam;
         }
 
         if (MoveInput.magnitude != 0)
         {
-            var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCamYAngle, 0));
+            var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCam.transform.eulerAngles.y, 0));
             var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
 
             if (Vector3.Dot(transform.forward, skewedInput) > 0.99f)
@@ -402,14 +404,14 @@ public abstract class PlayerBase : MonoBehaviour
 
     public void ReceiveNewCamAngle(object data)
     {
-        if (data is not float)
+        if (data is not GameObject)
         {
-            Debug.LogError("PlayerBase has not received a float!");
+            Debug.LogError("PlayerBase has not received a camera GameObject!");
         }
 
         PrevMoveInput = MoveInput; // Record previous Move Input so it can continue until player input changes
-        _prevCamYAngle = _camYAngle; // Record previous CamY so it can continue until player input changes
-        _camYAngle = (float)data;
+        _prevCam = _currentCam; // Record previous CamY so it can continue until player input changes
+        _currentCam = (GameObject)data;
     }
     #endregion
 }
