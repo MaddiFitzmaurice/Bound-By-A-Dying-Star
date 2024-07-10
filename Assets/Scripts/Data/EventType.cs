@@ -32,15 +32,20 @@ public enum EventType
     CREATE_RIFT,
     RIFT_SEND_EFFECT,
 
-    // Camera
+    // Players
+    PLAYERMANAGER_SEND_PLAYER1,     // Send the player1 object
+    PLAYERMANAGER_SEND_PLAYER2,     // Send the player2 object
     PLAYERMANAGER_SEND_FOLLOWGROUP, // Send the transform that Cinemachine will use to track both players
+
+    // Camera
     CAMERA_NEW_FWD_DIR,             // Send new forward direction vector to change what orientation forward is for input movement
     CAMERA_REGISTER,                // Register Cam to CameraManager
     CAMERA_DEREGISTER,              // Deregister Cam to CameraManager
     CAMERA_ACTIVATE,                // Activate (make live) a registered Camera
 
-    // Cinematics
-    PLAY_CINEMATIC,
+    // Cutscene
+    CUTSCENE_PLAY,
+    CUTSCENE_FINISHED,
 
     // Level
     LEVEL_SPAWN,                    // Spawn players into level for the first time

@@ -2,7 +2,6 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -91,8 +90,10 @@ public class FixedCamSystem : MonoBehaviour
 #if UNITY_EDITOR
     public void OnSelectionChange()
     {
-        var selectedObj = Selection.activeObject;
+        GameObject selectedObj = Selection.activeObject as GameObject;
         bool isSelected = false;
+
+        if (selectedObj == null) { return; }
 
         // If selected obj is the parent or camera
         if (selectedObj == _cam.gameObject || selectedObj == this.gameObject)

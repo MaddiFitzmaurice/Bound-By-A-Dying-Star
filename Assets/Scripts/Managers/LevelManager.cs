@@ -53,7 +53,7 @@ public class LevelManager : MonoBehaviour
         // Play cutscene if assigned
         if (_introCutscene != null)
         {
-            EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _introCutscene);
+            EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _introCutscene);
         }
 
         EventManager.EventTrigger(EventType.MUSIC, "Calm"); // Ensure transition to Calm section
