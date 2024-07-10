@@ -201,13 +201,13 @@ public class PedestalConstController : MonoBehaviour
         if (done)
         {
             Debug.Log("Constellation Complete!");
-            EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _cutsceneDoor);
+            EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _cutsceneDoor);
         }
     }
 
     private IEnumerator BeamActivationSequence()
     {
-        EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _cutsceneBeam);
+        EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _cutsceneBeam);
         yield return new WaitForSeconds(2f);
         _affordanceBeamActivated = true;
         _affordanceBeam.SetBeamStatus(true);

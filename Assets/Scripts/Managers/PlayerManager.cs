@@ -32,6 +32,8 @@ public class PlayerManager : MonoBehaviour
         // Event Inits
         EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_FOLLOWGROUP);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
+        EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_PLAYER1);
+        EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_PLAYER2);
     }
 
     private void OnEnable()
@@ -49,9 +51,16 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         SendFollowGroup();
+        SendPlayers();
     }
 
-    public void SendFollowGroup()
+    private void SendPlayers()
+    {
+        EventManager.EventTrigger(EventType.PLAYERMANAGER_SEND_PLAYER1, _player1);
+        EventManager.EventTrigger(EventType.PLAYERMANAGER_SEND_PLAYER2, _player2);
+    }
+
+    private void SendFollowGroup()
     {
         if (_targetGroup != null)
         {

@@ -4,40 +4,43 @@ using UnityEngine;
 using UnityEngine.Playables;
 
 [RequireComponent(typeof(PlayableDirector))]
-public class CinematicsManager : MonoBehaviour
+public class CutsceneManager : MonoBehaviour
 {
     #region INTERNAL DATA
     private PlayableDirector _director;
     #endregion
 
+    #region FRAMEWORK FUNCTIONS
     private void Awake()
     {
         // Init Components
         _director = GetComponent<PlayableDirector>();
 
         // Init Events
-        EventManager.EventInitialise(EventType.PLAY_CINEMATIC);
+        EventManager.EventInitialise(EventType.CUTSCENE_PLAY);
     }
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.PLAY_CINEMATIC, PlayCinematicHandler);
-        _director.stopped += CinematicFinishedHandler;
+        EventManager.EventSubscribe(EventType.CUTSCENE_PLAY, CutscenePlayHandler);
+        _director.stopped += CutsceneFinishedHandler;
     }
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.PLAY_CINEMATIC, PlayCinematicHandler);
-        _director.stopped -= CinematicFinishedHandler;
+        EventManager.EventUnsubscribe(EventType.CUTSCENE_PLAY, CutscenePlayHandler);
+        _director.stopped -= CutsceneFinishedHandler;
     }
+    #endregion
 
-    #region EVENT HANDLERS
-    public void CinematicFinishedHandler(PlayableDirector director)
+    #region EVENT FUNCTIONS
+    public void CutsceneFinishedHandler(PlayableDirector director)
     {
         EventManager.EventTrigger(EventType.ENABLE_INPUTS, null);
+        EventManager.EventTrigger(EventType.CUTSCENE_FINISHED, null);
     }
 
-    public void PlayCinematicHandler(object data)
+    public void CutscenePlayHandler(object data)
     {
         if (data is not PlayableAsset)
         {
