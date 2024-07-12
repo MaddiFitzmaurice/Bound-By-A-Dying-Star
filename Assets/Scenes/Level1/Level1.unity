@@ -41804,7 +41804,7 @@ GameObject:
   - component: {fileID: 569732237}
   - component: {fileID: 569732236}
   m_Layer: 0
-  m_Name: TestCam
+  m_Name: HubOrbitalCam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41841,7 +41841,7 @@ Transform:
   - {fileID: 751983671}
   - {fileID: 1489938302}
   - {fileID: 2014240297}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1307478954}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &577490337
 GameObject:
@@ -49876,6 +49876,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1467470349622993705}
+  - {fileID: 569732237}
   - {fileID: 6367865894684222849}
   - {fileID: 1656867414}
   - {fileID: 627046941}
@@ -90432,6 +90433,72 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1804340612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1804340613}
+  - component: {fileID: 1804340615}
+  - component: {fileID: 1804340614}
+  m_Layer: 9
+  m_Name: Trigger2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1804340613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804340612}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.00357543, z: -0, w: 0.9999937}
+  m_LocalPosition: {x: 14.5, y: 1, z: -3.31}
+  m_LocalScale: {x: 5, y: 2, z: 10.9347}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6435382934734899379}
+  m_LocalEulerAnglesHint: {x: 0, y: -0.41, z: 0}
+--- !u!114 &1804340614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804340612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36873eafb8d0611498bce195aeef780b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1804340615
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804340612}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 1015
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1808075200 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 664b4b83796615342b322cff67f63138, type: 3}
@@ -91646,7 +91713,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 0
+  m_Priority: 1
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
@@ -94638,7 +94705,7 @@ GameObject:
   - component: {fileID: 3666060536670432909}
   - component: {fileID: 3457429513022031710}
   m_Layer: 9
-  m_Name: Trigger
+  m_Name: Trigger1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94762,6 +94829,7 @@ Transform:
   m_Children:
   - {fileID: 1461235328868887404}
   - {fileID: 465145468845136103}
+  - {fileID: 1804340613}
   - {fileID: 4662266219120203687}
   m_Father: {fileID: 1399923051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -94957,6 +95025,5 @@ SceneRoots:
   - {fileID: 827366226}
   - {fileID: 861308971}
   - {fileID: 1904027485}
-  - {fileID: 569732237}
   - {fileID: 274283817}
   - {fileID: 1773198628}
