@@ -33,6 +33,10 @@ public abstract class PlayerBase : MonoBehaviour
     [Header("Rift Data")]
     [SerializeField] protected float DistanceInFront = 2f;
 
+    // Cloth Data
+    [Header("Cloth")]
+    [SerializeField] protected float ClothMovementAccel = 1f;
+
     // Item Data
     [field:Header("Interactable Data")]
     [field:SerializeField] public Material HighlightMat { get; private set; } // Temp material to highlight object to be interacted with
@@ -62,7 +66,9 @@ public abstract class PlayerBase : MonoBehaviour
     protected float PlayerZAngle;
     protected bool FacingMoveDir = false;
     private Vector3 _orientation = Vector3.up;
-    private Vector3 _clothAccelMod = new Vector3(0f, 19.62f, 0f); // When player is upside down, cloth accel reverses gravity
+    private Vector3 _clothExternalAccel;
+    private Vector3 _clothAccelGravityMod = new Vector3(0f, 19.62f, 0f); // When player is upside down, cloth accel reverses gravity
+    private Vector3 _clothMoveDir = new Vector3(1f, 0f, 1f); // Wind movement
 
     // Interactables
     List<Collider> _interactablesInRange;
@@ -123,6 +129,7 @@ public abstract class PlayerBase : MonoBehaviour
     private void FixedUpdate()
     {
         PlayerMovement();
+        ClothMovement();
         StepClimb();
     }
     #endregion
@@ -199,6 +206,21 @@ public abstract class PlayerBase : MonoBehaviour
     }
     
     #endregion
+
+    private void ClothMovement()
+    {
+        _clothExternalAccel = ClothMovementAccel * Mathf.Sin(Time.fixedTime) * _clothMoveDir;
+
+        // If movement is inverted
+        if (_orientation == Vector3.down)
+        {
+            _clothPhysics.externalAcceleration = _clothExternalAccel + _clothAccelGravityMod;
+        }
+        else
+        {
+            _clothPhysics.externalAcceleration = _clothExternalAccel;
+        }
+    }
 
     public void PlayTeleportEffect(bool mode)
     {
@@ -388,12 +410,12 @@ public abstract class PlayerBase : MonoBehaviour
             if (isInverted)
             {
                 _orientation = Vector3.down;
-                _clothPhysics.externalAcceleration = _clothAccelMod;
+                //_clothPhysics.externalAcceleration = _clothExternalAccel + _clothAccelGravityMod;
             }
             else
             {
                 _orientation = Vector3.up;
-                _clothPhysics.externalAcceleration = Vector3.zero;
+                //_clothPhysics.externalAcceleration = _clothExternalAccel;
             }
         }
         else

@@ -669,16 +669,16 @@ Cloth:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177230603}
   m_Enabled: 1
-  m_StretchingStiffness: 1
+  m_StretchingStiffness: 0.7
   m_BendingStiffness: 0.7
   m_UseTethers: 1
   m_UseGravity: 1
-  m_Damping: 0.7
+  m_Damping: 0.5
   m_ExternalAcceleration: {x: 0, y: 0, z: 0}
-  m_RandomAcceleration: {x: 0.1, y: 1, z: 0.1}
+  m_RandomAcceleration: {x: 0, y: 0, z: 0}
   m_WorldVelocityScale: 0.5
   m_WorldAccelerationScale: 0.5
-  m_Friction: 1
+  m_Friction: 0.5
   m_CollisionMassScale: 0
   m_UseContinuousCollision: 1
   m_UseVirtualParticles: 1
@@ -3834,6 +3834,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.7
       objectReference: {fileID: 0}
+    - target: {fileID: 503032407792818510, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
+      value: 3.9999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 503032407792818510, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.z
+      value: 2.326002
+      objectReference: {fileID: 0}
     - target: {fileID: 530550353063639676, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3970,6 +3978,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4352233078925703911, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
+      value: 3.9999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 4352233078925703911, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.z
+      value: 2.326002
+      objectReference: {fileID: 0}
     - target: {fileID: 4810499361073951574, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -3981,6 +3997,14 @@ PrefabInstance:
     - target: {fileID: 5508234846743703259, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5801257205652036793, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.x
+      value: 4.237095
+      objectReference: {fileID: 0}
+    - target: {fileID: 5801257205652036793, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
+      value: 0.23205481
       objectReference: {fileID: 0}
     - target: {fileID: 6005445842385754779, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_Radius
@@ -3997,6 +4021,14 @@ PrefabInstance:
     - target: {fileID: 6288577921789816059, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6331742126940349337, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
+      value: 3.9999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 6331742126940349337, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.z
+      value: 2.326002
       objectReference: {fileID: 0}
     - target: {fileID: 6394299271378416593, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4066,9 +4098,29 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8486979643365901245, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.x
+      value: 4.237095
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486979643365901245, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
+      value: 0.23205481
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486979643365901245, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8562116035897213392, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056816234107831851, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.x
+      value: 4.237095
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056816234107831851, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
+      value: 0.23205481
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -4140,7 +4192,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -10000, y: 0}
   m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &448713411
@@ -7279,7 +7331,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -10000, y: 0}
   m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &683555299
@@ -10995,16 +11047,16 @@ Cloth:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1637725450}
   m_Enabled: 1
-  m_StretchingStiffness: 1
+  m_StretchingStiffness: 0.7
   m_BendingStiffness: 0.7
   m_UseTethers: 1
   m_UseGravity: 1
-  m_Damping: 0.7
+  m_Damping: 0.5
   m_ExternalAcceleration: {x: 0, y: 0, z: 0}
-  m_RandomAcceleration: {x: 0.1, y: 1, z: 0.1}
+  m_RandomAcceleration: {x: 0, y: 0, z: 0}
   m_WorldVelocityScale: 0.5
   m_WorldAccelerationScale: 0.5
-  m_Friction: 1
+  m_Friction: 0.5
   m_CollisionMassScale: 0
   m_UseContinuousCollision: 1
   m_UseVirtualParticles: 1
