@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.01068664, g: 0.009676899, b: 0.020424884, a: 1}
+  m_IndirectSpecularColor: {r: 0.010686655, g: 0.009676899, b: 0.020424925, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 10100172}
   - component: {fileID: 10100171}
   - component: {fileID: 10100170}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling  (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36665,7 +36665,7 @@ GameObject:
   - component: {fileID: 124328641}
   - component: {fileID: 124328640}
   - component: {fileID: 124328639}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling  (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37414,7 +37414,7 @@ GameObject:
   - component: {fileID: 156575022}
   - component: {fileID: 156575021}
   - component: {fileID: 156575020}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38217,7 +38217,7 @@ GameObject:
   - component: {fileID: 196922610}
   - component: {fileID: 196922609}
   - component: {fileID: 196922608}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling  (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38763,7 +38763,7 @@ GameObject:
   - component: {fileID: 231688432}
   - component: {fileID: 231688431}
   - component: {fileID: 231688430}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Brick (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40283,6 +40283,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SandHill_Blockout (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 08536673662c259418dca9644aa3ab58, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -40694,6 +40698,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 08536673662c259418dca9644aa3ab58, type: 3}
       propertyPath: m_Name
       value: SandHill_Blockout (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 08536673662c259418dca9644aa3ab58, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -41444,6 +41452,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b8f629e1d32796444a2cfd8a2ba65657, type: 3}
       propertyPath: m_Name
       value: PedestalStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b8f629e1d32796444a2cfd8a2ba65657, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -42216,6 +42228,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock01_Blockout (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3f9386fb916ac9041845392113604cde, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -42544,7 +42560,7 @@ GameObject:
   - component: {fileID: 630338249}
   - component: {fileID: 630338248}
   - component: {fileID: 630338247}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Brick (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43624,7 +43640,7 @@ GameObject:
   - component: {fileID: 744570769}
   - component: {fileID: 744570768}
   - component: {fileID: 744570767}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Brick (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44108,7 +44124,7 @@ GameObject:
   - component: {fileID: 789442004}
   - component: {fileID: 789442003}
   - component: {fileID: 789442002}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling  (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44651,7 +44667,7 @@ GameObject:
   - component: {fileID: 881316621}
   - component: {fileID: 881316620}
   - component: {fileID: 881316619}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling  (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47699,7 +47715,7 @@ GameObject:
   - component: {fileID: 1158046932}
   - component: {fileID: 1158046931}
   - component: {fileID: 1158046930}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: 'Marble Mossy floor/crumbling '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48553,7 +48569,7 @@ GameObject:
   - component: {fileID: 1226738645}
   - component: {fileID: 1226738644}
   - component: {fileID: 1226738643}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling  (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48941,6 +48957,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Arch01_Blockout (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2030ffb22114c6d4b992a56056c0fa88, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -49270,7 +49290,7 @@ GameObject:
   - component: {fileID: 1277755655}
   - component: {fileID: 1277755654}
   - component: {fileID: 1277755653}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: 'Marble Mossy floor/crumbling '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52129,7 +52149,7 @@ GameObject:
   - component: {fileID: 1423122974}
   - component: {fileID: 1423122973}
   - component: {fileID: 1423122972}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling  (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52655,7 +52675,7 @@ GameObject:
   - component: {fileID: 1464941094}
   - component: {fileID: 1464941093}
   - component: {fileID: 1464941092}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling  (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53043,6 +53063,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 61bbde74b05d5f744b0b23818ad34349, type: 3}
       propertyPath: m_Name
       value: Rock05_Blockout (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 61bbde74b05d5f744b0b23818ad34349, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -87345,6 +87369,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillar01_Blockout (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2687d0fd165344a4188efe86463a3858, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -88614,6 +88642,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SandHill_Blockout (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 08536673662c259418dca9644aa3ab58, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -88839,6 +88871,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3f9386fb916ac9041845392113604cde, type: 3}
       propertyPath: m_Name
       value: Rock01_Blockout (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3f9386fb916ac9041845392113604cde, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -90430,6 +90466,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock03_Blockout (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3343a5c1d4851ae41a9c99d8e67398f1, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -90814,6 +90854,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock05_Blockout (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 61bbde74b05d5f744b0b23818ad34349, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -90917,6 +90961,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock04_Blockout (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ca4d2a74e8ad2ed4a8c87e5050d11289, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -90939,7 +90987,7 @@ GameObject:
   - component: {fileID: 1828502905}
   - component: {fileID: 1828502904}
   - component: {fileID: 1828502903}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Marble Mossy floor/crumbling  (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93008,6 +93056,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 2687d0fd165344a4188efe86463a3858, type: 3}
       propertyPath: m_Name
       value: Pillar01_Blockout (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2687d0fd165344a4188efe86463a3858, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

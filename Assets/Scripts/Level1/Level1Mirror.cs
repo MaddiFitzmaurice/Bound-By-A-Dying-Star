@@ -142,7 +142,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         // Maximum distance to check for the ground
         float maxDropHeight = 100.0f;
         // Get the layer mask for the ground, so the raycast doesn't hit the players
-        int groundLayer = LayerMask.GetMask("Default");
+        int groundLayer = LayerMask.GetMask("Ground");
 
         // Calculate the offset position behind the player by using the player's forward direction
         Vector3 offsetPosition = transform.position - _player.transform.forward * 2; // Offset by 2 units behind the player, for bigger game objects
