@@ -42,9 +42,13 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     private ParticleSystem.EmissionModule _emissionPS;
 
     // Item Bobbing
-    private bool isBobbingAllowed = true;
-    private Vector3 finalRestingPosition;
-    private bool hasSettled = false;
+    private bool _isBobbingAllowed = true;
+    private Vector3 _finalRestingPosition;
+    private float _frameRateSpeed = 0.0f;
+    // How high to bob up and down
+    [SerializeField] private float _bobbingAmplitude = 0.25f;
+    // How often to bob
+    [SerializeField] private float _bobbingFrequency = 1f;
     #endregion
 
     private void Awake()
@@ -81,9 +85,9 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
             // Perform the interpolation in world space
             transform.position = Vector3.Lerp(transform.position, _followTarget.position, _followSpeed * Time.deltaTime);
         }
-        if (isBobbingAllowed)
+        if (_isBobbingAllowed)
         {
-            BobbingEffect(finalRestingPosition);
+            BobbingEffect(_finalRestingPosition);
         }
     }
 
@@ -166,7 +170,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     private IEnumerator FloatItemToGround()
     {
         // Disables bobbing function
-        isBobbingAllowed = false;
+        _isBobbingAllowed = false;
 
         // Speed at which the item will move to the ground
         float dropSpeed = 1.5f;
@@ -197,8 +201,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
             }
 
             // Gets the latest position to be sent to bobbing function. This is because of how coroutines behave with the Update() function.
-            finalRestingPosition = transform.position;
-            hasSettled = true; // Mark that the item has settled
+            _finalRestingPosition = transform.position;
 
             // Disable colliders for all item versions
             foreach (GameObject itemVersion in _itemVersions)
@@ -216,7 +219,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         }
 
         // Re-enable bobbing.
-        isBobbingAllowed = true;
+        _isBobbingAllowed = true;
     }
 
 
@@ -224,7 +227,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
     private IEnumerator ItemFloatUp(Transform pickUpPoint)
     {
         // Stop bobbing function
-        isBobbingAllowed = false;
+        _isBobbingAllowed = false;
 
         // Variables to adjust how high and how often the item bounces
         float riseTime = 1.0f;
@@ -253,38 +256,28 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
         SetParent(_playerHoldingItem.transform);
 
         // Gets the latest position to be sent to bobbing function. This is because of how coroutines behave with the Update() function.
-        finalRestingPosition = transform.position;
+        _finalRestingPosition = transform.position;
 
         // Re-enable bobbing.
-        isBobbingAllowed = true;
+        _isBobbingAllowed = true;
     }
 
     private void BobbingEffect(Vector3 finalRestingPosition)
     {
         // Determine the correct base height for bobbing
-        float baseHeight;
-        if (hasSettled)
-        {
-            baseHeight = finalRestingPosition.y;  // Use the final resting position if the item has settled
-        }
-        else if (_followTarget != null)
-        {
-            baseHeight = _followTarget.position.y; // Use the follow target's position if following
-        }
-        else
-        {
-            baseHeight = transform.position.y; // Default to current position if not settled or following
-        }
+        float baseHeight = finalRestingPosition.y;
 
-        // Adjust the bobbing parameters based on whether there is a follow target
-        float bobbingAmplitude = _followTarget != null ? 0.2f : 0.0050f;
-        float bobbingFrequency = 2.0f;
+        // Increment movement based on time passed to maintain consistent speed across frame rates
+        _frameRateSpeed += _bobbingFrequency * Time.deltaTime;
 
         // Calculate the bobbing offset using a sine wave
-        float bobbingOffset = Mathf.Sin(Time.time * bobbingFrequency) * bobbingAmplitude;
+        float bobbingOffset = Mathf.Sin(_frameRateSpeed += _bobbingFrequency * Time.deltaTime) * _bobbingAmplitude + _bobbingAmplitude;
 
-        // Apply the bobbing offset to the y-axis of the base position
-        transform.position = new Vector3(transform.position.x, baseHeight + bobbingOffset, transform.position.z);
+        // Calculate the new position
+        float newYPosition = baseHeight + bobbingOffset;  // Always above the base height
+
+        // Apply the calculated position
+        transform.position = new Vector3(transform.position.x, newYPosition, transform.position.z);
     }
 
     #endregion
