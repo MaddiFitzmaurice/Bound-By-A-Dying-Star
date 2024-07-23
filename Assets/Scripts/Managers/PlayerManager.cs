@@ -34,23 +34,27 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
         EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_PLAYER1);
         EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_PLAYER2);
+        EventManager.EventInitialise(EventType.PLAYERMANAGER_REQUEST_FOLLOWGROUP);
+
     }
 
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
         EventManager.EventSubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
+        EventManager.EventSubscribe(EventType.PLAYERMANAGER_REQUEST_FOLLOWGROUP, SendFollowGroup);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
         EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
+        EventManager.EventUnsubscribe(EventType.PLAYERMANAGER_REQUEST_FOLLOWGROUP, SendFollowGroup);
     }
 
     private void Start()
     {
-        SendFollowGroup();
+        SendFollowGroup(null);
         SendPlayers();
     }
 
@@ -60,7 +64,7 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventTrigger(EventType.PLAYERMANAGER_SEND_PLAYER2, _player2);
     }
 
-    private void SendFollowGroup()
+    private void SendFollowGroup(object data)
     {
         if (_targetGroup != null)
         {

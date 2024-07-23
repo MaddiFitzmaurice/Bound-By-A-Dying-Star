@@ -9,20 +9,12 @@ public class PressurePlateSingle : MonoBehaviour, IPressurePlateBase
     [SerializeField] private ParticleSystem _pressurePlatePS; 
     [SerializeField] private Color _player1Colour; 
     [SerializeField] private Color _player2Colour; 
-
     #endregion
 
     #region InternalData
     private PressurePlateSystem _ppSystem;
-    private Renderer _renderer;
     private bool _permaActivated = false;
     #endregion
-
-    private void Awake()
-    {
-        // get components
-        _renderer = GetComponent<Renderer>();
-    }
 
     private void OnTriggerEnter(Collider other)
     {
