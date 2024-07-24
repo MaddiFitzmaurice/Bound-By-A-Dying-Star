@@ -65,14 +65,14 @@ Material:
     - _SineFrequency: 8.8
     - _SineRotation: 10.04
     - _Smoothness: 0
-    - _SubstrateDuneHeightMax: 0.069
+    - _SubstrateDuneHeightMax: 0.506
     - _SubstrateGrainHeightMax: 0.05
     - _SubstrateTightening: 10
     - _UVScale: 0.09
     m_Colors:
-    - _SandHighColor: {r: 1, g: 0.9408732, b: 0.76886797, a: 1}
-    - _SandLowColor: {r: 1, g: 0.93051684, b: 0.5330188, a: 1}
-    - _ShineColor: {r: 0.7011077, g: 0.69411767, b: 1, a: 1}
-    - _SubstrateColor: {r: 0.7019608, g: 0.69411767, b: 1, a: 1}
+    - _SandHighColor: {r: 0.39607847, g: 0.34117648, b: 0.5568628, a: 1}
+    - _SandLowColor: {r: 0.39607847, g: 0.41176474, b: 0.7372549, a: 1}
+    - _ShineColor: {r: 0.7171386, g: 0.7104397, b: 0.9716981, a: 1}
+    - _SubstrateColor: {r: 0.764151, g: 0.57421684, b: 0.2775454, a: 1}
     - _UVTiling: {r: 2, g: 2, b: 0, a: 0}
   m_BuildTextureStacks: []
