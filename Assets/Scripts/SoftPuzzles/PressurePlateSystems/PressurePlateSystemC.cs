@@ -16,6 +16,7 @@ public class PressurePlateSystemC : PressurePlateSystem
     #region Internal Data
     private bool _isMoving;
     private bool _movingToEnd;
+    private Coroutine _currentCoroutine;
     #endregion
 
     private void OnEnable()
@@ -33,13 +34,15 @@ public class PressurePlateSystemC : PressurePlateSystem
         // Decide what the object should do when the system has been completed
         _isMoving = _onIsMove ? activated : !activated;
 
+        // Checks to see if Coroutine is already happening to ensure no duplicate coroutines
+        if (_currentCoroutine != null)
+        {
+            StopCoroutine(_currentCoroutine);  
+        }
+
         if (_isMoving)
         {
-            StartCoroutine(UpdateLoop());
-        }
-        else
-        {
-            StopAllCoroutines();
+            _currentCoroutine = StartCoroutine(UpdateLoop());
         }
     }
 
@@ -54,17 +57,13 @@ public class PressurePlateSystemC : PressurePlateSystem
 
     void MovePlatform()
     {
-        if (_movingToEnd)
+        Vector3 targetPosition = _movingToEnd ? _platformEndPos.position : _platformStartPos.position;
+        _platform.transform.position = Vector3.MoveTowards(_platform.transform.position, targetPosition, _platformSpeed * Time.deltaTime);
+
+        if (_platform.transform.position == targetPosition)
         {
-            _platform.transform.position = Vector3.MoveTowards(_platform.transform.position, _platformEndPos.position, _platformSpeed * Time.deltaTime);
-            if (_platform.transform.position == _platformEndPos.position)
-                _movingToEnd = false;
+            _movingToEnd = !_movingToEnd;
         }
-        else
-        {
-            _platform.transform.position = Vector3.MoveTowards(_platform.transform.position, _platformStartPos.position, _platformSpeed * Time.deltaTime);
-            if (_platform.transform.position == _platformStartPos.position)
-                _movingToEnd = true;
-        }
+
     }
 }
