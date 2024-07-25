@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8409702783466114277}
   m_Layer: 7
   m_Name: Spot Light
-  m_TagString: Untagged
+  m_TagString: Pickupable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 1
@@ -226,6 +226,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemPassivePS
       objectReference: {fileID: 0}
+    - target: {fileID: 7106039356845503429, guid: e9500514f7df0724b88f643ac011a3ee, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7106039356845503429, guid: e9500514f7df0724b88f643ac011a3ee, type: 3}
+      propertyPath: m_TagString
+      value: Pickupable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -323,7 +331,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2a32fbf8ae263184a8708104d2051d50, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3683308409536551768}
+      addedObject: {fileID: 7842190375674254542}
   m_SourcePrefab: {fileID: 100100000, guid: 2a32fbf8ae263184a8708104d2051d50, type: 3}
 --- !u!4 &7315487775728136638 stripped
 Transform:
@@ -335,7 +343,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2a32fbf8ae263184a8708104d2051d50, type: 3}
   m_PrefabInstance: {fileID: 7065985233790801493}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &3683308409536551768
+--- !u!64 &7842190375674254542
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
