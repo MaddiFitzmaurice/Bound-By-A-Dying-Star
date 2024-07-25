@@ -186,6 +186,68 @@ void Rand1dTo3d_float(float value, out float3 Out)
     Out = rand1dTo3d(value);
 }
 
+// Perlin / gradient noise
+
+float perlinNoise(float2 value, float2 period)
+{
+    float2 cellsMimimum = floor(value);
+    float2 cellsMaximum = ceil(value);
+
+    cellsMimimum = modulo(cellsMimimum, period);
+    cellsMaximum = modulo(cellsMaximum, period);
+
+				//generate random directions
+    float2 lowerLeftDirection = rand2dTo2d(float2(cellsMimimum.x, cellsMimimum.y)) * 2 - 1;
+    float2 lowerRightDirection = rand2dTo2d(float2(cellsMaximum.x, cellsMimimum.y)) * 2 - 1;
+    float2 upperLeftDirection = rand2dTo2d(float2(cellsMimimum.x, cellsMaximum.y)) * 2 - 1;
+    float2 upperRightDirection = rand2dTo2d(float2(cellsMaximum.x, cellsMaximum.y)) * 2 - 1;
+
+    float2 fraction = frac(value);
+
+				//get values of cells based on fraction and cell directions
+    float lowerLeftFunctionValue = dot(lowerLeftDirection, fraction - float2(0, 0));
+    float lowerRightFunctionValue = dot(lowerRightDirection, fraction - float2(1, 0));
+    float upperLeftFunctionValue = dot(upperLeftDirection, fraction - float2(0, 1));
+    float upperRightFunctionValue = dot(upperRightDirection, fraction - float2(1, 1));
+
+    float interpolatorX = easeInOut(fraction.x);
+    float interpolatorY = easeInOut(fraction.y);
+
+				//interpolate between values
+    float lowerCells = lerp(lowerLeftFunctionValue, lowerRightFunctionValue, interpolatorX);
+    float upperCells = lerp(upperLeftFunctionValue, upperRightFunctionValue, interpolatorX);
+
+    float noise = lerp(lowerCells, upperCells, interpolatorY);
+    return noise;
+}
+
+float sampleLayeredNoise(float2 value, float period, float persistance, float roughness, float octaves)
+{
+    float noise = 0;
+    float frequency = 1;
+    float factor = 1;
+
+    for (int i = 0; i < octaves; i++)
+    {
+        noise = noise + perlinNoise(value * frequency + i * 0.72354, period * frequency) * factor;
+        factor *= persistance;
+        frequency *= roughness;
+    }
+
+    return noise;
+}
+
+void PerlinNoise_float(float2 Value, float2 Period, out float Out)
+{
+    Out = perlinNoise(Value, Period) + 0.5;
+}
+
+void PerlinNoise_float(float2 Value, float2 Period, float Persistance, float Roughness, float Octaves, out float Out)
+{
+    Out = sampleLayeredNoise(Value, Period, Persistance, Roughness, Octaves) + 0.5;
+
+}
+
 // Voronoi noise
 
 float3 voronoiNoise(float3 value, float3 period)
@@ -260,5 +322,4 @@ void VoronoiNoise_float(float3 Value, float3 Period, out float MinCellDistance, 
     Random = ret.y;
     MinEdgeDistance = ret.z;
 }
-
 #endif

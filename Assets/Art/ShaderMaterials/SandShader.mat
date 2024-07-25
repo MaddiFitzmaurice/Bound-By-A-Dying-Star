@@ -50,29 +50,31 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DuneShineMin: 0.9
-    - _GrainColorBlend: 0.5
-    - _GrainPeriod: 5
+    - _DistortAmplitude: 1.21
+    - _DistortNoisePeriod: 20.54
+    - _DuneShineMin: 0.5
+    - _GrainColorBlend: 0.42
+    - _GrainPeriod: 100
     - _GrainShineStrength: 0.5
     - _NoiseAmplitude: 1.58
     - _NoiseScale: 4.21
-    - _NormalStrength: 15.22
+    - _NormalStrength: 1
     - _PolygonSides: 5.54
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ShineThreshold: 0.2
-    - _SineAmplitude: 0.21
-    - _SineFrequency: 8.8
+    - _ShineThreshold: 0.9
+    - _SineAmplitude: 0.93
+    - _SineFrequency: 9.52
     - _SineRotation: 10.04
-    - _Smoothness: 0
-    - _SubstrateDuneHeightMax: 0.506
-    - _SubstrateGrainHeightMax: 0.05
-    - _SubstrateTightening: 10
-    - _UVScale: 0.09
+    - _Smoothness: 0.5
+    - _SubstrateDuneHeightMax: 1
+    - _SubstrateGrainHeightMax: 1
+    - _SubstrateTightening: 20
+    - _UVScale: 1
     m_Colors:
-    - _SandHighColor: {r: 0.39607847, g: 0.34117648, b: 0.5568628, a: 1}
-    - _SandLowColor: {r: 0.39607847, g: 0.41176474, b: 0.7372549, a: 1}
-    - _ShineColor: {r: 0.7171386, g: 0.7104397, b: 0.9716981, a: 1}
-    - _SubstrateColor: {r: 0.764151, g: 0.57421684, b: 0.2775454, a: 1}
-    - _UVTiling: {r: 2, g: 2, b: 0, a: 0}
+    - _SandHighColor: {r: 1, g: 0.9408732, b: 0.76886797, a: 1}
+    - _SandLowColor: {r: 1, g: 0.7591524, b: 0, a: 1}
+    - _ShineColor: {r: 0.7583584, g: 0.6933962, b: 1, a: 1}
+    - _SubstrateColor: {r: 0.16078427, g: 0.14901957, b: 0.21568623, a: 1}
+    - _UVTiling: {r: 0.2, g: 5.6, b: 0, a: 0}
   m_BuildTextureStacks: []
