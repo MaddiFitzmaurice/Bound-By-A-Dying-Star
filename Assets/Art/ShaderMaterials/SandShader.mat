@@ -62,20 +62,20 @@ Material:
     - _PolygonSides: 5.54
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SandDuneMaxHeight: 0.15
+    - _SandDuneMaxHeight: 0.1
     - _ShineThreshold: 0.69
     - _SineAmplitude: 0.69
     - _SineFrequency: 9.52
     - _SineRotation: 8.36
-    - _Smoothness: 0.269
+    - _Smoothness: 0
     - _SubstrateDuneHeightMax: 0.167
     - _SubstrateGrainHeightMax: 0.285
     - _SubstrateTightening: 1.49
     - _UVScale: 0.2
     m_Colors:
-    - _SandHighColor: {r: 1, g: 0.9408732, b: 0.76886797, a: 1}
-    - _SandLowColor: {r: 1, g: 0.7591524, b: 0, a: 1}
-    - _ShineColor: {r: 0.7583584, g: 0.6933962, b: 1, a: 1}
-    - _SubstrateColor: {r: 0.16078427, g: 0.14901957, b: 0.21568623, a: 1}
+    - _SandHighColor: {r: 0.3960784, g: 0.4117647, b: 0.7372549, a: 1}
+    - _SandLowColor: {r: 0.3960784, g: 0.34117648, b: 0.5568628, a: 1}
+    - _ShineColor: {r: 0.7176471, g: 0.70980394, b: 0.972549, a: 1}
+    - _SubstrateColor: {r: 0.7647059, g: 0.57254905, b: 0.2784314, a: 1}
     - _UVTiling: {r: 0.2, g: 5.6, b: 0, a: 0}
   m_BuildTextureStacks: []
