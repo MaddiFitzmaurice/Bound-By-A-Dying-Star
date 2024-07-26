@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -50,6 +51,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     private void Awake()
     {
         // Get components
+        _childColliders = GetComponentsInChildren<Collider>().ToList<Collider>();
         //_light = GetComponentInChildren<Light>();
         //_light.intensity = 0;
         _emissionPS = _itemPassivePS.emission;
@@ -310,7 +312,6 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     public void PlayerHoldInteract(PlayerBase player)
     {
-        throw new System.NotImplementedException();
     }
 
     public void PlayerReleaseHoldInteract(PlayerBase player)
