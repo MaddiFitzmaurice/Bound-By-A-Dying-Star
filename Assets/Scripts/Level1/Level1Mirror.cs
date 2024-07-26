@@ -15,6 +15,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     #region INTERNAL DATA
     // Components
     private Light _light;
+    private List<Collider> _childColliders;
 
     // Player
     private PlayerBase _player;
@@ -49,8 +50,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     private void Awake()
     {
         // Get components
-        _light = GetComponentInChildren<Light>();
-        _light.intensity = 0;
+        //_light = GetComponentInChildren<Light>();
+        //_light.intensity = 0;
         _emissionPS = _itemPassivePS.emission;
 
     }
@@ -118,8 +119,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         _player = player;
         _followTarget = _player.PickupPoint;   
 
-        Collider[] childColliders = GetComponentsInChildren<Collider>();
-        foreach (Collider collider in childColliders)
+        //Collider[] childColliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in _childColliders)
         {
             collider.enabled = false;
         }
@@ -170,8 +171,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
            
 
             //Enables all the coliders attached to the object
-            Collider[] childColliders = GetComponentsInChildren<Collider>();
-            foreach (Collider collider in childColliders)
+            //Collider[] childColliders = GetComponentsInChildren<Collider>();
+            foreach (Collider collider in _childColliders)
             {
                 collider.enabled = true;
             }
@@ -247,38 +248,38 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     #region IINTERACTABLE FUNCTIONS
     public void PlayerInRange(PlayerBase player)
     {
-        if (!isIntensityChanging)
-        {
-            isIntensityChanging = true;
-            //Debug.Log("Starting to change light intensity towards maximum.");
+        //if (!isIntensityChanging)
+        //{
+        //    isIntensityChanging = true;
+        //    //Debug.Log("Starting to change light intensity towards maximum.");
 
-            LeanTween.value(gameObject, _light.intensity, _maxIntensity, 1f).setOnUpdate((float val) => {
-                _light.intensity = val;
-                //Debug.Log("Current light intensity: " + val);
-            }).setEase(LeanTweenType.easeInOutSine)
-            .setOnComplete(() => {
-                //Debug.Log("Light intensity change complete. Current intensity: " + _light.intensity);
-                isIntensityChanging = false;
-            });
-        }
+        //    LeanTween.value(gameObject, _light.intensity, _maxIntensity, 1f).setOnUpdate((float val) => {
+        //        _light.intensity = val;
+        //        //Debug.Log("Current light intensity: " + val);
+        //    }).setEase(LeanTweenType.easeInOutSine)
+        //    .setOnComplete(() => {
+        //        //Debug.Log("Light intensity change complete. Current intensity: " + _light.intensity);
+        //        isIntensityChanging = false;
+        //    });
+        //}
     }
 
     public void PlayerNotInRange(PlayerBase player)
     {
-        if (isIntensityChanging)
-        {
+        //if (isIntensityChanging)
+        //{
 
-            isIntensityChanging = false;
-            // Debug.Log("Starting to decrease light intensity towards minimal.");
-            LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
-                _light.intensity = val;
-                // Debug.Log("Current light intensity: " + val);
-            }).setEase(LeanTweenType.easeOutSine)
-            .setOnComplete(() => {
-                // Debug.Log("Light intensity decrease complete. Current intensity: " + _light.intensity);
-                isIntensityChanging = true;
-            });
-        }
+        //    isIntensityChanging = false;
+        //    // Debug.Log("Starting to decrease light intensity towards minimal.");
+        //    LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
+        //        _light.intensity = val;
+        //        // Debug.Log("Current light intensity: " + val);
+        //    }).setEase(LeanTweenType.easeOutSine)
+        //    .setOnComplete(() => {
+        //        // Debug.Log("Light intensity decrease complete. Current intensity: " + _light.intensity);
+        //        isIntensityChanging = true;
+        //    });
+        //}
     }
 
     public void PlayerStartInteract(PlayerBase player)

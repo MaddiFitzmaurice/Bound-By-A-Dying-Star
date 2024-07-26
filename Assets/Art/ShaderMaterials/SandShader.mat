@@ -62,7 +62,7 @@ Material:
     - _PolygonSides: 5.54
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SandDuneMaxHeight: 0
+    - _SandDuneMaxHeight: 0.15
     - _ShineThreshold: 0.69
     - _SineAmplitude: 0.69
     - _SineFrequency: 9.52
