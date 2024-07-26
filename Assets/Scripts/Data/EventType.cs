@@ -28,10 +28,6 @@ public enum EventType
     // Narrative
     NPC_SEND_DIALOGUE,
 
-    // RiftManager
-    CREATE_RIFT,
-    RIFT_SEND_EFFECT,
-
     // Players
     PLAYERMANAGER_SEND_PLAYER1,         // Send the player1 object
     PLAYERMANAGER_SEND_PLAYER2,         // Send the player2 object

@@ -14101,6 +14101,10 @@ PrefabInstance:
       propertyPath: _indicatorP2
       value: 
       objectReference: {fileID: 448713411}
+    - target: {fileID: 3639782773902920701, guid: 463b5e60ef4bd964893627ea5be37e9d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5586755349096491681, guid: 463b5e60ef4bd964893627ea5be37e9d, type: 3}
       propertyPath: _targetGroup
       value: 
