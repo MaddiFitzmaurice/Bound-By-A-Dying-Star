@@ -8,7 +8,6 @@ public class Player1 : PlayerBase
     {
         base.OnEnable();
         EventManager.EventSubscribe(EventType.PLAYER_1_MOVE, Player1MoveHandler);
-        EventManager.EventSubscribe(EventType.PLAYER_1_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventSubscribe(EventType.PLAYER_1_INTERACT, Interact);
         EventManager.EventSubscribe(EventType.GRAVITY_INVERT, ModifyGravityAndFallingSpeed);
     }
@@ -17,7 +16,6 @@ public class Player1 : PlayerBase
     {
         base.OnDisable();
         EventManager.EventUnsubscribe(EventType.PLAYER_1_MOVE, Player1MoveHandler);
-        EventManager.EventUnsubscribe(EventType.PLAYER_1_RIFT, CreatePortalInFrontOfPlayer);
         EventManager.EventUnsubscribe(EventType.PLAYER_1_INTERACT, Interact);
         EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, ModifyGravityAndFallingSpeed);
     }

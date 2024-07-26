@@ -59,7 +59,6 @@ public abstract class PlayerBase : MonoBehaviour
     private Animator _animator;
 
     // Data
-    protected RiftData RiftData;
     protected Vector3 MoveInput;
     protected Vector3 PrevMoveInput;
     protected InteractTypes MoveType;
@@ -93,7 +92,6 @@ public abstract class PlayerBase : MonoBehaviour
 
         // Set data
         _animator.SetBool("IsRunning", false);
-        RiftData = new RiftData(transform.position, transform.rotation, tag);
         _interactablesInRange = new List<Collider>();
         _interactablesNotInRange = new List<Collider>();
 
@@ -388,16 +386,6 @@ public abstract class PlayerBase : MonoBehaviour
     public void PickupItem(GameObject item)
     {
         CarriedPickupable = item;
-    }
-    #endregion
-
-    #region RIFT FUNCTIONS
-    protected void CreatePortalInFrontOfPlayer(object data)
-    {
-        RiftData.Position = transform.position + transform.forward * DistanceInFront;
-        RiftData.Rotation = Quaternion.LookRotation(transform.forward);
-
-        EventManager.EventTrigger(EventType.CREATE_RIFT, RiftData);
     }
     #endregion
 

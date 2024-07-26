@@ -44,8 +44,6 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         EventManager.EventInitialise(EventType.PLAYER_2_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
-        EventManager.EventInitialise(EventType.PLAYER_1_RIFT);
-        EventManager.EventInitialise(EventType.PLAYER_2_RIFT);
 
         DeviceSetup();
     }
@@ -241,22 +239,6 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         {
             _holdInteractP2 = false;
             EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, InteractTypes.RELEASE_HOLD);
-        }
-    }
-
-    public void OnPlayer1GenerateRift(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            EventManager.EventTrigger(EventType.PLAYER_1_RIFT, "Player 1");
-        }
-    }
-
-    public void OnPlayer2GenerateRift(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            EventManager.EventTrigger(EventType.PLAYER_2_RIFT, "Player 2");
         }
     }
     #endregion

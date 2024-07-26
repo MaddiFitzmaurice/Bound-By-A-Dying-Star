@@ -18,19 +18,12 @@ public enum EventType
     PLAYER_2_INTERACT,
     PLAYER_2_HOLDINTERACT,
 
-    PLAYER_1_RIFT,
-    PLAYER_2_RIFT,
-
     // Level 1
     LVL1_STARTWINKLE_ACTIVATE,          // used to get the pedestals to make their associated stars start twinkling
     LVL1_STARBEAM_ACTIVATE,             // used to get the pedestals to make their associated stars also shoot their beams
 
     // Narrative
     NPC_SEND_DIALOGUE,
-
-    // RiftManager
-    CREATE_RIFT,
-    RIFT_SEND_EFFECT,
 
     // Players
     PLAYERMANAGER_SEND_PLAYER1,         // Send the player1 object

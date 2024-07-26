@@ -44,15 +44,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold,Press"",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Player1GenerateRift"",
-                    ""type"": ""Button"",
-                    ""id"": ""adc2d72c-5de1-4b0a-a629-bcf9bd8c2ccd"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -143,28 +134,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Player1Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4c27d24e-b9e9-4574-80ae-2c2562b78fd1"",
-                    ""path"": ""<Keyboard>/t"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player1GenerateRift"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a0294f3b-0ac1-4849-af7c-68a72519c947"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player1GenerateRift"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -175,7 +144,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Player1Move = m_Gameplay.FindAction("Player1Move", throwIfNotFound: true);
         m_Gameplay_Player1Interact = m_Gameplay.FindAction("Player1Interact", throwIfNotFound: true);
-        m_Gameplay_Player1GenerateRift = m_Gameplay.FindAction("Player1GenerateRift", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -239,14 +207,12 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Player1Move;
     private readonly InputAction m_Gameplay_Player1Interact;
-    private readonly InputAction m_Gameplay_Player1GenerateRift;
     public struct GameplayActions
     {
         private @Player1InputActions m_Wrapper;
         public GameplayActions(@Player1InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Player1Move => m_Wrapper.m_Gameplay_Player1Move;
         public InputAction @Player1Interact => m_Wrapper.m_Gameplay_Player1Interact;
-        public InputAction @Player1GenerateRift => m_Wrapper.m_Gameplay_Player1GenerateRift;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -262,9 +228,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1Interact.started += instance.OnPlayer1Interact;
             @Player1Interact.performed += instance.OnPlayer1Interact;
             @Player1Interact.canceled += instance.OnPlayer1Interact;
-            @Player1GenerateRift.started += instance.OnPlayer1GenerateRift;
-            @Player1GenerateRift.performed += instance.OnPlayer1GenerateRift;
-            @Player1GenerateRift.canceled += instance.OnPlayer1GenerateRift;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -275,9 +238,6 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1Interact.started -= instance.OnPlayer1Interact;
             @Player1Interact.performed -= instance.OnPlayer1Interact;
             @Player1Interact.canceled -= instance.OnPlayer1Interact;
-            @Player1GenerateRift.started -= instance.OnPlayer1GenerateRift;
-            @Player1GenerateRift.performed -= instance.OnPlayer1GenerateRift;
-            @Player1GenerateRift.canceled -= instance.OnPlayer1GenerateRift;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -299,6 +259,5 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     {
         void OnPlayer1Move(InputAction.CallbackContext context);
         void OnPlayer1Interact(InputAction.CallbackContext context);
-        void OnPlayer1GenerateRift(InputAction.CallbackContext context);
     }
 }
