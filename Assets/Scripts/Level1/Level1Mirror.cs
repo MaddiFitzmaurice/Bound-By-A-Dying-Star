@@ -316,7 +316,6 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     public void PlayerReleaseHoldInteract(PlayerBase player)
     {
-        throw new System.NotImplementedException();
         // Play the FMOD event
         EventManager.EventTrigger(EventType.ITEM_PICKUP, null);
     }
