@@ -15,7 +15,6 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     #region INTERNAL DATA
     // Components
-    private Light _light;
     private List<Collider> _childColliders;
 
     // Player
