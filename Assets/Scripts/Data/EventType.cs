@@ -19,7 +19,7 @@ public enum EventType
     PLAYER_2_HOLDINTERACT,
 
     // Level 1
-    LVL1_STARTWINKLE_ACTIVATE,          // used to get the pedestals to make their associated stars start twinkling
+    LVL1_STAR_ACTIVATE,                 // used to get the pedestals to make their associated stars appear
     LVL1_STARBEAM_ACTIVATE,             // used to get the pedestals to make their associated stars also shoot their beams
 
     // Narrative

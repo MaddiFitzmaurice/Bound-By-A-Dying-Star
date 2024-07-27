@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class SkyConstController : MonoBehaviour
 {
+    #region EXTERNAL DATA
     [SerializeField] private List<BeamEmitter> _beamList;
-    [SerializeField] private List<ParticleSystem> _twinkleList;
+    [SerializeField] private List<GameObject> _starList;
+    #endregion
 
     void Awake()
     {
@@ -17,16 +19,29 @@ public class SkyConstController : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        DeactivateAllStars();
+    }
+
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.LVL1_STARBEAM_ACTIVATE, StarBeamActivateHandler);
-        EventManager.EventSubscribe(EventType.LVL1_STARTWINKLE_ACTIVATE, StarTwinkleActivateHandler);
+        EventManager.EventSubscribe(EventType.LVL1_STAR_ACTIVATE, StarActivateHandler);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.LVL1_STARBEAM_ACTIVATE, StarBeamActivateHandler);
-        EventManager.EventUnsubscribe(EventType.LVL1_STARTWINKLE_ACTIVATE, StarTwinkleActivateHandler);
+        EventManager.EventUnsubscribe(EventType.LVL1_STAR_ACTIVATE, StarActivateHandler);
+    }
+
+    private void DeactivateAllStars()
+    {
+        foreach (GameObject star in _starList)
+        {
+            star.SetActive(false);
+        }
     }
 
     public void StarBeamActivateHandler(object data)
@@ -66,15 +81,15 @@ public class SkyConstController : MonoBehaviour
         }
     }
 
-    public void StarTwinkleActivateHandler(object data)
+    public void StarActivateHandler(object data)
     {
         if (data is not int)
         {
-            Debug.LogError("StarTwinkleActivateHandler has not received a int.");
+            Debug.LogError("StarActivateHandler has not received a int.");
         }
 
         int twinkleId = (int)data;
 
-        _twinkleList[twinkleId].Play();
+        _starList[twinkleId].SetActive(true);
     }
 }

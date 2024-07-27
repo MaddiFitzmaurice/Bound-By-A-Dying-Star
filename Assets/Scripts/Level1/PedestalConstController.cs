@@ -26,7 +26,7 @@ public class PedestalConstController : MonoBehaviour
     {
         _pedestalNum = _pedestalList.Count;
         EventManager.EventInitialise(EventType.LVL1_STARBEAM_ACTIVATE);
-        EventManager.EventInitialise(EventType.LVL1_STARTWINKLE_ACTIVATE);
+        EventManager.EventInitialise(EventType.LVL1_STAR_ACTIVATE);
     }
 
     void Start()
@@ -88,7 +88,7 @@ public class PedestalConstController : MonoBehaviour
         int senderIndex = _pedestalList.IndexOf(sender);
 
         // Send star twinkle event
-        EventManager.EventTrigger(EventType.LVL1_STARTWINKLE_ACTIVATE, senderIndex);
+        EventManager.EventTrigger(EventType.LVL1_STAR_ACTIVATE, senderIndex);
 
         // check to make sender is in list and that list is not empty
         if(senderIndex != -1 || _pedestalList.Count != 0)
