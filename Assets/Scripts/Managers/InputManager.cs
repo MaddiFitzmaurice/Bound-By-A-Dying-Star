@@ -36,6 +36,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player1Inputs = new Player1InputActions();
         _player2Inputs = new Player2InputActions();
         _player1Inputs.Gameplay.SetCallbacks(this);
+        _player1Inputs.MainMenu.SetCallbacks(this);
         _player2Inputs.Gameplay.SetCallbacks(this);
 
         EventManager.EventInitialise(EventType.ENABLE_GAMEPLAY_INPUTS);
@@ -58,6 +59,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         // Event Subscriptions
         EventManager.EventSubscribe(EventType.DISABLE_GAMEPLAY_INPUTS, DisableGameplayInput);
         EventManager.EventSubscribe(EventType.ENABLE_GAMEPLAY_INPUTS, EnableGameplayInput);
+        EventManager.EventSubscribe(EventType.ENABLE_MAINMENU_INPUTS, EnableMainMenuInput);
+        EventManager.EventSubscribe(EventType.DISABLE_MAINMENU_INPUTS, DisableMainMenuInput);
     }
 
     void OnDisable()
@@ -70,6 +73,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         // Event Unsubscriptions
         EventManager.EventUnsubscribe(EventType.DISABLE_GAMEPLAY_INPUTS, DisableGameplayInput);
         EventManager.EventUnsubscribe(EventType.ENABLE_GAMEPLAY_INPUTS, EnableGameplayInput);
+        EventManager.EventUnsubscribe(EventType.ENABLE_MAINMENU_INPUTS, EnableMainMenuInput);
+        EventManager.EventUnsubscribe(EventType.DISABLE_MAINMENU_INPUTS, DisableMainMenuInput);
     }
     #endregion
 
@@ -189,12 +194,18 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     public void OnStartGame(InputAction.CallbackContext context)
     {
         // Start level 1
-        EventManager.EventTrigger(EventType.PLAY_GAME, 1);
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.PLAY_GAME, 1);
+        }
     }
 
     public void OnEndGame(InputAction.CallbackContext context)
     {
-        EventManager.EventTrigger(EventType.QUIT_GAME, null);
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.QUIT_GAME, null);
+        }
     }
     #endregion
 

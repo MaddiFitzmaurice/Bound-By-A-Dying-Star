@@ -62,6 +62,7 @@ public class SceneSystemManager : MonoBehaviour
         // If build is running, load in the main menu
         // Otherwise, unload all scenes except Services and reload in order of their layer architecture
 #if !UNITY_EDITOR
+        EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
         StartCoroutine(LoadScene(_mainMenuIndex));
         StartCoroutine(_fader.NormalFadeIn());
 #else
@@ -72,6 +73,15 @@ public class SceneSystemManager : MonoBehaviour
         {
             Scene scene = SceneManager.GetSceneAt(i);
 
+            if (scene.buildIndex == _mainMenuIndex)
+            {
+                EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
+            }
+            else if (scene.buildIndex != _servicesIndex && scene.buildIndex != _mainMenuIndex)
+            {
+                EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+            }
+
             if (scene.buildIndex != _servicesIndex)
             {
                 loadedScenes.Enqueue(scene.buildIndex);
@@ -80,7 +90,6 @@ public class SceneSystemManager : MonoBehaviour
         }
 
         StartCoroutine(ReloadAllScenes(loadedScenes));
-
 #endif
     }
 
@@ -107,6 +116,7 @@ public class SceneSystemManager : MonoBehaviour
     // Level to Menu Change Sequence
     IEnumerator LevelToMenu()
     {
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
         EventManager.EventTrigger(EventType.FADING, false);
         yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadLevel(_currentLevel.buildIndex));
@@ -114,11 +124,13 @@ public class SceneSystemManager : MonoBehaviour
         yield return StartCoroutine(LoadScene(_mainMenuIndex));
         yield return StartCoroutine(_fader.NormalFadeIn());
         EventManager.EventTrigger(EventType.FADING, true);
+        EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
     }
 
     // Menu to Level Change Sequence
     IEnumerator MenuToLevel(int levelSelected)
     {
+        EventManager.EventTrigger(EventType.DISABLE_MAINMENU_INPUTS, null);
         EventManager.EventTrigger(EventType.FADING, false);
         yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadScene(_mainMenuIndex));
@@ -126,6 +138,7 @@ public class SceneSystemManager : MonoBehaviour
         yield return StartCoroutine(LoadLevel(levelSelected));
         yield return StartCoroutine(_fader.NormalFadeIn());
         EventManager.EventTrigger(EventType.FADING, true);
+        //EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
     }
 
     // Only loads levels, does not load MainMenu scene or core scenes
