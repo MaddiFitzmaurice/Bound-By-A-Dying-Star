@@ -47,6 +47,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     // Tutorial Prompt
     private static bool _showPrompt = true;
+    private bool _isPromptShowing = false;
     #endregion
 
     private void Awake()
@@ -251,8 +252,9 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     #region IINTERACTABLE FUNCTIONS
     public void PlayerInRange(PlayerBase player)
     {
-        if (_showPrompt)
+        if (_showPrompt && !_isPromptShowing)
         {
+            _isPromptShowing = true;
             EventManager.EventTrigger(EventType.SHOW_PROMPT_INTERACT, null);
         }
         //if (!isIntensityChanging)
@@ -275,6 +277,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     {
         if (_showPrompt)
         {
+            _isPromptShowing = false;
             EventManager.EventTrigger(EventType.HIDE_PROMPT_INTERACT, null);
         }
         //if (isIntensityChanging)

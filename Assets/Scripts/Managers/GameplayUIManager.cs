@@ -27,6 +27,10 @@ public class GameplayUIManager : MonoBehaviour
         // Get Components
         _cam = Camera.main;
         _screen = GetComponentInChildren<RectTransform>();
+        _tapPrompt.SetActive(true);
+        _holdPrompt.SetActive(true);
+        _tapPrompt.SetActive(false);
+        _holdPrompt.SetActive(false);
     }
 
     private void OnEnable()
@@ -105,7 +109,10 @@ public class GameplayUIManager : MonoBehaviour
 
     public void ShowTapPrompt(object data)
     {
-        _tapPrompt.SetActive(true);
+        if (_tapPrompt.activeInHierarchy == false)
+        {
+            _tapPrompt.SetActive(true);
+        }
     }
 
     public void HideTapPrompt(object data)
@@ -115,7 +122,10 @@ public class GameplayUIManager : MonoBehaviour
 
     public void ShowHoldPrompt(object data)
     {
-        _holdPrompt.SetActive(true);
+        if (_holdPrompt.activeInHierarchy == false)
+        {
+            _holdPrompt.SetActive(true);
+        }
     }    
 
     public void HideHoldPrompt(object data)
