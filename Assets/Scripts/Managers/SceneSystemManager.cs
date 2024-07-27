@@ -60,7 +60,7 @@ public class SceneSystemManager : MonoBehaviour
         // Otherwise, unload all scenes except Services and reload in order of their layer architecture
 #if !UNITY_EDITOR
         StartCoroutine(LoadScene(_mainMenuIndex));
-        //StartCoroutine(_fader.NormalFadeIn());
+        StartCoroutine(_fader.NormalFadeIn());
         EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
 #else
         int loadedScenesCount = SceneManager.loadedSceneCount;
