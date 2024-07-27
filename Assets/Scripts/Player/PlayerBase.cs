@@ -48,7 +48,6 @@ public abstract class PlayerBase : MonoBehaviour
     [field:SerializeField] protected VisualEffect _teleportInEffect;
     [field:SerializeField] protected VisualEffect _teleportOutEffect;
     [field:SerializeField] protected VisualEffect _flashEffect;
-    [field:SerializeField] protected ParticleSystem _flameHeadPS;
     #endregion
 
     #region INTERNAL DATA
@@ -103,7 +102,7 @@ public abstract class PlayerBase : MonoBehaviour
         UpperBoundRay.transform.localPosition = new Vector3(0, -1 + StepHeight, 0);
         LowerBoundRay.transform.localPosition = new Vector3(0, -1, 0);
 
-        _flameHeadPS.Play();
+    
     }
 
     protected virtual void OnEnable()
@@ -245,7 +244,6 @@ public abstract class PlayerBase : MonoBehaviour
             {
                 renderer.enabled = true;
             }
-            _flameHeadPS.Play();
         }
         else
         {
@@ -253,7 +251,6 @@ public abstract class PlayerBase : MonoBehaviour
             {
                 renderer.enabled = false;
             }
-            _flameHeadPS.Stop();
         }
     }
 
