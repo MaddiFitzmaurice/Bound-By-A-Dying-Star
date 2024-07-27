@@ -62,7 +62,7 @@ Material:
     - _QueueOffset: 0
     - _WhitePulseFrequency: 8
     m_Colors:
-    - _Color: {r: 13.433962, g: 11.570353, b: 1.9517261, a: 1}
+    - _Color: {r: 16, g: 7.769145, b: 0, a: 1}
     - _FresnelColourStrength: {r: 0.4, g: 0.7, b: 0, a: 0}
     - _FresnelColourStrength_1: {r: 0.4, g: 0.7, b: 0, a: 0}
     - _FresnelWhiteStregnth: {r: 1.3, g: 1.8, b: 0, a: 0}

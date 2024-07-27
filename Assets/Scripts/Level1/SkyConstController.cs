@@ -22,6 +22,7 @@ public class SkyConstController : MonoBehaviour
     private void Start()
     {
         DeactivateAllStars();
+        _starList[0].SetActive(true);
     }
 
     private void OnEnable()

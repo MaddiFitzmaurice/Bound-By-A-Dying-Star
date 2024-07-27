@@ -48,7 +48,8 @@ Material:
     - _QueueOffset: 0
     - _Rotation_amount: -1
     - _Twirl_strength: 15
-    m_Colors: []
+    m_Colors:
+    - _Color: {r: 1, g: 0.86148685, b: 0.43867922, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &55798042528033674
 MonoBehaviour:
