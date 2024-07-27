@@ -172,6 +172,17 @@
                 },
                 {
                     "name": "",
+                    "id": "bded4eb1-ceab-456c-bf5f-334a44987435",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StartGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f21a5ff8-47ff-4caf-b020-15c58bb17962",
                     "path": "<Gamepad>/select",
                     "interactions": "",

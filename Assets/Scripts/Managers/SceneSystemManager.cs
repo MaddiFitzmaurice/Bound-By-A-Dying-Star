@@ -4,9 +4,6 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using System;
 using System.Collections.Generic;
-
-
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -62,9 +59,9 @@ public class SceneSystemManager : MonoBehaviour
         // If build is running, load in the main menu
         // Otherwise, unload all scenes except Services and reload in order of their layer architecture
 #if !UNITY_EDITOR
-        EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
         StartCoroutine(LoadScene(_mainMenuIndex));
-        StartCoroutine(_fader.NormalFadeIn());
+        //StartCoroutine(_fader.NormalFadeIn());
+        EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
 #else
         int loadedScenesCount = SceneManager.loadedSceneCount;
         Queue<int> loadedScenes = new Queue<int>();

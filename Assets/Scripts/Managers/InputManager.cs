@@ -27,6 +27,11 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     private bool _holdInteractP1 = false;
     private bool _holdInteractP2 = false;
 
+    // Button Press Flags
+    private bool _pressedStart = false;
+    private bool _pressedQuit = false;
+    private bool _pressedRestart = false;
+
     #region FRAMEWORK FUNCTIONS
     void Awake()
     {
@@ -52,7 +57,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     void OnEnable()
     {
         //_inputs.Gameplay.Enable();
-        //EnableGameplayInput(null);
+        EnableGameplayInput(null);
+        EnableMainMenuInput(null);
         // Subscription to listen for device changes
         InputSystem.onDeviceChange += DeviceChangeHandler;
 
@@ -66,6 +72,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     void OnDisable()
     {
         DisableGameplayInput(null);
+        DisableMainMenuInput(null);
 
         // Unsubscribing from listening to device changes
         InputSystem.onDeviceChange -= DeviceChangeHandler;
@@ -194,16 +201,19 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     public void OnStartGame(InputAction.CallbackContext context)
     {
         // Start level 1
-        if (context.performed)
+        if (context.performed && !_pressedStart)
         {
+            _pressedStart = true;
+            _pressedRestart = false;
             EventManager.EventTrigger(EventType.PLAY_GAME, 1);
         }
     }
 
     public void OnEndGame(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !_pressedQuit)
         {
+            _pressedQuit = true;
             EventManager.EventTrigger(EventType.QUIT_GAME, null);
         }
     }
@@ -269,8 +279,10 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     // FOR OPEN DAY TO RESTART LEVEL 1
     public void OnRestartLevel1(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !_pressedRestart)
         {
+            _pressedRestart = true;
+            _pressedStart = false;
             EventManager.EventTrigger(EventType.MAIN_MENU, null);
         }
     }

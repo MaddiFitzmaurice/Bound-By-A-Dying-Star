@@ -13,7 +13,7 @@ public class AudioManager : MonoBehaviour
     private void Awake()
     {
         // Find the FMODEventManager in the scene
-        _fmodEventManager = FindObjectOfType<FMODEventManager>();
+        _fmodEventManager = GetComponent<FMODEventManager>();
 
         if (_fmodEventManager == null)
         {
