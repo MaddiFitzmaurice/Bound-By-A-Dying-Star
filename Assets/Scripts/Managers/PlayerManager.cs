@@ -78,7 +78,7 @@ public class PlayerManager : MonoBehaviour
 
     private IEnumerator PlayerTeleport(Transform spawnPoint)
     {
-        EventManager.EventTrigger(EventType.DISABLE_INPUTS, null);
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
         _player1.PlayTeleportEffect(true);
         _player2.PlayTeleportEffect(true);
         yield return new WaitForSeconds(2f);
@@ -102,7 +102,7 @@ public class PlayerManager : MonoBehaviour
         _player2.ToggleClothPhysics(true);
         _player1.ToggleVisibility(true);
         _player2.ToggleVisibility(true);
-        EventManager.EventTrigger(EventType.ENABLE_INPUTS, null);
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
     }
 
     #region EVENT HANDLERS

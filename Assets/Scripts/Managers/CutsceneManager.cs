@@ -36,7 +36,7 @@ public class CutsceneManager : MonoBehaviour
     #region EVENT FUNCTIONS
     public void CutsceneFinishedHandler(PlayableDirector director)
     {
-        EventManager.EventTrigger(EventType.ENABLE_INPUTS, null);
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
         EventManager.EventTrigger(EventType.CUTSCENE_FINISHED, null);
     }
 
@@ -48,7 +48,7 @@ public class CutsceneManager : MonoBehaviour
         }
 
         PlayableAsset cinematic = (PlayableAsset)data;
-        EventManager.EventTrigger(EventType.DISABLE_INPUTS, null);
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
         _director.Play(cinematic); 
     }
     #endregion

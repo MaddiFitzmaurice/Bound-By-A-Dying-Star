@@ -46,12 +46,14 @@ public class SceneSystemManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.PLAY_GAME, PlayGameHandler);
         EventManager.EventSubscribe(EventType.QUIT_GAME, QuitGameHandler);
+        EventManager.EventSubscribe(EventType.MAIN_MENU, MainMenuHandler);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.PLAY_GAME, PlayGameHandler);
         EventManager.EventUnsubscribe(EventType.QUIT_GAME, QuitGameHandler);
+        EventManager.EventUnsubscribe(EventType.MAIN_MENU, MainMenuHandler);
     }
 
     // After Services Scene is loaded in, additively load in the MainMenu scene
@@ -228,6 +230,11 @@ public class SceneSystemManager : MonoBehaviour
     public void QuitGameHandler(object data)
     {
         StartCoroutine(QuitGame());
+    }
+
+    public void MainMenuHandler(object data)
+    {
+        StartCoroutine(LevelToMenu());
     }
     #endregion
 }

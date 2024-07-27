@@ -5,10 +5,11 @@ public enum EventType
     PLAY_GAME,
     FADING, 
     QUIT_GAME,  
+    MAIN_MENU,
 
     // Inputs
-    ENABLE_INPUTS,
-    DISABLE_INPUTS,
+    ENABLE_GAMEPLAY_INPUTS,
+    DISABLE_GAMEPLAY_INPUTS,
 
     PLAYER_1_MOVE,
     PLAYER_2_MOVE,

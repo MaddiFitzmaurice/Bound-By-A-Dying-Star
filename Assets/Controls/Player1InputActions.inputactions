@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "Hold,Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RestartLevel1",
+                    "type": "Button",
+                    "id": "676cf1a7-0bc4-4f23-861c-4c33caa3a634",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -110,6 +119,65 @@
                     "processors": "",
                     "groups": "",
                     "action": "Player1Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3765209e-07cc-44fc-8dc6-02a1f276aa2d",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RestartLevel1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "MainMenu",
+            "id": "a363e563-bfa1-4d6b-8ff8-d6d1ccece096",
+            "actions": [
+                {
+                    "name": "StartGame",
+                    "type": "Button",
+                    "id": "8984f138-a02d-4470-8883-92a5ff9d3f03",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "EndGame",
+                    "type": "Button",
+                    "id": "07c23761-bba5-4f68-b68f-71db416d2619",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a90f2957-b924-406b-a78e-c95db002b2af",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StartGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f21a5ff8-47ff-4caf-b020-15c58bb17962",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EndGame",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
