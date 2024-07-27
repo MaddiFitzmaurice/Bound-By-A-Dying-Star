@@ -43,6 +43,10 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     private bool _isRotating = false;
     private bool _correctAngle = false;
     Quaternion _startRot;
+    private bool _canRotateMirror = false;
+
+    // Tutorial Prompt
+    private static bool _showPrompt = true;
     #endregion
 
     void Awake()
@@ -311,6 +315,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     public void ActivateOrb()
     {
         _mirrorBeamFX.SetActive(true);
+        _canRotateMirror = true;
     }
 
     // Activate sky beam
@@ -378,10 +383,18 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     #region IINTERACTABLE FUNCTIONS
     public void PlayerInRange(PlayerBase player)
     {
+        if (_showPrompt && _canRotateMirror && _id == 0)
+        {
+            EventManager.EventTrigger(EventType.SHOW_PROMPT_HOLD_INTERACT, null);
+        }
     }
 
     public void PlayerNotInRange(PlayerBase player)
     {
+        if (_showPrompt && _canRotateMirror && _id == 0)
+        {
+            EventManager.EventTrigger(EventType.HIDE_PROMPT_HOLD_INTERACT, null);
+        }
     }
 
     public void PlayerStartInteract(PlayerBase player)
@@ -391,6 +404,12 @@ public class ConstPedestal : MonoBehaviour, IInteractable
 
     public void PlayerHoldInteract(PlayerBase player)
     {
+        if (_showPrompt && _canRotateMirror && _id == 0)
+        {
+            _showPrompt = false;
+            EventManager.EventTrigger(EventType.HIDE_PROMPT_HOLD_INTERACT, null);
+        }
+
         if (player.CarriedPickupable == null)
         {
             if (_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)

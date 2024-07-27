@@ -10,7 +10,10 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     [SerializeField] private float _maxIntensity = 5f;
     [SerializeField] private float _maxDistance = 10f;
     public bool InteractLocked { get; set; } = false;
-
+    // How high to bob up and down
+    [SerializeField] private float _bobbingAmplitude = 0.25f;
+    // How often to bob
+    [SerializeField] private float _bobbingFrequency = 1f;
     #endregion
 
     #region INTERNAL DATA
@@ -41,10 +44,9 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     private bool _isBobbingAllowed = true;
     private Vector3 _finalRestingPosition;
     private float _frameRateSpeed = 0.0f;
-    // How high to bob up and down
-    [SerializeField] private float _bobbingAmplitude = 0.25f;
-    // How often to bob
-    [SerializeField] private float _bobbingFrequency = 1f;
+
+    // Tutorial Prompt
+    private static bool _showPrompt = true;
     #endregion
 
     private void Awake()
@@ -249,6 +251,10 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     #region IINTERACTABLE FUNCTIONS
     public void PlayerInRange(PlayerBase player)
     {
+        if (_showPrompt)
+        {
+            EventManager.EventTrigger(EventType.SHOW_PROMPT_INTERACT, null);
+        }
         //if (!isIntensityChanging)
         //{
         //    isIntensityChanging = true;
@@ -267,6 +273,10 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     public void PlayerNotInRange(PlayerBase player)
     {
+        if (_showPrompt)
+        {
+            EventManager.EventTrigger(EventType.HIDE_PROMPT_INTERACT, null);
+        }
         //if (isIntensityChanging)
         //{
 
@@ -285,6 +295,11 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     public void PlayerStartInteract(PlayerBase player)
     {
+        if (_showPrompt)
+        {
+            _showPrompt = false;
+            EventManager.EventTrigger(EventType.HIDE_PROMPT_INTERACT, null);
+        }
 
         // Play the FMOD event
         EventManager.EventTrigger(EventType.ITEM_PICKUP, null);

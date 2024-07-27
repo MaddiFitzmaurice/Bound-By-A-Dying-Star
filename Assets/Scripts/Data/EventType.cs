@@ -21,6 +21,11 @@ public enum EventType
     PLAYER_2_INTERACT,
     PLAYER_2_HOLDINTERACT,
 
+    SHOW_PROMPT_INTERACT,
+    HIDE_PROMPT_INTERACT,
+    SHOW_PROMPT_HOLD_INTERACT,
+    HIDE_PROMPT_HOLD_INTERACT,
+
     // Level 1
     LVL1_STAR_ACTIVATE,                 // used to get the pedestals to make their associated stars appear
     LVL1_STARBEAM_ACTIVATE,             // used to get the pedestals to make their associated stars also shoot their beams

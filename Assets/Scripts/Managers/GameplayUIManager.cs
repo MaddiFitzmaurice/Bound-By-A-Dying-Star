@@ -7,6 +7,8 @@ public class GameplayUIManager : MonoBehaviour
     #region EXTERNAL DATA
     [SerializeField] private OffscreenIndicator _indicatorP1;
     [SerializeField] private OffscreenIndicator _indicatorP2;
+    [SerializeField] private GameObject _tapPrompt;
+    [SerializeField] private GameObject _holdPrompt;
     #endregion
     #region INTERNAL DATA
     // Player Data
@@ -33,6 +35,10 @@ public class GameplayUIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.PLAYERMANAGER_SEND_PLAYER2, ReceivePlayer2Handler);
         EventManager.EventSubscribe(EventType.CUTSCENE_PLAY, HideUI);
         EventManager.EventSubscribe(EventType.CUTSCENE_FINISHED, ShowUI);
+        EventManager.EventSubscribe(EventType.SHOW_PROMPT_HOLD_INTERACT, ShowHoldPrompt);
+        EventManager.EventSubscribe(EventType.HIDE_PROMPT_HOLD_INTERACT, HideHoldPrompt);
+        EventManager.EventSubscribe(EventType.SHOW_PROMPT_INTERACT, ShowTapPrompt);
+        EventManager.EventSubscribe(EventType.HIDE_PROMPT_INTERACT, HideTapPrompt);
     }
 
     public void OnDisable()
@@ -41,6 +47,10 @@ public class GameplayUIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.PLAYERMANAGER_SEND_PLAYER2, ReceivePlayer2Handler);
         EventManager.EventUnsubscribe(EventType.CUTSCENE_PLAY, HideUI);
         EventManager.EventUnsubscribe(EventType.CUTSCENE_FINISHED, ShowUI);
+        EventManager.EventUnsubscribe(EventType.SHOW_PROMPT_HOLD_INTERACT, ShowHoldPrompt);
+        EventManager.EventUnsubscribe(EventType.HIDE_PROMPT_HOLD_INTERACT, HideHoldPrompt);
+        EventManager.EventUnsubscribe(EventType.SHOW_PROMPT_INTERACT, ShowTapPrompt);
+        EventManager.EventUnsubscribe(EventType.HIDE_PROMPT_INTERACT, HideTapPrompt);
     }
 
     public void Update()
@@ -91,6 +101,26 @@ public class GameplayUIManager : MonoBehaviour
     public void HideUI(object data)
     {
         _showOffscreenUI = false;
+    }
+
+    public void ShowTapPrompt(object data)
+    {
+        _tapPrompt.SetActive(true);
+    }
+
+    public void HideTapPrompt(object data)
+    {
+        _tapPrompt.SetActive(false);
+    }
+
+    public void ShowHoldPrompt(object data)
+    {
+        _holdPrompt.SetActive(true);
+    }    
+
+    public void HideHoldPrompt(object data)
+    {
+        _holdPrompt.SetActive(false);
     }
     #endregion
 }
