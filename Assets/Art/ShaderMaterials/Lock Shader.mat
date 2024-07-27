@@ -7,15 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Emission
-  m_Shader: {fileID: -6465566751694194690, guid: 013e11df870e74a4c8c410ff9f3ac110, type: 3}
-  m_Parent: {fileID: 2100000, guid: 57be1910ec062f54080f31a85b930bff, type: 2}
-  m_ModifiedSerializedProperties: 2
+  m_Name: Lock Shader
+  m_Shader: {fileID: -6465566751694194690, guid: 38e37e93f8800b848b4fe39794c349c9, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _EMISSION
-  - _SURFACE_TYPE_TRANSPARENT
-  m_LightmapFlags: 2
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,25 +22,31 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Blend: 0
-    - _Cutoff: 0.519
+    - _Blend: 0.74
     - _Distortion_Strength: 0.05
-    - _DstBlend: 10
-    - _DstBlendAlpha: 10
     - _Fresnel_Power: 5
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _Speed: 0.1
-    - _SrcBlend: 5
-    - _Surface: 1
-    - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0, g: 0.9892149, b: 1, a: 0}
-    - _Color: {r: 0, g: 0.98921484, b: 1, a: 0}
-    - _EmissionColor: {r: 0, g: 0.23464847, b: 1, a: 1}
+    - _Color: {r: 2, g: 0.6596047, b: 0, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &8779851967078598574
+--- !u!114 &5916191107133749136
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
