@@ -66,6 +66,8 @@ public class EndCutsceneTrigger : MonoBehaviour
 
     private void EndLevelCutscene()
     {
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+        EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
         EventManager.EventTrigger(EventType.MAIN_MENU, null);
     }
 }

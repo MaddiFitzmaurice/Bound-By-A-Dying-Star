@@ -21,6 +21,9 @@ public class FixedCamSystem : MonoBehaviour
     private CinemachineVirtualCamera _cam;
     private List<CamTrigger> _triggers;
     private CameraData _camData;
+
+    private bool _p1Entered = false;
+    private bool _p2Entered = false;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
@@ -77,10 +80,41 @@ public class FixedCamSystem : MonoBehaviour
     #endregion
 
     #region EXTERNAL FUNCTIONS
-    // If both players are in trigger box, activate camera
-    public void Triggered()
+    // If both players are within any of the family of trigger boxes, activate camera
+    public void TriggerEntered(PlayerBase player)
     {
-        EventManager.EventTrigger(EventType.CAMERA_ACTIVATE, _cam);   
+        if (player is Player1)
+        {
+            _p1Entered = true;
+
+            // If both players are in trigger, activate camera
+            if (_p2Entered)
+            {
+                EventManager.EventTrigger(EventType.CAMERA_ACTIVATE, _cam);
+            }
+        }
+        else if (player is Player2)
+        {
+            _p2Entered = true;
+
+            if (_p1Entered)
+            {
+                EventManager.EventTrigger(EventType.CAMERA_ACTIVATE, _cam);
+            }
+        }
+    }
+
+    // If a player has exited one of the family of triggers
+    public void TriggerExited(PlayerBase player)
+    {
+        if (player is Player1)
+        {
+            _p1Entered = false;
+        }
+        else if (player is Player2)
+        {
+            _p2Entered = false;
+        }
     }
     #endregion
 

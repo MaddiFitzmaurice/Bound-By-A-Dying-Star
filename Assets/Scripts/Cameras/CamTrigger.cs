@@ -39,14 +39,8 @@ public class CamTrigger : MonoBehaviour
 
         if (p1 != null)
         {
-            _player1In = true;
             
-            // If both players are in trigger, activate camera
-            if (_player2In)
-            {
-                _system.Triggered();
-            }
-
+            _system.TriggerEntered(p1);
             return;
         }
 
@@ -55,14 +49,7 @@ public class CamTrigger : MonoBehaviour
 
         if (p2 != null)
         {
-            _player2In = true;
-
-            // If both players are in trigger, activate camera
-            if (_player1In)
-            {
-                _system.Triggered();
-            }
-
+            _system.TriggerEntered(p2);
             return;
         }
     }
@@ -74,7 +61,7 @@ public class CamTrigger : MonoBehaviour
 
         if (p1 != null)
         {
-            _player1In = false;
+            _system.TriggerExited(p1);
             return;
         }
 
@@ -83,7 +70,7 @@ public class CamTrigger : MonoBehaviour
 
         if (p2 != null)
         {
-            _player2In = false;
+            _system.TriggerExited(p2);
             return;
         }
     }
