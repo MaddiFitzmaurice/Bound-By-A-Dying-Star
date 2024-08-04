@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.01068664, g: 0.009676899, b: 0.020424925, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -227,7 +227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 169800416990994415, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_DefaultBlend.m_Style
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 169800416990994415, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_CameraCutEvent.m_PersistentCalls.m_Calls.Array.size
