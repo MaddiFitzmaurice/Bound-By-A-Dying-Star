@@ -381,8 +381,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7939548834092981447}
   - component: {fileID: 395776664567196683}
-  - component: {fileID: 3639782773902920701}
-  - component: {fileID: 8591811819921629004}
   - component: {fileID: 5586755349096491681}
   m_Layer: 0
   m_Name: GameplayManager
@@ -419,32 +417,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17207ef8a7d2986469b4210954f82784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3639782773902920701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6262189983294742227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18478d09e35f1cd4f8cd6b8e7297f8ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8591811819921629004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6262189983294742227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7e5a6f8fe65f18429ecb4993d16f789, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _player1RiftPrefab: {fileID: 914029313261798401, guid: 5bd839aeb5ce7e84fbe595db74a565a2, type: 3}
-  _player2RiftPrefab: {fileID: 914029313261798401, guid: 0d9cd20ae2449934693ec82fceffe196, type: 3}
+  _indicatorP1: {fileID: 0}
+  _indicatorP2: {fileID: 0}
 --- !u!114 &5586755349096491681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,4 +431,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59014478c143b064f8710292c7aa6ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetGroup: {fileID: 0}
+  _playerGrouper: {fileID: 0}

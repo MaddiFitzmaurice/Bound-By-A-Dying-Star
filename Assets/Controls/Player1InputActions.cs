@@ -46,9 +46,9 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Player1GenerateRift"",
+                    ""name"": ""RestartLevel1"",
                     ""type"": ""Button"",
-                    ""id"": ""adc2d72c-5de1-4b0a-a629-bcf9bd8c2ccd"",
+                    ""id"": ""676cf1a7-0bc4-4f23-861c-4c33caa3a634"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -136,7 +136,7 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""bc571431-746c-4b6d-a370-27df413e56df"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -146,23 +146,71 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4c27d24e-b9e9-4574-80ae-2c2562b78fd1"",
-                    ""path"": ""<Keyboard>/t"",
+                    ""id"": ""3765209e-07cc-44fc-8dc6-02a1f276aa2d"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Player1GenerateRift"",
+                    ""action"": ""RestartLevel1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""MainMenu"",
+            ""id"": ""a363e563-bfa1-4d6b-8ff8-d6d1ccece096"",
+            ""actions"": [
+                {
+                    ""name"": ""StartGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""8984f138-a02d-4470-8883-92a5ff9d3f03"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EndGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""07c23761-bba5-4f68-b68f-71db416d2619"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a90f2957-b924-406b-a78e-c95db002b2af"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a0294f3b-0ac1-4849-af7c-68a72519c947"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""id"": ""bded4eb1-ceab-456c-bf5f-334a44987435"",
+                    ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Player1GenerateRift"",
+                    ""action"": ""StartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f21a5ff8-47ff-4caf-b020-15c58bb17962"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EndGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -175,7 +223,11 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Player1Move = m_Gameplay.FindAction("Player1Move", throwIfNotFound: true);
         m_Gameplay_Player1Interact = m_Gameplay.FindAction("Player1Interact", throwIfNotFound: true);
-        m_Gameplay_Player1GenerateRift = m_Gameplay.FindAction("Player1GenerateRift", throwIfNotFound: true);
+        m_Gameplay_RestartLevel1 = m_Gameplay.FindAction("RestartLevel1", throwIfNotFound: true);
+        // MainMenu
+        m_MainMenu = asset.FindActionMap("MainMenu", throwIfNotFound: true);
+        m_MainMenu_StartGame = m_MainMenu.FindAction("StartGame", throwIfNotFound: true);
+        m_MainMenu_EndGame = m_MainMenu.FindAction("EndGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -239,14 +291,14 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Player1Move;
     private readonly InputAction m_Gameplay_Player1Interact;
-    private readonly InputAction m_Gameplay_Player1GenerateRift;
+    private readonly InputAction m_Gameplay_RestartLevel1;
     public struct GameplayActions
     {
         private @Player1InputActions m_Wrapper;
         public GameplayActions(@Player1InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Player1Move => m_Wrapper.m_Gameplay_Player1Move;
         public InputAction @Player1Interact => m_Wrapper.m_Gameplay_Player1Interact;
-        public InputAction @Player1GenerateRift => m_Wrapper.m_Gameplay_Player1GenerateRift;
+        public InputAction @RestartLevel1 => m_Wrapper.m_Gameplay_RestartLevel1;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -262,9 +314,9 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1Interact.started += instance.OnPlayer1Interact;
             @Player1Interact.performed += instance.OnPlayer1Interact;
             @Player1Interact.canceled += instance.OnPlayer1Interact;
-            @Player1GenerateRift.started += instance.OnPlayer1GenerateRift;
-            @Player1GenerateRift.performed += instance.OnPlayer1GenerateRift;
-            @Player1GenerateRift.canceled += instance.OnPlayer1GenerateRift;
+            @RestartLevel1.started += instance.OnRestartLevel1;
+            @RestartLevel1.performed += instance.OnRestartLevel1;
+            @RestartLevel1.canceled += instance.OnRestartLevel1;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -275,9 +327,9 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
             @Player1Interact.started -= instance.OnPlayer1Interact;
             @Player1Interact.performed -= instance.OnPlayer1Interact;
             @Player1Interact.canceled -= instance.OnPlayer1Interact;
-            @Player1GenerateRift.started -= instance.OnPlayer1GenerateRift;
-            @Player1GenerateRift.performed -= instance.OnPlayer1GenerateRift;
-            @Player1GenerateRift.canceled -= instance.OnPlayer1GenerateRift;
+            @RestartLevel1.started -= instance.OnRestartLevel1;
+            @RestartLevel1.performed -= instance.OnRestartLevel1;
+            @RestartLevel1.canceled -= instance.OnRestartLevel1;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -295,10 +347,69 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         }
     }
     public GameplayActions @Gameplay => new GameplayActions(this);
+
+    // MainMenu
+    private readonly InputActionMap m_MainMenu;
+    private List<IMainMenuActions> m_MainMenuActionsCallbackInterfaces = new List<IMainMenuActions>();
+    private readonly InputAction m_MainMenu_StartGame;
+    private readonly InputAction m_MainMenu_EndGame;
+    public struct MainMenuActions
+    {
+        private @Player1InputActions m_Wrapper;
+        public MainMenuActions(@Player1InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @StartGame => m_Wrapper.m_MainMenu_StartGame;
+        public InputAction @EndGame => m_Wrapper.m_MainMenu_EndGame;
+        public InputActionMap Get() { return m_Wrapper.m_MainMenu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MainMenuActions set) { return set.Get(); }
+        public void AddCallbacks(IMainMenuActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MainMenuActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MainMenuActionsCallbackInterfaces.Add(instance);
+            @StartGame.started += instance.OnStartGame;
+            @StartGame.performed += instance.OnStartGame;
+            @StartGame.canceled += instance.OnStartGame;
+            @EndGame.started += instance.OnEndGame;
+            @EndGame.performed += instance.OnEndGame;
+            @EndGame.canceled += instance.OnEndGame;
+        }
+
+        private void UnregisterCallbacks(IMainMenuActions instance)
+        {
+            @StartGame.started -= instance.OnStartGame;
+            @StartGame.performed -= instance.OnStartGame;
+            @StartGame.canceled -= instance.OnStartGame;
+            @EndGame.started -= instance.OnEndGame;
+            @EndGame.performed -= instance.OnEndGame;
+            @EndGame.canceled -= instance.OnEndGame;
+        }
+
+        public void RemoveCallbacks(IMainMenuActions instance)
+        {
+            if (m_Wrapper.m_MainMenuActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMainMenuActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MainMenuActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MainMenuActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MainMenuActions @MainMenu => new MainMenuActions(this);
     public interface IGameplayActions
     {
         void OnPlayer1Move(InputAction.CallbackContext context);
         void OnPlayer1Interact(InputAction.CallbackContext context);
-        void OnPlayer1GenerateRift(InputAction.CallbackContext context);
+        void OnRestartLevel1(InputAction.CallbackContext context);
+    }
+    public interface IMainMenuActions
+    {
+        void OnStartGame(InputAction.CallbackContext context);
+        void OnEndGame(InputAction.CallbackContext context);
     }
 }

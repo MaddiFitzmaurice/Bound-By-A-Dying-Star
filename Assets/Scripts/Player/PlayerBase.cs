@@ -33,6 +33,10 @@ public abstract class PlayerBase : MonoBehaviour
     [Header("Rift Data")]
     [SerializeField] protected float DistanceInFront = 2f;
 
+    // Cloth Data
+    [Header("Cloth")]
+    [SerializeField] protected float ClothMovementAccel = 1f;
+
     // Item Data
     [field:Header("Interactable Data")]
     [field:SerializeField] public Material HighlightMat { get; private set; } // Temp material to highlight object to be interacted with
@@ -44,31 +48,36 @@ public abstract class PlayerBase : MonoBehaviour
     [field:SerializeField] protected VisualEffect _teleportInEffect;
     [field:SerializeField] protected VisualEffect _teleportOutEffect;
     [field:SerializeField] protected VisualEffect _flashEffect;
-    [field:SerializeField] protected ParticleSystem _flameHeadPS;
     #endregion
 
     #region INTERNAL DATA
     // Components
     private Rigidbody _rb;
     private List<SkinnedMeshRenderer> _meshRenderers;
+    private Cloth _clothPhysics;
+    private Animator _animator;
 
     // Data
-    protected RiftData RiftData;
     protected Vector3 MoveInput;
     protected Vector3 PrevMoveInput;
     protected InteractTypes MoveType;
     protected float PlayerZAngle;
     protected bool FacingMoveDir = false;
+    private Vector3 _orientation = Vector3.up;
+    private Vector3 _clothExternalAccel;
+    private Vector3 _clothAccelGravityMod = new Vector3(0f, 19.62f, 0f); // When player is upside down, cloth accel reverses gravity
+    private Vector3 _clothMoveDir = new Vector3(1f, 0f, 1f); // Wind movement
 
     // Interactables
     List<Collider> _interactablesInRange;
     List<Collider> _interactablesNotInRange;
     Collider _closestInteractable;
 
-    // TEST
-    private ControlType _controlType = ControlType.FIXEDCAM2;
-    private float _camYAngle;
-    private float _prevCamYAngle;
+    // Camera Data
+    private GameObject _currentCam;
+    private GameObject _prevCam;
+    //private float _camYAngle;
+    //private float _prevCamYAngle;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
@@ -77,9 +86,11 @@ public abstract class PlayerBase : MonoBehaviour
         // Set components
         _rb = GetComponent<Rigidbody>();
         _meshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+        _clothPhysics = GetComponentInChildren<Cloth>();
+        _animator = GetComponentInChildren<Animator>();
 
         // Set data
-        RiftData = new RiftData(transform.position, transform.rotation, tag);
+        _animator.SetBool("IsRunning", false);
         _interactablesInRange = new List<Collider>();
         _interactablesNotInRange = new List<Collider>();
 
@@ -91,19 +102,19 @@ public abstract class PlayerBase : MonoBehaviour
         UpperBoundRay.transform.localPosition = new Vector3(0, -1 + StepHeight, 0);
         LowerBoundRay.transform.localPosition = new Vector3(0, -1, 0);
 
-        _flameHeadPS.Play();
+    
     }
 
     protected virtual void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.TEST_CONTROLS, TestControlHandler);
-        EventManager.EventSubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventSubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
+        EventManager.EventSubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
     }
 
     protected virtual void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.TEST_CONTROLS, TestControlHandler);
-        EventManager.EventUnsubscribe(EventType.CLEARSHOT_CAMS_YROT, ReceiveNewCamAngle);
+        EventManager.EventUnsubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
+        EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
     }
 
     private void Update()
@@ -115,6 +126,7 @@ public abstract class PlayerBase : MonoBehaviour
     private void FixedUpdate()
     {
         PlayerMovement();
+        ClothMovement();
         StepClimb();
     }
     #endregion
@@ -137,100 +149,31 @@ public abstract class PlayerBase : MonoBehaviour
         float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, VelocityPower)
             * Mathf.Sign(velocityDif);
 
-        // OLD MOVEMENT TESTING
-        //if (_controlType == ControlType.TANK)
-        //{
-        //    _rb.AddForce(movementForce * transform.forward * MoveInput.z);
-        //}
-        //else if (_controlType == ControlType.WORLDSTRAFE)
-        //{
-        //    _rb.AddForce(movementForce * MoveInput);
-        //}
-        //else if (_controlType == ControlType.FIXEDCAM || _controlType == ControlType.FIXEDCAM2)
-        //{
-        //    _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
-        //}
-
-        //if (MoveType == InteractTypes.HOLD || MoveType == InteractTypes.RELEASE_HOLD)
-        //{
         if (FacingMoveDir)
         {
             _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
         }
-        //}
+
+        if (MoveInput.magnitude != 0)
+        {
+            _animator.SetBool("IsRunning", true);
+        }
+        else
+        {
+            _animator.SetBool("IsRunning", false);
+        }
     }
 
     public void PlayerRotation()
     {
-        // OLD ROTATION TEST
-        //if (_controlType == ControlType.TANK)
-        //{
-        //    Vector3 rotVector = new Vector3(0, MoveInput.x, PlayerZAngle);
-
-        //    Quaternion playerRotChange = Quaternion.Euler(rotVector * Time.deltaTime * RotationSpeed);
-
-        //    _rb.MoveRotation(_rb.rotation * playerRotChange);
-        //}
-        //else if (_controlType == ControlType.WORLDSTRAFE)
-        //{
-        //    if (MoveInput.magnitude != 0)
-        //    {
-        //        if (PlayerZAngle == 0)
-        //        {
-        //            _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.up));
-        //        }
-        //        else if (PlayerZAngle == -180)
-        //        {
-        //            _rb.MoveRotation(Quaternion.LookRotation(MoveInput, Vector3.down));
-        //        }
-        //    }
-        //}
-        //else if (_controlType == ControlType.FIXEDCAM)
-        //{
-        //    if (MoveInput.magnitude != 0)
-        //    {
-        //        var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _camYAngle, 0));
-        //        var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
-
-        //        var relative = (transform.position + skewedInput) - transform.position;
-        //        var rot = Quaternion.LookRotation(relative, Vector3.up);
-
-        //        transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, RotationSpeed * Time.deltaTime);
-        //    }
-        //}
-        //else if (_controlType == ControlType.FIXEDCAM2)
-        //{
-        //    if (PrevMoveInput != MoveInput)
-        //    {
-        //        _prevCamYAngle = _camYAngle;
-        //    }
-
-        //    if (MoveInput.magnitude != 0)
-        //    {
-        //        var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCamYAngle, 0));
-        //        var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
-        //        if (PlayerZAngle == 0)
-        //        {
-        //            _rb.MoveRotation(Quaternion.LookRotation(skewedInput, Vector3.up));
-        //        }
-        //        else if (PlayerZAngle == -180)
-        //        {
-        //            _rb.MoveRotation(Quaternion.LookRotation(skewedInput, Vector3.down));
-        //        }
-        //    }
-        //}
-
-        // Change to new skew angle based on changed camera if player has let go of
-        // the movement buttons or slightly changed direction if using a gamepad
-        //if (PrevMoveInput != MoveInput)
         if (Vector3.Dot(PrevMoveInput, MoveInput) < 0.85f)
         {
-            _prevCamYAngle = _camYAngle;
+            _prevCam = _currentCam;
         }
 
         if (MoveInput.magnitude != 0)
         {
-            var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCamYAngle, 0));
+            var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCam.transform.eulerAngles.y, 0));
             var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
 
             if (Vector3.Dot(transform.forward, skewedInput) > 0.99f)
@@ -241,16 +184,7 @@ public abstract class PlayerBase : MonoBehaviour
             {
                 FacingMoveDir = false;
                 Vector3 turnDir = Vector3.RotateTowards(transform.forward, skewedInput, RotationSpeed * Time.deltaTime, 1f);
-
-                // TODO: Check this when testing the gravity change
-                if (PlayerZAngle == 0)
-                {
-                    transform.rotation = Quaternion.LookRotation(turnDir, Vector3.up);
-                }
-                else
-                {
-                    _rb.MoveRotation(Quaternion.LookRotation(turnDir, Vector3.down));
-                }
+                transform.rotation = Quaternion.LookRotation(turnDir, _orientation);
             }
         }
     }
@@ -269,6 +203,21 @@ public abstract class PlayerBase : MonoBehaviour
     }
     
     #endregion
+
+    private void ClothMovement()
+    {
+        _clothExternalAccel = ClothMovementAccel * Mathf.Sin(Time.fixedTime) * _clothMoveDir;
+
+        // If movement is inverted
+        if (_orientation == Vector3.down)
+        {
+            _clothPhysics.externalAcceleration = _clothExternalAccel + _clothAccelGravityMod;
+        }
+        else
+        {
+            _clothPhysics.externalAcceleration = _clothExternalAccel;
+        }
+    }
 
     public void PlayTeleportEffect(bool mode)
     {
@@ -295,7 +244,6 @@ public abstract class PlayerBase : MonoBehaviour
             {
                 renderer.enabled = true;
             }
-            _flameHeadPS.Play();
         }
         else
         {
@@ -303,8 +251,12 @@ public abstract class PlayerBase : MonoBehaviour
             {
                 renderer.enabled = false;
             }
-            _flameHeadPS.Stop();
         }
+    }
+
+    public void ToggleClothPhysics(bool toggle)
+    {
+        _clothPhysics.enabled = toggle;
     }
 
     #region INTERACTION FUNCTIONS
@@ -434,37 +386,39 @@ public abstract class PlayerBase : MonoBehaviour
     }
     #endregion
 
-    #region RIFT FUNCTIONS
-    protected void CreatePortalInFrontOfPlayer(object data)
-    {
-        RiftData.Position = transform.position + transform.forward * DistanceInFront;
-        RiftData.Rotation = Quaternion.LookRotation(transform.forward);
-
-        EventManager.EventTrigger(EventType.CREATE_RIFT, RiftData);
-    }
-    #endregion
-
     #region EVENT HANDLERS
-    public void TestControlHandler(object data)
+    public void GravityChangeHandler(object data) 
     {
-        if (data is not ControlType)
+        if (data is bool isInverted)
         {
-            Debug.LogError("TestControlHandler has not received a ControlType");
+            // If movement is inverted, change orientation for movement and gravity for cloth
+            if (isInverted)
+            {
+                _orientation = Vector3.down;
+                //_clothPhysics.externalAcceleration = _clothExternalAccel + _clothAccelGravityMod;
+            }
+            else
+            {
+                _orientation = Vector3.up;
+                //_clothPhysics.externalAcceleration = _clothExternalAccel;
+            }
         }
-
-        _controlType = (ControlType)data;
+        else
+        {
+            Debug.LogError("GravityChangeHandler did not receive a bool");
+        }
     }
 
     public void ReceiveNewCamAngle(object data)
     {
-        if (data is not float)
+        if (data is not GameObject)
         {
-            Debug.LogError("PlayerBase has not received a float!");
+            Debug.LogError("PlayerBase has not received a camera GameObject!");
         }
 
         PrevMoveInput = MoveInput; // Record previous Move Input so it can continue until player input changes
-        _prevCamYAngle = _camYAngle; // Record previous CamY so it can continue until player input changes
-        _camYAngle = (float)data;
+        _prevCam = _currentCam; // Record previous CamY so it can continue until player input changes
+        _currentCam = (GameObject)data;
     }
     #endregion
 }

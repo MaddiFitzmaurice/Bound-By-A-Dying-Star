@@ -8,10 +8,9 @@ using UnityEngine.Playables;
 public class LevelManager : MonoBehaviour
 {
     #region EXTERNAL DATA 
-    [Header("Level Cam Parent")]
-    [SerializeField] private GameObject _levelCamParent;
     [Header("Spawn Data")]
-    [SerializeField] private GameObject _spawnPoint; // Where players initially start, and where they get TP'd to after solving a soft puzzle
+    [SerializeField] private GameObject _startSpawnPoint; // Where players first spawn in
+    [SerializeField] private GameObject _spawnPoint; // Where players get TP'd to after solving a soft puzzle or if they fall
     [Header("Soft Puzzle Data")]
     [SerializeField] private GameObject _rewardGrouper;
     [SerializeField] private List<GameObject> _softPuzzles;
@@ -19,7 +18,7 @@ public class LevelManager : MonoBehaviour
     #endregion
 
     #region INTERNAL DATA
-    private Queue<GameObject> _softPuzzlesQueue;
+    //private Queue<GameObject> _softPuzzlesQueue;
     #endregion
 
     private void Awake()
@@ -27,39 +26,35 @@ public class LevelManager : MonoBehaviour
         // Event Inits
         EventManager.EventInitialise(EventType.LEVEL_SPAWN);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
-
-        // Data Checks
-        if (_levelCamParent == null)
-        {
-            Debug.LogError("Please assign a level cam parent!");
-        }
     }
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
+        //EventManager.EventSubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
     }
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
-        EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, _levelCamParent); 
+        //EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
     }
 
     private void Start()
     {
-        if (_spawnPoint != null)
+        // Spawn players in
+        if (_startSpawnPoint != null)
         {
-            Spawn();
+            EventManager.EventTrigger(EventType.LEVEL_SPAWN, _startSpawnPoint.transform);
         }
         else
         {
             Debug.LogError("Please use SpawnPoint object to assign players' initial spawn in level.");
         }
-
-        // Send Level Cams
-        EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, _levelCamParent);
-        EventManager.EventTrigger(EventType.PLAY_CINEMATIC, _introCutscene);
+        
+        // Play cutscene if assigned
+        if (_introCutscene != null)
+        {
+            EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _introCutscene);
+        }
 
         EventManager.EventTrigger(EventType.MUSIC, "Calm"); // Ensure transition to Calm section
 
@@ -71,49 +66,44 @@ public class LevelManager : MonoBehaviour
             {
                 softPuzzle.GetComponent<SoftPuzzle>().SetRewardGrouper(_rewardGrouper.transform);
             }
-            softPuzzle.SetActive(false);
+            //softPuzzle.SetActive(false);
         }
 
         // Convert soft puzzle list to a queue
-        _softPuzzlesQueue = new Queue<GameObject>(_softPuzzles);
+        //_softPuzzlesQueue = new Queue<GameObject>(_softPuzzles);
 
         // Enable first soft puzzle and send its cams
-        ActivateSoftPuzzle(_softPuzzlesQueue.Peek());
+        //ActivateSoftPuzzle(_softPuzzlesQueue.Peek());
     }
 
-    private void ActivateSoftPuzzle(GameObject softPuzzleToActivate)
-    {
-        EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, softPuzzleToActivate.GetComponent<SoftPuzzle>().SendReceiveCams());
-        softPuzzleToActivate.SetActive(true);
-    }
+    //private void ActivateSoftPuzzle(GameObject softPuzzleToActivate)
+    //{
+    //    //EventManager.EventTrigger(EventType.ADD_GAMEPLAY_CAM, softPuzzleToActivate.GetComponent<SoftPuzzle>().SendReceiveCams());
+    //    softPuzzleToActivate.SetActive(true);
+    //}
 
-    private void DeactivateSoftPuzzle(GameObject softPuzzleToDeactivate)
-    {
-        EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, softPuzzleToDeactivate.GetComponent<SoftPuzzle>().SendReceiveCams());
-        softPuzzleToDeactivate.SetActive(false);
-    }
+    //private void DeactivateSoftPuzzle(GameObject softPuzzleToDeactivate)
+    //{
+    //    //EventManager.EventTrigger(EventType.DELETE_GAMEPLAY_CAM, softPuzzleToDeactivate.GetComponent<SoftPuzzle>().SendReceiveCams());
+    //    softPuzzleToDeactivate.SetActive(false);
+    //}
 
-    private void Spawn()
-    {
-        EventManager.EventTrigger(EventType.LEVEL_SPAWN, _spawnPoint.transform);
-    }
+    //// Coruoutine function to delay the teleporting of players to make space 
+    //private IEnumerator PuzzleTransition()
+    //{
+    //    EventManager.EventTrigger(EventType.SOFTPUZZLE_PLAYER_TELEPORT, _spawnPoint.transform);
+    //    yield return new WaitForSeconds(3.5f);
+    //    DeactivateSoftPuzzle(_softPuzzlesQueue.Peek());
+    //    _softPuzzlesQueue.Dequeue();
+    //    ActivateSoftPuzzle(_softPuzzlesQueue.Peek());
+    //}
 
-    // Coruoutine function to delay the teleporting of players to make space 
-    private IEnumerator PuzzleTransition()
-    {
-        EventManager.EventTrigger(EventType.SOFTPUZZLE_PLAYER_TELEPORT, _spawnPoint.transform);
-        yield return new WaitForSeconds(3.5f);
-        DeactivateSoftPuzzle(_softPuzzlesQueue.Peek());
-        _softPuzzlesQueue.Dequeue();
-        ActivateSoftPuzzle(_softPuzzlesQueue.Peek());
-    }
-
-    #region EVENT HANDLERS
-    // Teleport player and load in next Soft Puzzle
-    public void OnSoftPuzzleComplete(object data)
-    {
-        StopAllCoroutines();
-        StartCoroutine(PuzzleTransition());
-    }
-    #endregion
+    //#region EVENT HANDLERS
+    //// Teleport player and load in next Soft Puzzle
+    //public void OnSoftPuzzleComplete(object data)
+    //{
+    //    StopAllCoroutines();
+    //    StartCoroutine(PuzzleTransition());
+    //}
+    //#endregion
 }

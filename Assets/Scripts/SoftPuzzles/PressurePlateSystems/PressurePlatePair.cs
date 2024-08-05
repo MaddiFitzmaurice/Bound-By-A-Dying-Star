@@ -68,7 +68,7 @@ public class PressurePlatePair : PressurePlateSystem, IPressurePlateBase
             }
             else
             {
-                StopAllCoroutines();
+                //StopAllCoroutines();
             }
         }
     }

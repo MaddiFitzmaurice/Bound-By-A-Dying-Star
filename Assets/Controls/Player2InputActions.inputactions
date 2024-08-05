@@ -22,15 +22,6 @@
                     "processors": "",
                     "interactions": "Hold,Press",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Player2GenerateRift",
-                    "type": "Button",
-                    "id": "65386f05-4dba-4c71-9fac-18218b7656be",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -114,33 +105,11 @@
                 {
                     "name": "",
                     "id": "9c6d440a-3184-43e4-aae9-7976682dcd03",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Player2Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "45ecb988-76d3-4511-9967-93423110d662",
-                    "path": "<Keyboard>/period",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2GenerateRift",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "06f725a2-fde3-4f8f-b55b-15d123ee4ef9",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Player2GenerateRift",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

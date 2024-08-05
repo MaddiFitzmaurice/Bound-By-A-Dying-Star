@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -9,12 +10,15 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     [SerializeField] private float _maxIntensity = 5f;
     [SerializeField] private float _maxDistance = 10f;
     public bool InteractLocked { get; set; } = false;
-
+    // How high to bob up and down
+    [SerializeField] private float _bobbingAmplitude = 0.25f;
+    // How often to bob
+    [SerializeField] private float _bobbingFrequency = 1f;
     #endregion
 
     #region INTERNAL DATA
     // Components
-    private Light _light;
+    private List<Collider> _childColliders;
 
     // Player
     private PlayerBase _player;
@@ -36,14 +40,24 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     private bool isIntensityChanging = false;
 
+    // Item Bobbing
+    private bool _isBobbingAllowed = true;
+    private Vector3 _finalRestingPosition;
+    private float _frameRateSpeed = 0.0f;
+
+    // Tutorial Prompt
+    private static bool _showPrompt = true;
+    private bool _isPromptShowing = false;
     #endregion
 
     private void Awake()
     {
         // Get components
-        _light = GetComponentInChildren<Light>();
-        _light.intensity = 0;
+        _childColliders = GetComponentsInChildren<Collider>().ToList<Collider>();
+        //_light = GetComponentInChildren<Light>();
+        //_light.intensity = 0;
         _emissionPS = _itemPassivePS.emission;
+
     }
 
     private void Start()
@@ -55,12 +69,18 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         }
     }
 
+
     void Update()
     {
         if (_isFollowing && _followTarget != null)
         {
             // Perform the interpolation in world space
             transform.position = Vector3.Lerp(transform.position, _followTarget.position, _followSpeed * Time.deltaTime);
+        }
+
+        if (_isBobbingAllowed && _isOnPedestal == false)
+        {
+            BobbingEffect(_finalRestingPosition);
         }
     }
 
@@ -88,16 +108,11 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         {
             StartCoroutine(FloatItemToGround());
         }
-
         _player = null;
     }
 
     public void BePickedUp(PlayerBase player)
     {
-        _player = player;
-        _followTarget = _player.PickupPoint;
-        _emissionPS.enabled = true;
-
         // If currently associated with a soft puzzle
         if (_softPuzzle)
         {
@@ -105,7 +120,16 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             _softPuzzle.CheckAllRewardsHeld();
         }
 
-        StartCoroutine(ItemFloatUp());
+        _player = player;
+        _followTarget = _player.PickupPoint;   
+
+        //Collider[] childColliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in _childColliders)
+        {
+            collider.enabled = false;
+        }
+
+        StartCoroutine(ItemFloatUp(_followTarget));
     }
 
     public void SetParent(Transform parent)
@@ -115,14 +139,15 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     private IEnumerator FloatItemToGround()
     {
+        // Disables bobbing function
+        _isBobbingAllowed = false;
+
         // Speed at which the item will move to the ground
         float dropSpeed = 1.5f;
         // Maximum distance to check for the ground
         float maxDropHeight = 100.0f;
         // Get the layer mask for the ground, so the raycast doesn't hit the players
-        int groundLayer = LayerMask.GetMask("Default");
-
-        // ROBIN SUGGESTION: maybe use a lerp like in FloatItemToPlayer so the mirror doesn't just teleport?
+        int groundLayer = LayerMask.GetMask("Ground");
 
         // Calculate the offset position behind the player by using the player's forward direction
         Vector3 offsetPosition = transform.position - _player.transform.forward * 2; // Offset by 2 units behind the player, for bigger game objects
@@ -138,86 +163,146 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             // Move item directly to offset position to avoid hitting player
             transform.position = offsetPosition;
 
-            // ROBIN SUGGESTION: also maybe use a lerp here too?
-
+            // Moves item to the ground
             while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, dropSpeed * Time.deltaTime);
-                yield return null;  // Wait for the next frame
+                yield return null; 
+            }
+
+            // Gets the latest position to be sent to bobbing function. This is because of how coroutines behave with the Update() function.
+            _finalRestingPosition = transform.position; 
+           
+
+            //Enables all the coliders attached to the object
+            //Collider[] childColliders = GetComponentsInChildren<Collider>();
+            foreach (Collider collider in _childColliders)
+            {
+                collider.enabled = true;
             }
         }
         else
         {
             Debug.LogWarning("Ground not found below item, not moving.");
         }
+
+        // Re-enable bobbing.
+        _isBobbingAllowed = true; 
     }
 
     // Make the item float upwards, then set it to follow the player
-    private IEnumerator ItemFloatUp()
+    private IEnumerator ItemFloatUp(Transform pickUpPoint)
     {
-        // Calculate the world space position towards which to move
-        // Should be the mirror's current position, but at the follow target's elevation
-        Vector3 targetPosition = new Vector3(transform.position.x, _followTarget.position.y, transform.position.z);
+        // Stop bobbing function
+        _isBobbingAllowed = false;
 
-        while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        // Variables to adjust how high and how often the item bounces
+        float riseTime = 1.0f;
+        float elapsedTime = 0;
+
+        // Ensure startPosition is the current position at the very start of the coroutine
+        Vector3 startPosition = transform.position;
+        Vector3 verticalOffset = Vector3.up * (transform.localScale.y / 2);
+        float anticipatoryOffset = 0.9f;
+
+        // Moves the object downwards
+        while (elapsedTime < riseTime)
         {
-            // Perform the interpolation in world space
-            transform.position = Vector3.Lerp(transform.position, targetPosition, _followSpeed * Time.deltaTime);
-            yield return null;  // Wait for the next frame
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / riseTime;
+            Vector3 endPosition = pickUpPoint.position + verticalOffset - new Vector3(0, anticipatoryOffset, 0);
+
+            Vector3 nextPosition = Vector3.Lerp(startPosition, endPosition, progress);
+            transform.position = nextPosition;
+            yield return null;
         }
 
+        // Set item to follow player and adjust the parent
         _isFollowing = true;
         _player.PickupItem(gameObject);
         SetParent(_player.transform);
 
-        //// If currently associated with a soft puzzle
-        //if (_softPuzzle)
-        //{
-        //    HeldInSoftPuzzle = true;
-        //    _softPuzzle.CheckAllRewardsHeld();
-        //}
+        // Gets the latest position to be sent to bobbing function. This is because of how coroutines behave with the Update() function.
+        _finalRestingPosition = transform.position;
+
+        // Re-enable bobbing.
+        _isBobbingAllowed = true;  
+    }
+    
+    private void BobbingEffect(Vector3 finalRestingPosition)
+    {
+        // Determine the correct base height for bobbing
+        float baseHeight = finalRestingPosition.y;
+
+        // Increment movement based on time passed to maintain consistent speed across frame rates
+        _frameRateSpeed += _bobbingFrequency * Time.deltaTime;
+
+        // Calculate the bobbing offset using a sine wave
+        float bobbingOffset = Mathf.Sin(_frameRateSpeed += _bobbingFrequency * Time.deltaTime) * _bobbingAmplitude + _bobbingAmplitude;
+
+        // Calculate the new position
+        float newYPosition = baseHeight + bobbingOffset;  // Always above the base height
+
+        // Apply the calculated position
+        transform.position = new Vector3(transform.position.x, newYPosition, transform.position.z);
+
     }
     #endregion
 
     #region IINTERACTABLE FUNCTIONS
     public void PlayerInRange(PlayerBase player)
     {
-        if (!isIntensityChanging)
+        if (_showPrompt && !_isPromptShowing)
         {
-            isIntensityChanging = true;
-            //Debug.Log("Starting to change light intensity towards maximum.");
-
-            LeanTween.value(gameObject, _light.intensity, _maxIntensity, 1f).setOnUpdate((float val) => {
-                _light.intensity = val;
-                //Debug.Log("Current light intensity: " + val);
-            }).setEase(LeanTweenType.easeInOutSine)
-            .setOnComplete(() => {
-                //Debug.Log("Light intensity change complete. Current intensity: " + _light.intensity);
-                isIntensityChanging = false;
-            });
+            _isPromptShowing = true;
+            EventManager.EventTrigger(EventType.SHOW_PROMPT_INTERACT, null);
         }
+        //if (!isIntensityChanging)
+        //{
+        //    isIntensityChanging = true;
+        //    //Debug.Log("Starting to change light intensity towards maximum.");
+
+        //    LeanTween.value(gameObject, _light.intensity, _maxIntensity, 1f).setOnUpdate((float val) => {
+        //        _light.intensity = val;
+        //        //Debug.Log("Current light intensity: " + val);
+        //    }).setEase(LeanTweenType.easeInOutSine)
+        //    .setOnComplete(() => {
+        //        //Debug.Log("Light intensity change complete. Current intensity: " + _light.intensity);
+        //        isIntensityChanging = false;
+        //    });
+        //}
     }
 
     public void PlayerNotInRange(PlayerBase player)
     {
-        if (isIntensityChanging)
+        if (_showPrompt)
         {
-
-            isIntensityChanging = false;
-            // Debug.Log("Starting to decrease light intensity towards minimal.");
-            LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
-                _light.intensity = val;
-                // Debug.Log("Current light intensity: " + val);
-            }).setEase(LeanTweenType.easeOutSine)
-            .setOnComplete(() => {
-                // Debug.Log("Light intensity decrease complete. Current intensity: " + _light.intensity);
-                isIntensityChanging = true;
-            });
+            _isPromptShowing = false;
+            EventManager.EventTrigger(EventType.HIDE_PROMPT_INTERACT, null);
         }
+        //if (isIntensityChanging)
+        //{
+
+        //    isIntensityChanging = false;
+        //    // Debug.Log("Starting to decrease light intensity towards minimal.");
+        //    LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
+        //        _light.intensity = val;
+        //        // Debug.Log("Current light intensity: " + val);
+        //    }).setEase(LeanTweenType.easeOutSine)
+        //    .setOnComplete(() => {
+        //        // Debug.Log("Light intensity decrease complete. Current intensity: " + _light.intensity);
+        //        isIntensityChanging = true;
+        //    });
+        //}
     }
 
     public void PlayerStartInteract(PlayerBase player)
     {
+        if (_showPrompt)
+        {
+            _showPrompt = false;
+            EventManager.EventTrigger(EventType.HIDE_PROMPT_INTERACT, null);
+        }
 
         // Play the FMOD event
         EventManager.EventTrigger(EventType.ITEM_PICKUP, null);
@@ -244,12 +329,10 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     public void PlayerHoldInteract(PlayerBase player)
     {
-        throw new System.NotImplementedException();
     }
 
     public void PlayerReleaseHoldInteract(PlayerBase player)
     {
-        throw new System.NotImplementedException();
         // Play the FMOD event
         EventManager.EventTrigger(EventType.ITEM_PICKUP, null);
     }

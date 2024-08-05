@@ -13,7 +13,7 @@ public enum InteractTypes
     RELEASE_HOLD
 }
 
-public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions
+public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions, Player1InputActions.IMainMenuActions
 {
     // Input Action Assets
     private Player1InputActions _player1Inputs;
@@ -27,6 +27,11 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     private bool _holdInteractP1 = false;
     private bool _holdInteractP2 = false;
 
+    // Button Press Flags
+    private bool _pressedStart = false;
+    private bool _pressedQuit = false;
+    private bool _pressedRestart = false;
+
     #region FRAMEWORK FUNCTIONS
     void Awake()
     {
@@ -36,16 +41,15 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player1Inputs = new Player1InputActions();
         _player2Inputs = new Player2InputActions();
         _player1Inputs.Gameplay.SetCallbacks(this);
+        _player1Inputs.MainMenu.SetCallbacks(this);
         _player2Inputs.Gameplay.SetCallbacks(this);
 
-        EventManager.EventInitialise(EventType.ENABLE_INPUTS);
-        EventManager.EventInitialise(EventType.DISABLE_INPUTS);
+        EventManager.EventInitialise(EventType.ENABLE_GAMEPLAY_INPUTS);
+        EventManager.EventInitialise(EventType.DISABLE_GAMEPLAY_INPUTS);
         EventManager.EventInitialise(EventType.PLAYER_1_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_2_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
-        EventManager.EventInitialise(EventType.PLAYER_1_RIFT);
-        EventManager.EventInitialise(EventType.PLAYER_2_RIFT);
 
         DeviceSetup();
     }
@@ -53,25 +57,31 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     void OnEnable()
     {
         //_inputs.Gameplay.Enable();
-        EnablePlayerInput(null);
+        EnableGameplayInput(null);
+        EnableMainMenuInput(null);
         // Subscription to listen for device changes
         InputSystem.onDeviceChange += DeviceChangeHandler;
 
         // Event Subscriptions
-        EventManager.EventSubscribe(EventType.DISABLE_INPUTS, DisablePlayerInput);
-        EventManager.EventSubscribe(EventType.ENABLE_INPUTS, EnablePlayerInput);
+        EventManager.EventSubscribe(EventType.DISABLE_GAMEPLAY_INPUTS, DisableGameplayInput);
+        EventManager.EventSubscribe(EventType.ENABLE_GAMEPLAY_INPUTS, EnableGameplayInput);
+        EventManager.EventSubscribe(EventType.ENABLE_MAINMENU_INPUTS, EnableMainMenuInput);
+        EventManager.EventSubscribe(EventType.DISABLE_MAINMENU_INPUTS, DisableMainMenuInput);
     }
 
     void OnDisable()
     {
-        DisablePlayerInput(null);
+        DisableGameplayInput(null);
+        DisableMainMenuInput(null);
 
         // Unsubscribing from listening to device changes
         InputSystem.onDeviceChange -= DeviceChangeHandler;
 
         // Event Unsubscriptions
-        EventManager.EventUnsubscribe(EventType.DISABLE_INPUTS, DisablePlayerInput);
-        EventManager.EventUnsubscribe(EventType.ENABLE_INPUTS, EnablePlayerInput);
+        EventManager.EventUnsubscribe(EventType.DISABLE_GAMEPLAY_INPUTS, DisableGameplayInput);
+        EventManager.EventUnsubscribe(EventType.ENABLE_GAMEPLAY_INPUTS, EnableGameplayInput);
+        EventManager.EventUnsubscribe(EventType.ENABLE_MAINMENU_INPUTS, EnableMainMenuInput);
+        EventManager.EventUnsubscribe(EventType.DISABLE_MAINMENU_INPUTS, DisableMainMenuInput);
     }
     #endregion
 
@@ -88,7 +98,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         //#if UNITY_EDITOR
         InputUser.PerformPairingWithDevice(Keyboard.current, _player1);
         InputUser.PerformPairingWithDevice(Keyboard.current, _player2);
-        EnablePlayerInput(null);
+        //EnableGameplayInput(null);
         //#endif
 
         // At least find one gamepad device to pair with player 1
@@ -187,7 +197,29 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     }
     #endregion
 
-    #region ACTIONMAP INTERFACES
+    #region ACTIONMAP MAIN MENU INTERFACE
+    public void OnStartGame(InputAction.CallbackContext context)
+    {
+        // Start level 1
+        if (context.performed && !_pressedStart)
+        {
+            _pressedStart = true;
+            _pressedRestart = false;
+            EventManager.EventTrigger(EventType.PLAY_GAME, 1);
+        }
+    }
+
+    public void OnEndGame(InputAction.CallbackContext context)
+    {
+        if (context.performed && !_pressedQuit)
+        {
+            _pressedQuit = true;
+            EventManager.EventTrigger(EventType.QUIT_GAME, null);
+        }
+    }
+    #endregion
+
+    #region ACTIONMAP GAMEPLAY INTERFACE
     // Player 1 movement
     public void OnPlayer1Move(InputAction.CallbackContext context)
     {
@@ -243,35 +275,40 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
             EventManager.EventTrigger(EventType.PLAYER_2_INTERACT, InteractTypes.RELEASE_HOLD);
         }
     }
-
-    public void OnPlayer1GenerateRift(InputAction.CallbackContext context)
+    
+    // FOR OPEN DAY TO RESTART LEVEL 1
+    public void OnRestartLevel1(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !_pressedRestart)
         {
-            EventManager.EventTrigger(EventType.PLAYER_1_RIFT, "Player 1");
-        }
-    }
-
-    public void OnPlayer2GenerateRift(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            EventManager.EventTrigger(EventType.PLAYER_2_RIFT, "Player 2");
+            _pressedRestart = true;
+            _pressedStart = false;
+            EventManager.EventTrigger(EventType.MAIN_MENU, null);
         }
     }
     #endregion
 
     #region EVENT HANDLERS
-    public void EnablePlayerInput(object data)
+    public void EnableGameplayInput(object data)
     {
-        _player1Inputs.Enable();
-        _player2Inputs.Enable();
+        _player1Inputs.Gameplay.Enable();
+        _player2Inputs.Gameplay.Enable();
     }
 
-    public void DisablePlayerInput(object data)
+    public void DisableGameplayInput(object data)
     {
-        _player1Inputs.Disable();
-        _player2Inputs.Disable();
+        _player1Inputs.Gameplay.Disable();
+        _player2Inputs.Gameplay.Disable();
+    }
+
+    private void EnableMainMenuInput(object data)
+    {
+        _player1Inputs.MainMenu.Enable();
+    }
+
+    private void DisableMainMenuInput(object data)
+    {
+        _player1Inputs.MainMenu.Disable();
     }
     #endregion
 }

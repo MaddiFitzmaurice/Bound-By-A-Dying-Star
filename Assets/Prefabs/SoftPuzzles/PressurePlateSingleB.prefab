@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7053728754714963515}
   - component: {fileID: 7394063564728052010}
   - component: {fileID: 8135863120236709021}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PressurePlateSingleB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,6 +101,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1803504890314024680}
     m_Modifications:
+    - target: {fileID: 1114136325738398928, guid: a4802b942729aaf42832490a9bf4274d, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4927101082213837206, guid: a4802b942729aaf42832490a9bf4274d, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.049999997
@@ -148,6 +152,10 @@ PrefabInstance:
     - target: {fileID: 6769036172281129179, guid: a4802b942729aaf42832490a9bf4274d, type: 3}
       propertyPath: m_Name
       value: Pressure plate Sparks
+      objectReference: {fileID: 0}
+    - target: {fileID: 6769036172281129179, guid: a4802b942729aaf42832490a9bf4274d, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -223,10 +231,14 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 8eb8f491a9a399a41b971dec205711e2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: c92ab7707d7586c4ba6324e06d9bc2ae, type: 2}
+      objectReference: {fileID: 2100000, guid: 76a241b2f05c58b458443f2ad4a8722a, type: 2}
     - target: {fileID: 919132149155446097, guid: 8eb8f491a9a399a41b971dec205711e2, type: 3}
       propertyPath: m_Name
       value: PressurePlate_TypeB_NoTexture02
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8eb8f491a9a399a41b971dec205711e2, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

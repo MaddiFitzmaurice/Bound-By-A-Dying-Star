@@ -617,7 +617,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2382498787845129779}
-  - component: {fileID: 4690452068385792665}
   m_Layer: 0
   m_Name: FixedCams
   m_TagString: Untagged
@@ -643,44 +642,6 @@ Transform:
   - {fileID: 2409969213493543216}
   m_Father: {fileID: 8910302424083675647}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4690452068385792665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5222421641577635041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d62f748f5292bb343be9e6b0c84416d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ExcludedPropertiesInInspector:
-  - m_Script
-  m_LockStageInInspector: 
-  m_StreamingVersion: 20170927
-  m_Priority: 10
-  m_StandbyUpdate: 2
-  m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
-  m_ShowDebugText: 0
-  m_ChildCameras:
-  - {fileID: 5530301557048907877}
-  - {fileID: 5738861601590729362}
-  - {fileID: 985006282341442380}
-  m_ActivateAfter: 0
-  m_MinDuration: 0
-  m_RandomizeChoice: 0
-  m_DefaultBlend:
-    m_Style: 0
-    m_Time: 0
-    m_CustomCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  m_CustomBlends: {fileID: 0}
 --- !u!1 &6131084060764602886
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,10 +729,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_ShowDebugText: 0
-  m_ChildCameras:
-  - {fileID: 2379649335430263450}
-  - {fileID: 8155713886783345432}
-  - {fileID: 9207109171284705188}
+  m_ChildCameras: []
   m_ActivateAfter: 0
   m_MinDuration: 0
   m_RandomizeChoice: 0
@@ -865,9 +823,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f35d00e4a2b7b4ab34807c05115ab2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelCams: {fileID: 5222421641577635041}
+  _levelCamParent: {fileID: 0}
+  _startSpawnPoint: {fileID: 0}
   _spawnPoint: {fileID: 6675612559867873974}
+  _rewardGrouper: {fileID: 0}
   _softPuzzles: []
+  _introCutscene: {fileID: 0}
 --- !u!1 &6936992595897339867
 GameObject:
   m_ObjectHideFlags: 0

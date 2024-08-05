@@ -5,10 +5,13 @@ public enum EventType
     PLAY_GAME,
     FADING, 
     QUIT_GAME,  
+    MAIN_MENU,
 
     // Inputs
-    ENABLE_INPUTS,
-    DISABLE_INPUTS,
+    ENABLE_GAMEPLAY_INPUTS,
+    ENABLE_MAINMENU_INPUTS,
+    DISABLE_GAMEPLAY_INPUTS,
+    DISABLE_MAINMENU_INPUTS,
 
     PLAYER_1_MOVE,
     PLAYER_2_MOVE,
@@ -18,43 +21,41 @@ public enum EventType
     PLAYER_2_INTERACT,
     PLAYER_2_HOLDINTERACT,
 
-    PLAYER_1_RIFT,
-    PLAYER_2_RIFT,
-
-    // Puzzles
-    ASSIGNMENT_CODE_TRIGGER,    //trigger code for puzzle features
+    SHOW_PROMPT_INTERACT,
+    HIDE_PROMPT_INTERACT,
+    SHOW_PROMPT_HOLD_INTERACT,
+    HIDE_PROMPT_HOLD_INTERACT,
 
     // Level 1
-    LVL1_STARTWINKLE_ACTIVATE,         // used to get the pedestals to make their associated stars start twinkling
-    LVL1_STARBEAM_ACTIVATE,         // used to get the pedestals to make their associated stars also shoot their beams
+    LVL1_STAR_ACTIVATE,                 // used to get the pedestals to make their associated stars appear
+    LVL1_STARBEAM_ACTIVATE,             // used to get the pedestals to make their associated stars also shoot their beams
 
     // Narrative
     NPC_SEND_DIALOGUE,
 
-    // RiftManager
-    CREATE_RIFT,
-    RIFT_SEND_EFFECT,
+    // Players
+    PLAYERMANAGER_SEND_PLAYER1,         // Send the player1 object
+    PLAYERMANAGER_SEND_PLAYER2,         // Send the player2 object
+    PLAYERMANAGER_SEND_FOLLOWGROUP,     // Send the transform that Cinemachine will use to track both players
+    PLAYERMANAGER_REQUEST_FOLLOWGROUP,  // Request that PlayerManager send the followgroup transform
 
     // Camera
-    CAMERAMANAGER_SEND_FOLLOWGROUP,
-    CLEARSHOT_CAMS_YROT,
-    RECEIVE_GAMEPLAY_CAM_PARENT,
-    ADD_GAMEPLAY_CAM,
-    DELETE_GAMEPLAY_CAM,
+    CAMERA_NEW_FWD_DIR,                 // Send new forward direction vector to change what orientation forward is for input movement
+    CAMERA_REGISTER,                    // Register Cam to CameraManager
+    CAMERA_DEREGISTER,                  // Deregister Cam to CameraManager
+    CAMERA_ACTIVATE,                    // Activate (make live) a registered Camera
 
-    // Teleport
-    TELEPORT_PLAYERS,
-
-    // Cinematics
-    PLAY_CINEMATIC,
+    // Cutscene
+    CUTSCENE_PLAY,
+    CUTSCENE_FINISHED,
 
     // Level
-    LEVEL_SPAWN,
-    SOFTPUZZLE_PLAYER_TELEPORT, // The one that creates the VFX effect
+    LEVEL_SPAWN,                        // Spawn players into level for the first time
+    SOFTPUZZLE_PLAYER_TELEPORT,         // Teleport players after completing a soft puzzle
     SOFTPUZZLE_COMPLETE,
 
     // Gravity 
-    GRAVITY_INVERT,
+    GRAVITY_INVERT,                     // Send whether gravity is inverted for players
 
     // Testing
     TEST_CONTROLS,

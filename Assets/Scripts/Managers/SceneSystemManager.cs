@@ -1,7 +1,9 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using System.Linq;
+using System;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -19,6 +21,7 @@ public class SceneSystemManager : MonoBehaviour
     private int _numOfScenes; // Number of total scenes in the game
     private int _mainMenuIndex;
     private int _gameplayIndex;
+    private int _servicesIndex;
     #endregion
 
     private void Awake()
@@ -26,10 +29,11 @@ public class SceneSystemManager : MonoBehaviour
         // If using the Unity editor or development build, enable debug logs
         Debug.unityLogger.logEnabled = Debug.isDebugBuild;
 
-        // Get total number of scenes in game and indexes for main menu and gameplay scenes
+        // Get total number of scenes in game and indexes for main menu, gameplay, and services scenes
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
         _mainMenuIndex = GetBuildIndex("MainMenu");
         _gameplayIndex = GetBuildIndex("Gameplay");
+        _servicesIndex = GetBuildIndex("Services");
 
         // Init Events
         EventManager.EventInitialise(EventType.FADING);
@@ -39,40 +43,69 @@ public class SceneSystemManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.PLAY_GAME, PlayGameHandler);
         EventManager.EventSubscribe(EventType.QUIT_GAME, QuitGameHandler);
+        EventManager.EventSubscribe(EventType.MAIN_MENU, MainMenuHandler);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.PLAY_GAME, PlayGameHandler);
         EventManager.EventUnsubscribe(EventType.QUIT_GAME, QuitGameHandler);
+        EventManager.EventUnsubscribe(EventType.MAIN_MENU, MainMenuHandler);
     }
 
     // After Services Scene is loaded in, additively load in the MainMenu scene
     private void Start()
     {
         // If build is running, load in the main menu
-        #if !UNITY_EDITOR
-            StartCoroutine(LoadScene(_mainMenuIndex));
-            StartCoroutine(_fader.NormalFadeIn());
-        #else
+        // Otherwise, unload all scenes except Services and reload in order of their layer architecture
+#if !UNITY_EDITOR
+        StartCoroutine(LoadScene(_mainMenuIndex));
+        StartCoroutine(_fader.NormalFadeIn());
+        EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
+#else
+        int loadedScenesCount = SceneManager.loadedSceneCount;
+        Queue<int> loadedScenes = new Queue<int>();
 
-        #endif
+        for (int i = 0; i < loadedScenesCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+
+            if (scene.buildIndex == _mainMenuIndex)
+            {
+                EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
+                EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+            }
+            else if (scene.buildIndex != _servicesIndex && scene.buildIndex != _mainMenuIndex)
+            {
+                EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+                EventManager.EventTrigger(EventType.DISABLE_MAINMENU_INPUTS, null);
+            }
+
+            if (scene.buildIndex != _servicesIndex)
+            {
+                loadedScenes.Enqueue(scene.buildIndex);
+                SceneManager.UnloadSceneAsync(scene);
+            }
+        }
+
+        StartCoroutine(ReloadAllScenes(loadedScenes));
+#endif
     }
 
     #region LEVEL AND MENU FUNCTIONALITY
-    IEnumerator LevelChanger(int prevLevel, int newLevel)
+    // To simulate when the build boots up for the first time
+    IEnumerator ReloadAllScenes(Queue<int> scenesToReload)
     {
-        EventManager.EventTrigger(EventType.FADING, false);
-        yield return StartCoroutine(_fader.NormalFadeOut());
-        yield return StartCoroutine(UnloadLevel(prevLevel));
-        yield return StartCoroutine(LoadLevel(newLevel));
-        yield return StartCoroutine(_fader.NormalFadeIn());
-        EventManager.EventTrigger(EventType.FADING, true);
+        foreach (int i in scenesToReload)
+        {
+            yield return StartCoroutine(LoadScene(i));
+        }
     }
 
     // Level to Menu Change Sequence
     IEnumerator LevelToMenu()
     {
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
         EventManager.EventTrigger(EventType.FADING, false);
         yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadLevel(_currentLevel.buildIndex));
@@ -80,11 +113,13 @@ public class SceneSystemManager : MonoBehaviour
         yield return StartCoroutine(LoadScene(_mainMenuIndex));
         yield return StartCoroutine(_fader.NormalFadeIn());
         EventManager.EventTrigger(EventType.FADING, true);
+        EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
     }
 
     // Menu to Level Change Sequence
     IEnumerator MenuToLevel(int levelSelected)
     {
+        EventManager.EventTrigger(EventType.DISABLE_MAINMENU_INPUTS, null);
         EventManager.EventTrigger(EventType.FADING, false);
         yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadScene(_mainMenuIndex));
@@ -92,6 +127,7 @@ public class SceneSystemManager : MonoBehaviour
         yield return StartCoroutine(LoadLevel(levelSelected));
         yield return StartCoroutine(_fader.NormalFadeIn());
         EventManager.EventTrigger(EventType.FADING, true);
+        //EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
     }
 
     // Only loads levels, does not load MainMenu scene or core scenes
@@ -197,7 +233,10 @@ public class SceneSystemManager : MonoBehaviour
     {
         StartCoroutine(QuitGame());
     }
-    #endregion
 
-    
+    public void MainMenuHandler(object data)
+    {
+        StartCoroutine(LevelToMenu());
+    }
+    #endregion
 }

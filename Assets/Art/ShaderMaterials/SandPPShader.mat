@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3160266523129512382
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SandPPShader
+  m_Shader: {fileID: -6465566751694194690, guid: a1503f05ee8e24144b4cbde9541957ee, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DistortAmplitude: 1.81
+    - _DistortNoisePeriod: 20.64
+    - _DuneShineMin: 0.5
+    - _GrainColorBlend: 0.42
+    - _GrainPeriod: 761
+    - _GrainShineStrength: 0.58
+    - _NoiseAmplitude: 1.58
+    - _NoiseScale: 4.21
+    - _NormalStrength: 1
+    - _PolygonSides: 5.54
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _SandDuneMaxHeight: 0.1
+    - _ShineThreshold: 0.69
+    - _SineAmplitude: 0.69
+    - _SineFrequency: 9.52
+    - _SineRotation: 8.36
+    - _Smoothness: 0
+    - _SubstrateDuneHeightMax: 0.167
+    - _SubstrateGrainHeightMax: 0.285
+    - _SubstrateTightening: 1.49
+    - _UVScale: 0.2
+    m_Colors:
+    - _SandHighColor: {r: 0.3960784, g: 0.4117647, b: 0.7372549, a: 1}
+    - _SandLowColor: {r: 0.3960784, g: 0.34117648, b: 0.5568628, a: 1}
+    - _ShineColor: {r: 0.7176471, g: 0.70980394, b: 0.972549, a: 1}
+    - _SubstrateColor: {r: 0.7647059, g: 0.57254905, b: 0.2784314, a: 1}
+    - _UVTiling: {r: 0.2, g: 5.6, b: 0, a: 0}
+  m_BuildTextureStacks: []
