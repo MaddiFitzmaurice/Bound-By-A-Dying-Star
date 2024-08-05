@@ -73,10 +73,12 @@ public class SceneSystemManager : MonoBehaviour
             if (scene.buildIndex == _mainMenuIndex)
             {
                 EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
+                EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
             }
             else if (scene.buildIndex != _servicesIndex && scene.buildIndex != _mainMenuIndex)
             {
                 EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+                EventManager.EventTrigger(EventType.DISABLE_MAINMENU_INPUTS, null);
             }
 
             if (scene.buildIndex != _servicesIndex)
@@ -98,16 +100,6 @@ public class SceneSystemManager : MonoBehaviour
         {
             yield return StartCoroutine(LoadScene(i));
         }
-    }
-
-    IEnumerator LevelChanger(int prevLevel, int newLevel)
-    {
-        EventManager.EventTrigger(EventType.FADING, false);
-        yield return StartCoroutine(_fader.NormalFadeOut());
-        yield return StartCoroutine(UnloadLevel(prevLevel));
-        yield return StartCoroutine(LoadLevel(newLevel));
-        yield return StartCoroutine(_fader.NormalFadeIn());
-        EventManager.EventTrigger(EventType.FADING, true);
     }
 
     // Level to Menu Change Sequence

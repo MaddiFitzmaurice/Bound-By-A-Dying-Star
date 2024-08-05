@@ -8,9 +8,6 @@ public class CamTrigger : MonoBehaviour
     #region INTERNAL DATA
     // Components
     private FixedCamSystem _system;
-    // Are both Players inside the trigger?
-    private bool _player1In = false;
-    private bool _player2In = false;
     // Gizmo color
     private Color _color = Color.blue;
     #endregion
