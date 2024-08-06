@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Dike_Statue
-    second: {fileID: 2100000, guid: 34f13e5cca54b8f40b5eab5ae20d4a84, type: 2}
+    second: {fileID: 2100000, guid: bfce6278213a357489e5684cf2aefd01, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -3,7 +3,12 @@ guid: 05f20fc8b8c36344b9d5eb0227a4dd56
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Astraea_Statue
+    second: {fileID: 2100000, guid: 6df7483887a4f374a83534bc9f40d30f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
