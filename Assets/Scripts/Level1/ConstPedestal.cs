@@ -200,40 +200,6 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         }
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        // If player has entered the trigger
-        if (other.CompareTag("Player1") || other.CompareTag("Player2"))
-        {
-            PlayerBase player = other.GetComponent<PlayerBase>();
-
-            // Ensure player has entered the trigger
-            if (player != null)
-            {
-                // Ensure player is holding something and it's the correct interactable to be placed on pedestal
-                if (player.CarriedPickupable != null && _validInteractables.Contains(player.CarriedPickupable))
-                {
-                    // Change the disk's color to green
-                    //_diskRenderer.material.color = Color.green;
-
-                    // IPickupable and IInteractable manipulation
-                    GameObject carriedPickupable = player.CarriedPickupable;
-                    LockPlacedMirror(carriedPickupable);
-                    IPickupable pickupableType = carriedPickupable.GetComponent<IPickupable>();
-                    pickupableType.PickupLocked(true);
-                    pickupableType.BeDropped(_beamSource);
-
-                    // If a mirror is to be placed on a pedestal
-                    if (pickupableType is Level1Mirror)
-                    {
-                        _mirror = (Level1Mirror)pickupableType;
-                        InitialRotateMirror(_mirror.transform);
-                    }
-                }
-            }
-        }
-    }
-
     // Set start and end point of the beam in local space
     private void SetBeamPositions()
     {
@@ -278,7 +244,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         }
     }
 
-    // Rotate mirror to angle on placing on pedestal
+    // Rotate mirror to initial angle when placing on pedestal
     private void InitialRotateMirror(Transform mirror)
     {
         // Set the mirror's position and rotation to match the pedestal before starting the rotation
@@ -399,7 +365,24 @@ public class ConstPedestal : MonoBehaviour, IInteractable
 
     public void PlayerStartInteract(PlayerBase player)
     {
-        
+        // If mirror has not been placed on pedestal
+        // Ensure player is holding something and it's the correct interactable to be placed on pedestal
+        if (player.CarriedPickupable != null && _validInteractables.Contains(player.CarriedPickupable) && _mirror == null)
+        {
+            // IPickupable and IInteractable manipulation
+            GameObject carriedPickupable = player.CarriedPickupable;
+            LockPlacedMirror(carriedPickupable);
+            IPickupable pickupableType = carriedPickupable.GetComponent<IPickupable>();
+            pickupableType.PickupLocked(true);
+            pickupableType.BeDropped(_beamSource);
+
+            // If a mirror is to be placed on a pedestal
+            if (pickupableType is Level1Mirror)
+            {
+                _mirror = (Level1Mirror)pickupableType;
+                InitialRotateMirror(_mirror.transform);
+            }
+        }
     }
 
     public void PlayerHoldInteract(PlayerBase player)
