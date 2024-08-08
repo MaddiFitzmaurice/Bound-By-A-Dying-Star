@@ -4,112 +4,111 @@ using UnityEngine;
 
 public class PressurePlateTriggerAnimation : MonoBehaviour
 {
-    public GameObject plate; // Reference to the plate object
-    public ParticleSystem glowEffect; // Reference to the glow particle system
-    public float sinkDistance = 0.2f;
-    public float sinkSpeed = 2.0f;
+    [SerializeField] private GameObject _plate; // Reference to the plate object
+    [SerializeField] private ParticleSystem _glowEffect; // Reference to the glow particle system
+    [SerializeField] private float _sinkDistance = 0.2f;
+    [SerializeField] private float _sinkSpeed = 2.0f;
 
-    private const string playerTag1 = "Player1";
-    private const string playerTag2 = "Player2";
+    private const string _playerTag1 = "Player1";
+    private const string _playerTag2 = "Player2";
 
-    private Color player1Color = Color.blue;
-    private Color player2Color = new Color(1f, 0.5f, 0f); // Orange
+    private Color _player1Color = Color.blue;
+    private Color _player2Color = new Color(1f, 0.5f, 0f); // Orange
 
-    private Vector3 originalPosition;
-    private Vector3 targetPosition;
-    private bool isPressed = false;
-    private int objectsOnPlate = 0;
+    private Vector3 _originalPosition;
+    private Vector3 _targetPosition;
+    private bool _isPressed = false;
+    private int _objectsOnPlate = 0;
 
-    private AudioSource audioSource;
-    private AudioClip tileDraggingClip;
-
+    private AudioSource _audioSource;
+    private AudioClip _tileDraggingClip;
 
     void Start()
     {
-        if (plate == null)
+        if (_plate == null)
         {
-            Debug.LogError("missing plate reference");
+            Debug.LogError("Missing plate reference");
             return;
         }
-        if (glowEffect == null)
+        if (_glowEffect == null)
         {
-            Debug.LogError("missing particle systen");
+            Debug.LogError("Missing particle system");
             return;
         }
-       
-        originalPosition = plate.transform.localPosition;
-        targetPosition = originalPosition - new Vector3(0, sinkDistance, 0);
+
+        _originalPosition = _plate.transform.localPosition;
+        _targetPosition = _originalPosition - new Vector3(0, _sinkDistance, 0);
 
         // Initialize and configure the AudioSource
-        audioSource = gameObject.AddComponent<AudioSource>();
-       
-       tileDraggingClip = Resources.Load<AudioClip>("Tile_Dragging_Demo");
+        _audioSource = gameObject.AddComponent<AudioSource>();
 
-        if (tileDraggingClip == null)
+        _tileDraggingClip = Resources.Load<AudioClip>("Tile_Dragging_Demo");
+
+        if (_tileDraggingClip == null)
         {
-            Debug.LogError("Tile_Dragging_Demo audio clip not in Resources Folder (IT WONT WORK UNLESS IN THIS FOLDER FOR SOME REASON AHHHHHHHHHHHHHHHHHHHHHHHH)");
+            Debug.LogError("Tile_Dragging_Demo audio clip not in Resources Folder");
         }
         else
         {
-            audioSource.clip = tileDraggingClip;
-            audioSource.volume = 1.0f;
-            audioSource.playOnAwake = false; 
+            _audioSource.clip = _tileDraggingClip;
+            _audioSource.volume = 1.0f;
+            _audioSource.playOnAwake = false;
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(playerTag1) || other.CompareTag(playerTag2))
+        if (other.CompareTag(_playerTag1) || other.CompareTag(_playerTag2))
         {
-            objectsOnPlate++;
-            if (!isPressed)
+            _objectsOnPlate++;
+            if (!_isPressed)
             {
-                isPressed = true;
+                _isPressed = true;
                 StopAllCoroutines();
-                StartCoroutine(SinkPlate(targetPosition));
-      //          ChangeGlowEffectColor(other.tag);
-                glowEffect.Play();
-                audioSource.Play();
+                StartCoroutine(SinkPlate(_targetPosition));
+                _glowEffect.Play();
+                _audioSource.Play();
             }
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag(playerTag1) || other.CompareTag(playerTag2))
+        if (other.CompareTag(_playerTag1) || other.CompareTag(_playerTag2))
         {
-            objectsOnPlate--;
-            if (objectsOnPlate == 0)
+            _objectsOnPlate--;
+            if (_objectsOnPlate == 0)
             {
-                isPressed = false;
+                _isPressed = false;
                 StopAllCoroutines();
-                StartCoroutine(SinkPlate(originalPosition));
-                glowEffect.Stop();
-                audioSource.Play();
+                StartCoroutine(SinkPlate(_originalPosition));
+                _glowEffect.Stop();
+                _audioSource.Play();
             }
         }
     }
 
-    System.Collections.IEnumerator SinkPlate(Vector3 target)
+    IEnumerator SinkPlate(Vector3 target)
     {
-        while (Vector3.Distance(plate.transform.localPosition, target) > 0.01f)
+        while (Vector3.Distance(_plate.transform.localPosition, target) > 0.01f)
         {
-            plate.transform.localPosition = Vector3.MoveTowards(plate.transform.localPosition, target, sinkSpeed * Time.deltaTime);
+            _plate.transform.localPosition = Vector3.MoveTowards(_plate.transform.localPosition, target, _sinkSpeed * Time.deltaTime);
             yield return null;
         }
-        plate.transform.localPosition = target; 
+        _plate.transform.localPosition = target;
     }
+
     /*
     void ChangeGlowEffectColor(string playerTag)
     {
-        var mainModule = glowEffect.main;
-        if (playerTag == playerTag1)
+        var mainModule = _glowEffect.main;
+        if (playerTag == _playerTag1)
         {
-            mainModule.startColor = player1Color;
+            mainModule.startColor = _player1Color;
         }
-        else if (playerTag == playerTag2)
+        else if (playerTag == _playerTag2)
         {
-            mainModule.startColor = player2Color;
+            mainModule.startColor = _player2Color;
         }
     }
     */
