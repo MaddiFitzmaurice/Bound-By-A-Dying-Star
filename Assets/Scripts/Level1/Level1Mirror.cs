@@ -92,23 +92,25 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     public void BeDropped(Transform newParent)
     {
-        _isFollowing = false;
+        // REMOVED DROPPING FUNCTIONALITY!!
 
-        // Removes the parent-child relationship, making the object independent in the scene
-        // If an incoming parent is specified, use that. Else, use the default parent assigned in the scene
-        Transform parent = newParent != null ? newParent : _softPuzzleRewardGrouper;
-        SetParent(parent);
+        //_isFollowing = false;
 
-        _emissionPS.enabled = false;
+        //// Removes the parent-child relationship, making the object independent in the scene
+        //// If an incoming parent is specified, use that. Else, use the default parent assigned in the scene
+        //Transform parent = newParent != null ? newParent : _softPuzzleRewardGrouper;
+        //SetParent(parent);
 
-        _player.DropItem();
+        //_emissionPS.enabled = false;
 
-        // Start coroutine to smoothly move the item to the ground
-        if (parent == _softPuzzleRewardGrouper)
-        {
-            StartCoroutine(FloatItemToGround());
-        }
-        _player = null;
+        //_player.DropItem();
+
+        //// Start coroutine to smoothly move the item to the ground
+        //if (parent == _softPuzzleRewardGrouper)
+        //{
+        //    StartCoroutine(FloatItemToGround());
+        //}
+        //_player = null;
     }
 
     public void BePickedUp(PlayerBase player)
