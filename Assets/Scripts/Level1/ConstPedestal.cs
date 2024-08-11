@@ -380,6 +380,13 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             if (pickupableType is Level1Mirror)
             {
                 _mirror = (Level1Mirror)pickupableType;
+
+                // Added due to removal of dropping functionality of mirror
+                _mirror.isFollowing = false;
+                _mirror.emissionPS.enabled = false;
+                _mirror.SetParent(null);
+                player.DropItem();
+
                 InitialRotateMirror(_mirror.transform);
             }
         }

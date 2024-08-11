@@ -6,21 +6,24 @@ using UnityEngine;
 public class SoftPuzzle : MonoBehaviour
 {
     #region External Data
-    [SerializeField] private List<GameObject> _rewardObjs;
-    [SerializeField] private GameObject _forwardPuzzle;
+    [SerializeField, Header("Puzzle Groups")]
+    private GameObject _forwardPuzzle;
     [SerializeField] private GameObject _backwardPuzzle;
-    [SerializeField] private Respawn _respawnScript;
-    [SerializeField] private GameObject _puzzlePlatform;
+
+    [SerializeField, Space(10), Header("Moving Platform")]
+    private GameObject _puzzlePlatform;
     [SerializeField] private GameObject _puzzleMovePoint;
+    [SerializeField] private float _platformMoveSpeed = 2.0f;
+
+    [SerializeField, Space(10)] private List<GameObject> _rewardObjs;
+    [SerializeField] private Respawn _respawnScript;
     [SerializeField] private GameObject _puzzleDoor;
     [SerializeField] private GameObject _softPuzzleCamParent;
     #endregion
 
     #region Internal Data
     private List<ISoftPuzzleReward> _rewards = new List<ISoftPuzzleReward>();
-    private GameObject _player1;
     private bool _player1InPuzzle;
-    private GameObject _player2;
     private bool _player2InPuzzle;
     private bool _puzzleCompleted;
     #endregion
@@ -54,20 +57,20 @@ public class SoftPuzzle : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Enables flag to check if players are within the puzzle
         if (other.CompareTag("Player1"))
         {
-            _player1 = other.gameObject;
             _player1InPuzzle = true;
         }
         else if (other.CompareTag("Player2"))
         {
-            _player2 = other.gameObject;
             _player2InPuzzle = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        // Enables flag to check if players are outside the puzzle
         if (other.CompareTag("Player1"))
         {
             _player1InPuzzle = false;
@@ -77,18 +80,11 @@ public class SoftPuzzle : MonoBehaviour
             _player2InPuzzle = false;
         }
 
+        // Enables flag to check if players are outside the puzzle
         if (!_player1InPuzzle && !_player2InPuzzle && _puzzleCompleted)
         {
             _puzzleDoor.SetActive(true);
         }
-    }
-
-    private void OnEnable()
-    {
-    }
-
-    private void OnDisable()
-    {
     }
 
     public GameObject SendReceiveCams()
@@ -116,21 +112,24 @@ public class SoftPuzzle : MonoBehaviour
         // Swap the puzzles
         _forwardPuzzle.SetActive(false);
 
-        float duration = 2.0f; // Duration of the movement
+        // INSERT HERE FOR CUTSCENE CAMERA 
+
         float elapsedTime = 0f;
 
         Vector3 initialPositionPlatform = _puzzlePlatform.transform.position;
 
         Vector3 targetPosition = _puzzleMovePoint.transform.position;
 
-        while (elapsedTime < duration)
+        // Moves platform to the target position, players are automatically moved with the platform containing the "Moving Platform" script
+        while (elapsedTime < _platformMoveSpeed)
         {
-            _puzzlePlatform.transform.position = Vector3.Lerp(initialPositionPlatform, targetPosition, elapsedTime / duration);
+            _puzzlePlatform.transform.position = Vector3.Lerp(initialPositionPlatform, targetPosition, elapsedTime / _platformMoveSpeed);
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
+        // Activates the backwards puzzle and resets the spawn point
         _backwardPuzzle.SetActive(true);
         _respawnScript.CurrentSpawnPoint = _respawnScript.BackwardPuzzleRespawnPoint;
         _puzzleCompleted = true;

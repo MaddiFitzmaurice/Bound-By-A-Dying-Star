@@ -33,10 +33,10 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     // Item Floating
     private Transform _followTarget;
-    private bool _isFollowing = false;
+    public bool isFollowing = false;
     private float _followSpeed = 5f;  // Adjust this value as needed
     [SerializeField] private ParticleSystem _itemPassivePS;
-    private ParticleSystem.EmissionModule _emissionPS;
+    public ParticleSystem.EmissionModule emissionPS;
 
     private bool isIntensityChanging = false;
 
@@ -56,7 +56,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         _childColliders = GetComponentsInChildren<Collider>().ToList<Collider>();
         //_light = GetComponentInChildren<Light>();
         //_light.intensity = 0;
-        _emissionPS = _itemPassivePS.emission;
+        emissionPS = _itemPassivePS.emission;
 
     }
 
@@ -72,7 +72,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     void Update()
     {
-        if (_isFollowing && _followTarget != null)
+        if (isFollowing && _followTarget != null)
         {
             // Perform the interpolation in world space
             transform.position = Vector3.Lerp(transform.position, _followTarget.position, _followSpeed * Time.deltaTime);
@@ -92,7 +92,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     public void BeDropped(Transform newParent)
     {
-        // REMOVED DROPPING FUNCTIONALITY!!
+        //// REMOVED DROPPING FUNCTIONALITY!!
 
         //_isFollowing = false;
 
@@ -220,7 +220,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         }
 
         // Set item to follow player and adjust the parent
-        _isFollowing = true;
+        isFollowing = true;
         _player.PickupItem(gameObject);
         SetParent(_player.transform);
 
