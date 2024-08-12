@@ -45,6 +45,11 @@ public class CameraManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.CAMERA_DEREGISTER, DeregisterCameraHandler);
         EventManager.EventUnsubscribe(EventType.CAMERA_ACTIVATE, ActivateCameraHandler);
     }
+
+    private void Update()
+    {
+        
+    }
     #endregion
 
     // Called when Cinemachine Brain detects a camera activating
