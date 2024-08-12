@@ -2,7 +2,6 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -10,8 +9,21 @@ public class CameraManager : MonoBehaviour
     #region INTERNAL DATA
     // Components
     private CinemachineBrain _cmBrain;
+    private Camera _cam;
+
+    // Cam frustum
+    private List<Plane> _frustumPlanes;
+    private bool _genPlanes = false;
+
+    // Cinemachine
     private List<CinemachineVirtualCamera> _registeredCameras;
     private CinemachineTargetGroup _playerFollowGroup;
+
+    // Players
+    private Player1 _p1;
+    private Player2 _p2;
+    private Collider _p1Collider;
+    private Collider _p2Collider;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
@@ -19,6 +31,7 @@ public class CameraManager : MonoBehaviour
     {
         // Get Components
         _cmBrain = GetComponentInChildren<CinemachineBrain>();
+        _cam = GetComponentInChildren<Camera>();
 
         // Init Events
         EventManager.EventInitialise(EventType.CAMERA_NEW_FWD_DIR);
@@ -36,6 +49,10 @@ public class CameraManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.CAMERA_REGISTER, RegisterCameraHandler);
         EventManager.EventSubscribe(EventType.CAMERA_DEREGISTER, DeregisterCameraHandler);
         EventManager.EventSubscribe(EventType.CAMERA_ACTIVATE, ActivateCameraHandler);
+        EventManager.EventSubscribe(EventType.ENABLE_GAMEPLAY_INPUTS, StartGeneratingPlanes);
+        EventManager.EventSubscribe(EventType.DISABLE_GAMEPLAY_INPUTS, StopGeneratingPlanes);
+        EventManager.EventSubscribe(EventType.PLAYERMANAGER_SEND_PLAYER1, ReceivePlayers);
+        EventManager.EventSubscribe(EventType.PLAYERMANAGER_SEND_PLAYER2, ReceivePlayers);
     }
 
     private void OnDisable()
@@ -44,11 +61,35 @@ public class CameraManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.CAMERA_REGISTER, RegisterCameraHandler);
         EventManager.EventUnsubscribe(EventType.CAMERA_DEREGISTER, DeregisterCameraHandler);
         EventManager.EventUnsubscribe(EventType.CAMERA_ACTIVATE, ActivateCameraHandler);
+        EventManager.EventUnsubscribe(EventType.ENABLE_GAMEPLAY_INPUTS, StartGeneratingPlanes);
+        EventManager.EventUnsubscribe(EventType.DISABLE_GAMEPLAY_INPUTS, StopGeneratingPlanes);
+        EventManager.EventUnsubscribe(EventType.PLAYERMANAGER_SEND_PLAYER1, ReceivePlayers);
+        EventManager.EventUnsubscribe(EventType.PLAYERMANAGER_SEND_PLAYER2, ReceivePlayers);
     }
 
     private void Update()
     {
-        
+        // Get camera's frustum planes
+        if (_genPlanes)
+        {
+            _frustumPlanes = GeometryUtility.CalculateFrustumPlanes(_cam).ToList();
+
+            if (_p1 != null)
+            {
+                if (!GeometryUtility.TestPlanesAABB(_frustumPlanes.ToArray(), _p1Collider.bounds))
+                {
+                    Debug.Log("PLAYER 1 OFFSCREEN");
+                }
+            }
+
+            if (_p2 != null)
+            {
+                if (!GeometryUtility.TestPlanesAABB(_frustumPlanes.ToArray(), _p2Collider.bounds))
+                {
+                    Debug.Log("PLAYER 2 OFFSCREEN");
+                }
+            }
+        }
     }
     #endregion
 
@@ -78,6 +119,33 @@ public class CameraManager : MonoBehaviour
     }
 
     #region EVENT HANDLERS
+    // When to start generating frustum planes
+    public void StartGeneratingPlanes(object data)
+    {
+        _genPlanes = true;
+    }
+
+    // When to stop generating frustum planes
+    public void StopGeneratingPlanes(object data)
+    {
+        _genPlanes = false;
+    }
+
+    // Receive Players
+    public void ReceivePlayers(object data)
+    {
+        if (data is Player1 p1)
+        {
+            _p1 = p1;
+            _p1Collider = _p1.GetComponent<Collider>();
+        }
+        else if (data is Player2 p2)
+        {
+            _p2 = p2;
+            _p2Collider = _p2.GetComponent<Collider>();
+        }
+    }
+
     // Receive follow group that cinemachine will use to follow or look at the players
     public void ReceiveFollowGroupHandler(object data)
     {
