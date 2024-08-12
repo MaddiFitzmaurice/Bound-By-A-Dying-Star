@@ -20,9 +20,6 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
     private bool _isPressed = false;
     private int _objectsOnPlate = 0;
 
-    private AudioSource _audioSource;
-    private AudioClip _tileDraggingClip;
-
     void Start()
     {
         if (_plate == null)
@@ -38,22 +35,6 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
 
         _originalPosition = _plate.transform.localPosition;
         _targetPosition = _originalPosition - new Vector3(0, _sinkDistance, 0);
-
-        // Initialize and configure the AudioSource
-        _audioSource = gameObject.AddComponent<AudioSource>();
-
-        _tileDraggingClip = Resources.Load<AudioClip>("Tile_Dragging_Demo");
-
-        if (_tileDraggingClip == null)
-        {
-            Debug.LogError("Tile_Dragging_Demo audio clip not in Resources Folder");
-        }
-        else
-        {
-            _audioSource.clip = _tileDraggingClip;
-            _audioSource.volume = 1.0f;
-            _audioSource.playOnAwake = false;
-        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -66,8 +47,8 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
                 _isPressed = true;
                 StopAllCoroutines();
                 StartCoroutine(SinkPlate(_targetPosition));
-                _glowEffect.Play();
-                _audioSource.Play();
+                //_glowEffect.Play();
+                // TRIGGER AUDIO EVENT HERE
             }
         }
     }
@@ -82,8 +63,8 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
                 _isPressed = false;
                 StopAllCoroutines();
                 StartCoroutine(SinkPlate(_originalPosition));
-                _glowEffect.Stop();
-                _audioSource.Play();
+                //_glowEffect.Stop();
+                // TRIGGER AUDIO EVENT HERE
             }
         }
     }

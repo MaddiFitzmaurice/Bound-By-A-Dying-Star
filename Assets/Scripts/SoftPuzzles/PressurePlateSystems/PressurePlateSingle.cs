@@ -9,11 +9,11 @@ public class PressurePlateSingle : MonoBehaviour, IPressurePlateBase
     [SerializeField] private ParticleSystem _pressurePlatePS;
     [SerializeField] private Color _player1Colour;
     [SerializeField] private Color _player2Colour;
-    [SerializeField] public bool persistVisualEffect = false;
+    [SerializeField] public bool _persistVisualEffect = false;
     [SerializeField] private PressurePlateSystem _ppSystem;
     #endregion
 
-    #region InternalData
+    #region Internal Data
     private bool _permaActivated = false; 
     private GameObject _lastPlayer;
     #endregion
@@ -41,7 +41,7 @@ public class PressurePlateSingle : MonoBehaviour, IPressurePlateBase
 
     private void OnTriggerExit(Collider other)
     {
-        if (!_permaActivated && !persistVisualEffect)
+        if (!_permaActivated && !_persistVisualEffect)
         {
             if (other.CompareTag("Player1") || other.CompareTag("Player2"))
             {
