@@ -4015,6 +4015,10 @@ PrefabInstance:
       value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1445001021237656109, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445001021237656109, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_Center.y
       value: 1
       objectReference: {fileID: 0}
@@ -11379,7 +11383,6 @@ GameObject:
   - component: {fileID: 1565678306}
   - component: {fileID: 1565678309}
   - component: {fileID: 1565678308}
-  - component: {fileID: 1565678307}
   m_Layer: 9
   m_Name: Player_1 Head
   m_TagString: Untagged
@@ -11402,27 +11405,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 431485560}
   m_LocalEulerAnglesHint: {x: -13.084, y: 0, z: 0}
---- !u!135 &1565678307
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1565678305}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1565678308
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14892,7 +14874,6 @@ GameObject:
   - component: {fileID: 1774730392}
   - component: {fileID: 1774730395}
   - component: {fileID: 1774730394}
-  - component: {fileID: 1774730393}
   m_Layer: 9
   m_Name: Player_2 Head
   m_TagString: Untagged
@@ -14915,27 +14896,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 431485561}
   m_LocalEulerAnglesHint: {x: -13.084, y: 0, z: 0}
---- !u!135 &1774730393
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1774730391}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1774730394
 MeshRenderer:
   m_ObjectHideFlags: 0

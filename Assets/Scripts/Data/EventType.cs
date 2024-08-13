@@ -38,6 +38,8 @@ public enum EventType
     PLAYERMANAGER_SEND_PLAYER2,         // Send the player2 object
     PLAYERMANAGER_SEND_FOLLOWGROUP,     // Send the transform that Cinemachine will use to track both players
     PLAYERMANAGER_REQUEST_FOLLOWGROUP,  // Request that PlayerManager send the followgroup transform
+    PLAYER1_ISOFFSCREEN,                // Send bool for whether player 1 is offscreen
+    PLAYER2_ISOFFSCREEN,                // Send bool for whether player 2 is offscreen
 
     // Camera
     CAMERA_NEW_FWD_DIR,                 // Send new forward direction vector to change what orientation forward is for input movement
