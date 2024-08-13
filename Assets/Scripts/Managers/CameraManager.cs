@@ -38,6 +38,8 @@ public class CameraManager : MonoBehaviour
         EventManager.EventInitialise(EventType.CAMERA_REGISTER);
         EventManager.EventInitialise(EventType.CAMERA_DEREGISTER);
         EventManager.EventInitialise(EventType.CAMERA_ACTIVATE);
+        EventManager.EventInitialise(EventType.PLAYER1_ISOFFSCREEN);
+        EventManager.EventInitialise(EventType.PLAYER2_ISOFFSCREEN);
 
         // Init Data
         _registeredCameras = new List<CinemachineVirtualCamera>();
@@ -90,12 +92,15 @@ public class CameraManager : MonoBehaviour
                 if (!onScreen && !_p1Offscreen)
                 {
                     Debug.Log("PLAYER 1 OFFSCREEN");
+                    FindClosestPlane(_p1Collider.gameObject.transform);
+                    EventManager.EventTrigger(EventType.PLAYER1_ISOFFSCREEN, true);
                     _p1Offscreen = true; // Flag as offscreen
                 }
                 // If P1 onscreen and has previously been flagged as offscreen
                 else if (onScreen && _p1Offscreen)
                 {
                     Debug.Log("PLAYER 1 ONSCREEN");
+                    EventManager.EventTrigger(EventType.PLAYER1_ISOFFSCREEN, false);
                     _p1Offscreen = false; // Flag as not offscreen
                 }
             }
@@ -109,16 +114,45 @@ public class CameraManager : MonoBehaviour
                 if (!onScreen && !_p2Offscreen)
                 {
                     Debug.Log("PLAYER 2 OFFSCREEN");
+                    FindClosestPlane(_p2Collider.gameObject.transform);
+                    EventManager.EventTrigger(EventType.PLAYER2_ISOFFSCREEN, true);
                     _p2Offscreen = true; // Flag as offscreen
                 }
                 // If P2 onscreen and has previously been flagged as offscreen
                 else if (onScreen && _p2Offscreen)
                 {
                     Debug.Log("PLAYER 2 ONSCREEN");
+                    EventManager.EventTrigger(EventType.PLAYER2_ISOFFSCREEN, false);
                     _p2Offscreen = false; // Flag as not offscreen
                 }
             }
         }
+    }
+
+    private Plane FindClosestPlane(Transform playerPos)
+    {
+        // Grab first plane for starting reference
+        float shortestDistance = _frustumPlanes[0].GetDistanceToPoint(playerPos.position);
+        Plane closestPlane = _frustumPlanes[0];
+        int index = 0;
+
+        // Then go through the rest of the planes in the frustum
+        for (int i = 1; i < _frustumPlanes.Count; i++)
+        {
+            // Find distance from plane to player
+            float dist = _frustumPlanes[i].GetDistanceToPoint(playerPos.position);
+
+            // If current plane is closer than previously recorded plane, update values
+            if (dist < shortestDistance)
+            {
+                shortestDistance = dist;   
+                closestPlane = _frustumPlanes[i];
+                index = i;
+            }
+        }
+
+        Debug.Log($"{index} is closest");
+        return closestPlane;
     }
 
     // Called when Cinemachine Brain detects a camera activating

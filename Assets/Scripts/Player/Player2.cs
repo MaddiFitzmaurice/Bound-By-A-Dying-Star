@@ -10,6 +10,7 @@ public class Player2 : PlayerBase
         EventManager.EventSubscribe(EventType.PLAYER_2_MOVE, Player2MoveHandler);
         EventManager.EventSubscribe(EventType.PLAYER_2_INTERACT, Interact);
         EventManager.EventSubscribe(EventType.GRAVITY_INVERT, ModifyGravityAndFallingSpeed);
+        EventManager.EventSubscribe(EventType.PLAYER2_ISOFFSCREEN, OffScreenHandler);
     }
 
     protected override void OnDisable()
@@ -18,6 +19,7 @@ public class Player2 : PlayerBase
         EventManager.EventUnsubscribe(EventType.PLAYER_2_MOVE, Player2MoveHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_2_INTERACT, Interact);
         EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, ModifyGravityAndFallingSpeed);
+        EventManager.EventUnsubscribe(EventType.PLAYER2_ISOFFSCREEN, OffScreenHandler);
     }
 
     private void Player2MoveHandler(object data)

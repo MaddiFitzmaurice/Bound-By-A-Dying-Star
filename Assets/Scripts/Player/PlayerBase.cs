@@ -57,12 +57,13 @@ public abstract class PlayerBase : MonoBehaviour
     private Cloth _clothPhysics;
     private Animator _animator;
 
-    // Data
+    // Movement Data
     protected Vector3 MoveInput;
     protected Vector3 PrevMoveInput;
     protected InteractTypes MoveType;
     protected float PlayerZAngle;
     protected bool FacingMoveDir = false;
+    protected bool IsOffscreen = false;
     private Vector3 _orientation = Vector3.up;
     private Vector3 _clothExternalAccel;
     private Vector3 _clothAccelGravityMod = new Vector3(0f, 19.62f, 0f); // When player is upside down, cloth accel reverses gravity
@@ -387,6 +388,18 @@ public abstract class PlayerBase : MonoBehaviour
     #endregion
 
     #region EVENT HANDLERS
+    public void OffScreenHandler(object data)
+    {
+        if (data is bool isOffscreen)
+        {
+            IsOffscreen = isOffscreen;
+        }
+        else
+        {
+            Debug.LogError("Did not receive a bool!");
+        }
+    }
+
     public void GravityChangeHandler(object data) 
     {
         if (data is bool isInverted)
