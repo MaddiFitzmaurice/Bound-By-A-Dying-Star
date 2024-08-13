@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 public class CameraManager : MonoBehaviour
 {
@@ -92,8 +93,8 @@ public class CameraManager : MonoBehaviour
                 if (!onScreen && !_p1Offscreen)
                 {
                     Debug.Log("PLAYER 1 OFFSCREEN");
-                    FindClosestPlane(_p1Collider.gameObject.transform);
-                    EventManager.EventTrigger(EventType.PLAYER1_ISOFFSCREEN, true);
+                    Vector3 closestPlaneNP1 = FindClosestPlaneNormal(_p1Collider.gameObject.transform);
+                    EventManager.EventTrigger(EventType.PLAYER1_ISOFFSCREEN, new Tuple<bool, Vector3>(true, closestPlaneNP1));
                     _p1Offscreen = true; // Flag as offscreen
                 }
                 // If P1 onscreen and has previously been flagged as offscreen
@@ -114,8 +115,8 @@ public class CameraManager : MonoBehaviour
                 if (!onScreen && !_p2Offscreen)
                 {
                     Debug.Log("PLAYER 2 OFFSCREEN");
-                    FindClosestPlane(_p2Collider.gameObject.transform);
-                    EventManager.EventTrigger(EventType.PLAYER2_ISOFFSCREEN, true);
+                    Vector3 closestPlaneNP2 = FindClosestPlaneNormal(_p2Collider.gameObject.transform);
+                    EventManager.EventTrigger(EventType.PLAYER2_ISOFFSCREEN, new Tuple<bool, Vector3>(true, closestPlaneNP2));
                     _p2Offscreen = true; // Flag as offscreen
                 }
                 // If P2 onscreen and has previously been flagged as offscreen
@@ -129,7 +130,9 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    private Plane FindClosestPlane(Transform playerPos)
+    // Find the closest plane to the player offscreen, and 
+    // send its normal with y zeroed out
+    private Vector3 FindClosestPlaneNormal(Transform playerPos)
     {
         // Grab first plane for starting reference
         float shortestDistance = _frustumPlanes[0].GetDistanceToPoint(playerPos.position);
@@ -152,7 +155,10 @@ public class CameraManager : MonoBehaviour
         }
 
         Debug.Log($"{index} is closest");
-        return closestPlane;
+
+        Vector3 normal = closestPlane.normal;
+        normal.y = 0f;
+        return normal;
     }
 
     // Called when Cinemachine Brain detects a camera activating

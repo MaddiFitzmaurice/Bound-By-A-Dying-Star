@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,8 +64,14 @@ public abstract class PlayerBase : MonoBehaviour
     protected InteractTypes MoveType;
     protected float PlayerZAngle;
     protected bool FacingMoveDir = false;
-    protected bool IsOffscreen = false;
     private Vector3 _orientation = Vector3.up;
+
+    // Camera Frustum Data
+    protected bool IsOffscreen = false;
+    //protected Plane ClosestPlane;
+    protected Vector3 ClosestPlaneNormal;
+
+    // Clothing Data
     private Vector3 _clothExternalAccel;
     private Vector3 _clothAccelGravityMod = new Vector3(0f, 19.62f, 0f); // When player is upside down, cloth accel reverses gravity
     private Vector3 _clothMoveDir = new Vector3(1f, 0f, 1f); // Wind movement
@@ -102,8 +109,6 @@ public abstract class PlayerBase : MonoBehaviour
         // Current transform centre: 1 unit
         UpperBoundRay.transform.localPosition = new Vector3(0, -1 + StepHeight, 0);
         LowerBoundRay.transform.localPosition = new Vector3(0, -1, 0);
-
-    
     }
 
     protected virtual void OnEnable()
@@ -152,17 +157,24 @@ public abstract class PlayerBase : MonoBehaviour
 
         if (FacingMoveDir)
         {
-            _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
+            // If is onscreen, move normally
+            if (!IsOffscreen)
+            {
+                _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
+            }
+            // Else if offscreen, restrict movement
+            else
+            {
+                // Make sure player only moves either perpendicular to plane's normal or walks back to be onscreen
+                if (Vector3.Dot(transform.forward, ClosestPlaneNormal.normalized) >= 0)
+                {
+                    _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
+                }
+            }
         }
 
-        if (MoveInput.magnitude != 0)
-        {
-            _animator.SetBool("IsRunning", true);
-        }
-        else
-        {
-            _animator.SetBool("IsRunning", false);
-        }
+        // Update Animator
+        PlayerAnimation();
     }
 
     public void PlayerRotation()
@@ -204,6 +216,19 @@ public abstract class PlayerBase : MonoBehaviour
     }
     
     #endregion
+
+    // Player character animation
+    private void PlayerAnimation()
+    {
+        if (MoveInput.magnitude != 0)
+        {
+            _animator.SetBool("IsRunning", true);
+        }
+        else
+        {
+            _animator.SetBool("IsRunning", false);
+        }
+    }
 
     private void ClothMovement()
     {
@@ -390,13 +415,20 @@ public abstract class PlayerBase : MonoBehaviour
     #region EVENT HANDLERS
     public void OffScreenHandler(object data)
     {
+        // If receiving just a bool, means player is back on screen
         if (data is bool isOffscreen)
         {
             IsOffscreen = isOffscreen;
         }
+        // If receiving a tuple, player has gone offscreen and will have a closest frustum plane to reference
+        else if (data is Tuple<bool, Vector3> tuple)
+        {
+            IsOffscreen = tuple.Item1;
+            ClosestPlaneNormal = tuple.Item2;
+        }
         else
         {
-            Debug.LogError("Did not receive a bool!");
+            Debug.LogError("Did not receive a bool or tuple<bool, Plane>!");
         }
     }
 
