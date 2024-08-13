@@ -19,11 +19,11 @@ public class CameraManager : MonoBehaviour
     private List<CinemachineVirtualCamera> _registeredCameras;
     private CinemachineTargetGroup _playerFollowGroup;
 
-    // Players
-    private Player1 _p1;
-    private Player2 _p2;
+    // Player Data
     private Collider _p1Collider;
     private Collider _p2Collider;
+    private bool _p1Offscreen = false;
+    private bool _p2Offscreen = false;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
@@ -69,29 +69,57 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        // Get camera's frustum planes
+        PlayersOffscreenCheck();
+    }
+    #endregion
+
+    // Offscreen Check Functionality 
+    private void PlayersOffscreenCheck()
+    {
         if (_genPlanes)
         {
+            // Get camera's frustum planes
             _frustumPlanes = GeometryUtility.CalculateFrustumPlanes(_cam).ToList();
 
-            if (_p1 != null)
+            // Check if Player 1 is offscreen
+            if (_p1Collider != null)
             {
-                if (!GeometryUtility.TestPlanesAABB(_frustumPlanes.ToArray(), _p1Collider.bounds))
+                bool onScreen = GeometryUtility.TestPlanesAABB(_frustumPlanes.ToArray(), _p1Collider.bounds);
+
+                // If P1 not onscreen and has not already been flagged as offscreen
+                if (!onScreen && !_p1Offscreen)
                 {
                     Debug.Log("PLAYER 1 OFFSCREEN");
+                    _p1Offscreen = true; // Flag as offscreen
+                }
+                // If P1 onscreen and has previously been flagged as offscreen
+                else if (onScreen && _p1Offscreen)
+                {
+                    Debug.Log("PLAYER 1 ONSCREEN");
+                    _p1Offscreen = false; // Flag as not offscreen
                 }
             }
 
-            if (_p2 != null)
+            // Check if Player 2 is offscreen
+            if (_p2Collider != null)
             {
-                if (!GeometryUtility.TestPlanesAABB(_frustumPlanes.ToArray(), _p2Collider.bounds))
+                bool onScreen = GeometryUtility.TestPlanesAABB(_frustumPlanes.ToArray(), _p2Collider.bounds);
+
+                // If P2 not onscreen and has not already been flagged as offscreen
+                if (!onScreen && !_p2Offscreen)
                 {
                     Debug.Log("PLAYER 2 OFFSCREEN");
+                    _p2Offscreen = true; // Flag as offscreen
+                }
+                // If P2 onscreen and has previously been flagged as offscreen
+                else if (onScreen && _p2Offscreen)
+                {
+                    Debug.Log("PLAYER 2 ONSCREEN");
+                    _p2Offscreen = false; // Flag as not offscreen
                 }
             }
         }
     }
-    #endregion
 
     // Called when Cinemachine Brain detects a camera activating
     public void LevelCameraActivateEvent()
@@ -136,13 +164,11 @@ public class CameraManager : MonoBehaviour
     {
         if (data is Player1 p1)
         {
-            _p1 = p1;
-            _p1Collider = _p1.GetComponent<Collider>();
+            _p1Collider = p1.GetComponent<Collider>();
         }
         else if (data is Player2 p2)
         {
-            _p2 = p2;
-            _p2Collider = _p2.GetComponent<Collider>();
+            _p2Collider = p2.GetComponent<Collider>();
         }
     }
 
