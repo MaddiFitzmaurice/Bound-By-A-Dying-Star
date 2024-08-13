@@ -68,8 +68,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     // Camera Frustum Data
     protected bool IsOffscreen = false;
-    //protected Plane ClosestPlane;
-    protected Vector3 ClosestPlaneNormal;
+    protected Plane ClosestPlane;
 
     // Clothing Data
     private Vector3 _clothExternalAccel;
@@ -165,8 +164,12 @@ public abstract class PlayerBase : MonoBehaviour
             // Else if offscreen, restrict movement
             else
             {
-                // Make sure player only moves either perpendicular to plane's normal or walks back to be onscreen
-                if (Vector3.Dot(transform.forward, ClosestPlaneNormal.normalized) >= 0)
+                // Update plane normal and 0 out y component (players don't walk in Y dir)
+                Vector3 closestPlaneNormal = ClosestPlane.normal;
+                closestPlaneNormal.y = 0f;
+
+                // Make sure player only moves either less than perpendicular to plane's normal or walks back to be onscreen
+                if (Vector3.Dot(transform.forward, closestPlaneNormal.normalized) >= 0.2f)
                 {
                     _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
                 }
@@ -421,10 +424,10 @@ public abstract class PlayerBase : MonoBehaviour
             IsOffscreen = isOffscreen;
         }
         // If receiving a tuple, player has gone offscreen and will have a closest frustum plane to reference
-        else if (data is Tuple<bool, Vector3> tuple)
+        else if (data is Tuple<bool, Plane> tuple)
         {
             IsOffscreen = tuple.Item1;
-            ClosestPlaneNormal = tuple.Item2;
+            ClosestPlane = tuple.Item2;
         }
         else
         {
