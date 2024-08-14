@@ -19,6 +19,7 @@ public class CameraManager : MonoBehaviour
     // Cinemachine
     private List<CinemachineVirtualCamera> _registeredCameras;
     private CinemachineTargetGroup _playerFollowGroup;
+    private CameraData _currentCam;
 
     // Player Data
     private Collider _p1Collider;
@@ -127,6 +128,35 @@ public class CameraManager : MonoBehaviour
                     _p2Offscreen = false; // Flag as not offscreen
                 }
             }
+
+            // If either P1 or P2 is offscreen, any moving camera should stop moving and looking
+            if (_playerFollowGroup != null)
+            {
+                if (_currentCam.CameraType == CameraType.DOLLY)
+                {
+                    if (_p1Offscreen || _p2Offscreen)
+                    {
+                        _cmBrain.ActiveVirtualCamera.Follow = null;
+                    }
+                    else if (!_p1Offscreen && !_p2Offscreen)
+                    {
+                        _cmBrain.ActiveVirtualCamera.Follow = _playerFollowGroup.transform;
+                    }
+                }
+                else if (_currentCam.CameraType == CameraType.DOLLY_LOOK)
+                {
+                    if (_p1Offscreen || _p2Offscreen)
+                    {
+                        _cmBrain.ActiveVirtualCamera.Follow = null;
+                        _cmBrain.ActiveVirtualCamera.LookAt = null;
+                    }
+                    else if (!_p1Offscreen && !_p2Offscreen)
+                    {
+                        _cmBrain.ActiveVirtualCamera.Follow = _playerFollowGroup.transform;
+                        _cmBrain.ActiveVirtualCamera.LookAt = _playerFollowGroup.transform;
+                    }
+                }
+            }
         }
     }
 
@@ -137,7 +167,6 @@ public class CameraManager : MonoBehaviour
         // Grab first plane for starting reference
         float shortestDistance = _frustumPlanes[0].GetDistanceToPoint(playerPos.position);
         Plane closestPlane = _frustumPlanes[0];
-        int index = 0;
 
         // Then go through the rest of the planes in the frustum
         for (int i = 1; i < _frustumPlanes.Count; i++)
@@ -150,7 +179,6 @@ public class CameraManager : MonoBehaviour
             {
                 shortestDistance = dist;   
                 closestPlane = _frustumPlanes[i];
-                index = i;
             }
         }
 
@@ -260,13 +288,29 @@ public class CameraManager : MonoBehaviour
 
     public void ActivateCameraHandler(object data)
     {
-        if (data is CinemachineVirtualCamera cam)
+        if (data is CameraData camData)
         {
-            ActivateSelectedCamera(cam);
+            // Reassign follow group if has been deactivated because of being offscreen
+            if (_currentCam != null)
+            {
+                if (_currentCam.CameraType == CameraType.DOLLY)
+                {
+                    _currentCam.VirtualCamera.Follow = _playerFollowGroup.transform;
+                }
+                else if (_currentCam.CameraType == CameraType.DOLLY_LOOK)
+                {
+                    _currentCam.VirtualCamera.Follow = _playerFollowGroup.transform;
+                    _currentCam.VirtualCamera.LookAt= _playerFollowGroup.transform;
+                }
+            }
+
+            // Overwrite current active cam
+            _currentCam = camData;
+            ActivateSelectedCamera(camData.VirtualCamera);
         }
         else
         {
-            Debug.LogError("Did not receive a VirtualCamera");
+            Debug.LogError("Did not receive a CameraData object");
         }
     }
     #endregion
