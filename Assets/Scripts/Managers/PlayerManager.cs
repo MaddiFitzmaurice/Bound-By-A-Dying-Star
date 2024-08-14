@@ -35,7 +35,6 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_PLAYER1);
         EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_PLAYER2);
         EventManager.EventInitialise(EventType.PLAYERMANAGER_REQUEST_FOLLOWGROUP);
-
     }
 
     private void OnEnable()

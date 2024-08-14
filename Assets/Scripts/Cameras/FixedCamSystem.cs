@@ -90,7 +90,7 @@ public class FixedCamSystem : MonoBehaviour
             // If both players are in trigger, activate camera
             if (_p2Entered)
             {
-                EventManager.EventTrigger(EventType.CAMERA_ACTIVATE, _cam);
+                EventManager.EventTrigger(EventType.CAMERA_ACTIVATE, _camData);
             }
         }
         else if (player is Player2)
@@ -99,7 +99,7 @@ public class FixedCamSystem : MonoBehaviour
 
             if (_p1Entered)
             {
-                EventManager.EventTrigger(EventType.CAMERA_ACTIVATE, _cam);
+                EventManager.EventTrigger(EventType.CAMERA_ACTIVATE, _camData);
             }
         }
     }
