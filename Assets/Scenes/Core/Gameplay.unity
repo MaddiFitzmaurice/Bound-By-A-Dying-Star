@@ -3994,6 +3994,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -1.15
       objectReference: {fileID: 0}
+    - target: {fileID: 868458043139488422, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 964433810869957675, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: MoveDecel
       value: 3
@@ -4049,6 +4053,10 @@ PrefabInstance:
     - target: {fileID: 2632272185759781231, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: StepSmoothing
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2775010615063076660, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2879832383240433885, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
       propertyPath: m_LocalPosition.x

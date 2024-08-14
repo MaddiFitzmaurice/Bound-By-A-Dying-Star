@@ -11,8 +11,8 @@ public class SoftPuzzle : MonoBehaviour
     [SerializeField] private GameObject _backwardPuzzle;
 
     [SerializeField, Space(10), Header("Moving Platform")]
-    private GameObject _puzzlePlatform;
-    [SerializeField] private GameObject _puzzleMovePoint;
+    private List<GameObject> _puzzlePlatforms;
+    [SerializeField] private List<GameObject> _puzzleMovePoints;
     [SerializeField] private float _platformMoveSpeed = 2.0f;
 
     [SerializeField, Space(10)] private List<GameObject> _rewardObjs;
@@ -103,49 +103,58 @@ public class SoftPuzzle : MonoBehaviour
             }
         }
 
-        //CompleteSoftPuzzle();
-        StartCoroutine(SwapPuzzle());
-    }
-
-    private IEnumerator SwapPuzzle()
-    {
         // Swap the puzzles
         _forwardPuzzle.SetActive(false);
 
         // INSERT HERE FOR CUTSCENE CAMERA 
 
+        // Moves platforms and swaps puzzle
+        StartCoroutine(MovePlatformsAndActivateBackwardPuzzle());
+    }
+
+    private IEnumerator MovePlatformsAndActivateBackwardPuzzle()
+    {
+        int arrayIndex = 0;
+        List<Coroutine> coroutines = new List<Coroutine>();
+
+        // Loops through each platform and starts to move it to the required position
+        foreach (GameObject platform in _puzzlePlatforms)
+        {
+            coroutines.Add(StartCoroutine(MovePlatforms(platform, arrayIndex)));
+            arrayIndex++;
+        }
+
+        // Waits till all platforms have finished moving
+        foreach (Coroutine coroutine in coroutines)
+        {
+            yield return coroutine;
+        }
+
+        // Activates the backward puzzle and resets the spawn point
+        _backwardPuzzle.SetActive(true);
+        _respawnScript.CurrentSpawnPoint = _respawnScript.BackwardPuzzleRespawnPoint;
+        _puzzleCompleted = true;
+
+    }
+
+    private IEnumerator MovePlatforms(GameObject platform, int index)
+    {
         float elapsedTime = 0f;
 
-        Vector3 initialPositionPlatform = _puzzlePlatform.transform.position;
-
-        Vector3 targetPosition = _puzzleMovePoint.transform.position;
+        Vector3 initialPositionPlatform = platform.transform.position;
+        Vector3 targetPosition = _puzzleMovePoints[index].transform.position;
 
         // Moves platform to the target position, players are automatically moved with the platform containing the "Moving Platform" script
         while (elapsedTime < _platformMoveSpeed)
         {
-            _puzzlePlatform.transform.position = Vector3.Lerp(initialPositionPlatform, targetPosition, elapsedTime / _platformMoveSpeed);
-
+            platform.transform.position = Vector3.Lerp(initialPositionPlatform, targetPosition, elapsedTime / _platformMoveSpeed);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // Activates the backwards puzzle and resets the spawn point
-        _backwardPuzzle.SetActive(true);
-        _respawnScript.CurrentSpawnPoint = _respawnScript.BackwardPuzzleRespawnPoint;
-        _puzzleCompleted = true;
+        // Ensure the platform reaches the target position after the loop
+        platform.transform.position = targetPosition;
     }
-
-    // Remove all references to the soft puzzle so players don't get teleported every time they touch reward obj
-    //private void CompleteSoftPuzzle()
-    //{
-    //    foreach (ISoftPuzzleReward reward in _rewards)
-    //    {
-    //        reward.HeldInSoftPuzzle = false;
-    //        reward.SetSoftPuzzle(null);
-    //    }
-
-    //    EventManager.EventTrigger(EventType.SOFTPUZZLE_COMPLETE, null);
-    //}
 
     public void SetRewardGrouper(Transform transform)
     {
