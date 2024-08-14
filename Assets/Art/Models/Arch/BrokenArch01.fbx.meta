@@ -3,7 +3,12 @@ guid: 50e461b47a078414ca0ce9dc3355e2dc
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BrokenArches
+    second: {fileID: 2100000, guid: c905badf2d5046843a891c4b2ef9d95a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
