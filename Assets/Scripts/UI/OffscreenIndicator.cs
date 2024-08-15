@@ -36,18 +36,18 @@ public class OffscreenIndicator : MonoBehaviour
         _offsetY = _rect.rect.height / 2f;
     }
 
-    public bool UpdatePos(PlayerBase player, Camera cam, RectTransform screen)
+    public void UpdatePos(PlayerBase player, Camera cam, RectTransform screen)
     {
         Vector3 indicatorPos = cam.WorldToScreenPoint(player.transform.position);
 
         // If player is onscreen
-        if (indicatorPos.x > 0f + _offsetX && indicatorPos.x < screen.rect.width - _offsetX &&
-            indicatorPos.y > 0f + _offsetY && indicatorPos.y < screen.rect.height - _offsetY)
-        {
-            return false;
-        }
-        else
-        { 
+        //if (indicatorPos.x > 0f + _offsetX && indicatorPos.x < screen.rect.width - _offsetX &&
+        //    indicatorPos.y > 0f + _offsetY && indicatorPos.y < screen.rect.height - _offsetY)
+        //{
+        //    return false;
+        //}
+        //else
+        //{ 
             if (indicatorPos.x < 0f + _offsetX)
             {
                 indicatorPos.x = _offsetX;
@@ -68,7 +68,7 @@ public class OffscreenIndicator : MonoBehaviour
 
             _rect.position = indicatorPos;
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }
