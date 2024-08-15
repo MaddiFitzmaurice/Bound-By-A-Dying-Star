@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SoftPuzzle : MonoBehaviour
 {
@@ -84,6 +85,8 @@ public class SoftPuzzle : MonoBehaviour
         if (!_player1InPuzzle && !_player2InPuzzle && _puzzleCompleted)
         {
             _puzzleDoor.SetActive(true);
+            // Let level manager know this puzzle is complete
+            EventManager.EventTrigger(EventType.SOFTPUZZLE_COMPLETE, this.gameObject);
         }
     }
 

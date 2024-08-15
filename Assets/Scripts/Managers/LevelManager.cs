@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour
     #endregion
 
     #region INTERNAL DATA
-    //private Queue<GameObject> _softPuzzlesQueue;
+    private Dictionary<GameObject, bool> _softPuzzlesDone;
     #endregion
 
     private void Awake()
@@ -30,12 +30,12 @@ public class LevelManager : MonoBehaviour
 
     private void OnEnable()
     {
-        //EventManager.EventSubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
+        EventManager.EventSubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
     }
 
     private void OnDisable()
     {
-        //EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
+        EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
     }
 
     private void Start()
@@ -58,22 +58,21 @@ public class LevelManager : MonoBehaviour
 
         EventManager.EventTrigger(EventType.MUSIC, "Calm"); // Ensure transition to Calm section
 
-        // Set reward grouper parent and disable all soft puzzles
+        // Convert soft puzzle list to the dictionary
+        _softPuzzlesDone = new Dictionary<GameObject, bool>();
+
+        // Set reward grouper parent
         foreach (GameObject softPuzzle in _softPuzzles)
         {
             softPuzzle.SetActive(true);
+
             if (softPuzzle.GetComponent<SoftPuzzle>() != null)
             {
                 softPuzzle.GetComponent<SoftPuzzle>().SetRewardGrouper(_rewardGrouper.transform);
             }
-            //softPuzzle.SetActive(false);
+
+            _softPuzzlesDone.Add(softPuzzle, false);
         }
-
-        // Convert soft puzzle list to a queue
-        //_softPuzzlesQueue = new Queue<GameObject>(_softPuzzles);
-
-        // Enable first soft puzzle and send its cams
-        //ActivateSoftPuzzle(_softPuzzlesQueue.Peek());
     }
 
     //private void ActivateSoftPuzzle(GameObject softPuzzleToActivate)
@@ -98,12 +97,31 @@ public class LevelManager : MonoBehaviour
     //    ActivateSoftPuzzle(_softPuzzlesQueue.Peek());
     //}
 
-    //#region EVENT HANDLERS
+    #region EVENT HANDLERS
+    public void OnSoftPuzzleComplete(object data)
+    {
+        if (data is GameObject softPuzzle)
+        {
+            if (_softPuzzlesDone.ContainsKey(softPuzzle))
+            {
+                _softPuzzlesDone[softPuzzle] = true;
+            }
+        }
+
+        foreach (KeyValuePair<GameObject, bool> softPuzzleDone in _softPuzzlesDone)
+        {
+            if (!softPuzzleDone.Value)
+            {
+                return;
+            }
+        }
+    }
+
     //// Teleport player and load in next Soft Puzzle
     //public void OnSoftPuzzleComplete(object data)
     //{
     //    StopAllCoroutines();
     //    StartCoroutine(PuzzleTransition());
     //}
-    //#endregion
+    #endregion
 }
