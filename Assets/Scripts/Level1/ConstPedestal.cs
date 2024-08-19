@@ -402,12 +402,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             EventManager.EventTrigger(EventType.HIDE_PROMPT_HOLD_INTERACT, null);
         }
 
-        Debug.Log("player: " + player.CarriedPickupable);
         if (player.CarriedPickupable == null)
         {
-            Debug.Log("IsRotating: " + _isRotating);
-            Debug.Log("CorrectAngle: " + _correctAngle);
-            Debug.Log("BeamCount: " + _beamRenderer.Count);
             if (_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
             {
                 StartCoroutine(RotateMirror(_targetDir));
