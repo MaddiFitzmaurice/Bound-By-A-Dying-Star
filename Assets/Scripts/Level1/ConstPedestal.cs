@@ -7,6 +7,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     private int _id = 0;
     #region EXTERNAL DATA
     public bool InteractLocked { get; set; } = false;
+    [SerializeField] private GameObject _mirrorParent;
     [SerializeField] private List<GameObject> _validInteractables;
     [SerializeField] private GameObject _presetPlacedObject = null;    
     [SerializeField] private float _raiseMirrorHeight = 2.5f;
@@ -79,7 +80,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         // If the bedestal shoots 1 beam or more than 1 beam
         if(_beamDestinations.Count == 1)
         {
-            // Set beam length to be distance between ource and destination
+            // Set beam length to be distance between source and destination
             _beamMaxLength[0] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[0].transform.position), Vector3.zero);
             
             Vector3 offsetTarget = _beamDestinations[0].transform.position;
@@ -186,7 +187,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 if (pickupableType is Level1Mirror)
                 {
                     _mirror = (Level1Mirror)pickupableType;
-                    InitialRotateMirror(_mirror.transform);
+                    SetUpMirror(_mirror.transform);
                 }
             }
             else
@@ -245,7 +246,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     }
 
     // Rotate mirror to initial angle when placing on pedestal
-    private void InitialRotateMirror(Transform mirror)
+    private void SetUpMirror(Transform mirror)
     {
         // Set the mirror's position and rotation to match the pedestal before starting the rotation
         mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
@@ -326,6 +327,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     private bool CheckAngles()
     {
         float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
+
         if(dot > 0.985f) 
         { 
             _correctAngle = true;
@@ -384,10 +386,10 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 // Added due to removal of dropping functionality of mirror
                 _mirror.isFollowing = false;
                 _mirror.emissionPS.enabled = false;
-                _mirror.SetParent(null);
+                _mirror.SetParent(_mirrorParent.transform);
                 player.DropItem();
 
-                InitialRotateMirror(_mirror.transform);
+                SetUpMirror(_mirror.transform);
             }
         }
     }
@@ -400,8 +402,12 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             EventManager.EventTrigger(EventType.HIDE_PROMPT_HOLD_INTERACT, null);
         }
 
+        Debug.Log("player: " + player.CarriedPickupable);
         if (player.CarriedPickupable == null)
         {
+            Debug.Log("IsRotating: " + _isRotating);
+            Debug.Log("CorrectAngle: " + _correctAngle);
+            Debug.Log("BeamCount: " + _beamRenderer.Count);
             if (_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
             {
                 StartCoroutine(RotateMirror(_targetDir));
