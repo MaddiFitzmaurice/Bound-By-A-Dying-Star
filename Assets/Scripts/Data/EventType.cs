@@ -51,6 +51,10 @@ public enum EventType
     CUTSCENE_PLAY,
     CUTSCENE_FINISHED,
 
+    // UI
+    ARTWORK_SHOW,                       // Show artwork in fullscreen
+    ARTWORK_HIDE,                       // Hide fullscreen artwork
+
     // Level
     LEVEL_SPAWN,                        // Spawn players into level for the first time
     SOFTPUZZLE_PLAYER_TELEPORT,         // Teleport players after completing a soft puzzle

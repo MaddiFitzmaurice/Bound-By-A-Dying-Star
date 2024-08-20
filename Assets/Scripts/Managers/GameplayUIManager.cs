@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameplayUIManager : MonoBehaviour
 {
     #region EXTERNAL DATA
     [SerializeField] private OffscreenIndicator _indicatorP1;
     [SerializeField] private OffscreenIndicator _indicatorP2;
+    [SerializeField] private Image _artwork;
     [SerializeField] private GameObject _tapPrompt;
     [SerializeField] private GameObject _holdPrompt;
     #endregion
@@ -36,6 +38,11 @@ public class GameplayUIManager : MonoBehaviour
         _holdPrompt.SetActive(true);
         _tapPrompt.SetActive(false);
         _holdPrompt.SetActive(false);
+        _artwork.gameObject.SetActive(false);
+
+        // Event Init
+        EventManager.EventInitialise(EventType.ARTWORK_SHOW);
+        EventManager.EventInitialise(EventType.ARTWORK_HIDE);
     }
 
     private void OnEnable()
@@ -50,6 +57,8 @@ public class GameplayUIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.HIDE_PROMPT_INTERACT, HideTapPrompt);
         EventManager.EventSubscribe(EventType.PLAYER1_ISOFFSCREEN, IsP1OffscreenHandler);
         EventManager.EventSubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
+        EventManager.EventSubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
+        EventManager.EventSubscribe(EventType.ARTWORK_HIDE, HideArtwork);
     }
 
     public void OnDisable()
@@ -64,6 +73,8 @@ public class GameplayUIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.HIDE_PROMPT_INTERACT, HideTapPrompt);
         EventManager.EventUnsubscribe(EventType.PLAYER1_ISOFFSCREEN, IsP1OffscreenHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
+        EventManager.EventUnsubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
+        EventManager.EventUnsubscribe(EventType.ARTWORK_HIDE, HideArtwork);
     }
 
     public void Update()
@@ -128,6 +139,24 @@ public class GameplayUIManager : MonoBehaviour
     }
 
     #region EVENT FUNCTIONS
+    public void ShowArtwork(object data)
+    {
+        if (data is Sprite artToShow)
+        {
+            _artwork.sprite = artToShow;
+            _artwork.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("GameplayUI did not receive a Sprite for ShowArtwork!");
+        }
+    }
+
+    public void HideArtwork(object data)
+    {
+        _artwork.gameObject.SetActive(false);
+    }
+
     public void IsP1OffscreenHandler(object data)
     {
         // If receiving just a bool, means player is back on screen
