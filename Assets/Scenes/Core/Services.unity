@@ -451,6 +451,13 @@ MonoBehaviour:
       Data3: 1438512033
       Data4: -1573594344
     Path: event:/Pedestal_Rotation
+  <BeamConnection>k__BackingField:
+    Guid:
+      Data1: 1130467853
+      Data2: 1269255618
+      Data3: -622527054
+      Data4: -1657445206
+    Path: event:/Angelic_Ring
   <PressurePlatePlayer1On>k__BackingField:
     Guid:
       Data1: 519979859

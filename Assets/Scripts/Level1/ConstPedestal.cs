@@ -345,6 +345,10 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
             _canRotateMirror = false;
+
+            // Trigger the beam connection sound
+            EventManager.EventTrigger(EventType.BEAM_CONNECTION, transform.position);
+
             return true;
         }
         else
