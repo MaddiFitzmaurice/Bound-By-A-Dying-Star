@@ -73,5 +73,6 @@ public enum EventType
     INTRO,
     ITEM_PICKUP,
     ITEM_DROP,
+    MIRROR_PLACEMENT,
     BACKGROUND_MUSIC,
 };

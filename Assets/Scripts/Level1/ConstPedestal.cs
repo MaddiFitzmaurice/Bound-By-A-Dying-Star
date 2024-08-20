@@ -421,6 +421,9 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 player.DropItem();
 
                 SetUpMirror(_mirror.transform);
+
+                // Trigger mirror placement sound
+                EventManager.EventTrigger(EventType.MIRROR_PLACEMENT, null);
             }
         }
     }

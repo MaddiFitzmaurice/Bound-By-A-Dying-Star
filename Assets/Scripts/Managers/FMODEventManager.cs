@@ -9,12 +9,14 @@ public class FMODEventManager : MonoBehaviour
     [field: Header("Item SFX")]
     [field: SerializeField] public EventReference ItemPickup { get; private set; }
     [field: SerializeField] public EventReference ItemDrop { get; private set; }
+    [field: SerializeField] public EventReference MirrorPlacement { get; private set; }
 
     [field: Header("Music Events")]
     [field: SerializeField] public EventReference BackgroundMusic { get; private set; }
 
     private EventInstance _itemPickupInstance;
     private EventInstance _itemDropInstance;
+    private EventInstance _mirrorPlacementInstance;
     private EventInstance _backgroundMusicInstance;
 
     private const int AMBIENT_POSITION = 0; 
@@ -26,11 +28,13 @@ public class FMODEventManager : MonoBehaviour
         // Initialize events
         EventManager.EventInitialise(EventType.ITEM_PICKUP);
         EventManager.EventInitialise(EventType.ITEM_DROP);
+        EventManager.EventInitialise(EventType.MIRROR_PLACEMENT);
         EventManager.EventInitialise(EventType.BACKGROUND_MUSIC);
 
         // Preload FMOD event instances
         _itemPickupInstance = RuntimeManager.CreateInstance(ItemPickup);
         _itemDropInstance = RuntimeManager.CreateInstance(ItemDrop);
+        _mirrorPlacementInstance = RuntimeManager.CreateInstance(MirrorPlacement);
         _backgroundMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
 
         // Pre-start instances to load resources
@@ -39,6 +43,9 @@ public class FMODEventManager : MonoBehaviour
 
         _itemDropInstance.start();
         _itemDropInstance.setPaused(true);
+
+        _mirrorPlacementInstance.start();
+        _mirrorPlacementInstance.setPaused(true);
 
         _backgroundMusicInstance.start();
         _backgroundMusicInstance.setPaused(true);
@@ -49,6 +56,7 @@ public class FMODEventManager : MonoBehaviour
         // Subscribe to events
         EventManager.EventSubscribe(EventType.ITEM_PICKUP, HandleItemPickup);
         EventManager.EventSubscribe(EventType.ITEM_DROP, HandleItemDrop);
+        EventManager.EventSubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
         EventManager.EventSubscribe(EventType.BACKGROUND_MUSIC, HandleBackgroundMusic);
     }
 
@@ -57,6 +65,7 @@ public class FMODEventManager : MonoBehaviour
         // Unsubscribe from events
         EventManager.EventUnsubscribe(EventType.ITEM_PICKUP, HandleItemPickup);
         EventManager.EventUnsubscribe(EventType.ITEM_DROP, HandleItemDrop);
+        EventManager.EventUnsubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
         EventManager.EventUnsubscribe(EventType.BACKGROUND_MUSIC, HandleBackgroundMusic);
     }
 
@@ -68,6 +77,11 @@ public class FMODEventManager : MonoBehaviour
     private void HandleItemDrop(object data)
     {
         PlayEvent(_itemDropInstance);
+    }
+
+    private void HandleMirrorPlacement(object data)
+    {
+        PlayEvent(_mirrorPlacementInstance);
     }
 
     public void HandleBackgroundMusic(object data)
