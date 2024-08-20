@@ -7,6 +7,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     private int _id = 0;
     #region EXTERNAL DATA
     public bool InteractLocked { get; set; } = false;
+    public bool IsHighlighted { get; set; } = false;
     [SerializeField] private GameObject _mirrorParent;
     [SerializeField] private List<GameObject> _validInteractables;
     [SerializeField] private GameObject _presetPlacedObject = null;    
@@ -317,17 +318,19 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             }
 
             _beamSource.rotation = endRot;
-            _isRotating = CheckAngles();
+            _isRotating = !ReachedTargetAngle();
         }
         _beamTurningPS.Stop();
         yield return null;
     }
 
-    // Check if beam if racing the right angle
-    private bool CheckAngles()
+    // Check if beam if facing the destination angle
+    private bool ReachedTargetAngle()
     {
         float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
 
+        // If desired angle has been reached
+        // TODO: Fix this messy math
         if(dot > 0.985f) 
         { 
             _correctAngle = true;
@@ -335,17 +338,28 @@ public class ConstPedestal : MonoBehaviour, IInteractable
 
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
-            return false;
+            _canRotateMirror = false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
 
     public List<ConstPedestal> ReturnDestinations()
     {
         return _pedestalDestinations;
+    }
+
+    private void ChangeLayers(LayerMask layer)
+    {
+        gameObject.layer = layer;
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.layer = layer;
+        }
     }
 
     #region IINTERACTABLE FUNCTIONS
@@ -355,6 +369,17 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             EventManager.EventTrigger(EventType.SHOW_PROMPT_HOLD_INTERACT, null);
         }
+        
+        if (!IsHighlighted)
+        {
+            // If pedestal has mirror OR if player is holding an interactable, show pedestal as interactable
+            // This may need to change if other items other than the mirror can be picked up
+            if (player.CarriedPickupable != null || (_mirror != null && _canRotateMirror))
+            {
+                ChangeLayers(LayerMask.NameToLayer("HighlightInteract"));
+                IsHighlighted = true;
+            }
+        }
     }
 
     public void PlayerNotInRange(PlayerBase player)
@@ -362,6 +387,12 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         if (_showPrompt && _canRotateMirror && _id == 0)
         {
             EventManager.EventTrigger(EventType.HIDE_PROMPT_HOLD_INTERACT, null);
+        }
+
+        if (IsHighlighted)
+        {
+            ChangeLayers(LayerMask.NameToLayer("Interactables"));
+            IsHighlighted = false;
         }
     }
 
@@ -416,7 +447,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         if (_isRotating)
         {
             StopAllCoroutines();
-            CheckAngles();
+            ReachedTargetAngle();
             _isRotating = false;
             _beamTurningPS.Stop();
         }

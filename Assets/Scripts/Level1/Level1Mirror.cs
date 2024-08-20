@@ -10,6 +10,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     [SerializeField] private float _maxIntensity = 5f;
     [SerializeField] private float _maxDistance = 10f;
     public bool InteractLocked { get; set; } = false;
+    public bool IsHighlighted { get; set; } = false;
     // How high to bob up and down
     [SerializeField] private float _bobbingAmplitude = 0.25f;
     // How often to bob
@@ -81,6 +82,16 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         if (_isBobbingAllowed && _isOnPedestal == false)
         {
             BobbingEffect(_finalRestingPosition);
+        }
+    }
+
+    private void ChangeLayers(LayerMask layer)
+    {
+        gameObject.layer = layer;
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.layer = layer;
         }
     }
 
@@ -259,20 +270,12 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             _isPromptShowing = true;
             EventManager.EventTrigger(EventType.SHOW_PROMPT_INTERACT, null);
         }
-        //if (!isIntensityChanging)
-        //{
-        //    isIntensityChanging = true;
-        //    //Debug.Log("Starting to change light intensity towards maximum.");
 
-        //    LeanTween.value(gameObject, _light.intensity, _maxIntensity, 1f).setOnUpdate((float val) => {
-        //        _light.intensity = val;
-        //        //Debug.Log("Current light intensity: " + val);
-        //    }).setEase(LeanTweenType.easeInOutSine)
-        //    .setOnComplete(() => {
-        //        //Debug.Log("Light intensity change complete. Current intensity: " + _light.intensity);
-        //        isIntensityChanging = false;
-        //    });
-        //}
+        if (!IsHighlighted)
+        {
+            ChangeLayers(LayerMask.NameToLayer("HighlightInteract"));
+            IsHighlighted = true;
+        }
     }
 
     public void PlayerNotInRange(PlayerBase player)
@@ -282,20 +285,12 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             _isPromptShowing = false;
             EventManager.EventTrigger(EventType.HIDE_PROMPT_INTERACT, null);
         }
-        //if (isIntensityChanging)
-        //{
 
-        //    isIntensityChanging = false;
-        //    // Debug.Log("Starting to decrease light intensity towards minimal.");
-        //    LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
-        //        _light.intensity = val;
-        //        // Debug.Log("Current light intensity: " + val);
-        //    }).setEase(LeanTweenType.easeOutSine)
-        //    .setOnComplete(() => {
-        //        // Debug.Log("Light intensity decrease complete. Current intensity: " + _light.intensity);
-        //        isIntensityChanging = true;
-        //    });
-        //}
+        if (IsHighlighted)
+        {
+            ChangeLayers(LayerMask.NameToLayer("Interactables"));
+            IsHighlighted = false;
+        }
     }
 
     public void PlayerStartInteract(PlayerBase player)

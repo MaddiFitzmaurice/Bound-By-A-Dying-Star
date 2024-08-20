@@ -325,6 +325,8 @@ public abstract class PlayerBase : MonoBehaviour
                 _closestInteractable = null;
             }
 
+            interactable.PlayerNotInRange(this);
+
             if (iType == InteractTypes.HOLD)
             {
                 interactable.PlayerHoldInteract(this);
@@ -342,18 +344,19 @@ public abstract class PlayerBase : MonoBehaviour
 
     public void CheckInteract()
     {
-        Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactables"));
+        Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactables", "HighlightInteract"));
         List<Collider> colliders = colliderArray.ToList();
 
         foreach (var collider in colliders)
         {
             IInteractable interactable = collider.GetComponentInParent<IInteractable>();
+            // Only check colliders that have the IInteractable script
             if (interactable != null)
             {
-                // If closest interactable hasn't been assigned yet, assign first one in found collider list
                 // Make sure locked interactable is not included as closest interactable
                 if (!interactable.InteractLocked)
                 {
+                    // If closest interactable hasn't been assigned yet, assign first one in found collider list
                     // Make sure picked up interactable is not included again as a closest interactable
                     if (_closestInteractable == null && collider.transform.parent.gameObject != CarriedPickupable)
                     {
@@ -379,15 +382,15 @@ public abstract class PlayerBase : MonoBehaviour
         // If interactable is no longer in range, add to another list to be deleted safely
         if (_interactablesInRange.Count != 0)
         {
-            foreach (var interactable in _interactablesInRange)
+            foreach (var interactableCollider in _interactablesInRange)
             {
-                if (!colliders.Contains(interactable))
+                if (!colliders.Contains(interactableCollider))
                 {
-                    _interactablesNotInRange.Add(interactable);
+                    _interactablesNotInRange.Add(interactableCollider);
 
-                    if (interactable == _closestInteractable)
+                    if (interactableCollider == _closestInteractable)
                     {
-                        interactable.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
+                        interactableCollider.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
                         _closestInteractable = null;
                     }
                 }

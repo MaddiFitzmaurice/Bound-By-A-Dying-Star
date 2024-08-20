@@ -8,6 +8,7 @@ public class UnlockDoor : MonoBehaviour, IInteractable
     [SerializeField] private GameObject _KeyObject;
 
     public bool InteractLocked { get; set; } = false;
+    public bool IsHighlighted { get; set; } = false;
 
     private void OnTriggerEnter(Collider other)
     {
