@@ -11,12 +11,22 @@ public class FMODEventManager : MonoBehaviour
     [field: SerializeField] public EventReference ItemDrop { get; private set; }
     [field: SerializeField] public EventReference MirrorPlacement { get; private set; }
 
+        [field: Header("Pressure Plate SFX")]
+    [field: SerializeField] public EventReference PressurePlatePlayer1On { get; private set; }
+    [field: SerializeField] public EventReference PressurePlatePlayer1Off { get; private set; }
+    [field: SerializeField] public EventReference PressurePlatePlayer2On { get; private set; }
+    [field: SerializeField] public EventReference PressurePlatePlayer2Off { get; private set; }
+        
     [field: Header("Music Events")]
     [field: SerializeField] public EventReference BackgroundMusic { get; private set; }
 
     private EventInstance _itemPickupInstance;
     private EventInstance _itemDropInstance;
     private EventInstance _mirrorPlacementInstance;
+    private EventInstance _pressurePlatePlayer1OnInstance;
+    private EventInstance _pressurePlatePlayer1OffInstance;
+    private EventInstance _pressurePlatePlayer2OnInstance;
+    private EventInstance _pressurePlatePlayer2OffInstance;
     private EventInstance _backgroundMusicInstance;
 
     private const int AMBIENT_POSITION = 0; 
@@ -29,12 +39,20 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventInitialise(EventType.ITEM_PICKUP);
         EventManager.EventInitialise(EventType.ITEM_DROP);
         EventManager.EventInitialise(EventType.MIRROR_PLACEMENT);
+        EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER1_ON);
+        EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER1_OFF);
+        EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER2_ON);
+        EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER2_OFF);
         EventManager.EventInitialise(EventType.BACKGROUND_MUSIC);
 
         // Preload FMOD event instances
         _itemPickupInstance = RuntimeManager.CreateInstance(ItemPickup);
         _itemDropInstance = RuntimeManager.CreateInstance(ItemDrop);
         _mirrorPlacementInstance = RuntimeManager.CreateInstance(MirrorPlacement);
+        _pressurePlatePlayer1OnInstance = RuntimeManager.CreateInstance(PressurePlatePlayer1On);
+        _pressurePlatePlayer1OffInstance = RuntimeManager.CreateInstance(PressurePlatePlayer1Off);
+        _pressurePlatePlayer2OnInstance = RuntimeManager.CreateInstance(PressurePlatePlayer2On);
+        _pressurePlatePlayer2OffInstance = RuntimeManager.CreateInstance(PressurePlatePlayer2Off);
         _backgroundMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
 
         // Pre-start instances to load resources
@@ -47,6 +65,18 @@ public class FMODEventManager : MonoBehaviour
         _mirrorPlacementInstance.start();
         _mirrorPlacementInstance.setPaused(true);
 
+        _pressurePlatePlayer1OnInstance.start();
+        _pressurePlatePlayer1OnInstance.setPaused(true);
+
+        _pressurePlatePlayer1OffInstance.start();
+        _pressurePlatePlayer1OffInstance.setPaused(true);
+
+        _pressurePlatePlayer2OnInstance.start();
+        _pressurePlatePlayer2OnInstance.setPaused(true);
+
+        _pressurePlatePlayer2OffInstance.start();
+        _pressurePlatePlayer2OffInstance.setPaused(true);
+
         _backgroundMusicInstance.start();
         _backgroundMusicInstance.setPaused(true);
     }
@@ -57,6 +87,10 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.ITEM_PICKUP, HandleItemPickup);
         EventManager.EventSubscribe(EventType.ITEM_DROP, HandleItemDrop);
         EventManager.EventSubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
+        EventManager.EventSubscribe(EventType.PRESSURE_PLATE_PLAYER1_ON, HandlePressurePlatePlayer1On);
+        EventManager.EventSubscribe(EventType.PRESSURE_PLATE_PLAYER1_OFF, HandlePressurePlatePlayer1Off);
+        EventManager.EventSubscribe(EventType.PRESSURE_PLATE_PLAYER2_ON, HandlePressurePlatePlayer2On);
+        EventManager.EventSubscribe(EventType.PRESSURE_PLATE_PLAYER2_OFF, HandlePressurePlatePlayer2Off);
         EventManager.EventSubscribe(EventType.BACKGROUND_MUSIC, HandleBackgroundMusic);
     }
 
@@ -66,6 +100,10 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.ITEM_PICKUP, HandleItemPickup);
         EventManager.EventUnsubscribe(EventType.ITEM_DROP, HandleItemDrop);
         EventManager.EventUnsubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
+        EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER1_ON, HandlePressurePlatePlayer1On);
+        EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER1_OFF, HandlePressurePlatePlayer1Off);
+        EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER2_ON, HandlePressurePlatePlayer2On);
+        EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER2_OFF, HandlePressurePlatePlayer2Off);
         EventManager.EventUnsubscribe(EventType.BACKGROUND_MUSIC, HandleBackgroundMusic);
     }
 
@@ -82,6 +120,23 @@ public class FMODEventManager : MonoBehaviour
     private void HandleMirrorPlacement(object data)
     {
         PlayEvent(_mirrorPlacementInstance);
+    }
+        private void HandlePressurePlatePlayer1On(object data)
+    {
+        PlayEvent(_pressurePlatePlayer1OnInstance);
+    }
+        private void HandlePressurePlatePlayer1Off(object data)
+    {
+        PlayEvent(_pressurePlatePlayer1OffInstance);
+    }
+
+    private void HandlePressurePlatePlayer2On(object data)
+    {
+        PlayEvent(_pressurePlatePlayer2OnInstance);
+    }
+    private void HandlePressurePlatePlayer2Off(object data)
+    {
+        PlayEvent(_pressurePlatePlayer2OffInstance);
     }
 
     public void HandleBackgroundMusic(object data)

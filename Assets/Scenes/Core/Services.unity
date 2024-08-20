@@ -437,6 +437,41 @@ MonoBehaviour:
       Data3: 1337427844
       Data4: -1042647547
     Path: event:/Radiant2
+  <MirrorPlacement>k__BackingField:
+    Guid:
+      Data1: -1449896044
+      Data2: 1212714494
+      Data3: 762834048
+      Data4: 1848053931
+    Path: event:/Mirror_On_Pedestal
+  <PressurePlatePlayer1On>k__BackingField:
+    Guid:
+      Data1: 519979859
+      Data2: 1285762104
+      Data3: -703447921
+      Data4: 497503598
+    Path: event:/Local_Tile_Shift
+  <PressurePlatePlayer1Off>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <PressurePlatePlayer2On>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <PressurePlatePlayer2Off>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   <BackgroundMusic>k__BackingField:
     Guid:
       Data1: 1844927654
