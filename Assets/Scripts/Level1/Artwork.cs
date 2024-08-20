@@ -26,11 +26,13 @@ public class Artwork : MonoBehaviour, IInteractable
         if (!_isArtShowing)
         {
             EventManager.EventTrigger(EventType.ARTWORK_SHOW, _artToShow);
+            EventManager.EventTrigger(EventType.CAN_MOVE, false);
             _isArtShowing = true;
         }
         else
         {
             EventManager.EventTrigger(EventType.ARTWORK_HIDE, null);
+            EventManager.EventTrigger(EventType.CAN_MOVE, true);
             _isArtShowing = false;
         }
     }

@@ -15,6 +15,7 @@ public enum EventType
 
     PLAYER_1_MOVE,
     PLAYER_2_MOVE,
+    CAN_MOVE,
 
     PLAYER_1_INTERACT,
     PLAYER_1_HOLDINTERACT,

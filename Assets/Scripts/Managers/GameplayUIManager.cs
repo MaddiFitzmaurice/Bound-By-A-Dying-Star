@@ -43,6 +43,7 @@ public class GameplayUIManager : MonoBehaviour
         // Event Init
         EventManager.EventInitialise(EventType.ARTWORK_SHOW);
         EventManager.EventInitialise(EventType.ARTWORK_HIDE);
+        EventManager.EventInitialise(EventType.CAN_MOVE);
     }
 
     private void OnEnable()
