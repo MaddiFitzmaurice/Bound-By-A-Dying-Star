@@ -49,6 +49,9 @@ public class ConstPedestal : MonoBehaviour, IInteractable
 
     // Tutorial Prompt
     private static bool _showPrompt = true;
+
+    // Audio Managment 
+    private bool _isRotationSoundPlaying = false;
     #endregion
 
     void Awake()
@@ -297,6 +300,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     {
         _isRotating = true;
         _beamTurningPS.Play();
+        StartRotationSound();
+
         while (_isRotating)
         {
             Quaternion endRot = Quaternion.LookRotation(targetDir, Vector3.up);
@@ -320,6 +325,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             _beamSource.rotation = endRot;
             _isRotating = !ReachedTargetAngle();
         }
+        StopRotationSound();
         _beamTurningPS.Stop();
         yield return null;
     }
@@ -428,6 +434,26 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         }
     }
 
+    private void StartRotationSound()
+    {
+        if (!_isRotationSoundPlaying)
+        {
+            _isRotationSoundPlaying = true;
+            PedestalRotationData rotationData = new PedestalRotationData(1f, transform.position, true);
+            EventManager.EventTrigger(EventType.PEDESTAL_ROTATION, rotationData);
+        }
+    }
+
+    private void StopRotationSound()
+    {
+        if (_isRotationSoundPlaying)
+        {
+            _isRotationSoundPlaying = false;
+            PedestalRotationData rotationData = new PedestalRotationData(0f, transform.position, false);
+            EventManager.EventTrigger(EventType.PEDESTAL_ROTATION, rotationData);
+        }
+    }
+
     public void PlayerHoldInteract(PlayerBase player)
     {
         if (_showPrompt && _canRotateMirror && _id == 0)
@@ -438,14 +464,13 @@ public class ConstPedestal : MonoBehaviour, IInteractable
 
         if (player.CarriedPickupable == null)
         {
-            if (_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
+            if (!_isRotating && _beamRenderer.Count != 0 && !_correctAngle)
             {
                 StartCoroutine(RotateMirror(_targetDir));
             }
         }
     }
-
-    public void PlayerReleaseHoldInteract(PlayerBase player)
+        public void PlayerReleaseHoldInteract(PlayerBase player)
     {
         if (_isRotating)
         {
@@ -453,6 +478,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             ReachedTargetAngle();
             _isRotating = false;
             _beamTurningPS.Stop();
+            StopRotationSound();
         }
     }
     #endregion
