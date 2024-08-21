@@ -221,6 +221,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     // Set start and end point of the beam in local space
     private void SetBeamPositions()
     {
+        Debug.Log("SetBeamPositions");
         int beamCount = _beamRenderer.Count;
 
         if (beamCount == _beamDestinations.Count)
@@ -288,6 +289,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     // Activate beam effects for each destination in list
     public void ActivateEffect()
     {
+        Debug.Log("ActivateEffect");
         foreach (var item in _beamDestinations)
         {
             GameObject newLightbeam = Instantiate(_lightBeam, transform);
