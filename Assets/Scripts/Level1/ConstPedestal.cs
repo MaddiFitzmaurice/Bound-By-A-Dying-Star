@@ -444,8 +444,9 @@ public class ConstPedestal : MonoBehaviour, IInteractable
 
         if (!IsHighlighted)
         {
-            // If pedestal has mirror OR if player is holding an interactable, show pedestal as interactable
-            if (player.CarriedPickupable != null || (_hasMirror && _canRotateMirror))
+            // 1) If player is holding an interactable, show pedestal as interactable
+            // 2) If mirror is on pedestal and is the next to be rotated
+            if (player.CarriedPickupable != null && !_hasMirror || (_hasMirror && _canRotateMirror && _isReflectingBeam))
             {
                 ChangeLayers(LayerMask.NameToLayer("HighlightInteract"));
                 IsHighlighted = true;
