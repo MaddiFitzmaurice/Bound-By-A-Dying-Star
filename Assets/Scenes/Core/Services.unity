@@ -446,18 +446,18 @@ MonoBehaviour:
     Path: event:/Mirror_On_Pedestal
   <MirrorCarryingPlayer1>k__BackingField:
     Guid:
-      Data1: 1229130296
-      Data2: 1305071870
-      Data3: 372293507
-      Data4: 1607710978
-    Path: event:/Temp Silence - Blank Template
+      Data1: -1073276483
+      Data2: 1082699913
+      Data3: -1320383559
+      Data4: -1193919708
+    Path: event:/Muffled_breath
   <MirrorCarryingPlayer2>k__BackingField:
     Guid:
-      Data1: 1229130296
-      Data2: 1305071870
-      Data3: 372293507
-      Data4: 1607710978
-    Path: event:/Temp Silence - Blank Template
+      Data1: -1073276483
+      Data2: 1082699913
+      Data3: -1320383559
+      Data4: -1193919708
+    Path: event:/Muffled_breath
   <PedestalRotation>k__BackingField:
     Guid:
       Data1: -1720521500
