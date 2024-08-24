@@ -20,7 +20,10 @@ public class FMODEventManager : MonoBehaviour
     [field: SerializeField] public EventReference PressurePlatePlayer1Off { get; private set; }
     [field: SerializeField] public EventReference PressurePlatePlayer2On { get; private set; }
     [field: SerializeField] public EventReference PressurePlatePlayer2Off { get; private set; }
-        
+
+    [field: Header("Puzzle Completion SFX")]
+    [field: SerializeField] public EventReference ConstellationComplete { get; private set; }
+
     [field: Header("Music Events")]
     [field: SerializeField] public EventReference BackgroundMusic { get; private set; }
 
@@ -29,6 +32,7 @@ public class FMODEventManager : MonoBehaviour
     private EventInstance _mirrorPlacementInstance;
     private EventInstance _pedestalRotationInstance;
     private EventInstance _beamConnectionInstance;
+    private EventInstance _constellationCompleteInstance;
     private EventInstance _pressurePlatePlayer1OnInstance;
     private EventInstance _pressurePlatePlayer1OffInstance;
     private EventInstance _pressurePlatePlayer2OnInstance;
@@ -47,6 +51,7 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventInitialise(EventType.MIRROR_PLACEMENT);
         EventManager.EventInitialise(EventType.PEDESTAL_ROTATION);
         EventManager.EventInitialise(EventType.BEAM_CONNECTION);
+        EventManager.EventInitialise(EventType.CONSTELLATION_COMPLETE);
         EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER1_ON);
         EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER1_OFF);
         EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER2_ON);
@@ -59,6 +64,7 @@ public class FMODEventManager : MonoBehaviour
         _mirrorPlacementInstance = RuntimeManager.CreateInstance(MirrorPlacement);
         _pedestalRotationInstance = RuntimeManager.CreateInstance(PedestalRotation);
         _beamConnectionInstance = RuntimeManager.CreateInstance(BeamConnection);
+        _constellationCompleteInstance = RuntimeManager.CreateInstance(ConstellationComplete);
         _pressurePlatePlayer1OnInstance = RuntimeManager.CreateInstance(PressurePlatePlayer1On);
         _pressurePlatePlayer1OffInstance = RuntimeManager.CreateInstance(PressurePlatePlayer1Off);
         _pressurePlatePlayer2OnInstance = RuntimeManager.CreateInstance(PressurePlatePlayer2On);
@@ -80,6 +86,9 @@ public class FMODEventManager : MonoBehaviour
 
         _beamConnectionInstance.start();
         _beamConnectionInstance.setPaused(true);
+
+        _constellationCompleteInstance.start();
+        _constellationCompleteInstance.setPaused(true);
 
         _pressurePlatePlayer1OnInstance.start();
         _pressurePlatePlayer1OnInstance.setPaused(true);
@@ -105,6 +114,7 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
         EventManager.EventSubscribe(EventType.PEDESTAL_ROTATION, HandlePedestalRotation);
         EventManager.EventSubscribe(EventType.BEAM_CONNECTION, HandleBeamConnection);
+        EventManager.EventSubscribe(EventType.CONSTELLATION_COMPLETE, HandleConstellationComplete);
         EventManager.EventSubscribe(EventType.PRESSURE_PLATE_PLAYER1_ON, HandlePressurePlatePlayer1On);
         EventManager.EventSubscribe(EventType.PRESSURE_PLATE_PLAYER1_OFF, HandlePressurePlatePlayer1Off);
         EventManager.EventSubscribe(EventType.PRESSURE_PLATE_PLAYER2_ON, HandlePressurePlatePlayer2On);
@@ -120,6 +130,7 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
         EventManager.EventUnsubscribe(EventType.PEDESTAL_ROTATION, HandlePedestalRotation);
         EventManager.EventUnsubscribe(EventType.BEAM_CONNECTION, HandleBeamConnection);
+        EventManager.EventUnsubscribe(EventType.CONSTELLATION_COMPLETE, HandleConstellationComplete);
         EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER1_ON, HandlePressurePlatePlayer1On);
         EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER1_OFF, HandlePressurePlatePlayer1Off);
         EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER2_ON, HandlePressurePlatePlayer2On);
@@ -167,6 +178,11 @@ public class FMODEventManager : MonoBehaviour
             _beamConnectionInstance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
             PlayEvent(_beamConnectionInstance);
         }
+    }
+
+    private void HandleConstellationComplete(object data)
+    {
+        PlayEvent(_constellationCompleteInstance);
     }
 
     private void HandlePressurePlatePlayer1On(object data)

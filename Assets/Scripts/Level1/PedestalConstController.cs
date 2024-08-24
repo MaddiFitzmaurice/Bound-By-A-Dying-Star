@@ -190,6 +190,7 @@ public class PedestalConstController : MonoBehaviour
         if (done)
         {
             Debug.Log("Constellation Complete!");
+            EventManager.EventTrigger(EventType.CONSTELLATION_COMPLETE, null);
             EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _cutsceneDoor);
         }
     }
