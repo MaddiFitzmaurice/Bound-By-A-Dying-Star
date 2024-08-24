@@ -122,6 +122,16 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         //    StartCoroutine(FloatItemToGround());
         //}
         //_player = null;
+
+        // Stop the mirror carrying sound
+        if (_player is Player1)
+        {
+            EventManager.EventTrigger(EventType.MIRROR_CARRYING_PLAYER1, false);
+        }
+        else if (_player is Player2)
+        {
+            EventManager.EventTrigger(EventType.MIRROR_CARRYING_PLAYER2, false);
+        }
     }
 
     public void BePickedUp(PlayerBase player)
@@ -142,6 +152,15 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             collider.enabled = false;
         }
 
+        // Trigger the mirror carrying sound
+        if (player is Player1)
+        {
+            EventManager.EventTrigger(EventType.MIRROR_CARRYING_PLAYER1, true);
+        }
+        else if (player is Player2)
+        {
+            EventManager.EventTrigger(EventType.MIRROR_CARRYING_PLAYER2, true);
+        }
         StartCoroutine(ItemFloatUp(_followTarget));
     }
 

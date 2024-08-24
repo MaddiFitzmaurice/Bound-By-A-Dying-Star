@@ -10,7 +10,9 @@ public class FMODEventManager : MonoBehaviour
     [field: SerializeField] public EventReference ItemPickup { get; private set; }
     [field: SerializeField] public EventReference ItemDrop { get; private set; }
     [field: SerializeField] public EventReference MirrorPlacement { get; private set; }
-    
+    [field: SerializeField] public EventReference MirrorCarryingPlayer1 { get; private set; }
+    [field: SerializeField] public EventReference MirrorCarryingPlayer2 { get; private set; }
+
     [field: Header("Pedestal SFX")]
     [field: SerializeField] public EventReference PedestalRotation { get; private set; }
     [field: SerializeField] public EventReference BeamConnection { get; private set; }
@@ -30,6 +32,8 @@ public class FMODEventManager : MonoBehaviour
     private EventInstance _itemPickupInstance;
     private EventInstance _itemDropInstance;
     private EventInstance _mirrorPlacementInstance;
+    private EventInstance _mirrorCarryingPlayer1Instance;
+    private EventInstance _mirrorCarryingPlayer2Instance;
     private EventInstance _pedestalRotationInstance;
     private EventInstance _beamConnectionInstance;
     private EventInstance _constellationCompleteInstance;
@@ -49,6 +53,8 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventInitialise(EventType.ITEM_PICKUP);
         EventManager.EventInitialise(EventType.ITEM_DROP);
         EventManager.EventInitialise(EventType.MIRROR_PLACEMENT);
+        EventManager.EventInitialise(EventType.MIRROR_CARRYING_PLAYER1);
+        EventManager.EventInitialise(EventType.MIRROR_CARRYING_PLAYER2);
         EventManager.EventInitialise(EventType.PEDESTAL_ROTATION);
         EventManager.EventInitialise(EventType.BEAM_CONNECTION);
         EventManager.EventInitialise(EventType.CONSTELLATION_COMPLETE);
@@ -62,6 +68,8 @@ public class FMODEventManager : MonoBehaviour
         _itemPickupInstance = RuntimeManager.CreateInstance(ItemPickup);
         _itemDropInstance = RuntimeManager.CreateInstance(ItemDrop);
         _mirrorPlacementInstance = RuntimeManager.CreateInstance(MirrorPlacement);
+        _mirrorCarryingPlayer1Instance = RuntimeManager.CreateInstance(MirrorCarryingPlayer1);
+        _mirrorCarryingPlayer2Instance = RuntimeManager.CreateInstance(MirrorCarryingPlayer2);
         _pedestalRotationInstance = RuntimeManager.CreateInstance(PedestalRotation);
         _beamConnectionInstance = RuntimeManager.CreateInstance(BeamConnection);
         _constellationCompleteInstance = RuntimeManager.CreateInstance(ConstellationComplete);
@@ -112,6 +120,8 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.ITEM_PICKUP, HandleItemPickup);
         EventManager.EventSubscribe(EventType.ITEM_DROP, HandleItemDrop);
         EventManager.EventSubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
+        EventManager.EventSubscribe(EventType.MIRROR_CARRYING_PLAYER1, HandleMirrorCarryingPlayer1);
+        EventManager.EventSubscribe(EventType.MIRROR_CARRYING_PLAYER2, HandleMirrorCarryingPlayer2);
         EventManager.EventSubscribe(EventType.PEDESTAL_ROTATION, HandlePedestalRotation);
         EventManager.EventSubscribe(EventType.BEAM_CONNECTION, HandleBeamConnection);
         EventManager.EventSubscribe(EventType.CONSTELLATION_COMPLETE, HandleConstellationComplete);
@@ -128,6 +138,8 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.ITEM_PICKUP, HandleItemPickup);
         EventManager.EventUnsubscribe(EventType.ITEM_DROP, HandleItemDrop);
         EventManager.EventUnsubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
+        EventManager.EventUnsubscribe(EventType.MIRROR_CARRYING_PLAYER1, HandleMirrorCarryingPlayer1);
+        EventManager.EventUnsubscribe(EventType.MIRROR_CARRYING_PLAYER2, HandleMirrorCarryingPlayer2);
         EventManager.EventUnsubscribe(EventType.PEDESTAL_ROTATION, HandlePedestalRotation);
         EventManager.EventUnsubscribe(EventType.BEAM_CONNECTION, HandleBeamConnection);
         EventManager.EventUnsubscribe(EventType.CONSTELLATION_COMPLETE, HandleConstellationComplete);
@@ -152,6 +164,37 @@ public class FMODEventManager : MonoBehaviour
     {
         PlayEvent(_mirrorPlacementInstance);
     }
+
+    private void HandleMirrorCarryingPlayer1(object data)
+    {
+        if (data is bool isCarrying)
+        {
+            if (isCarrying)
+            {
+                _mirrorCarryingPlayer1Instance.start();
+            }
+            else
+            {
+                _mirrorCarryingPlayer1Instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            }
+        }
+    }
+
+    private void HandleMirrorCarryingPlayer2(object data)
+    {
+        if (data is bool isCarrying)
+        {
+            if (isCarrying)
+            {
+                _mirrorCarryingPlayer2Instance.start();
+            }
+            else
+            {
+                _mirrorCarryingPlayer2Instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            }
+        }
+    }
+
 
     private void HandlePedestalRotation(object data)
     {

@@ -444,6 +444,20 @@ MonoBehaviour:
       Data3: 762834048
       Data4: 1848053931
     Path: event:/Mirror_On_Pedestal
+  <MirrorCarryingPlayer1>k__BackingField:
+    Guid:
+      Data1: 1229130296
+      Data2: 1305071870
+      Data3: 372293507
+      Data4: 1607710978
+    Path: event:/Temp Silence - Blank Template
+  <MirrorCarryingPlayer2>k__BackingField:
+    Guid:
+      Data1: 1229130296
+      Data2: 1305071870
+      Data3: 372293507
+      Data4: 1607710978
+    Path: event:/Temp Silence - Blank Template
   <PedestalRotation>k__BackingField:
     Guid:
       Data1: -1720521500
