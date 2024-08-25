@@ -17,24 +17,23 @@ public class SoftPuzzle : MonoBehaviour
     [SerializeField] private float _platformMoveSpeed = 2.0f;
 
     [SerializeField, Space(10)] private List<GameObject> _rewardObjs;
-    [SerializeField] private Respawn _respawnScript;
     [SerializeField] private GameObject _puzzleDoor;
     [SerializeField] private GameObject _softPuzzleCamParent;
     #endregion
 
     #region Internal Data
     private List<ISoftPuzzleReward> _rewards = new List<ISoftPuzzleReward>();
+    private Respawn _respawnScript;
     private bool _player1InPuzzle;
     private bool _player2InPuzzle;
     private bool _puzzleCompleted;
     #endregion
 
-    private void Start()
-    {
-    }
-
     private void Awake()
     {
+        // Component Init
+        _respawnScript = GetComponentInChildren<Respawn>();
+
         // Make sure only 1 or 2 reward objects are assigned
         if (_rewardObjs.Count < 0 || _rewardObjs.Count > 2)
         {
