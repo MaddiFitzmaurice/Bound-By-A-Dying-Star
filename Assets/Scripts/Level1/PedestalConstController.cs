@@ -50,8 +50,8 @@ public class PedestalConstController : MonoBehaviour
         ConstPedestal pedestalSender = linkData.sender;
         int senderIndex = _pedestalList.IndexOf(pedestalSender);
 
-        // Set preset peddestal values so it is shooting beam
-        pedestalSender.ActivateEffect();
+        // Set preset pedestal values so it is shooting beam
+        pedestalSender.ActivateEffect(); // Set up first mirror beam
         foreach (ConstPedestal pedestal in _pedestalList)
         {
             pedestal.ActivateOrb();
@@ -146,8 +146,9 @@ public class PedestalConstController : MonoBehaviour
                 pedestalSender.ActivateEffect();
                 pedestalSender.SetReflectingBeam(true);
             }
-            ConstellationChecker();
         }
+
+        ConstellationChecker();
     }
 
     // checks if constellation is complete, if so sends an event
