@@ -13,7 +13,7 @@ public class SoftPuzzle : MonoBehaviour
 
     [SerializeField, Space(10), Header("Moving Platform")]
     private List<GameObject> _puzzlePlatforms;
-    [SerializeField] private List<GameObject> _puzzleMovePoints;
+    [SerializeField] private List<SoftPuzzleFixedPlatform> _fixedPlatforms;
     [SerializeField] private float _platformMoveSpeed = 2.0f;
 
     [SerializeField, Space(10)] private List<GameObject> _rewardObjs;
@@ -53,6 +53,9 @@ public class SoftPuzzle : MonoBehaviour
             pickupObj.SetSoftPuzzle(this);
             _rewards.Add(pickupObj);
         }
+
+        // Set Forward respawn
+        _respawnScript.ChangeToForwardRespawn();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -134,7 +137,7 @@ public class SoftPuzzle : MonoBehaviour
 
         // Activates the backward puzzle and resets the spawn point
         _backwardPuzzle.SetActive(true);
-        _respawnScript.CurrentSpawnPoint = _respawnScript.BackwardPuzzleRespawnPoint;
+        _respawnScript.ChangeToBackRespawn(_fixedPlatforms);
         _puzzleCompleted = true;
 
     }
@@ -144,7 +147,7 @@ public class SoftPuzzle : MonoBehaviour
         float elapsedTime = 0f;
 
         Vector3 initialPositionPlatform = platform.transform.position;
-        Vector3 targetPosition = _puzzleMovePoints[index].transform.position;
+        Vector3 targetPosition = _fixedPlatforms[index].transform.position;
 
         // Moves platform to the target position, players are automatically moved with the platform containing the "Moving Platform" script
         while (elapsedTime < _platformMoveSpeed)
