@@ -344,7 +344,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     public void CheckInteract()
     {
-        Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactables", "HighlightInteract"));
+        Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1.5f, LayerMask.GetMask("Interactables", "HighlightInteract"));
         List<Collider> colliders = colliderArray.ToList();
 
         foreach (var collider in colliders)
