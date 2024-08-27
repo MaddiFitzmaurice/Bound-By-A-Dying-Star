@@ -37,6 +37,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     {
         //_inputs = new InputActions();
         //_inputs.Gameplay.SetCallbacks(this);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         _player1Inputs = new Player1InputActions();
         _player2Inputs = new Player2InputActions();
