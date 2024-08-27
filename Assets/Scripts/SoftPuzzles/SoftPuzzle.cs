@@ -22,7 +22,6 @@ public class SoftPuzzle : MonoBehaviour
     [Header("Puzzle Components")]
     [SerializeField, Space(10)] private List<GameObject> _rewardObjs;
     [SerializeField] private GameObject _puzzleDoor;
-    [SerializeField] private GameObject _softPuzzleCamParent;
     #endregion
 
     #region Internal Data
@@ -65,8 +64,8 @@ public class SoftPuzzle : MonoBehaviour
 
         // Set Forward respawn
         _respawnScript.ChangeToForwardRespawn();
-        _forwardCams.SetActive(true);
-        _backwardCams.SetActive(false);
+        //_forwardCams.SetActive(true);
+        //_backwardCams.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -101,11 +100,6 @@ public class SoftPuzzle : MonoBehaviour
             // Let level manager know this puzzle is complete
             EventManager.EventTrigger(EventType.SOFTPUZZLE_COMPLETE, this.gameObject);
         }
-    }
-
-    public GameObject SendReceiveCams()
-    {
-        return _softPuzzleCamParent;
     }
 
     public void CheckAllRewardsHeld()

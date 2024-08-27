@@ -48,25 +48,26 @@ public class OffscreenIndicator : MonoBehaviour
         //}
         //else
         //{ 
-            if (indicatorPos.x < 0f + _offsetX)
-            {
-                indicatorPos.x = _offsetX;
-            }
-            else if (indicatorPos.x > screen.rect.width - _offsetX)
-            {
-                indicatorPos.x = screen.rect.width - _offsetX;
-            }
+        if (indicatorPos.x < 0f)
+        {
+            indicatorPos.x = 200f;
+        }
+        else if (indicatorPos.x > screen.rect.width)
+        {
+            indicatorPos.x = screen.rect.width - 200f;
+        }
 
-            if (indicatorPos.y < 0f + _offsetY)
-            {
-                indicatorPos.y = _offsetY;
-            }
-            else if (indicatorPos.y > screen.rect.height - _offsetY)
-            {
-                indicatorPos.y = screen.rect.height - _offsetY;
-            }
+        if (indicatorPos.y < 0f - _offsetY)
+        {
+            indicatorPos.y = _offsetY;
+        }
+        else if (indicatorPos.y > screen.rect.height + _offsetY)
+        {
+            indicatorPos.y = screen.rect.height - _offsetY;
+        }
 
-            _rect.position = indicatorPos;
+        indicatorPos.z = 0;
+        _rect.position = indicatorPos;
 
         //    return true;
         //}

@@ -66,7 +66,7 @@ public class Respawn : MonoBehaviour
     {
         _currentSpawnPoint = null;
 
-        if (fixedPlatforms.Count == 1 || fixedPlatforms.Count == 2)
+        if (fixedPlatforms.Count == 2)
         {
             for (int i = 0; i < fixedPlatforms.Count; i++)
             {
@@ -80,6 +80,11 @@ public class Respawn : MonoBehaviour
                     _p2SpawnPointGroup = i + 1;
                 }
             }
+        }
+        else if (fixedPlatforms.Count == 1)
+        {
+            _p1SpawnPointGroup = 1;
+            _p2SpawnPointGroup = 1;
         }
         else
         {
