@@ -31,15 +31,14 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     private List<float> _beamMaxLength = new List<float>();
 
     // Components
-    private Renderer _diskRenderer;
     private PedestalConstController _conController;
-
     private List<LineRenderer> _beamRenderer = new List<LineRenderer>();
 
     // Mirror
     private Level1Mirror _mirror = null;
     private Vector3 _targetDir;
     private Quaternion _startRot;
+    private PlayerBase _playerRotating = null;
 
     // Tutorial Prompt
     private static bool _showPrompt = true;
@@ -64,7 +63,6 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     void Awake()
     {
         // Get the Renderer component from the disk
-        _diskRenderer = GetComponentInChildren<Renderer>();
         _conController = GetComponentInParent<PedestalConstController>();
         _pedestalDestinations = new List<ConstPedestal>();
         foreach (GameObject dest in _beamDestinations)
@@ -466,6 +464,20 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             ChangeLayers(LayerMask.NameToLayer("Interactables"));
             IsHighlighted = false;
         }
+
+        if (_isRotating)
+        {
+            // If player who is rotating is the one who released
+            if (player == _playerRotating)
+            {
+                _playerRotating = null;
+                StopAllCoroutines();
+                ReachedTargetAngle();
+                _isRotating = false;
+                _beamTurningPS.Stop();
+                StopRotationSound();
+            }
+        }
     }
 
     public void PlayerStartInteract(PlayerBase player)
@@ -532,6 +544,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             if (!_isRotating && _beamRenderer.Count != 0 && !_isAligned)
             {
+                // Set player as the one rotating the mirror
+                _playerRotating = player;
                 StartCoroutine(RotateMirror(_targetDir));
             }
         }
@@ -541,11 +555,16 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     {
         if (_isRotating)
         {
-            StopAllCoroutines();
-            ReachedTargetAngle();
-            _isRotating = false;
-            _beamTurningPS.Stop();
-            StopRotationSound();
+            // If player who is rotating is the one who released
+            if (player == _playerRotating)
+            {
+                _playerRotating = null;
+                StopAllCoroutines();
+                ReachedTargetAngle();
+                _isRotating = false;
+                _beamTurningPS.Stop();
+                StopRotationSound();
+            }
         }
     }
     #endregion
