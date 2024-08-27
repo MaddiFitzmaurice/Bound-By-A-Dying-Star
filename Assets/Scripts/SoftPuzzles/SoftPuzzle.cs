@@ -124,7 +124,7 @@ public class SoftPuzzle : MonoBehaviour
         // Loops through each platform and starts to move it to the required position
         foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
         {
-            coroutines.Add(StartCoroutine(MovePlatforms(platform.gameObject, arrayIndex)));
+            coroutines.Add(StartCoroutine(MovePlatforms(platform.gameObject)));
             arrayIndex++;
         }
 
@@ -141,12 +141,12 @@ public class SoftPuzzle : MonoBehaviour
 
     }
 
-    private IEnumerator MovePlatforms(GameObject platform, int index)
+    private IEnumerator MovePlatforms(SoftPuzzleFixedPlatform platform)
     {
         float elapsedTime = 0f;
 
         Vector3 initialPositionPlatform = platform.transform.position;
-        Vector3 targetPosition = _fixedPlatforms[index].transform.position;
+        Vector3 targetPosition = platform.MoveToPos.position;
 
         // Moves platform to the target position, players are automatically moved with the platform containing the "Moving Platform" script
         while (elapsedTime < _platformMoveSpeed)

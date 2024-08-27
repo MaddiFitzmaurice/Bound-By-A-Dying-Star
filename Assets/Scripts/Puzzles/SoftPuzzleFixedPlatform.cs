@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SoftPuzzleFixedPlatform : MonoBehaviour
 {
+    [field: SerializeField] public Transform MoveToPos { get; private set; }
     public bool HasPlayer1 { get; private set; } = false;
     public bool HasPlayer2 { get; private set; } = false;
 
