@@ -118,14 +118,12 @@ public class SoftPuzzle : MonoBehaviour
 
     private IEnumerator MovePlatformsAndActivateBackwardPuzzle()
     {
-        int arrayIndex = 0;
         List<Coroutine> coroutines = new List<Coroutine>();
 
         // Loops through each platform and starts to move it to the required position
         foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
         {
             coroutines.Add(StartCoroutine(MovePlatforms(platform)));
-            arrayIndex++;
         }
 
         // Waits till all platforms have finished moving
@@ -138,7 +136,6 @@ public class SoftPuzzle : MonoBehaviour
         _backwardPuzzle.SetActive(true);
         _respawnScript.ChangeToBackRespawn(_fixedPlatforms);
         _puzzleCompleted = true;
-
     }
 
     private IEnumerator MovePlatforms(SoftPuzzleFixedPlatform platform)
