@@ -15,6 +15,11 @@ public class SoftPuzzle : MonoBehaviour
     [SerializeField] private List<SoftPuzzleFixedPlatform> _fixedPlatforms;
     [SerializeField] private float _platformMoveSpeed = 2.0f;
 
+    [Header("Cameras")]
+    [SerializeField] private GameObject _forwardCams;
+    [SerializeField] private GameObject _backwardCams;
+
+    [Header("Puzzle Components")]
     [SerializeField, Space(10)] private List<GameObject> _rewardObjs;
     [SerializeField] private GameObject _puzzleDoor;
     [SerializeField] private GameObject _softPuzzleCamParent;
@@ -39,6 +44,11 @@ public class SoftPuzzle : MonoBehaviour
             Debug.LogError("Please assign either 1 or 2 reward objects to SoftPuzzle!");
         }
 
+        if (_forwardCams == null || _backwardCams == null)
+        {
+            Debug.LogError("Please assign cameras!");
+        }
+
         // Check if objects added subscribe to IReward
         foreach (GameObject obj in _rewardObjs)
         {
@@ -55,6 +65,8 @@ public class SoftPuzzle : MonoBehaviour
 
         // Set Forward respawn
         _respawnScript.ChangeToForwardRespawn();
+        _forwardCams.SetActive(true);
+        _backwardCams.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -134,6 +146,8 @@ public class SoftPuzzle : MonoBehaviour
 
         // Activates the backward puzzle and resets the spawn point
         _backwardPuzzle.SetActive(true);
+        _forwardCams.SetActive(false);
+        _backwardCams.SetActive(true);
         _respawnScript.ChangeToBackRespawn(_fixedPlatforms);
         _puzzleCompleted = true;
     }
