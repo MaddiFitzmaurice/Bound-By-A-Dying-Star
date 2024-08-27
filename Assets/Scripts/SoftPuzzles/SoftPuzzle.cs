@@ -124,7 +124,7 @@ public class SoftPuzzle : MonoBehaviour
         // Loops through each platform and starts to move it to the required position
         foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
         {
-            coroutines.Add(StartCoroutine(MovePlatforms(platform.gameObject)));
+            coroutines.Add(StartCoroutine(MovePlatforms(platform)));
             arrayIndex++;
         }
 
