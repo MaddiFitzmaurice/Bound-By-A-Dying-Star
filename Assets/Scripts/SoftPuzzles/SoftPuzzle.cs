@@ -11,8 +11,7 @@ public class SoftPuzzle : MonoBehaviour
     private GameObject _forwardPuzzle;
     [SerializeField] private GameObject _backwardPuzzle;
 
-    [SerializeField, Space(10), Header("Moving Platform")]
-    private List<GameObject> _puzzlePlatforms;
+    [Header("Moving Platform Data")]
     [SerializeField] private List<SoftPuzzleFixedPlatform> _fixedPlatforms;
     [SerializeField] private float _platformMoveSpeed = 2.0f;
 
@@ -123,9 +122,9 @@ public class SoftPuzzle : MonoBehaviour
         List<Coroutine> coroutines = new List<Coroutine>();
 
         // Loops through each platform and starts to move it to the required position
-        foreach (GameObject platform in _puzzlePlatforms)
+        foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
         {
-            coroutines.Add(StartCoroutine(MovePlatforms(platform, arrayIndex)));
+            coroutines.Add(StartCoroutine(MovePlatforms(platform.gameObject, arrayIndex)));
             arrayIndex++;
         }
 
