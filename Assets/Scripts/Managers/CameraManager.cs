@@ -77,6 +77,20 @@ public class CameraManager : MonoBehaviour
     }
     #endregion
 
+    // Shrink the frustum planes so players will still appear slightly onscreen
+    // but will still be flagged as offscreen
+    private List<Plane> AdjustPlanePositions(List<Plane> frustumPlanes)
+    {
+        for (int i = 0; i < frustumPlanes.Count; i++)
+        {
+            // Use normal and reverse it for translate direction
+            Vector3 translateDir = -(frustumPlanes[i].normal.normalized);
+            frustumPlanes[i] = Plane.Translate(frustumPlanes[i], translateDir);
+        }
+
+        return frustumPlanes;
+    }
+
     // Offscreen Check Functionality 
     private void PlayersOffscreenCheck()
     {
@@ -84,7 +98,8 @@ public class CameraManager : MonoBehaviour
         {
             // Get camera's frustum planes
             _frustumPlanes = GeometryUtility.CalculateFrustumPlanes(_cam).ToList();
-
+            _frustumPlanes = AdjustPlanePositions(_frustumPlanes);
+            
             // Check if Player 1 is offscreen
             if (_p1Collider != null)
             {
