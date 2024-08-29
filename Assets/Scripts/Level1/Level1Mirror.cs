@@ -10,6 +10,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     [SerializeField] private float _maxIntensity = 5f;
     [SerializeField] private float _maxDistance = 10f;
     public bool InteractLocked { get; set; } = false;
+    public bool IsHighlighted { get; set; } = false;
     // How high to bob up and down
     [SerializeField] private float _bobbingAmplitude = 0.25f;
     // How often to bob
@@ -84,6 +85,16 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         }
     }
 
+    private void ChangeLayers(LayerMask layer)
+    {
+        gameObject.layer = layer;
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.layer = layer;
+        }
+    }
+
     #region IPICKUPABLE FUNCTIONS
     public void PickupLocked(bool flag)
     {
@@ -111,6 +122,16 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         //    StartCoroutine(FloatItemToGround());
         //}
         //_player = null;
+
+        // Stop the mirror carrying sound
+        if (_player is Player1)
+        {
+            EventManager.EventTrigger(EventType.MIRROR_CARRYING_PLAYER1, false);
+        }
+        else if (_player is Player2)
+        {
+            EventManager.EventTrigger(EventType.MIRROR_CARRYING_PLAYER2, false);
+        }
     }
 
     public void BePickedUp(PlayerBase player)
@@ -131,6 +152,15 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             collider.enabled = false;
         }
 
+        // Trigger the mirror carrying sound
+        if (player is Player1)
+        {
+            EventManager.EventTrigger(EventType.MIRROR_CARRYING_PLAYER1, true);
+        }
+        else if (player is Player2)
+        {
+            EventManager.EventTrigger(EventType.MIRROR_CARRYING_PLAYER2, true);
+        }
         StartCoroutine(ItemFloatUp(_followTarget));
     }
 
@@ -259,20 +289,12 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             _isPromptShowing = true;
             EventManager.EventTrigger(EventType.SHOW_PROMPT_INTERACT, null);
         }
-        //if (!isIntensityChanging)
-        //{
-        //    isIntensityChanging = true;
-        //    //Debug.Log("Starting to change light intensity towards maximum.");
 
-        //    LeanTween.value(gameObject, _light.intensity, _maxIntensity, 1f).setOnUpdate((float val) => {
-        //        _light.intensity = val;
-        //        //Debug.Log("Current light intensity: " + val);
-        //    }).setEase(LeanTweenType.easeInOutSine)
-        //    .setOnComplete(() => {
-        //        //Debug.Log("Light intensity change complete. Current intensity: " + _light.intensity);
-        //        isIntensityChanging = false;
-        //    });
-        //}
+        if (!IsHighlighted)
+        {
+            ChangeLayers(LayerMask.NameToLayer("HighlightInteract"));
+            IsHighlighted = true;
+        }
     }
 
     public void PlayerNotInRange(PlayerBase player)
@@ -282,20 +304,12 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
             _isPromptShowing = false;
             EventManager.EventTrigger(EventType.HIDE_PROMPT_INTERACT, null);
         }
-        //if (isIntensityChanging)
-        //{
 
-        //    isIntensityChanging = false;
-        //    // Debug.Log("Starting to decrease light intensity towards minimal.");
-        //    LeanTween.value(gameObject, _light.intensity, 0f, 1f).setOnUpdate((float val) => {
-        //        _light.intensity = val;
-        //        // Debug.Log("Current light intensity: " + val);
-        //    }).setEase(LeanTweenType.easeOutSine)
-        //    .setOnComplete(() => {
-        //        // Debug.Log("Light intensity decrease complete. Current intensity: " + _light.intensity);
-        //        isIntensityChanging = true;
-        //    });
-        //}
+        if (IsHighlighted)
+        {
+            ChangeLayers(LayerMask.NameToLayer("Interactables"));
+            IsHighlighted = false;
+        }
     }
 
     public void PlayerStartInteract(PlayerBase player)

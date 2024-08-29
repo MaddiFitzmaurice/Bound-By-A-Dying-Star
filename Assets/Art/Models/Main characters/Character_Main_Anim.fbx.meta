@@ -3,7 +3,12 @@ guid: 79387863c79e116479905669908c0139
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Clothing
+    second: {fileID: 2100000, guid: 981e295c06a19734ea736c0a00867d79, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -17,12 +22,7 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: "Avatar Rig Configuration mis-match. Bone length in configuration
-      does not match position in animation file:\n\t'L.Thigh' : position error =
-      122.308220 mm\n\t'L.Leg' : position error = 164.473816 mm\n\t'L.Feet' : position
-      error = 147.805481 mm\n\t'R.Thigh' : position error = 122.308220 mm\n\t'R.Leg'
-      : position error = 164.473816 mm\n\t'R.Feet' : position error = 147.805481
-      mm\n"
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 

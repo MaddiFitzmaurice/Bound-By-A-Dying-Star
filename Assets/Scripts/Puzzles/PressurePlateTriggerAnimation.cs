@@ -20,6 +20,8 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
     private bool _isPressed = false;
     private int _objectsOnPlate = 0;
 
+    private string _lastPlayerTag = "";
+
     void Start()
     {
         if (_plate == null)
@@ -48,7 +50,16 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
                 StopAllCoroutines();
                 StartCoroutine(SinkPlate(_targetPosition));
                 //_glowEffect.Play();
+
                 // TRIGGER AUDIO EVENT HERE
+                if (other.CompareTag(_playerTag1))
+                {
+                    EventManager.EventTrigger(EventType.PRESSURE_PLATE_PLAYER1_ON, transform.position);
+                }
+                else if (other.CompareTag(_playerTag2))
+                {
+                    EventManager.EventTrigger(EventType.PRESSURE_PLATE_PLAYER2_ON, transform.position);
+                }
             }
         }
     }
@@ -64,7 +75,18 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
                 StopAllCoroutines();
                 StartCoroutine(SinkPlate(_originalPosition));
                 //_glowEffect.Stop();
+
                 // TRIGGER AUDIO EVENT HERE
+                if (_lastPlayerTag == _playerTag1)
+                {
+                    EventManager.EventTrigger(EventType.PRESSURE_PLATE_PLAYER1_OFF, transform.position);
+                }
+                else if (_lastPlayerTag == _playerTag2)
+                {
+                    EventManager.EventTrigger(EventType.PRESSURE_PLATE_PLAYER2_OFF, transform.position);
+                }
+
+                _lastPlayerTag = "";
             }
         }
     }

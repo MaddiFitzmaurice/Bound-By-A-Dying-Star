@@ -64,6 +64,7 @@ public abstract class PlayerBase : MonoBehaviour
     protected InteractTypes MoveType;
     protected float PlayerZAngle;
     protected bool FacingMoveDir = false;
+    protected bool _canMove = true;
     private Vector3 _orientation = Vector3.up;
 
     // Camera Frustum Data
@@ -114,12 +115,14 @@ public abstract class PlayerBase : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
         EventManager.EventSubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
+        EventManager.EventSubscribe(EventType.CAN_MOVE, CanMoveHandler);
     }
 
     protected virtual void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
         EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
+        EventManager.EventUnsubscribe(EventType.CAN_MOVE, CanMoveHandler);
     }
 
     private void Update()
@@ -140,67 +143,74 @@ public abstract class PlayerBase : MonoBehaviour
     // Movement
     public void PlayerMovement()
     {
-        // Calculate desired velocity
-        float targetVelocity = MoveInput.magnitude * MoveSpeed;
-
-        // Find diff between desired velocity and current velocity
-        float velocityDif = targetVelocity - _rb.velocity.magnitude;
-
-        // Check whether to accel or deccel
-        float accelRate = (Mathf.Abs(targetVelocity) > 0.01f) ? MoveAccel :
-            MoveDecel;
-
-        // Calc force by multiplying accel and velocity diff, and applying velocity power
-        float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, VelocityPower)
-            * Mathf.Sign(velocityDif);
-
-        if (FacingMoveDir)
+        if (_canMove)
         {
-            // If is onscreen, move normally
-            if (!IsOffscreen)
-            {
-                _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
-            }
-            // Else if offscreen, restrict movement
-            else
-            {
-                // Update plane normal and 0 out y component (players don't walk in Y dir)
-                Vector3 closestPlaneNormal = ClosestPlane.normal;
-                closestPlaneNormal.y = 0f;
+            // Calculate desired velocity
+            float targetVelocity = MoveInput.magnitude * MoveSpeed;
 
-                // Make sure player only moves either less than perpendicular to plane's normal or walks back to be onscreen
-                if (Vector3.Dot(transform.forward, closestPlaneNormal.normalized) >= 0.2f)
+            // Find diff between desired velocity and current velocity
+            float velocityDif = targetVelocity - _rb.velocity.magnitude;
+
+            // Check whether to accel or deccel
+            float accelRate = (Mathf.Abs(targetVelocity) > 0.01f) ? MoveAccel :
+                MoveDecel;
+
+            // Calc force by multiplying accel and velocity diff, and applying velocity power
+            float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, VelocityPower)
+                * Mathf.Sign(velocityDif);
+
+            if (FacingMoveDir)
+            {
+                // If is onscreen, move normally
+                if (!IsOffscreen)
                 {
                     _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
                 }
-            }
-        }
+                // Else if offscreen, restrict movement
+                else
+                {
+                    // Update plane normal and 0 out y component (players don't walk in Y dir)
+                    Vector3 closestPlaneNormal = ClosestPlane.normal;
+                    closestPlaneNormal.y = 0f;
 
-        // Update Animator
-        PlayerAnimation();
+                    // Make sure player only moves either less than perpendicular to plane's normal or walks back to be onscreen
+                    if (Vector3.Dot(transform.forward, closestPlaneNormal.normalized) >= 0.2f)
+                    {
+                        _rb.AddForce(movementForce * transform.forward * MoveInput.magnitude);
+                    }
+                }
+            }
+
+            // Update Animator
+            PlayerAnimation();
+        }
     }
 
     public void PlayerRotation()
     {
-        if (Vector3.Dot(PrevMoveInput, MoveInput) < 0.85f)
+        if (_canMove)
         {
-            _prevCam = _currentCam;
-        }
-
-        if (MoveInput.magnitude != 0)
-        {
-            var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCam.transform.eulerAngles.y, 0));
-            var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
-
-            if (Vector3.Dot(transform.forward, skewedInput) > 0.99f)
+            // If enough of a cam change has occurred to change the current cam
+            if (Vector3.Dot(PrevMoveInput, MoveInput) < 0.85f)
             {
-                FacingMoveDir = true;
+                _prevCam = _currentCam;
             }
-            else
+
+            if (MoveInput.magnitude != 0)
             {
-                FacingMoveDir = false;
-                Vector3 turnDir = Vector3.RotateTowards(transform.forward, skewedInput, RotationSpeed * Time.deltaTime, 1f);
-                transform.rotation = Quaternion.LookRotation(turnDir, _orientation);
+                var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, _prevCam.transform.eulerAngles.y, 0));
+                var skewedInput = matrix.MultiplyPoint3x4(MoveInput);
+
+                if (Vector3.Dot(transform.forward, skewedInput) > 0.99f)
+                {
+                    FacingMoveDir = true;
+                }
+                else
+                {
+                    FacingMoveDir = false;
+                    Vector3 turnDir = Vector3.RotateTowards(transform.forward, skewedInput, RotationSpeed * Time.deltaTime, 1f);
+                    transform.rotation = Quaternion.LookRotation(turnDir, _orientation);
+                }
             }
         }
     }
@@ -315,6 +325,8 @@ public abstract class PlayerBase : MonoBehaviour
                 _closestInteractable = null;
             }
 
+            interactable.PlayerNotInRange(this);
+
             if (iType == InteractTypes.HOLD)
             {
                 interactable.PlayerHoldInteract(this);
@@ -332,18 +344,19 @@ public abstract class PlayerBase : MonoBehaviour
 
     public void CheckInteract()
     {
-        Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactables"));
+        Collider[] colliderArray = Physics.OverlapSphere(transform.position, 1.5f, LayerMask.GetMask("Interactables", "HighlightInteract"));
         List<Collider> colliders = colliderArray.ToList();
 
         foreach (var collider in colliders)
         {
             IInteractable interactable = collider.GetComponentInParent<IInteractable>();
+            // Only check colliders that have the IInteractable script
             if (interactable != null)
             {
-                // If closest interactable hasn't been assigned yet, assign first one in found collider list
                 // Make sure locked interactable is not included as closest interactable
                 if (!interactable.InteractLocked)
                 {
+                    // If closest interactable hasn't been assigned yet, assign first one in found collider list
                     // Make sure picked up interactable is not included again as a closest interactable
                     if (_closestInteractable == null && collider.transform.parent.gameObject != CarriedPickupable)
                     {
@@ -369,15 +382,15 @@ public abstract class PlayerBase : MonoBehaviour
         // If interactable is no longer in range, add to another list to be deleted safely
         if (_interactablesInRange.Count != 0)
         {
-            foreach (var interactable in _interactablesInRange)
+            foreach (var interactableCollider in _interactablesInRange)
             {
-                if (!colliders.Contains(interactable))
+                if (!colliders.Contains(interactableCollider))
                 {
-                    _interactablesNotInRange.Add(interactable);
+                    _interactablesNotInRange.Add(interactableCollider);
 
-                    if (interactable == _closestInteractable)
+                    if (interactableCollider == _closestInteractable)
                     {
-                        interactable.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
+                        interactableCollider.GetComponentInParent<IInteractable>().PlayerNotInRange(this);
                         _closestInteractable = null;
                     }
                 }
@@ -416,6 +429,18 @@ public abstract class PlayerBase : MonoBehaviour
     #endregion
 
     #region EVENT HANDLERS
+    public void CanMoveHandler(object data)
+    {
+        if (data is bool canMove)
+        {
+            _canMove = canMove;
+        }
+        else
+        {
+            Debug.LogError("Did not receive a bool!");
+        }
+    }
+
     public void OffScreenHandler(object data)
     {
         // If receiving just a bool, means player is back on screen

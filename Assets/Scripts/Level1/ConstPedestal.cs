@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class ConstPedestal : MonoBehaviour, IInteractable
 {
-    private int _id = 0;
     #region EXTERNAL DATA
-    public bool InteractLocked { get; set; } = false;
+    [SerializeField] private GameObject _mirrorParent;
     [SerializeField] private List<GameObject> _validInteractables;
-    [SerializeField] private GameObject _presetPlacedObject = null;    
+    [SerializeField] private GameObject _presetPlacedObject = null;
     [SerializeField] private float _raiseMirrorHeight = 2.5f;
 
     // Moving the Beam once it is activated
@@ -24,36 +23,47 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     [SerializeField] private float _raiseLightBeam = 1f;
     [SerializeField] private Transform _beamSource;
     [SerializeField] private ParticleSystem _beamTurningPS;
-
     #endregion
 
     #region INTERNAL DATA
+    private int _id = 0;
     private List<ConstPedestal> _pedestalDestinations;
     private List<float> _beamMaxLength = new List<float>();
-    
-    // Components
-    private Renderer _diskRenderer;
-    private PedestalConstController _conController;
 
+    // Components
+    private PedestalConstController _conController;
     private List<LineRenderer> _beamRenderer = new List<LineRenderer>();
-    
+
     // Mirror
     private Level1Mirror _mirror = null;
     private Vector3 _targetDir;
-    private bool _isRotating = false;
-    private bool _correctAngle = false;
-    Quaternion _startRot;
-    private bool _canRotateMirror = false;
+    private Quaternion _startRot;
+    private PlayerBase _playerRotating = null;
 
     // Tutorial Prompt
     private static bool _showPrompt = true;
+
+    // Audio Management 
+    private bool _isRotationSoundPlaying = false;
+
+    // New state flags
+    private bool _hasMirror = false;
+    private bool _isReceivingBeam = false;
+    private bool _isReflectingBeam = false;
+    private bool _isAligned = false;
+    private bool _isRotating = false;
+    private bool _canRotateMirror = false;
+    #endregion
+
+    #region PROPERTIES
+    public bool InteractLocked { get; set; } = false;
+    public bool IsHighlighted { get; set; } = false;
     #endregion
 
     void Awake()
     {
         // Get the Renderer component from the disk
-        _diskRenderer = GetComponentInChildren<Renderer>();
-        _conController = GetComponentInParent<PedestalConstController>();  
+        _conController = GetComponentInParent<PedestalConstController>();
         _pedestalDestinations = new List<ConstPedestal>();
         foreach (GameObject dest in _beamDestinations)
         {
@@ -72,69 +82,13 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         StopAllCoroutines();
     }
 
-    // Check if Pedestal has a preset object placed on it
-    // if so, place it on the pedestal
     void Start()
     {
-        // If the bedestal shoots 1 beam or more than 1 beam
-        if(_beamDestinations.Count == 1)
-        {
-            // Set beam length to be distance between ource and destination
-            _beamMaxLength[0] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[0].transform.position), Vector3.zero);
-            
-            Vector3 offsetTarget = _beamDestinations[0].transform.position;
-            offsetTarget = new Vector3(offsetTarget.x, _beamSource.position.y, offsetTarget.z);
-            
-            // Set target direction to be the 1 target
-            _targetDir = offsetTarget - _beamSource.position;
-            _beamSource.rotation = Quaternion.LookRotation(_targetDir);
-            
-            // Then add initial offset to initial direction
-            _startRot = _beamSource.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f);
-            Vector3 startRotEuler = _startRot.eulerAngles;
-            _startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
-            _beamSource.rotation = _startRot;
-        }
-        else if(_beamDestinations.Count > 1)
-        {
-            // Iterate over each beam destination and calculate the average
-            Vector3 meanVector = Vector3.zero;
-            for (int i = 0; i < _beamDestinations.Count; i++)
-            {
-                Vector3 pos = _beamDestinations[i].transform.position;
-                pos = new Vector3(pos.x, _beamSource.position.y, pos.z);
-                meanVector += pos;
-                
-                // Set beam length to be distance between source and destination
-                _beamMaxLength[i] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[i].transform.position), Vector3.zero);
-            }
-
-            meanVector = meanVector / _beamDestinations.Count;
-
-            // Then turn the average into a direction and set that to be the target
-            _targetDir = meanVector -_beamSource.position;
-            _beamSource.rotation = Quaternion.LookRotation(_targetDir);
-
-            // Then add initial offset to initial direction
-            _startRot = _beamSource.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f);
-            Vector3 startRotEuler = _startRot.eulerAngles;
-            _startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
-            _beamSource.rotation = _startRot;
-        }
-        else 
-        {
-            Debug.LogError("_pairedPedestals must not be NULL!");
-        }
-
-        if (!TryGetComponent<ConstPedestal>(out ConstPedestal hinge))
-        {
-            Debug.LogError(_beamDestinations + " was not pedestal!!");
-        }
+        SetupBeamDirections();
 
         if (_initialAngleOffset == 0f)
         {
-            _correctAngle = true;
-            _conController.BeamRightDirection(this);
+            SetAligned(true);
         }
 
         // Place mirror that is already set to be on the mirror
@@ -142,6 +96,68 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             PlacePresetObject();
         }
+    }
+
+    private void SetupBeamDirections()
+    {
+        if (_beamDestinations.Count == 1)
+        {
+            SetupSingleBeamDirection();
+        }
+        else if (_beamDestinations.Count > 1)
+        {
+            SetupMultipleBeamDirections();
+        }
+        else
+        {
+            Debug.LogError("_pairedPedestals must not be NULL!");
+        }
+    }
+
+    private void SetupSingleBeamDirection()
+    {
+        // Set beam length to be distance between source and destination
+        _beamMaxLength[0] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[0].transform.position), Vector3.zero);
+
+        Vector3 offsetTarget = _beamDestinations[0].transform.position;
+        offsetTarget = new Vector3(offsetTarget.x, _beamSource.position.y, offsetTarget.z);
+
+        // Set target direction to be the 1 target
+        _targetDir = offsetTarget - _beamSource.position;
+        _beamSource.rotation = Quaternion.LookRotation(_targetDir);
+
+        // Then add initial offset to initial direction
+        _startRot = _beamSource.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f);
+        Vector3 startRotEuler = _startRot.eulerAngles;
+        _startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
+        _beamSource.rotation = _startRot;
+    }
+
+    private void SetupMultipleBeamDirections()
+    {
+        // Iterate over each beam destination and calculate the average
+        Vector3 meanVector = Vector3.zero;
+        for (int i = 0; i < _beamDestinations.Count; i++)
+        {
+            Vector3 pos = _beamDestinations[i].transform.position;
+            pos = new Vector3(pos.x, _beamSource.position.y, pos.z);
+            meanVector += pos;
+
+            // Set beam length to be distance between source and destination
+            _beamMaxLength[i] = Vector3.Distance(transform.InverseTransformPoint(_beamDestinations[i].transform.position), Vector3.zero);
+        }
+
+        meanVector = meanVector / _beamDestinations.Count;
+
+        // Then turn the average into a direction and set that to be the target
+        _targetDir = meanVector - _beamSource.position;
+        _beamSource.rotation = Quaternion.LookRotation(_targetDir);
+
+        // Then add initial offset to initial direction
+        _startRot = _beamSource.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f);
+        Vector3 startRotEuler = _startRot.eulerAngles;
+        _startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
+        _beamSource.rotation = _startRot;
     }
 
     public void SetID(int id)
@@ -186,7 +202,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 if (pickupableType is Level1Mirror)
                 {
                     _mirror = (Level1Mirror)pickupableType;
-                    InitialRotateMirror(_mirror.transform);
+                    SetUpMirror(_mirror.transform);
                 }
             }
             else
@@ -204,11 +220,11 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     private void SetBeamPositions()
     {
         int beamCount = _beamRenderer.Count;
-        
+
         if (beamCount == _beamDestinations.Count)
         {
             Vector3 localSource = transform.InverseTransformPoint(_beamSource.position);
-            
+
             // If there are two beams
             if (beamCount == 2)
             {
@@ -218,7 +234,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                     // Calculate destination in local space
                     Vector3 offsetTarget = transform.InverseTransformPoint(_beamDestinations[i].transform.position);
                     offsetTarget = new Vector3(offsetTarget.x, localSource.y, offsetTarget.z);
-                    
+
                     // Set Beam start and endpoints
                     _beamRenderer[i].gameObject.transform.parent.gameObject.SetActive(true);
                     _beamRenderer[i].SetPosition(0, localSource);
@@ -245,7 +261,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     }
 
     // Rotate mirror to initial angle when placing on pedestal
-    private void InitialRotateMirror(Transform mirror)
+    private void SetUpMirror(Transform mirror)
     {
         // Set the mirror's position and rotation to match the pedestal before starting the rotation
         mirror.position = new Vector3(transform.position.x, transform.position.y + _raiseMirrorHeight, transform.position.z);
@@ -262,7 +278,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         targetRotation = targetRotation * (mirror.rotation * Quaternion.Euler(0f, _initialAngleOffset, 0f));
 
         // Ensure the mirror snaps to the exact rotation
-        mirror.rotation = targetRotation; 
+        mirror.rotation = targetRotation;
+        SetHasMirror(true);
         _conController.PedestalHasMirror(this);
     }
 
@@ -275,6 +292,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             _beamRenderer.Add(newLightbeam.GetComponentInChildren<LineRenderer>());
             newLightbeam.SetActive(false);
         }
+        // Set flag to show that pedestal is now reflecting a beam
+        SetReflectingBeam(true);
     }
 
     // Activate mirror orb effects
@@ -295,6 +314,8 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     {
         _isRotating = true;
         _beamTurningPS.Play();
+        StartRotationSound();
+
         while (_isRotating)
         {
             Quaternion endRot = Quaternion.LookRotation(targetDir, Vector3.up);
@@ -316,28 +337,36 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             }
 
             _beamSource.rotation = endRot;
-            _isRotating = CheckAngles();
+            _isRotating = !ReachedTargetAngle();
         }
+        StopRotationSound();
         _beamTurningPS.Stop();
         yield return null;
     }
 
-    // Check if beam if racing the right angle
-    private bool CheckAngles()
+    // Check if beam if facing the destination angle
+    private bool ReachedTargetAngle()
     {
         float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
-        if(dot > 0.985f) 
-        { 
-            _correctAngle = true;
+
+        // If desired angle has been reached
+        if (dot > 0.985f)
+        {
+            SetAligned(true);
             SetBeamPositions();
 
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
-            return false;
+            _canRotateMirror = false;
+
+            // Trigger the beam connection sound
+            EventManager.EventTrigger(EventType.BEAM_CONNECTION, transform.position);
+
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
 
@@ -346,12 +375,80 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         return _pedestalDestinations;
     }
 
+    private void ChangeLayers(LayerMask layer)
+    {
+        gameObject.layer = layer;
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.layer = layer;
+        }
+    }
+
+    #region STATE MANAGEMENT
+    public void SetHasMirror(bool value)
+    {
+        _hasMirror = value;
+    }
+
+    public void SetReceivingBeam(bool value)
+    {
+        _isReceivingBeam = value;
+    }
+
+    public void SetReflectingBeam(bool value)
+    {
+        _isReflectingBeam = value;
+    }
+
+    public void SetAligned(bool value)
+    {
+        _isAligned = value;
+    }
+
+    public bool GetHasMirror()
+    {
+        return _hasMirror;
+    }
+
+    public bool GetIsReceivingBeam()
+    {
+        return _isReceivingBeam;
+    }
+
+    public bool GetIsReflectingBeam()
+    {
+        return _isReflectingBeam;
+    }
+
+    public bool GetIsAligned()
+    {
+        return _isAligned;
+    }
+
+    public bool GetIsRotating()
+    {
+        return _isRotating;
+    }
+    #endregion
+
     #region IINTERACTABLE FUNCTIONS
     public void PlayerInRange(PlayerBase player)
     {
         if (_showPrompt && _canRotateMirror && _id == 0)
         {
             EventManager.EventTrigger(EventType.SHOW_PROMPT_HOLD_INTERACT, null);
+        }
+
+        if (!IsHighlighted)
+        {
+            // 1) If player is holding an interactable, show pedestal as interactable
+            // 2) If mirror is on pedestal and is the next to be rotated
+            if (player.CarriedPickupable != null && !_hasMirror || (_hasMirror && _canRotateMirror && _isReflectingBeam))
+            {
+                ChangeLayers(LayerMask.NameToLayer("HighlightInteract"));
+                IsHighlighted = true;
+            }
         }
     }
 
@@ -361,13 +458,33 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         {
             EventManager.EventTrigger(EventType.HIDE_PROMPT_HOLD_INTERACT, null);
         }
+
+        if (IsHighlighted)
+        {
+            ChangeLayers(LayerMask.NameToLayer("Interactables"));
+            IsHighlighted = false;
+        }
+
+        if (_isRotating)
+        {
+            // If player who is rotating is the one who released
+            if (player == _playerRotating)
+            {
+                _playerRotating = null;
+                StopAllCoroutines();
+                ReachedTargetAngle();
+                _isRotating = false;
+                _beamTurningPS.Stop();
+                StopRotationSound();
+            }
+        }
     }
 
     public void PlayerStartInteract(PlayerBase player)
     {
         // If mirror has not been placed on pedestal
         // Ensure player is holding something and it's the correct interactable to be placed on pedestal
-        if (player.CarriedPickupable != null && _validInteractables.Contains(player.CarriedPickupable) && _mirror == null)
+        if (player.CarriedPickupable != null && _validInteractables.Contains(player.CarriedPickupable) && !_hasMirror)
         {
             // IPickupable and IInteractable manipulation
             GameObject carriedPickupable = player.CarriedPickupable;
@@ -384,11 +501,34 @@ public class ConstPedestal : MonoBehaviour, IInteractable
                 // Added due to removal of dropping functionality of mirror
                 _mirror.isFollowing = false;
                 _mirror.emissionPS.enabled = false;
-                _mirror.SetParent(null);
+                _mirror.SetParent(_mirrorParent.transform);
                 player.DropItem();
 
-                InitialRotateMirror(_mirror.transform);
+                SetUpMirror(_mirror.transform);
+
+                // Trigger mirror placement sound
+                EventManager.EventTrigger(EventType.MIRROR_PLACEMENT, null);
             }
+        }
+    }
+
+    private void StartRotationSound()
+    {
+        if (!_isRotationSoundPlaying)
+        {
+            _isRotationSoundPlaying = true;
+            PedestalRotationData rotationData = new PedestalRotationData(1f, transform.position, true);
+            EventManager.EventTrigger(EventType.PEDESTAL_ROTATION, rotationData);
+        }
+    }
+
+    private void StopRotationSound()
+    {
+        if (_isRotationSoundPlaying)
+        {
+            _isRotationSoundPlaying = false;
+            PedestalRotationData rotationData = new PedestalRotationData(0f, transform.position, false);
+            EventManager.EventTrigger(EventType.PEDESTAL_ROTATION, rotationData);
         }
     }
 
@@ -402,8 +542,10 @@ public class ConstPedestal : MonoBehaviour, IInteractable
 
         if (player.CarriedPickupable == null)
         {
-            if (_isRotating == false && _beamRenderer.Count != 0 && !_correctAngle)
+            if (!_isRotating && _beamRenderer.Count != 0 && !_isAligned)
             {
+                // Set player as the one rotating the mirror
+                _playerRotating = player;
                 StartCoroutine(RotateMirror(_targetDir));
             }
         }
@@ -413,10 +555,16 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     {
         if (_isRotating)
         {
-            StopAllCoroutines();
-            CheckAngles();
-            _isRotating = false;
-            _beamTurningPS.Stop();
+            // If player who is rotating is the one who released
+            if (player == _playerRotating)
+            {
+                _playerRotating = null;
+                StopAllCoroutines();
+                ReachedTargetAngle();
+                _isRotating = false;
+                _beamTurningPS.Stop();
+                StopRotationSound();
+            }
         }
     }
     #endregion

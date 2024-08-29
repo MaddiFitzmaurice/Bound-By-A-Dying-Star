@@ -8,6 +8,7 @@ public class Item : MonoBehaviour, IInteractable, IPickupable
 {
     #region EXTERNAL DATA
     public bool InteractLocked { get; set; } = false;
+    public bool IsHighlighted { get; set; } = false;
     #endregion
     #region INTERNAL DATA
     // Item Grouper

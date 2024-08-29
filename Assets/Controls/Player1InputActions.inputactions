@@ -20,7 +20,7 @@
                     "id": "4a1a266b-6c7e-452c-9ca6-062c3fa69355",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold,Press",
+                    "interactions": "Hold(duration=0.25),Press",
                     "initialStateCheck": false
                 },
                 {
@@ -185,6 +185,17 @@
                     "name": "",
                     "id": "f21a5ff8-47ff-4caf-b020-15c58bb17962",
                     "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EndGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e0179cc8-4050-4439-88e6-8e1284197860",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

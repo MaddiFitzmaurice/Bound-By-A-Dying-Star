@@ -7,6 +7,7 @@ public class Level1Star : MonoBehaviour, IInteractable, ISoftPuzzleReward, IPick
     #region EXTERNAL DATA
     public bool InteractLocked { get; set; } = false;
     public bool HeldInSoftPuzzle { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public bool IsHighlighted { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     #endregion
 
     #region IPICKUPABLE FUNCTIONS

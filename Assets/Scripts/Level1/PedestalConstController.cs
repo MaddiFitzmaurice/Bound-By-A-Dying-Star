@@ -10,7 +10,6 @@ public class PedestalConstController : MonoBehaviour
     //List of pedestals in constellation
     [Header("Pedestal Data")]
     [SerializeField] private List<ConstPedestal> _pedestalList;
-    [SerializeField] private List<PedestalData> _pedestaData = new List<PedestalData>();
     [SerializeField] private BeamEmitter _affordanceBeam;
     [Header("Cinematics")]
     [SerializeField] PlayableAsset _cutsceneDoor;
@@ -31,15 +30,9 @@ public class PedestalConstController : MonoBehaviour
 
     void Start()
     {
-        //set all _mirroredPedestals bools to false
-        for (int i = 0; i < _pedestalNum; i++)
-        {
-            _pedestaData.Add(new PedestalData());
-        }
-
         for (int i = 0; i < _pedestalList.Count; i++)
         {
-            if(_pedestalList[i] == null)
+            if (_pedestalList[i] == null)
             {
                 Debug.LogError("_pedestalList has an empty value!!! fix this now");
             }
@@ -56,16 +49,16 @@ public class PedestalConstController : MonoBehaviour
     {
         ConstPedestal pedestalSender = linkData.sender;
         int senderIndex = _pedestalList.IndexOf(pedestalSender);
-        
-        // Set preset peddestal values so it is shooting beam
-        pedestalSender.ActivateEffect();
+
+        // Set preset pedestal values so it is shooting beam
+        pedestalSender.ActivateEffect(); // Set up first mirror beam
         foreach (ConstPedestal pedestal in _pedestalList)
         {
             pedestal.ActivateOrb();
         }
 
-        _pedestaData[senderIndex].ShootingBeam = true;
-        _pedestaData[senderIndex].RecieveBeam = true;
+        pedestalSender.SetReflectingBeam(true);
+        pedestalSender.SetReceivingBeam(true);
         PedestalChecker(senderIndex);
     }
 
@@ -74,11 +67,11 @@ public class PedestalConstController : MonoBehaviour
     {
         ConstPedestal pedestalSender = linkData.sender;
         int senderIndex = _pedestalList.IndexOf(pedestalSender);
-        
-        // Set preset peddestal values so it is shooting beam
+
+        // Set preset pedestal values so it is shooting beam
         pedestalSender.ActivateEffect();
-        _pedestaData[senderIndex].ShootingBeam = true;
-        _pedestaData[senderIndex].RecieveBeam = true;
+        pedestalSender.SetReflectingBeam(true);
+        pedestalSender.SetReceivingBeam(true);
         PedestalChecker(senderIndex);
     }
 
@@ -91,9 +84,9 @@ public class PedestalConstController : MonoBehaviour
         EventManager.EventTrigger(EventType.LVL1_STAR_ACTIVATE, senderIndex);
 
         // check to make sender is in list and that list is not empty
-        if(senderIndex != -1 || _pedestalList.Count != 0)
+        if (senderIndex != -1 || _pedestalList.Count != 0)
         {
-            _pedestaData[senderIndex].HasMirror = true;
+            sender.SetHasMirror(true);
             PedestalChecker(senderIndex);
         }
         else
@@ -107,9 +100,9 @@ public class PedestalConstController : MonoBehaviour
     {
         int senderIndex = _pedestalList.IndexOf(sender);
         // check to make sender is in list and that list is not empty
-        if(senderIndex != -1 || _pedestalList.Count != 0)
+        if (senderIndex != -1 || _pedestalList.Count != 0)
         {
-            _pedestaData[senderIndex].RightBeamDirection = true;
+            sender.SetAligned(true);
         }
         else
         {
@@ -117,17 +110,17 @@ public class PedestalConstController : MonoBehaviour
         }
     }
 
-    // Set all pedestal destinations to be recieving beam
+    // Set all pedestal destinations to be receiving beam
     public void PedestalHasBeam(List<ConstPedestal> pedestalDestinations)
     {
-        // Go through pedestalDestinations list and set the destinations to be recieving beam
+        // Go through pedestalDestinations list and set the destinations to be receiving beam
         foreach (ConstPedestal pedestal in pedestalDestinations)
         {
             int senderIndex = _pedestalList.IndexOf(pedestal);
             // check to make sender is in list and that list is not empty
-            if(senderIndex != -1 || _pedestalList.Count != 0)
+            if (senderIndex != -1 || _pedestalList.Count != 0)
             {
-                _pedestaData[senderIndex].RecieveBeam = true;
+                pedestal.SetReceivingBeam(true);
                 PedestalChecker(senderIndex);
             }
             else
@@ -138,7 +131,7 @@ public class PedestalConstController : MonoBehaviour
     }
 
     // Go through each pedestal
-    // if the pedestal has a mirror and is recieving a beam but not shooting a beam
+    // if the pedestal has a mirror and is receiving a beam but not shooting a beam
     // tell the pedestal to activate the beam effect
     // then check if constellation is complete
     private void PedestalChecker(int senderIndex)
@@ -146,17 +139,16 @@ public class PedestalConstController : MonoBehaviour
         ConstPedestal pedestalSender = _pedestalList[senderIndex];
         List<ConstPedestal> pedestalDestinations = pedestalSender.ReturnDestinations();
 
-        foreach (var PedestalOther in pedestalDestinations)
+        foreach (var pedestalOther in pedestalDestinations)
         {
-            PedestalData senderData = _pedestaData[senderIndex];
-
-            if (senderData.HasMirror && senderData.RecieveBeam && !senderData.ShootingBeam)
+            if (pedestalSender.GetHasMirror() && pedestalSender.GetIsReceivingBeam() && !pedestalSender.GetIsReflectingBeam())
             {
                 pedestalSender.ActivateEffect();
-                senderData.ShootingBeam = true;
+                pedestalSender.SetReflectingBeam(true);
             }
-            ConstellationChecker();
         }
+
+        ConstellationChecker();
     }
 
     // checks if constellation is complete, if so sends an event
@@ -167,33 +159,31 @@ public class PedestalConstController : MonoBehaviour
 
         for (int i = 0; i < _pedestalNum; i++)
         {
+            ConstPedestal pedestal = _pedestalList[i];
+
             // Check if each pedestal has a mirror
-            if(!_pedestaData[i].HasMirror)
+            if (!pedestal.GetHasMirror())
             {
                 mirrorsDone = false;
             }
 
-            // Check if each pedestal has a mirror, recieving a beam and it's beam is facing the right direction
-            if(!_pedestaData[i].RightBeamDirection || !_pedestaData[i].RecieveBeam || !_pedestaData[i].HasMirror)
+            // Check if each pedestal has a mirror, receiving a beam and it's beam is facing the right direction
+            if (!pedestal.GetIsAligned() || !pedestal.GetIsReceivingBeam() || !pedestal.GetHasMirror())
             {
                 done = false;
             }
 
-            // Check if each pedestal has a mirror, recieving a beam, shooting a beam and it's beam is facing the right direction
-            if(_pedestaData[i].ShootingBeam && _pedestaData[i].RightBeamDirection && _pedestaData[i].RecieveBeam &&_pedestaData[i].HasMirror)
+            // Check if each pedestal has a mirror, receiving a beam, shooting a beam and it's beam is facing the right direction
+            if (pedestal.GetIsReflectingBeam() && pedestal.GetIsAligned() && pedestal.GetIsReceivingBeam() && pedestal.GetHasMirror())
             {
-                _pedestalList[i].ActivateSkyBeam();
+                pedestal.ActivateSkyBeam();
             }
         }
 
         // Activate affordance beam from the arch to the 1st pedestal
         // Also activate all the orbs
-        if (mirrorsDone & !_affordanceBeamActivated)
+        if (mirrorsDone && !_affordanceBeamActivated)
         {
-            //_affordanceBeamActivated = true;
-            //_affordanceBeam.SetBeamStatus(true);
-            //PedestalLinkData linkData = _pedestalList[0].GetPedestalLinkData();
-            //AffordanceBeamActivate(linkData);
             StartCoroutine(BeamActivationSequence());
         }
 
@@ -201,6 +191,7 @@ public class PedestalConstController : MonoBehaviour
         if (done)
         {
             Debug.Log("Constellation Complete!");
+            EventManager.EventTrigger(EventType.CONSTELLATION_COMPLETE, null);
             EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _cutsceneDoor);
         }
     }
@@ -216,22 +207,7 @@ public class PedestalConstController : MonoBehaviour
     }
 }
 
-// Data class for individual pedestals
-[Serializable]
-public class PedestalData
-{
-    //bools associated with if pedestals have mirrors
-    public bool HasMirror = false; 
-    //bools associated with if pedestals are shooting a beam
-    public bool ShootingBeam = false; 
-    //bools associated with if pedestals are receiving a beam
-    public bool RecieveBeam = false; 
-    //bools associated with if beams are facing their correct direction
-    public bool RightBeamDirection = false; 
-}
-
-// Data class for sending a peddestal and it's beam destinations to the controller 
-//[Serializable]
+// Data class for sending a pedestal and its beam destinations to the controller 
 public class PedestalLinkData
 {
     // Pedestal reference

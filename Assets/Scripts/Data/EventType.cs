@@ -15,6 +15,7 @@ public enum EventType
 
     PLAYER_1_MOVE,
     PLAYER_2_MOVE,
+    CAN_MOVE,
 
     PLAYER_1_INTERACT,
     PLAYER_1_HOLDINTERACT,
@@ -51,6 +52,10 @@ public enum EventType
     CUTSCENE_PLAY,
     CUTSCENE_FINISHED,
 
+    // UI
+    ARTWORK_SHOW,                       // Show artwork in fullscreen
+    ARTWORK_HIDE,                       // Hide fullscreen artwork
+
     // Level
     LEVEL_SPAWN,                        // Spawn players into level for the first time
     SOFTPUZZLE_PLAYER_TELEPORT,         // Teleport players after completing a soft puzzle
@@ -68,5 +73,15 @@ public enum EventType
     INTRO,
     ITEM_PICKUP,
     ITEM_DROP,
+    MIRROR_PLACEMENT,
+    MIRROR_CARRYING_PLAYER1,
+    MIRROR_CARRYING_PLAYER2,
+    PRESSURE_PLATE_PLAYER1_ON,
+    PRESSURE_PLATE_PLAYER1_OFF,
+    PRESSURE_PLATE_PLAYER2_ON,
+    PRESSURE_PLATE_PLAYER2_OFF,
+    PEDESTAL_ROTATION,
+    BEAM_CONNECTION,
+    CONSTELLATION_COMPLETE,
     BACKGROUND_MUSIC,
 };
