@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,25 +36,25 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     #region FRAMEWORK FUNCTIONS
     void Awake()
     {
-        //_inputs = new InputActions();
-        //_inputs.Gameplay.SetCallbacks(this);
+        // Remove cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
+        // Player Input and Device Setup
         _player1Inputs = new Player1InputActions();
         _player2Inputs = new Player2InputActions();
         _player1Inputs.Gameplay.SetCallbacks(this);
         _player1Inputs.MainMenu.SetCallbacks(this);
         _player2Inputs.Gameplay.SetCallbacks(this);
+        DeviceSetup();
 
+        // Event Inits
         EventManager.EventInitialise(EventType.ENABLE_GAMEPLAY_INPUTS);
         EventManager.EventInitialise(EventType.DISABLE_GAMEPLAY_INPUTS);
         EventManager.EventInitialise(EventType.PLAYER_1_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_2_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
-
-        DeviceSetup();
     }
 
     void OnEnable()
@@ -103,22 +104,65 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         //EnableGameplayInput(null);
         //#endif
 
-        // At least find one gamepad device to pair with player 1
-        if (Gamepad.current != null)
+        // Check all currently connected devices to computer
+        var deviceList = InputUser.GetUnpairedInputDevices();
+
+        foreach (var device in deviceList)
         {
-            InputUser.PerformPairingWithDevice(Gamepad.all[0], _player1);
-            _player1Inputs.Enable();
-            
-            // If another gamepad, pair device with player 2
-            if (Gamepad.all.Count > 1)
-            {
-                InputUser.PerformPairingWithDevice(Gamepad.all[1], _player2);
-                _player2Inputs.Enable();
-            }
+            TryAddGamepadDevice(device);
         }
-        else
+    }
+
+    // Perform gamepad connection checks and add a gamepad to a player
+    // This ensures only one gamepad will ever be connected to a player
+    private void TryAddGamepadDevice(InputDevice incomingDevice)
+    {
+        // Only look at ones that are gamepads
+        if (incomingDevice is UnityEngine.InputSystem.XInput.XInputController)
         {
-            Debug.Log("Please connect a gamepad to the game!");
+            bool p1HasGamepad = false;
+
+            // Check Player 1's currently connected devices
+            foreach (var p1Device in _player1.pairedDevices)
+            {
+                // If player already has a gamepad connected, break out of loop
+                if (p1Device is UnityEngine.InputSystem.XInput.XInputController)
+                {
+                    p1HasGamepad = true;
+                    break;
+                }
+            }
+
+            // Assign device to player 1 and return out of function
+            if (!p1HasGamepad)
+            {
+                Debug.Log("Player 1 connected to " + incomingDevice.description);
+                InputUser.PerformPairingWithDevice(incomingDevice, _player1);
+                _player1Inputs.Enable();
+                return;
+            }
+
+            bool p2HasGamepad = false;
+
+            // Check Player 2's currently connected devices
+            foreach (var p2Device in _player2.pairedDevices)
+            {
+                // If player already has a gamepad connected, break out of loop
+                if (p2Device is UnityEngine.InputSystem.XInput.XInputController)
+                {
+                    p2HasGamepad = true;
+                    break;
+                }
+            }
+
+            // Assign device to player 2 and return out of function
+            if (!p2HasGamepad)
+            {
+                Debug.Log("Player 2 connected to " + incomingDevice.description);
+                InputUser.PerformPairingWithDevice(incomingDevice, _player2);
+                _player2Inputs.Enable();
+                return;
+            }
         }
     }
 
@@ -128,53 +172,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         switch (change)
         {
             case InputDeviceChange.Added:
-                // Make sure incoming device is not a keyboard or mouse
-                if (device.description.deviceClass != "Keyboard" || device.description.deviceClass != "Mouse")
-                {
-                    bool p1HasDevice = false;
-
-                    // Check devices connected to player 1
-                    foreach (InputDevice p1ConDevice in _player1.pairedDevices)
-                    {
-                        // If same device class, break out of for loop
-                        if (p1ConDevice.description.deviceClass == device.description.deviceClass)
-                        {
-                            p1HasDevice = true;
-                            break;
-                        }
-                    }
-
-                    // Assign device to player 1 and break out of switch
-                    if (!p1HasDevice)
-                    {
-                        Debug.Log("Player 1: " + device.description);
-                        InputUser.PerformPairingWithDevice(device, _player1);
-                        _player1Inputs.Enable();
-                        break;
-                    }
-
-                    bool p2HasDevice = false;
-
-                    // Check devices connected to player 2
-                    foreach (InputDevice p1ConDevice in _player2.pairedDevices)
-                    {
-                        // If same device class, break out of for loop
-                        if (p1ConDevice.description.deviceClass == device.description.deviceClass)
-                        {
-                            p2HasDevice = true;
-                            break;
-                        }
-                    }
-
-                    // Assign device to player 2 and break out of switch
-                    if (!p2HasDevice)
-                    {
-                        Debug.Log("Player 2: " + device.description);
-                        InputUser.PerformPairingWithDevice(device, _player2);
-                        _player2Inputs.Enable();
-                        break;
-                    }
-                }
+                TryAddGamepadDevice(device);
                 break;
             case InputDeviceChange.Disconnected:
                 // If device has been disconnected from player 1
