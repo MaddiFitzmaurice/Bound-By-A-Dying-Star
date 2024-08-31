@@ -75,34 +75,34 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayerTeleport(Transform spawnPoint)
-    {
-        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
-        _player1.PlayTeleportEffect(true);
-        _player2.PlayTeleportEffect(true);
-        yield return new WaitForSeconds(2f);
-        _player1.PlayFlashEffect();
-        _player2.PlayFlashEffect();
-        _player1.ToggleVisibility(false);
-        _player2.ToggleVisibility(false);
-        _player1.ToggleClothPhysics(false);
-        _player2.ToggleClothPhysics(false);
-        yield return new WaitForSeconds(1.5f);
-        _playerGrouper.transform.position = spawnPoint.position;
-        _playerGrouper.transform.rotation = spawnPoint.rotation;
-        _player1.transform.localPosition = new Vector3(-2, 2, 0);
-        _player2.transform.localPosition = new Vector3(2, 2, 0);
-        _player1.PlayTeleportEffect(false);
-        _player2.PlayTeleportEffect(false);
-        yield return new WaitForSeconds(1.5f);
-        _player1.PlayFlashEffect();
-        _player2.PlayFlashEffect();
-        _player1.ToggleClothPhysics(true);
-        _player2.ToggleClothPhysics(true);
-        _player1.ToggleVisibility(true);
-        _player2.ToggleVisibility(true);
-        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
-    }
+    //private IEnumerator PlayerTeleport(Transform spawnPoint)
+    //{
+    //    EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+    //    _player1.PlayTeleportEffect(true);
+    //    _player2.PlayTeleportEffect(true);
+    //    yield return new WaitForSeconds(2f);
+    //    _player1.PlayFlashEffect();
+    //    _player2.PlayFlashEffect();
+    //    _player1.ToggleVisibility(false);
+    //    _player2.ToggleVisibility(false);
+    //    _player1.ToggleClothPhysics(false);
+    //    _player2.ToggleClothPhysics(false);
+    //    yield return new WaitForSeconds(1.5f);
+    //    _playerGrouper.transform.position = spawnPoint.position;
+    //    _playerGrouper.transform.rotation = spawnPoint.rotation;
+    //    _player1.transform.localPosition = new Vector3(-2, 2, 0);
+    //    _player2.transform.localPosition = new Vector3(2, 2, 0);
+    //    _player1.PlayTeleportEffect(false);
+    //    _player2.PlayTeleportEffect(false);
+    //    yield return new WaitForSeconds(1.5f);
+    //    _player1.PlayFlashEffect();
+    //    _player2.PlayFlashEffect();
+    //    _player1.ToggleClothPhysics(true);
+    //    _player2.ToggleClothPhysics(true);
+    //    _player1.ToggleVisibility(true);
+    //    _player2.ToggleVisibility(true);
+    //    EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+    //}
 
     #region EVENT HANDLERS
     // Have players spawn at a desired location in a specific level
@@ -135,7 +135,7 @@ public class PlayerManager : MonoBehaviour
 
         Transform spawnPoint = (Transform)data;
         StopAllCoroutines();
-        StartCoroutine(PlayerTeleport(spawnPoint));
+        //StartCoroutine(PlayerTeleport(spawnPoint));
     }
     #endregion
 }

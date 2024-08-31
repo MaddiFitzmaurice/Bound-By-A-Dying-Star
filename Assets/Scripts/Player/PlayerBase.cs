@@ -54,7 +54,7 @@ public abstract class PlayerBase : MonoBehaviour
     #region INTERNAL DATA
     // Components
     private Rigidbody _rb;
-    private List<SkinnedMeshRenderer> _meshRenderers;
+    private List<Renderer> _renderers;
     private Cloth _clothPhysics;
     private Animator _animator;
 
@@ -93,7 +93,9 @@ public abstract class PlayerBase : MonoBehaviour
     {
         // Set components
         _rb = GetComponent<Rigidbody>();
-        _meshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+        _renderers = new List<Renderer>();
+        _renderers.AddRange(GetComponentsInChildren<MeshRenderer>().ToList<Renderer>());
+        _renderers.AddRange(GetComponentsInChildren<SkinnedMeshRenderer>().ToList<Renderer>());
         _clothPhysics = GetComponentInChildren<Cloth>();
         _animator = GetComponentInChildren<Animator>();
 
@@ -243,6 +245,25 @@ public abstract class PlayerBase : MonoBehaviour
         }
     }
 
+    private IEnumerator RespawnSequence(Transform spawnPoint)
+    {
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+        PlayTeleportOutEffect();
+        yield return new WaitForSeconds(_teleportOutEffect.GetFloat("EffectLifetime"));
+        PlayFlashEffect();
+        ToggleVisibility(false);
+        ToggleClothPhysics(false);
+        yield return new WaitForSeconds(1f);
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
+        PlayTeleportInEffect();
+        yield return new WaitForSeconds(_teleportInEffect.GetFloat("EffectLifetime"));
+        PlayFlashEffect();
+        ToggleClothPhysics(true);
+        ToggleVisibility(true);
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+    }
+
     private void ClothMovement()
     {
         _clothExternalAccel = ClothMovementAccel * Mathf.Sin(Time.fixedTime) * _clothMoveDir;
@@ -258,7 +279,17 @@ public abstract class PlayerBase : MonoBehaviour
         }
     }
 
-    public void PlayTeleportEffect(bool mode)
+    public void PlayTeleportOutEffect()
+    {
+        _teleportOutEffect.Play();
+    }
+
+    public void PlayTeleportInEffect()
+    {
+        _teleportInEffect.Play();
+    }
+
+    public void PlayTeleportOutEffect(bool mode)
     {
         if (mode)
         {
@@ -279,14 +310,14 @@ public abstract class PlayerBase : MonoBehaviour
     {
         if (mode)
         {
-            foreach (SkinnedMeshRenderer renderer in _meshRenderers)
+            foreach (Renderer renderer in _renderers)
             {
                 renderer.enabled = true;
             }
         }
         else
         {
-            foreach (SkinnedMeshRenderer renderer in _meshRenderers)
+            foreach (Renderer renderer in _renderers)
             {
                 renderer.enabled = false;
             }
@@ -296,6 +327,12 @@ public abstract class PlayerBase : MonoBehaviour
     public void ToggleClothPhysics(bool toggle)
     {
         _clothPhysics.enabled = toggle;
+    }
+
+    public void Respawn(Transform respawnPoint)
+    {
+        StopAllCoroutines();
+        StartCoroutine(RespawnSequence(respawnPoint));
     }
 
     #region INTERACTION FUNCTIONS
