@@ -110,4 +110,4 @@ fmod.log
 /FMOD_Studio_Project/.user
 
 # Ignore video files (since they will probably be larger than 100MB and Github hates this)
-/[Aa]ssets/Video
+/[Aa]ssets/Video/
