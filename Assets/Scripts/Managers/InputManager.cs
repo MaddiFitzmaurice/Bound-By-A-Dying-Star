@@ -14,7 +14,7 @@ public enum InteractTypes
     RELEASE_HOLD
 }
 
-public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions, Player1InputActions.IMainMenuActions
+public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions, Player1InputActions.IMainMenuActions, Player2InputActions.IMainMenuActions
 {
     // Input Action Assets
     private Player1InputActions _player1Inputs;
@@ -46,11 +46,14 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player1Inputs.Gameplay.SetCallbacks(this);
         _player1Inputs.MainMenu.SetCallbacks(this);
         _player2Inputs.Gameplay.SetCallbacks(this);
+        _player2Inputs.MainMenu.SetCallbacks(this);
         DeviceSetup();
 
         // Event Inits
         EventManager.EventInitialise(EventType.ENABLE_GAMEPLAY_INPUTS);
         EventManager.EventInitialise(EventType.DISABLE_GAMEPLAY_INPUTS);
+        EventManager.EventInitialise(EventType.DISABLE_MAINMENU_INPUTS);
+        EventManager.EventInitialise(EventType.ENABLE_MAINMENU_INPUTS);
         EventManager.EventInitialise(EventType.PLAYER_1_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_2_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
@@ -304,11 +307,13 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     private void EnableMainMenuInput(object data)
     {
         _player1Inputs.MainMenu.Enable();
+        _player2Inputs.MainMenu.Enable();
     }
 
     private void DisableMainMenuInput(object data)
     {
         _player1Inputs.MainMenu.Disable();
+        _player2Inputs.MainMenu.Disable();
     }
     #endregion
 }
