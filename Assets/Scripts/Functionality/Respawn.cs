@@ -19,38 +19,40 @@ public class Respawn : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        PlayerBase player = other.GetComponent<PlayerBase>();
+
         // For forward puzzle
         if (_currentSpawnPoint == _forwardPuzzleRespawnPoint)
         {
-            if (other.GetComponent<Player1>() || other.GetComponent<Player2>())
+            if (player != null)
             {
-                other.gameObject.transform.position = _currentSpawnPoint.position;
+                player.Respawn(_currentSpawnPoint);
             }
         }
         else
         {
             // Assign Player 1 to a spawn point grouping
-            if (other.GetComponent<Player1>())
+            if (player is Player1)
             {
                 if (_p1SpawnPointGroup == 1)
                 {
-                    other.gameObject.transform.position = _backwardPuzzleRespawnPoint1.position;
+                    player.Respawn(_backwardPuzzleRespawnPoint1);
                 }
                 else if (_p1SpawnPointGroup == 2)
                 {
-                    other.gameObject.transform.position = _backwardPuzzleRespawnPoint2.position;
+                    player.Respawn(_backwardPuzzleRespawnPoint2);
                 }
             }
             // Assign Player 2 to a spawn point grouping
-            else if (other.GetComponent<Player2>())
+            else if (player is Player2)
             {
                 if (_p2SpawnPointGroup == 1)
                 {
-                    other.gameObject.transform.position = _backwardPuzzleRespawnPoint1.position;
+                    player.Respawn(_backwardPuzzleRespawnPoint1);
                 }
                 else if (_p2SpawnPointGroup == 2)
                 {
-                    other.gameObject.transform.position = _backwardPuzzleRespawnPoint2.position;
+                    player.Respawn(_backwardPuzzleRespawnPoint2);
                 }
             }
         }
