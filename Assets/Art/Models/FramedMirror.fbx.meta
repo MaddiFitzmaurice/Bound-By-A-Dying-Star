@@ -3,7 +3,12 @@ guid: b1d2c81f51e90ec45a7058e275e5ad1c
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ArtFrame
+    second: {fileID: 2100000, guid: 97a8501413125484ba58c0954afdb3cc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
