@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cb8a1ce8f52cb1348abcd08cac0e051f
+guid: 0dbd41047766ba44f8d58072317dbd22
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -21,7 +21,8 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'LeftUpperLeg' not found\n"
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -36,7 +37,65 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: NPC_Dike_Idle
+      takeName: Armature|Dike_Idle
+      internalID: -4540078407159419346
+      firstFrame: 0
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: NPC_Dike_NoAnim
+      takeName: Armature|Dike_NoAnim
+      internalID: 7838226202590180520
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -83,7 +142,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 0
+  importAnimation: 1
   humanDescription:
     serializedVersion: 3
     human:
@@ -97,14 +156,6 @@ ModelImporter:
         modified: 0
     - boneName: Head
       humanName: Head
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: L_Shoulder
-      humanName: LeftShoulder
       limit:
         min: {x: 0, y: 0, z: 0}
         max: {x: 0, y: 0, z: 0}
@@ -137,6 +188,62 @@ ModelImporter:
         modified: 0
     - boneName: Chest
       humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: L_Thigh
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: L_Leg
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: L_Foot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: R_Thigh
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: R_Leg
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: R_Foot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: L_Shoulder
+      humanName: LeftShoulder
       limit:
         min: {x: 0, y: 0, z: 0}
         max: {x: 0, y: 0, z: 0}
@@ -191,63 +298,15 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
-    - boneName: L_Thigh
-      humanName: LeftUpperLeg
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: R_Thigh
-      humanName: RightUpperLeg
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: L_Leg
-      humanName: LeftLowerLeg
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: R_Leg
-      humanName: RightLowerLeg
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: R_Foot
-      humanName: RightFoot
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: L_Foot
-      humanName: LeftFoot
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
     skeleton:
-    - name: NPC_Dike(Clone)
+    - name: NPC_Dike_Anim(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Armature
-      parentName: NPC_Dike(Clone)
-      position: {x: 6, y: 0, z: 0}
+      parentName: NPC_Dike_Anim(Clone)
+      position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
       scale: {x: 300, y: 300, z: 300}
     - name: Hips
@@ -278,18 +337,18 @@ ModelImporter:
     - name: Scale_ROOT
       parentName: Head
       position: {x: 3.8343362e-32, y: 0.009028297, z: 0.00037973427}
-      rotation: {x: -0.034421384, y: -1.2228939e-16, z: 4.005222e-15, w: 0.9994074}
-      scale: {x: 1.0000001, y: 0.9999997, z: 0.9999997}
+      rotation: {x: -0.034421384, y: 8.63527e-11, z: 0.0000000021199615, w: 0.9994074}
+      scale: {x: 1.0000002, y: 0.9999994, z: 0.9999994}
     - name: Left_Scale
       parentName: Scale_ROOT
-      position: {x: -0, y: 0.0000000022724271, z: -9.458407e-12}
-      rotation: {x: 0.0000001527369, y: -0.00000019185245, z: 0.70710695, w: 0.7071066}
-      scale: {x: 0.9999997, y: 0.9999996, z: 1}
+      position: {x: -3.123185e-11, y: 0.0000000011746469, z: 2.9015065e-11}
+      rotation: {x: 0.0000001527369, y: -0.00000019191347, z: 0.70710695, w: 0.7071066}
+      scale: {x: 0.9999997, y: 0.99999976, z: 0.99999994}
     - name: Left_ScaleWeights
       parentName: Left_Scale
-      position: {x: 3.514737e-10, y: 0.009053249, z: 1.8176351e-11}
+      position: {x: 0.0000000015918203, y: 0.009053247, z: 9.7707016e-11}
       rotation: {x: 0.7069222, y: -0.70727515, z: -0.0033884358, w: -0.0033900314}
-      scale: {x: 0.99999994, y: 0.99999946, z: 0.9999997}
+      scale: {x: 0.9999999, y: 1.0000001, z: 0.99999964}
     - name: Left_ScaleWeights_end
       parentName: Left_ScaleWeights
       position: {x: -0, y: 0.0058592036, z: 0}
@@ -297,14 +356,14 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: Right_Scale
       parentName: Scale_ROOT
-      position: {x: -0, y: 0.0000000022724271, z: -9.458407e-12}
-      rotation: {x: 0.00000014156103, y: 0.00000016577542, z: -0.70710695, w: 0.7071066}
-      scale: {x: 0.9999997, y: 0.9999996, z: 1}
+      position: {x: -3.123185e-11, y: 0.0000000011746469, z: 2.9015065e-11}
+      rotation: {x: 0.00000014156103, y: 0.0000001657144, z: -0.70710695, w: 0.7071066}
+      scale: {x: 0.9999998, y: 0.9999999, z: 0.99999994}
     - name: Right_ScaleWeights
       parentName: Right_Scale
-      position: {x: -3.514737e-10, y: 0.009053249, z: 1.8176353e-11}
+      position: {x: 6.9971345e-10, y: 0.009053247, z: 2.737579e-11}
       rotation: {x: 0.7069222, y: 0.70727515, z: 0.0033884097, w: -0.0033900426}
-      scale: {x: 0.99999994, y: 0.99999946, z: 0.9999997}
+      scale: {x: 0.99999976, y: 0.99999994, z: 0.9999997}
     - name: Right_ScaleWeights_end
       parentName: Right_ScaleWeights
       position: {x: -0, y: 0.0058592036, z: 0}
@@ -313,12 +372,12 @@ ModelImporter:
     - name: L_Shoulder
       parentName: Chest
       position: {x: -0.001337862, y: 0.0041019307, z: 0.0015379095}
-      rotation: {x: -0.6124185, y: 0.3534738, z: 0.35347375, w: 0.6124184}
+      rotation: {x: -0.5739354, y: 0.41303554, z: 0.41303548, w: 0.5739352}
       scale: {x: 1.0000002, y: 1.0000004, z: 1}
     - name: L_UpperArm
       parentName: L_Shoulder
       position: {x: -1.19435e-10, y: 0.0030744346, z: -1.4681417e-10}
-      rotation: {x: -0.000000029802322, y: -0.00000008940697, z: 0.25894463, w: 0.9658922}
+      rotation: {x: -0.000000029802319, y: -0.000000059604638, z: 0.19887501, w: 0.98002493}
       scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
     - name: L_Forearm
       parentName: L_UpperArm
@@ -338,12 +397,12 @@ ModelImporter:
     - name: R_Shoulder
       parentName: Chest
       position: {x: 0.001337862, y: 0.0041019307, z: 0.0015379095}
-      rotation: {x: -0.6124184, y: -0.3534738, z: -0.35347375, w: 0.6124184}
+      rotation: {x: -0.5739355, y: -0.4130352, z: -0.4130354, w: 0.5739353}
       scale: {x: 1.0000001, y: 1.0000002, z: 1}
     - name: R_UpperArm
       parentName: R_Shoulder
       position: {x: 1.19435e-10, y: 0.0030744346, z: -1.4681396e-10}
-      rotation: {x: -0.00000005960465, y: 0.000000014901163, z: -0.2589446, w: 0.9658922}
+      rotation: {x: 0.00000008940698, y: 0.000000029802326, z: -0.19887534, w: 0.9800248}
       scale: {x: 0.99999994, y: 0.99999994, z: 1}
     - name: R_Forearm
       parentName: R_UpperArm
@@ -368,13 +427,13 @@ ModelImporter:
     - name: L_Leg
       parentName: L_Thigh
       position: {x: -2.9802322e-10, y: 0.0045822132, z: 1.7763576e-17}
-      rotation: {x: -4.0941795e-22, y: -0.00000004371138, z: 7.1054274e-15, w: 1}
+      rotation: {x: -4.0941825e-22, y: -0.00000004371138, z: 7.1054274e-15, w: 1}
       scale: {x: 0.9999999, y: 1.0000001, z: 1.0000001}
     - name: L_Foot
       parentName: L_Leg
       position: {x: -2.9802322e-10, y: 0.002999999, z: -2.1175823e-24}
       rotation: {x: -0.000000030908623, y: 0.7071068, z: -0.7071067, w: 0.000000030908623}
-      scale: {x: 1, y: 0.9999997, z: 0.9999997}
+      scale: {x: 1.0000001, y: 0.9999997, z: 0.9999997}
     - name: L_Foot_end
       parentName: L_Foot
       position: {x: -0, y: 0.002, z: 0}
@@ -388,13 +447,13 @@ ModelImporter:
     - name: R_Leg
       parentName: R_Thigh
       position: {x: 2.9802322e-10, y: 0.0045822132, z: -1.7763576e-17}
-      rotation: {x: -4.0941795e-22, y: -0.00000004371138, z: 7.1054274e-15, w: 1}
+      rotation: {x: -4.0941825e-22, y: -0.00000004371138, z: 7.1054274e-15, w: 1}
       scale: {x: 0.9999999, y: 1.0000001, z: 1.0000001}
     - name: R_Foot
       parentName: R_Leg
       position: {x: 2.9802322e-10, y: 0.002999999, z: 2.1175823e-24}
       rotation: {x: -0.000000030908623, y: 0.7071068, z: -0.7071067, w: 0.000000030908623}
-      scale: {x: 1, y: 0.9999997, z: 0.9999997}
+      scale: {x: 1.0000001, y: 0.9999997, z: 0.9999997}
     - name: R_Foot_end
       parentName: R_Foot
       position: {x: -0, y: 0.002, z: 0}
@@ -411,13 +470,13 @@ ModelImporter:
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Dike
-      parentName: NPC_Dike(Clone)
-      position: {x: 6, y: 0, z: 0}
+      parentName: NPC_Dike_Anim(Clone)
+      position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Scales
-      parentName: NPC_Dike(Clone)
-      position: {x: 6, y: 8.619151, z: 0.29999998}
+      parentName: NPC_Dike_Anim(Clone)
+      position: {x: -0, y: 8.619151, z: 0.29999998}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
