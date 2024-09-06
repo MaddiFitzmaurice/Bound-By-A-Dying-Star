@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class PressurePlateSystemD : PressurePlateSystem
 {
+    #region EXTERNAL DATA
     [SerializeField] private GameObject _objectToUnlock; 
     [SerializeField] private float _activationTime = 10.0f;
     [SerializeField] private List<GameObject> _pressurePlateObjects;
+    #endregion
 
+    #region INTERNAL DATA
     private bool _timerActive = false;
     private float _timer;
+    private List<PPVFXTimer> _ppVFXs;
+    #endregion
 
     protected override void InitAllPressurePlates()
     {
         // Initialize the list of pressure plates from the manually assigned list in inspector
         PressurePlates = new List<IPressurePlateBase>();
+        // Init list of VFX timers
+        _ppVFXs = new List<PPVFXTimer>();
+
         foreach (GameObject plateObject in _pressurePlateObjects)
         {
             var plate = plateObject.GetComponent<PressurePlateSingle>();
@@ -22,6 +30,13 @@ public class PressurePlateSystemD : PressurePlateSystem
             {
                 PressurePlates.Add(plate);
                 plate.InitPlateSystem(this);
+            }
+
+            PPVFXTimer vfx = plateObject.GetComponentInChildren<PPVFXTimer>();
+            if (vfx != null)
+            {
+                _ppVFXs.Add(vfx);
+                vfx.SetDrainTime(_activationTime);
             }
         }
     }
@@ -91,10 +106,19 @@ public class PressurePlateSystemD : PressurePlateSystem
         {
             _timer = _activationTime;
             _timerActive = true;
+            ActivateTimerVFXs();
         }
         plate.Activated = true;
 
         // Immediately check if this activation fulfilled all conditions
         CheckAllPlatesActivated();
+    }
+
+    private void ActivateTimerVFXs()
+    {
+        foreach (PPVFXTimer timer in _ppVFXs)
+        {
+            timer.StartVFXDrainer();
+        }
     }
 }
