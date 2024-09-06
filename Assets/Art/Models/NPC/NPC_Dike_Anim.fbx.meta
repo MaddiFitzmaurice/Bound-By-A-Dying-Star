@@ -21,8 +21,7 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
-      human bone 'LeftUpperLeg' not found\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -63,8 +62,84 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask: []
-      maskType: 3
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Hips
+        weight: 1
+      - path: Armature/Hips/Bottom_Clothing
+        weight: 1
+      - path: Armature/Hips/Bottom_Clothing/Bottom_Clothing_end
+        weight: 0
+      - path: Armature/Hips/L_Thigh
+        weight: 1
+      - path: Armature/Hips/L_Thigh/L_Leg
+        weight: 1
+      - path: Armature/Hips/L_Thigh/L_Leg/L_Foot
+        weight: 1
+      - path: Armature/Hips/L_Thigh/L_Leg/L_Foot/L_Foot_end
+        weight: 0
+      - path: Armature/Hips/R_Thigh
+        weight: 1
+      - path: Armature/Hips/R_Thigh/R_Leg
+        weight: 1
+      - path: Armature/Hips/R_Thigh/R_Leg/R_Foot
+        weight: 1
+      - path: Armature/Hips/R_Thigh/R_Leg/R_Foot/R_Foot_end
+        weight: 0
+      - path: Armature/Hips/Scale_ROOT
+        weight: 1
+      - path: Armature/Hips/Scale_ROOT/Scale_Middle
+        weight: 1
+      - path: Armature/Hips/Scale_ROOT/Scale_Middle/Left_Scale
+        weight: 1
+      - path: Armature/Hips/Scale_ROOT/Scale_Middle/Left_Scale/Left_ScaleWeights
+        weight: 1
+      - path: Armature/Hips/Scale_ROOT/Scale_Middle/Left_Scale/Left_ScaleWeights/Left_ScaleWeights_end
+        weight: 0
+      - path: Armature/Hips/Scale_ROOT/Scale_Middle/Right_Scale
+        weight: 1
+      - path: Armature/Hips/Scale_ROOT/Scale_Middle/Right_Scale/Right_ScaleWeights
+        weight: 1
+      - path: Armature/Hips/Scale_ROOT/Scale_Middle/Right_Scale/Right_ScaleWeights/Right_ScaleWeights_end
+        weight: 0
+      - path: Armature/Hips/Spine
+        weight: 1
+      - path: Armature/Hips/Spine/Chest
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder/L_UpperArm
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder/L_UpperArm/L_Forearm
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder/L_UpperArm/L_Forearm/L_Hand
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder/L_UpperArm/L_Forearm/L_Hand/L_Hand_end
+        weight: 0
+      - path: Armature/Hips/Spine/Chest/Neck
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/Neck/Head
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/Neck/Head/Head_end
+        weight: 0
+      - path: Armature/Hips/Spine/Chest/R_Shoulder
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/R_Shoulder/R_UpperArm
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/R_Shoulder/R_UpperArm/R_Forearm
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/R_Shoulder/R_UpperArm/R_Forearm/R_Hand
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/R_Shoulder/R_UpperArm/R_Forearm/R_Hand/R_Hand_end
+        weight: 0
+      - path: Dike
+        weight: 1
+      - path: Scales
+        weight: 1
+      maskType: 0
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16

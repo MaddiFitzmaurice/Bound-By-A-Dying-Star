@@ -585,6 +585,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57090f33acd392e48a57010bfd106678, type: 3}
+--- !u!4 &532898414 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3742407835892290726, guid: 0c9641e612589554d95aa258da52ffdd, type: 3}
+  m_PrefabInstance: {fileID: 1248841896}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &583261122
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1498,6 +1503,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -326738376104180399, guid: 0c9641e612589554d95aa258da52ffdd, type: 3}
+      propertyPath: m_RootBone
+      value: 
+      objectReference: {fileID: 532898414}
     - target: {fileID: 919132149155446097, guid: 0c9641e612589554d95aa258da52ffdd, type: 3}
       propertyPath: m_Name
       value: NPC_Astraea_Anim
@@ -1521,7 +1530,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 0dbd41047766ba44f8d58072317dbd22, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 27.252392
+      value: 43.02
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0dbd41047766ba44f8d58072317dbd22, type: 3}
       propertyPath: m_LocalPosition.y

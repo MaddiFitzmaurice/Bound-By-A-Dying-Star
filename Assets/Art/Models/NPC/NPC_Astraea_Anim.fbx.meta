@@ -24,10 +24,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Armature|Astraea_Idle' has import animation
-      warnings that might lower retargeting quality:\nNote: Activate translation
-      DOF on avatar to improve retargeting quality.\n\t'Chest' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -65,8 +62,74 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask: []
-      maskType: 3
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Hips
+        weight: 1
+      - path: Armature/Hips/Bottom_Clothing
+        weight: 1
+      - path: Armature/Hips/Bottom_Clothing/Bottom_Clothing_end
+        weight: 0
+      - path: Armature/Hips/L_Thigh
+        weight: 1
+      - path: Armature/Hips/L_Thigh/L_Leg
+        weight: 1
+      - path: Armature/Hips/L_Thigh/L_Leg/L_Foot
+        weight: 1
+      - path: Armature/Hips/L_Thigh/L_Leg/L_Foot/L_Foot_end
+        weight: 0
+      - path: Armature/Hips/R_Thigh
+        weight: 1
+      - path: Armature/Hips/R_Thigh/R_Leg
+        weight: 1
+      - path: Armature/Hips/R_Thigh/R_Leg/R_Foot
+        weight: 1
+      - path: Armature/Hips/R_Thigh/R_Leg/R_Foot/R_Foot_end
+        weight: 0
+      - path: Armature/Hips/Ring_ROOT
+        weight: 1
+      - path: Armature/Hips/Ring_ROOT/Ring
+        weight: 1
+      - path: Armature/Hips/Ring_ROOT/Ring/Ring_end
+        weight: 0
+      - path: Armature/Hips/Spine
+        weight: 1
+      - path: Armature/Hips/Spine/Chest
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder/L_UpperArm
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder/L_UpperArm/L_Forearm
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder/L_UpperArm/L_Forearm/L_Hand
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/L_Shoulder/L_UpperArm/L_Forearm/L_Hand/L_Hand_end
+        weight: 0
+      - path: Armature/Hips/Spine/Chest/Neck
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/Neck/Head
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/Neck/Head/Head_end
+        weight: 0
+      - path: Armature/Hips/Spine/Chest/R_Shoulder
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/R_Shoulder/R_UpperArm
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/R_Shoulder/R_UpperArm/R_Forearm
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/R_Shoulder/R_UpperArm/R_Forearm/R_Hand
+        weight: 1
+      - path: Armature/Hips/Spine/Chest/R_Shoulder/R_UpperArm/R_Forearm/R_Hand/R_Hand_end
+        weight: 0
+      - path: Astraea
+        weight: 1
+      - path: Astraea_Ring
+        weight: 1
+      maskType: 0
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
@@ -81,8 +144,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -366,45 +429,50 @@ ModelImporter:
       position: {x: -0, y: 0.002, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Ring
+    - name: Ring_ROOT
       parentName: Hips
-      position: {x: -0, y: 0.019077195, z: 0}
-      rotation: {x: -0.7071067, y: 0, z: -0, w: 0.7071069}
-      scale: {x: 1, y: 1, z: 1}
+      position: {x: -0, y: 0.0022898924, z: 0}
+      rotation: {x: -0.09256365, y: 0, z: -0, w: 0.9957068}
+      scale: {x: 1.0000002, y: 1, z: 1.0000002}
+    - name: Ring
+      parentName: Ring_ROOT
+      position: {x: -0, y: 0.017079987, z: 0}
+      rotation: {x: -0.6386186, y: 0, z: -0, w: 0.76952344}
+      scale: {x: 1.0000001, y: 1, z: 1.0000001}
     - name: Ring_end
       parentName: Ring
-      position: {x: -0, y: 0.006296792, z: 0}
+      position: {x: -0, y: 0.003148396, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Spine
       parentName: Hips
       position: {x: -0, y: 0.0022898924, z: 0}
       rotation: {x: -3.5527137e-15, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
+      scale: {x: 0.9999998, y: 0.9999998, z: 1}
     - name: Chest
       parentName: Spine
-      position: {x: -0, y: 0.0037601017, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      position: {x: -0, y: 0.0037600994, z: 0}
+      rotation: {x: -3.5527137e-15, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: L_Shoulder
       parentName: Chest
-      position: {x: -0.001337862, y: 0.0041019293, z: 0.0015379095}
-      rotation: {x: -0.57393533, y: 0.41303557, z: 0.41303542, w: 0.5739352}
+      position: {x: -0.001337862, y: 0.004101929, z: 0.0015379095}
+      rotation: {x: -0.57393533, y: 0.4130356, z: 0.41303545, w: 0.5739352}
       scale: {x: 1.0000001, y: 1.0000001, z: 1}
     - name: L_UpperArm
       parentName: L_Shoulder
-      position: {x: -1.1842118e-10, y: 0.0030744346, z: -7.428605e-10}
-      rotation: {x: -0.00000011920929, y: -0.000000014901161, z: 0.198875, w: 0.9800249}
-      scale: {x: 0.99999994, y: 0.9999999, z: 1}
+      position: {x: 1.7960212e-10, y: 0.0030744346, z: -7.428605e-10}
+      rotation: {x: -0, y: -0.000000014901163, z: 0.19887498, w: 0.9800249}
+      scale: {x: 0.9999999, y: 0.9999999, z: 0.99999994}
     - name: L_Forearm
       parentName: L_UpperArm
-      position: {x: 1.3507685e-17, y: 0.0040000007, z: 2.4424906e-17}
+      position: {x: -2.2019454e-17, y: 0.0040000007, z: -5.960464e-10}
       rotation: {x: 1.8357116e-15, y: -1.0918784e-22, z: -0.000000029802322, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: L_Hand
       parentName: L_Forearm
-      position: {x: -0, y: 0.003999996, z: -5.5511148e-18}
-      rotation: {x: 0, y: -0, z: -1.2717526e-16, w: 1}
+      position: {x: -0, y: 0.003999996, z: -5.9604643e-10}
+      rotation: {x: 0, y: -0, z: -1.2717534e-16, w: 1}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: L_Hand_end
       parentName: L_Hand
@@ -415,11 +483,11 @@ ModelImporter:
       parentName: Chest
       position: {x: -0, y: 0.0041019297, z: 0}
       rotation: {x: 0.00069376646, y: -0.00000019247823, z: -5.685828e-14, w: 0.99999976}
-      scale: {x: 1, y: 1, z: 1}
+      scale: {x: 1, y: 0.9999999, z: 0.99999994}
     - name: Head
       parentName: Neck
-      position: {x: 6.938894e-20, y: 0.0019750032, z: -2.9103808e-13}
-      rotation: {x: 0.034421455, y: -2.3060428e-14, z: 3.969608e-24, w: 0.9994074}
+      position: {x: 1.3877787e-19, y: 0.0019750025, z: 2.0383001e-19}
+      rotation: {x: 0.034421455, y: -8.841161e-15, z: 4.582386e-16, w: 0.9994074}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: Head_end
       parentName: Head
@@ -428,23 +496,23 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: R_Shoulder
       parentName: Chest
-      position: {x: 0.001337862, y: 0.0041019293, z: 0.0015379095}
-      rotation: {x: -0.57393533, y: -0.41303557, z: -0.41303542, w: 0.5739352}
+      position: {x: 0.001337862, y: 0.004101929, z: 0.0015379095}
+      rotation: {x: -0.57393533, y: -0.4130356, z: -0.41303545, w: 0.5739352}
       scale: {x: 1.0000001, y: 1.0000001, z: 1}
     - name: R_UpperArm
       parentName: R_Shoulder
-      position: {x: 1.1842118e-10, y: 0.0030744346, z: -7.428605e-10}
-      rotation: {x: -0.00000011920929, y: 0.000000014901161, z: -0.198875, w: 0.9800249}
-      scale: {x: 0.99999994, y: 0.9999999, z: 1}
+      position: {x: -1.7960212e-10, y: 0.0030744346, z: -7.428605e-10}
+      rotation: {x: -0, y: 0.000000014901163, z: -0.19887498, w: 0.9800249}
+      scale: {x: 0.9999999, y: 0.9999999, z: 0.99999994}
     - name: R_Forearm
       parentName: R_UpperArm
-      position: {x: -1.3507685e-17, y: 0.0040000007, z: 2.4424906e-17}
+      position: {x: 2.2019454e-17, y: 0.0040000007, z: -5.960464e-10}
       rotation: {x: 1.8357116e-15, y: 1.0918784e-22, z: 0.000000029802322, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: R_Hand
       parentName: R_Forearm
-      position: {x: -0, y: 0.003999996, z: -5.5511148e-18}
-      rotation: {x: 0, y: 0, z: 1.2717526e-16, w: 1}
+      position: {x: -0, y: 0.003999996, z: -5.9604643e-10}
+      rotation: {x: 0, y: 0, z: 1.2717534e-16, w: 1}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: R_Hand_end
       parentName: R_Hand
@@ -454,13 +522,13 @@ ModelImporter:
     - name: Astraea
       parentName: NPC_Astraea_Anim(Clone)
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 300, y: 300, z: 300}
     - name: Astraea_Ring
       parentName: NPC_Astraea_Anim(Clone)
       position: {x: -0, y: 8.013402, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 0.72, y: 0.72, z: 0.72}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 216.00002, y: 216.00002, z: 216.00002}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
