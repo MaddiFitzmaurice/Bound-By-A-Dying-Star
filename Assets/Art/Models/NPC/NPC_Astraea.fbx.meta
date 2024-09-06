@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Astraea
-    second: {fileID: 2100000, guid: 6791a61f1bcba864d9085e065d8ce6c1, type: 2}
+    second: {fileID: 2100000, guid: 647bd10ef974ee24996bd4846c2d6c89, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Dike
-    second: {fileID: 2100000, guid: 1bbfa377b52e5574a98dfb222a1c77df, type: 2}
+    second: {fileID: 2100000, guid: fe573df273ace1a4e99fa8da50e58e90, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -21,8 +21,7 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
-      human bone 'LeftUpperLeg' not found\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
