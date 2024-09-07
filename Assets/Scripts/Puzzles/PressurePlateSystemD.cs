@@ -81,6 +81,12 @@ public class PressurePlateSystemD : PressurePlateSystem
 
     private void FinalizeActivation()
     {
+        // Stop timer VFX
+        foreach (var vfx in _ppVFXs)
+        {
+            vfx.StopVFXDrainer();
+        }
+
         // Sets each pressure plate to white
         foreach (var plate in PressurePlates)
         {

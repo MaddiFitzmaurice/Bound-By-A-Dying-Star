@@ -9,6 +9,8 @@ public class PPVFXTimer : MonoBehaviour
     private float _drainTime;
     private ParticleSystem _system;
     ParticleSystem.ShapeModule _shape;
+    ParticleSystem.MainModule _main;
+    ParticleSystem.EmissionModule _emission;
     private float _timer = 0f;
     #endregion
 
@@ -16,6 +18,8 @@ public class PPVFXTimer : MonoBehaviour
     {
         _system = GetComponentInChildren<ParticleSystem>();
         _shape = _system.shape;
+        _main = _system.main;
+        _emission = _system.emission;
         _system.gameObject.SetActive(false);
     }
 
@@ -29,6 +33,13 @@ public class PPVFXTimer : MonoBehaviour
         StartCoroutine(VFXDrainer());
     }
 
+    public void StopVFXDrainer()
+    {
+        StopAllCoroutines();
+        _system.Stop();
+        _system.gameObject.SetActive(false);
+    }
+
     private IEnumerator VFXDrainer()
     {
         _system.gameObject.SetActive(true);
@@ -36,13 +47,16 @@ public class PPVFXTimer : MonoBehaviour
 
         while (_timer < _drainTime)
         {
-            _shape.arc = Mathf.Lerp(360f, 1f, _timer / _drainTime);
+            float num = Mathf.Lerp(360f, 1f, _timer / _drainTime);
+            _shape.arc = num;
+            _emission.rateOverTimeMultiplier = (num * 10f);
             _timer += Time.deltaTime;
             yield return null;
         }
 
         _system.gameObject.SetActive(false);
         _shape.arc = 360f;
+        _emission.rateOverTimeMultiplier = 3600f;
     }
 
     //private void Update()
