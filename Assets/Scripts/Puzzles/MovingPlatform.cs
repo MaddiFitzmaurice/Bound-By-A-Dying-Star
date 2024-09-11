@@ -15,10 +15,13 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        // Check if the GameObject's tag is "Player1" or "Player2"
-        if (other.CompareTag("Player1") || other.CompareTag("Player2"))
+        // Check if object is PlayerBase
+        PlayerBase player = other.GetComponent<PlayerBase>();
+
+        if (player != null)
         {
-            other.transform.SetParent(null);
+            // Reset to default parent in Gameplay Scene
+            player.DefaultParent();
         }
     }
 }

@@ -58,6 +58,9 @@ public abstract class PlayerBase : MonoBehaviour
     private Cloth _clothPhysics;
     private Animator _animator;
 
+    // Parent Grouper
+    private Transform _playerGrouper;
+
     // Movement Data
     protected Vector3 MoveInput;
     protected Vector3 PrevMoveInput;
@@ -98,6 +101,9 @@ public abstract class PlayerBase : MonoBehaviour
         _renderers.AddRange(GetComponentsInChildren<SkinnedMeshRenderer>().ToList<Renderer>());
         _clothPhysics = GetComponentInChildren<Cloth>();
         _animator = GetComponentInChildren<Animator>();
+
+        // Store parent so it can return to this parent after being temporarily parented
+        _playerGrouper = this.transform.parent;
 
         // Set data
         _animator.SetBool("IsRunning", false);
@@ -333,6 +339,11 @@ public abstract class PlayerBase : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(RespawnSequence(respawnPoint));
+    }
+
+    public void DefaultParent()
+    {
+        transform.parent = _playerGrouper;
     }
 
     #region INTERACTION FUNCTIONS
