@@ -19,7 +19,7 @@ public class PressurePlateSystemD : PressurePlateSystem
     protected override void InitAllPressurePlates()
     {
         // Initialize the list of pressure plates from the manually assigned list in inspector
-        PressurePlates = new List<IPressurePlateBase>();
+        PressurePlates = new List<PressurePlateSingle>();
         // Init list of VFX timers
         _ppVFXs = new List<PPVFXTimer>();
 
@@ -79,19 +79,16 @@ public class PressurePlateSystemD : PressurePlateSystem
         }
     }
 
+    // When all pressure plates have successfully been activated
     private void FinalizeActivation()
     {
-        // Stop timer VFX
+        // Stop timer VFX and set it to complete state
         foreach (var vfx in _ppVFXs)
         {
             vfx.StopVFXDrainer();
+            vfx.FinaliseActivation();
         }
 
-        // Sets each pressure plate to white
-        foreach (var plate in PressurePlates)
-        {
-            plate.ActivateColour(0);
-        }
         // Unlocks the final object, can be configured depending on scenario
         _objectToUnlock.SetActive(true);
     }
@@ -102,11 +99,16 @@ public class PressurePlateSystemD : PressurePlateSystem
         foreach (PressurePlateSingle plate in PressurePlates)
         {
             plate.Activated = false;
-            plate.ResetVisuals();
+        }
+
+        foreach (var vfx in _ppVFXs)
+        {
+            vfx.StopVFXDrainer();
         }
     }
 
-    public override void PlateActivated(IPressurePlateBase plate, bool activated)
+    // If a plate from the system is activated
+    public override void PlateActivated(PressurePlateSingle plate, bool activated)
     {
         if (!_timerActive)
         {
@@ -115,6 +117,7 @@ public class PressurePlateSystemD : PressurePlateSystem
             ActivateTimerVFXs();
         }
         plate.Activated = true;
+        plate.SetVFXPlayerColour();
 
         // Immediately check if this activation fulfilled all conditions
         CheckAllPlatesActivated();

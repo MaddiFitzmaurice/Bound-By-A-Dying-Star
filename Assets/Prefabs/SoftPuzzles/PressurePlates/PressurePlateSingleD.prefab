@@ -14,15 +14,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: a23100231f1388c47b478779b9123fea, type: 2}
     - target: {fileID: 332280542382311898, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 27.169659
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 332280542382311898, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.2395906
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 332280542382311898, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.461159
+      value: -6.58
       objectReference: {fileID: 0}
     - target: {fileID: 332280542382311898, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -52,12 +52,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1288505890996959789, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
+      propertyPath: _particleSystem
+      value: 
+      objectReference: {fileID: 2941139720294812517}
+    - target: {fileID: 1288505890996959789, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
+      propertyPath: _pressurePlatePS
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1288505890996959789, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
+      propertyPath: _persistVisualEffect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5168733509437644179, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
       propertyPath: m_Name
       value: PressurePlateSingleD
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9014086534672898005, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 332280542382311898, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
       insertIndex: 0
@@ -77,6 +90,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1534132670704456198}
     m_Modifications:
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _defaultColour.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _defaultColour.b
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _defaultColour.g
+      value: 0.8156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _defaultColour.r
+      value: 0.9372549
+      objectReference: {fileID: 0}
     - target: {fileID: 5711108469530618141, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
       propertyPath: m_Name
       value: PPTimer
@@ -314,6 +343,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+--- !u!198 &2941139720294812517 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8304101349394462766, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+  m_PrefabInstance: {fileID: 6624547455646659403}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3890822477795569279 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7931371922843327796, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}

@@ -29,7 +29,7 @@ public class PressurePlateSystemC : PressurePlateSystem
         }
     }
 
-    public override void PlateActivated(IPressurePlateBase plate, bool activated)
+    public override void PlateActivated(PressurePlateSingle plate, bool activated)
     {
         // Decide what the object should do when the system has been completed
         _isMoving = _onIsMove ? activated : !activated;

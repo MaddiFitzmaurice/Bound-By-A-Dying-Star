@@ -15,12 +15,12 @@ public class PressurePlateSystemA : PressurePlateSystem
         InitAllPressurePlates();
     }
 
-    public override void PlateActivated(IPressurePlateBase plate, bool activated)
+    public override void PlateActivated(PressurePlateSingle plate, bool activated)
     {
         // If one plate is deactivated, check if other plates are still activated
         if (!activated) 
         {
-            foreach (IPressurePlateBase pressurePlate in PressurePlates)
+            foreach (PressurePlateSingle pressurePlate in PressurePlates)
             {
                 if (pressurePlate != plate && pressurePlate.Activated)
                 {

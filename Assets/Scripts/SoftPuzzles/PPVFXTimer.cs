@@ -5,6 +5,10 @@ using UnityEngine.ProBuilder.Shapes;
 
 public class PPVFXTimer : MonoBehaviour
 {
+    #region EXTERNAL DATA
+    [SerializeField] private Color _defaultColour;
+    #endregion
+    
     #region INTERNAL DATA
     private float _drainTime;
     private ParticleSystem _system;
@@ -20,7 +24,20 @@ public class PPVFXTimer : MonoBehaviour
         _shape = _system.shape;
         _main = _system.main;
         _emission = _system.emission;
+        _main.startColor = _defaultColour;
         _system.gameObject.SetActive(false);
+    }
+
+    public void FinaliseActivation()
+    {
+        ResetAnim();
+        SetColour(Color.white);
+        _system.gameObject.SetActive(true);
+    }
+
+    public void SetColour(Color colour)
+    {
+        _main.startColor = colour;
     }
 
     public void SetDrainTime(float drainTime)
@@ -37,6 +54,7 @@ public class PPVFXTimer : MonoBehaviour
     {
         StopAllCoroutines();
         _system.Stop();
+        ResetAnim();
         _system.gameObject.SetActive(false);
     }
 
@@ -55,19 +73,13 @@ public class PPVFXTimer : MonoBehaviour
         }
 
         _system.gameObject.SetActive(false);
-        _shape.arc = 360f;
-        _emission.rateOverTimeMultiplier = 3600f;
+        ResetAnim();
     }
 
-    //private void Update()
-    //{
-    //    if (_shape.arc > 1)
-    //    {
-    //        _shape.arc -= (360f / _drainTime) * Time.deltaTime;
-    //    }
-    //    else
-    //    {
-    //        _system.gameObject.SetActive(false);
-    //    }
-    //}
+    private void ResetAnim()
+    {
+        _shape.arc = 360f;
+        _emission.rateOverTimeMultiplier = 3600f;
+        SetColour(_defaultColour);
+    }
 }
