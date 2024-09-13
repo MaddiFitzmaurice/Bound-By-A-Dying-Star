@@ -52,12 +52,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1288505890996959789, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
+      propertyPath: _particleSystem
+      value: 
+      objectReference: {fileID: 3511801033982496809}
     - target: {fileID: 5168733509437644179, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
       propertyPath: m_Name
-      value: PressurePlateSingleC Variant
+      value: PressurePlateSingleC
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
+--- !u!198 &3511801033982496809 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4199590739887379953, guid: c1c333312aacd1d4cb37a07fba1e23e8, type: 3}
+  m_PrefabInstance: {fileID: 791399780052993496}
+  m_PrefabAsset: {fileID: 0}

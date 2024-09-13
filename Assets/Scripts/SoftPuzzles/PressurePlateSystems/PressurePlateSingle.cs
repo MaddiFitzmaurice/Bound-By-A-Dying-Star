@@ -61,7 +61,13 @@ public class PressurePlateSingle : MonoBehaviour
     // NOT part of the overall system's VFX
     public void ActivateIndividualVFX()
     {
+        DeactivateIndividualVFX();
+        _particleSystem.Play();
+    }
 
+    public void DeactivateIndividualVFX()
+    {
+        _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 
     public void SetVFXPlayerColour()

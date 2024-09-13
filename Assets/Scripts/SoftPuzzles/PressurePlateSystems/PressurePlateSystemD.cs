@@ -116,6 +116,7 @@ public class PressurePlateSystemD : PressurePlateSystem
             _timerActive = true;
             ActivateTimerVFXs();
         }
+
         plate.Activated = true;
         plate.SetVFXPlayerColour();
 
