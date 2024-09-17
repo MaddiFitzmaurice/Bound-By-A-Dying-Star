@@ -6,8 +6,10 @@ public class UpdateRespawnPoint : MonoBehaviour
 {
     #region EXTERNAL DATA
     [Header("Path Respawns To Update")]
-    [SerializeField] private bool _path1ToUpdate;
-    [SerializeField] private bool _path2ToUpdate;
+    [SerializeField] private bool _forwardPath1ToUpdate;
+    [SerializeField] private bool _forwardPath2ToUpdate;
+    [SerializeField] private bool _backPath1ToUpdate;
+    [SerializeField] private bool _backPath2ToUpdate;
     #endregion
 
     #region INTERNAL DATA
@@ -30,28 +32,26 @@ public class UpdateRespawnPoint : MonoBehaviour
     {
         PlayerBase player = null;
 
-        // If either path still needs to update
-        if (_path1ToUpdate || _path2ToUpdate)
-        {
-            player = GetComponent<PlayerBase>();
+        player = other.GetComponent<PlayerBase>();
 
-            if (player == null)
-            {
-                if (_path1ToUpdate)
-                {
-                    _respawnSystem.UpdatePath1RespawnPoint(player);
-                    _path1ToUpdate = false;
-                }
-                else if (_path2ToUpdate)
-                {
-                    _respawnSystem.UpdatePath2RespawnPoint(player);
-                    _path2ToUpdate = false;
-                }
-            }
-        }
-        else
+        if (player != null)
         {
-            return;
-        }
+            if (_forwardPath1ToUpdate)
+            {
+                _forwardPath1ToUpdate = !_respawnSystem.UpdateForwardPath1RespawnPoint(player);
+            }
+            else if (_forwardPath2ToUpdate)
+            {
+                _forwardPath2ToUpdate = !_respawnSystem.UpdateForwardPath2RespawnPoint(player);
+            }
+            else if (_backPath1ToUpdate)
+            {
+                _backPath1ToUpdate = !_respawnSystem.UpdateBackPath1RespawnPoint(player);
+            }
+            else if (_backPath2ToUpdate)
+            {
+                _backPath2ToUpdate = !_respawnSystem.UpdateBackPath2RespawnPoint(player);
+            }
+        }        
     }
 }

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-
 public class RespawnSystem : MonoBehaviour
 {
     #region External Data
@@ -30,21 +28,10 @@ public class RespawnSystem : MonoBehaviour
     private Queue<Transform> _path2ForwardQ;
     private Queue<Transform> _path1BackQ;
     private Queue<Transform> _path2BackQ;
-
-    // List of UpdateRespawnPoints
-    private List<UpdateRespawnPoint> _updaters;
     #endregion
 
     private void Awake()
-    {
-        // Init updaters
-        _updaters = GetComponentsInChildren<UpdateRespawnPoint>().ToList<UpdateRespawnPoint>();
-
-        if (_updaters.Count < 1)
-        {
-            Debug.LogError("UpdateRespawnPoint scripts have not been assigned within soft puzzle!");
-        }
-
+    { 
         // Create queues
         _path1ForwardQ = new Queue<Transform>();
         _path2ForwardQ = new Queue<Transform>();
@@ -88,7 +75,7 @@ public class RespawnSystem : MonoBehaviour
         // If no separate paths to take, assume player1 = path1
         if (pathNum == RespawnPathNum.NOPATH)
         {
-            _player1CurrentQ = _path1BackQ;
+            _player1FutureBackQ = _path1BackQ;
         }
         else if (pathNum == RespawnPathNum.PATH1)
         {
@@ -97,11 +84,6 @@ public class RespawnSystem : MonoBehaviour
         else
         {
             _player1FutureBackQ = _path2BackQ;
-        }
-
-        if (_player1FutureBackQ == _player2FutureBackQ)
-        {
-            Debug.LogError("You have assigned the RespawnPathNums incorrectly on the RespawnPathChooser!");
         }
     }
 
@@ -120,35 +102,81 @@ public class RespawnSystem : MonoBehaviour
         {
             _player2FutureBackQ = _path2BackQ;
         }
+    }
 
-        if (_player1FutureBackQ == _player2FutureBackQ)
+    // Update respawn point of a path, return true to UpdateRespawnPoint if updated successfully
+    public bool UpdateForwardPath1RespawnPoint(PlayerBase player)
+    {
+        if (player is Player1 && _player1CurrentQ == _path1ForwardQ)
         {
-            Debug.LogError("You have assigned the RespawnPathNums incorrectly on the RespawnPathChooser!");
+            _player1CurrentQ.Dequeue();
+            return true;
+        }
+        else if (player is Player2 && _player2CurrentQ == _path1ForwardQ)
+        {
+            _player2CurrentQ.Dequeue();
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
-    // Update respawn point of a path
-    public void UpdatePath1RespawnPoint(PlayerBase player)
+    // Update respawn point of a path, return true to UpdateRespawnPoint if updated successfully
+    public bool UpdateForwardPath2RespawnPoint(PlayerBase player)
+    {
+        if (player is Player1 && _player1CurrentQ == _path2ForwardQ)
+        {
+            _player1CurrentQ.Dequeue();
+            return true;
+        }
+        else if (player is Player2 && _player2CurrentQ == _path2ForwardQ)
+        {
+            _player2CurrentQ.Dequeue();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // Update respawn point of a path, return true to UpdateRespawnPoint if updated successfully
+    public bool UpdateBackPath1RespawnPoint(PlayerBase player)
     {
         if (player is Player1 && _player1CurrentQ == _path1BackQ)
         {
-            _player1CurrentQ.Dequeue(); 
+            _player1CurrentQ.Dequeue();
+            return true;
         }
         else if (player is Player2 && _player2CurrentQ == _path1BackQ)
         {
             _player2CurrentQ.Dequeue();
+            return true;
+        }
+        else
+        { 
+            return false;
         }
     }
 
-    public void UpdatePath2RespawnPoint(PlayerBase player)
+    // Update respawn point of a path, return true to UpdateRespawnPoint if updated successfully
+    public bool UpdateBackPath2RespawnPoint(PlayerBase player)
     {
         if (player is Player1 && _player1CurrentQ == _path2BackQ)
         {
             _player1CurrentQ.Dequeue();
+            return true;
         }
         else if (player is Player2 && _player2CurrentQ == _path2BackQ)
         {
             _player2CurrentQ.Dequeue();
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
