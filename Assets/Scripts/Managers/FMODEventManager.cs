@@ -34,7 +34,8 @@ public class FMODEventManager : MonoBehaviour
     [field: SerializeField] public float MainAreaLoopEnd { get; private set; } = 54.859f;
     [field: SerializeField] public float SoftPuzzleLoopStart { get; private set; } = 58.286f;
     [field: SerializeField] public float SoftPuzzleLoopEnd { get; private set; } = 109.901f;
-    [field: SerializeField] public float TransitionDuration { get; private set; } = 3.429f;
+    [field: SerializeField] public float MainAreaTransitionDuration { get; private set; } = 3.429f;
+    [field: SerializeField] public float SoftPuzzleTransitionDuration { get; private set; } = 6.875f;
 
     private EventInstance _itemPickupInstance;
     private EventInstance _itemDropInstance;
@@ -51,6 +52,11 @@ public class FMODEventManager : MonoBehaviour
     private EventInstance _backgroundMusicInstance;
 
     private const string LOOP_REGION_PARAMETER = "LoopRegion";
+    private const string VOLUME_PARAMETER = "Volume";
+
+    private EventInstance _mainAreaMusicInstance;
+    private EventInstance _softPuzzleMusicInstance;
+    private bool _isInMainArea = true;
 
     private const int AMBIENT_POSITION = 0; 
     private const int CALM_POSITION = 3428; 
@@ -87,11 +93,22 @@ public class FMODEventManager : MonoBehaviour
         _pressurePlatePlayer1OffInstance = RuntimeManager.CreateInstance(PressurePlatePlayer1Off);
         _pressurePlatePlayer2OnInstance = RuntimeManager.CreateInstance(PressurePlatePlayer2On);
         _pressurePlatePlayer2OffInstance = RuntimeManager.CreateInstance(PressurePlatePlayer2Off);
-        // Initialize the background music
-        _backgroundMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
-        _backgroundMusicInstance.start();
-        _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 0); // Start with main area loop
-        _backgroundMusicInstance.setTimelinePosition((int)(MainAreaLoopStart * 1000));
+
+        // Initialize both music instances
+        _mainAreaMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
+        _softPuzzleMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
+
+        // Set up main area music
+        _mainAreaMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 0);
+        _mainAreaMusicInstance.setTimelinePosition((int)(MainAreaLoopStart * 1000));
+        _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, 1f);
+        _mainAreaMusicInstance.start();
+
+        // Set up soft puzzle music (initially silent)
+        _softPuzzleMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 1);
+        _softPuzzleMusicInstance.setTimelinePosition((int)(SoftPuzzleLoopStart * 1000));
+        _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, 0f);
+        _softPuzzleMusicInstance.start();
 
         // Pre-start instances to load resources
         _itemPickupInstance.start();
@@ -203,10 +220,16 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER2_OFF, HandlePressurePlatePlayer2Off);
         EventManager.EventUnsubscribe(EventType.BACKGROUND_MUSIC, HandleBackgroundMusic);
 
-        if (_backgroundMusicInstance.isValid())
+        if (_mainAreaMusicInstance.isValid())
         {
-            _backgroundMusicInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-            _backgroundMusicInstance.release();
+            _mainAreaMusicInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            _mainAreaMusicInstance.release();
+        }
+
+        if (_softPuzzleMusicInstance.isValid())
+        {
+            _softPuzzleMusicInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            _softPuzzleMusicInstance.release();
         }
     }
 
@@ -308,54 +331,74 @@ public class FMODEventManager : MonoBehaviour
 
     public void HandleBackgroundMusic(object data)
     {
-        Debug.Log($"HandleBackgroundMusic called with data: {data}");
         if (data is string section)
         {
             switch (section)
             {
                 case "MainArea":
-                    Debug.Log("Transitioning to Main Area music");
-                    StartCoroutine(TransitionToMainArea());
+                    if (!_isInMainArea)
+                    {
+                        StartCoroutine(CrossfadeToMainArea());
+                    }
                     break;
                 case "SoftPuzzle":
-                    Debug.Log("Transitioning to Soft Puzzle music");
-                    StartCoroutine(TransitionToSoftPuzzle());
-                    break;
-                default:
-                    Debug.LogWarning($"Unknown music section: {section}");
+                    if (_isInMainArea)
+                    {
+                        StartCoroutine(CrossfadeToSoftPuzzle());
+                    }
                     break;
             }
         }
-        else
-        {
-            Debug.LogError($"Unexpected data type for HandleBackgroundMusic: {data?.GetType()}");
-        }
     }
 
-    private IEnumerator TransitionToMainArea()
+    private IEnumerator CrossfadeToMainArea()
     {
-        float startTime = Time.time;
-        while (Time.time - startTime < TransitionDuration)
+        float elapsedTime = 0f;
+        float duration = MainAreaTransitionDuration;
+
+        while (elapsedTime < duration)
         {
-            float t = (Time.time - startTime) / TransitionDuration;
-            _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 1 - t);
+            float t = elapsedTime / duration;
+            float mainAreaVolume = Mathf.Lerp(0f, 1f, t);
+            float softPuzzleVolume = Mathf.Lerp(1f, 0f, t);
+
+            _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, mainAreaVolume);
+            _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, softPuzzleVolume);
+
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-        _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 0);
-        _backgroundMusicInstance.setTimelinePosition((int)(MainAreaLoopStart * 1000));
+
+        // Ensure final volumes are set correctly
+        _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, 1f);
+        _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, 0f);
+
+        _isInMainArea = true;
     }
 
-    private IEnumerator TransitionToSoftPuzzle()
+    private IEnumerator CrossfadeToSoftPuzzle()
     {
-        float startTime = Time.time;
-        while (Time.time - startTime < TransitionDuration)
+        float elapsedTime = 0f;
+        float duration = SoftPuzzleTransitionDuration;
+
+        while (elapsedTime < duration)
         {
-            float t = (Time.time - startTime) / TransitionDuration;
-            _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, t);
+            float t = elapsedTime / duration;
+            float mainAreaVolume = Mathf.Lerp(1f, 0f, t);
+            float softPuzzleVolume = Mathf.Lerp(0f, 1f, t);
+
+            _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, mainAreaVolume);
+            _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, softPuzzleVolume);
+
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-        _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 1);
-        _backgroundMusicInstance.setTimelinePosition((int)(SoftPuzzleLoopStart * 1000));
+
+        // Ensure final volumes are set correctly
+        _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, 0f);
+        _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, 1f);
+
+        _isInMainArea = false;
     }
 
     private void PlayEvent(EventInstance eventInstance)
