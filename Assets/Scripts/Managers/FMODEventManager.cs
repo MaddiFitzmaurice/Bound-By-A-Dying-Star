@@ -29,6 +29,13 @@ public class FMODEventManager : MonoBehaviour
     [field: Header("Music Events")]
     [field: SerializeField] public EventReference BackgroundMusic { get; private set; }
 
+    [field: Header("Music Sections")]
+    [field: SerializeField] public float MainAreaLoopStart { get; private set; } = 3.424f;
+    [field: SerializeField] public float MainAreaLoopEnd { get; private set; } = 54.859f;
+    [field: SerializeField] public float SoftPuzzleLoopStart { get; private set; } = 58.286f;
+    [field: SerializeField] public float SoftPuzzleLoopEnd { get; private set; } = 109.901f;
+    [field: SerializeField] public float TransitionDuration { get; private set; } = 3.429f;
+
     private EventInstance _itemPickupInstance;
     private EventInstance _itemDropInstance;
     private EventInstance _mirrorPlacementInstance;
@@ -42,6 +49,8 @@ public class FMODEventManager : MonoBehaviour
     private EventInstance _pressurePlatePlayer2OnInstance;
     private EventInstance _pressurePlatePlayer2OffInstance;
     private EventInstance _backgroundMusicInstance;
+
+    private const string LOOP_REGION_PARAMETER = "LoopRegion";
 
     private const int AMBIENT_POSITION = 0; 
     private const int CALM_POSITION = 3428; 
@@ -64,6 +73,7 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER2_OFF);
         EventManager.EventInitialise(EventType.BACKGROUND_MUSIC);
 
+
         // Preload FMOD event instances
         _itemPickupInstance = RuntimeManager.CreateInstance(ItemPickup);
         _itemDropInstance = RuntimeManager.CreateInstance(ItemDrop);
@@ -77,7 +87,11 @@ public class FMODEventManager : MonoBehaviour
         _pressurePlatePlayer1OffInstance = RuntimeManager.CreateInstance(PressurePlatePlayer1Off);
         _pressurePlatePlayer2OnInstance = RuntimeManager.CreateInstance(PressurePlatePlayer2On);
         _pressurePlatePlayer2OffInstance = RuntimeManager.CreateInstance(PressurePlatePlayer2Off);
+        // Initialize the background music
         _backgroundMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
+        _backgroundMusicInstance.start();
+        _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 0); // Start with main area loop
+        _backgroundMusicInstance.setTimelinePosition((int)(MainAreaLoopStart * 1000));
 
         // Pre-start instances to load resources
         _itemPickupInstance.start();
@@ -112,6 +126,46 @@ public class FMODEventManager : MonoBehaviour
 
         _backgroundMusicInstance.start();
         _backgroundMusicInstance.setPaused(true);
+
+
+        // DEBUGGINH
+        Debug.Log("Initializing background music");
+        _backgroundMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
+        if (!_backgroundMusicInstance.isValid())
+        {
+            Debug.LogError("Failed to create background music instance");
+            return;
+        }
+
+        Debug.Log("Starting background music");
+        FMOD.RESULT result = _backgroundMusicInstance.start();
+        if (result != FMOD.RESULT.OK)
+        {
+            Debug.LogError($"Failed to start background music: {result}");
+            return;
+        }
+
+        Debug.Log("Setting initial parameter for background music");
+        result = _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 0);
+        if (result != FMOD.RESULT.OK)
+        {
+            Debug.LogError($"Failed to set initial parameter for background music: {result}");
+            return;
+        }
+
+        Debug.Log("Setting initial timeline position for background music");
+        result = _backgroundMusicInstance.setTimelinePosition((int)(MainAreaLoopStart * 1000));
+        if (result != FMOD.RESULT.OK)
+        {
+            Debug.LogError($"Failed to set initial timeline position for background music: {result}");
+            return;
+        }
+
+        Debug.Log("Background music initialization complete");
+
+
+
+
     }
 
     private void OnEnable()
@@ -148,6 +202,12 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER2_ON, HandlePressurePlatePlayer2On);
         EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER2_OFF, HandlePressurePlatePlayer2Off);
         EventManager.EventUnsubscribe(EventType.BACKGROUND_MUSIC, HandleBackgroundMusic);
+
+        if (_backgroundMusicInstance.isValid())
+        {
+            _backgroundMusicInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            _backgroundMusicInstance.release();
+        }
     }
 
     private void HandleItemPickup(object data)
@@ -248,17 +308,54 @@ public class FMODEventManager : MonoBehaviour
 
     public void HandleBackgroundMusic(object data)
     {
-        if (data is string marker)
+        Debug.Log($"HandleBackgroundMusic called with data: {data}");
+        if (data is string section)
         {
-            _backgroundMusicInstance.setPaused(false);
-            int position = GetMarkerPosition(marker);
-            if (position >= 0)
+            switch (section)
             {
-                _backgroundMusicInstance.setTimelinePosition(position);
-                _backgroundMusicInstance.start();
-                SetLoopRegion(marker);
+                case "MainArea":
+                    Debug.Log("Transitioning to Main Area music");
+                    StartCoroutine(TransitionToMainArea());
+                    break;
+                case "SoftPuzzle":
+                    Debug.Log("Transitioning to Soft Puzzle music");
+                    StartCoroutine(TransitionToSoftPuzzle());
+                    break;
+                default:
+                    Debug.LogWarning($"Unknown music section: {section}");
+                    break;
             }
         }
+        else
+        {
+            Debug.LogError($"Unexpected data type for HandleBackgroundMusic: {data?.GetType()}");
+        }
+    }
+
+    private IEnumerator TransitionToMainArea()
+    {
+        float startTime = Time.time;
+        while (Time.time - startTime < TransitionDuration)
+        {
+            float t = (Time.time - startTime) / TransitionDuration;
+            _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 1 - t);
+            yield return null;
+        }
+        _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 0);
+        _backgroundMusicInstance.setTimelinePosition((int)(MainAreaLoopStart * 1000));
+    }
+
+    private IEnumerator TransitionToSoftPuzzle()
+    {
+        float startTime = Time.time;
+        while (Time.time - startTime < TransitionDuration)
+        {
+            float t = (Time.time - startTime) / TransitionDuration;
+            _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, t);
+            yield return null;
+        }
+        _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 1);
+        _backgroundMusicInstance.setTimelinePosition((int)(SoftPuzzleLoopStart * 1000));
     }
 
     private void PlayEvent(EventInstance eventInstance)
