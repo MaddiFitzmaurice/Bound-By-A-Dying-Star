@@ -11,22 +11,10 @@ public class SoftPuzzleManager : MonoBehaviour
 
     #region Internal Data
     private GameObject _player1;
-    private bool _player1InPuzzle;
     private GameObject _player2;
+    private bool _player1InPuzzle;
     private bool _player2InPuzzle;
     #endregion
-
-    private void CheckMusicTransition()
-    {
-        if (_player1InPuzzle && _player2InPuzzle)
-        {
-            EventManager.EventTrigger(EventType.MUSIC, "SoftPuzzle");
-        }
-        else if (!_player1InPuzzle && !_player2InPuzzle)
-        {
-            EventManager.EventTrigger(EventType.MUSIC, "MainArea");
-        }
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -56,10 +44,9 @@ public class SoftPuzzleManager : MonoBehaviour
         CheckMusicTransition();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void CheckMusicTransition()
     {
-        
-
+        string musicSection = (_player1InPuzzle && _player2InPuzzle) ? "SoftPuzzle" : "MainArea";
+        EventManager.EventTrigger(EventType.MUSIC, musicSection);
     }
 }

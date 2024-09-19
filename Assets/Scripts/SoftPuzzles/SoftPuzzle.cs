@@ -80,8 +80,6 @@ public class SoftPuzzle : MonoBehaviour
         }
     }
 
-
-
     private void OnTriggerEnter(Collider other)
     {
         // Enables flag to check if players are within the puzzle

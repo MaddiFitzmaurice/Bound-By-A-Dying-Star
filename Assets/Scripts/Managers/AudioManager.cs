@@ -7,30 +7,46 @@ using FMODUnity;
 public class AudioManager : MonoBehaviour
 {
     private FMODEventManager _fmodEventManager;
-    private FMOD.Studio.EventInstance _musicInstance;
-    private FMOD.Studio.EventInstance _sfxInstance;
 
     private void Awake()
     {
-        // Find the FMODEventManager in the scene
+        InitializeFMODEventManager();
+        InitializeEvents();
+    }
+
+    private void InitializeFMODEventManager()
+    {
         _fmodEventManager = GetComponent<FMODEventManager>();
 
         if (_fmodEventManager == null)
         {
             Debug.LogError("FMODEventManager not found in the scene.");
         }
+    }
 
+    private void InitializeEvents()
+    {
         EventManager.EventInitialise(EventType.MUSIC);
         EventManager.EventInitialise(EventType.SFX);
     }
 
     private void OnEnable()
     {
+        SubscribeToEvents();
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeFromEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
         EventManager.EventSubscribe(EventType.MUSIC, MusicEventHandler);
         EventManager.EventSubscribe(EventType.SFX, SFXEventHandler);
     }
 
-    private void OnDisable()
+    private void UnsubscribeFromEvents()
     {
         EventManager.EventUnsubscribe(EventType.MUSIC, MusicEventHandler);
         EventManager.EventUnsubscribe(EventType.SFX, SFXEventHandler);
@@ -38,12 +54,6 @@ public class AudioManager : MonoBehaviour
 
     private void MusicEventHandler(object data)
     {
-        if (_musicInstance.isValid())
-        {
-            _musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            _musicInstance.release();
-        }
-
         if (_fmodEventManager != null && data is string section)
         {
             _fmodEventManager.HandleBackgroundMusic(section);
@@ -54,9 +64,9 @@ public class AudioManager : MonoBehaviour
     {
         if (data is string sfxName)
         {
-            _sfxInstance = RuntimeManager.CreateInstance(sfxName);
-            _sfxInstance.start();
-            _sfxInstance.release();
+            FMOD.Studio.EventInstance sfxInstance = RuntimeManager.CreateInstance(sfxName);
+            sfxInstance.start();
+            sfxInstance.release();
         }
         else
         {

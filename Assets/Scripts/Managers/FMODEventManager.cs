@@ -1,42 +1,46 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
 
 public class FMODEventManager : MonoBehaviour
 {
-    [field: Header("Item SFX")]
-    [field: SerializeField] public EventReference ItemPickup { get; private set; }
-    [field: SerializeField] public EventReference ItemDrop { get; private set; }
-    [field: SerializeField] public EventReference MirrorPlacement { get; private set; }
-    [field: SerializeField] public EventReference MirrorCarryingPlayer1 { get; private set; }
-    [field: SerializeField] public EventReference MirrorCarryingPlayer2 { get; private set; }
+    #region Audio Events
+    [Header("Item SFX")]
+    [SerializeField] private EventReference _itemPickup;
+    [SerializeField] private EventReference _itemDrop;
+    [SerializeField] private EventReference _mirrorPlacement;
+    [SerializeField] private EventReference _mirrorCarryingPlayer1;
+    [SerializeField] private EventReference _mirrorCarryingPlayer2;
 
-    [field: Header("Pedestal SFX")]
-    [field: SerializeField] public EventReference PedestalRotation { get; private set; }
-    [field: SerializeField] public EventReference BeamConnection { get; private set; }
+    [Header("Pedestal SFX")]
+    [SerializeField] private EventReference _pedestalRotation;
+    [SerializeField] private EventReference _beamConnection;
 
-    [field: Header("Pressure Plate SFX")]
-    [field: SerializeField] public EventReference PressurePlatePlayer1On { get; private set; }
-    [field: SerializeField] public EventReference PressurePlatePlayer1Off { get; private set; }
-    [field: SerializeField] public EventReference PressurePlatePlayer2On { get; private set; }
-    [field: SerializeField] public EventReference PressurePlatePlayer2Off { get; private set; }
+    [Header("Pressure Plate SFX")]
+    [SerializeField] private EventReference _pressurePlatePlayer1On;
+    [SerializeField] private EventReference _pressurePlatePlayer1Off;
+    [SerializeField] private EventReference _pressurePlatePlayer2On;
+    [SerializeField] private EventReference _pressurePlatePlayer2Off;
 
-    [field: Header("Puzzle Completion SFX")]
-    [field: SerializeField] public EventReference ConstellationComplete { get; private set; }
+    [Header("Puzzle Completion SFX")]
+    [SerializeField] private EventReference _constellationComplete;
 
-    [field: Header("Music Events")]
-    [field: SerializeField] public EventReference BackgroundMusic { get; private set; }
+    [Header("Music Events")]
+    [SerializeField] private EventReference _backgroundMusic;
+    #endregion
 
-    [field: Header("Music Sections")]
-    [field: SerializeField] public float MainAreaLoopStart { get; private set; } = 3.424f;
-    [field: SerializeField] public float MainAreaLoopEnd { get; private set; } = 54.859f;
-    [field: SerializeField] public float SoftPuzzleLoopStart { get; private set; } = 58.286f;
-    [field: SerializeField] public float SoftPuzzleLoopEnd { get; private set; } = 109.901f;
-    [field: SerializeField] public float MainAreaTransitionDuration { get; private set; } = 3.429f;
-    [field: SerializeField] public float SoftPuzzleTransitionDuration { get; private set; } = 6.875f;
+    #region Music Section Parameters
+    [Header("Music Sections")]
+    [SerializeField] private float _mainAreaLoopStart = 3.424f;
+    [SerializeField] private float _mainAreaLoopEnd = 54.859f;
+    [SerializeField] private float _softPuzzleLoopStart = 58.286f;
+    [SerializeField] private float _softPuzzleLoopEnd = 109.901f;
+    [SerializeField] private float _mainAreaTransitionDuration = 3.429f;
+    [SerializeField] private float _softPuzzleTransitionDuration = 6.875f;
+    #endregion
 
+    #region Private Fields
     private EventInstance _itemPickupInstance;
     private EventInstance _itemDropInstance;
     private EventInstance _mirrorPlacementInstance;
@@ -49,22 +53,34 @@ public class FMODEventManager : MonoBehaviour
     private EventInstance _pressurePlatePlayer1OffInstance;
     private EventInstance _pressurePlatePlayer2OnInstance;
     private EventInstance _pressurePlatePlayer2OffInstance;
-    private EventInstance _backgroundMusicInstance;
-
-    private const string LOOP_REGION_PARAMETER = "LoopRegion";
-    private const string VOLUME_PARAMETER = "Volume";
-
     private EventInstance _mainAreaMusicInstance;
     private EventInstance _softPuzzleMusicInstance;
     private bool _isInMainArea = true;
 
-    private const int AMBIENT_POSITION = 0; 
-    private const int CALM_POSITION = 3428; 
-    private const int DEEP_POSITION = 58287; 
+    private const string LOOP_REGION_PARAMETER = "LoopRegion";
+    private const string VOLUME_PARAMETER = "Volume";
+    #endregion
 
     private void Awake()
     {
-        // Initialize events
+        InitializeEvents();
+        CreateEventInstances();
+        SetupMusicInstances();
+    }
+
+    private void OnEnable()
+    {
+        SubscribeToEvents();
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeFromEvents();
+        ReleaseMusicInstances();
+    }
+
+    private void InitializeEvents()
+    {
         EventManager.EventInitialise(EventType.ITEM_PICKUP);
         EventManager.EventInitialise(EventType.ITEM_DROP);
         EventManager.EventInitialise(EventType.MIRROR_PLACEMENT);
@@ -78,116 +94,42 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER2_ON);
         EventManager.EventInitialise(EventType.PRESSURE_PLATE_PLAYER2_OFF);
         EventManager.EventInitialise(EventType.BACKGROUND_MUSIC);
+    }
 
+    private void CreateEventInstances()
+    {
+        _itemPickupInstance = RuntimeManager.CreateInstance(_itemPickup);
+        _itemDropInstance = RuntimeManager.CreateInstance(_itemDrop);
+        _mirrorPlacementInstance = RuntimeManager.CreateInstance(_mirrorPlacement);
+        _mirrorCarryingPlayer1Instance = RuntimeManager.CreateInstance(_mirrorCarryingPlayer1);
+        _mirrorCarryingPlayer2Instance = RuntimeManager.CreateInstance(_mirrorCarryingPlayer2);
+        _pedestalRotationInstance = RuntimeManager.CreateInstance(_pedestalRotation);
+        _beamConnectionInstance = RuntimeManager.CreateInstance(_beamConnection);
+        _constellationCompleteInstance = RuntimeManager.CreateInstance(_constellationComplete);
+        _pressurePlatePlayer1OnInstance = RuntimeManager.CreateInstance(_pressurePlatePlayer1On);
+        _pressurePlatePlayer1OffInstance = RuntimeManager.CreateInstance(_pressurePlatePlayer1Off);
+        _pressurePlatePlayer2OnInstance = RuntimeManager.CreateInstance(_pressurePlatePlayer2On);
+        _pressurePlatePlayer2OffInstance = RuntimeManager.CreateInstance(_pressurePlatePlayer2Off);
+    }
 
-        // Preload FMOD event instances
-        _itemPickupInstance = RuntimeManager.CreateInstance(ItemPickup);
-        _itemDropInstance = RuntimeManager.CreateInstance(ItemDrop);
-        _mirrorPlacementInstance = RuntimeManager.CreateInstance(MirrorPlacement);
-        _mirrorCarryingPlayer1Instance = RuntimeManager.CreateInstance(MirrorCarryingPlayer1);
-        _mirrorCarryingPlayer2Instance = RuntimeManager.CreateInstance(MirrorCarryingPlayer2);
-        _pedestalRotationInstance = RuntimeManager.CreateInstance(PedestalRotation);
-        _beamConnectionInstance = RuntimeManager.CreateInstance(BeamConnection);
-        _constellationCompleteInstance = RuntimeManager.CreateInstance(ConstellationComplete);
-        _pressurePlatePlayer1OnInstance = RuntimeManager.CreateInstance(PressurePlatePlayer1On);
-        _pressurePlatePlayer1OffInstance = RuntimeManager.CreateInstance(PressurePlatePlayer1Off);
-        _pressurePlatePlayer2OnInstance = RuntimeManager.CreateInstance(PressurePlatePlayer2On);
-        _pressurePlatePlayer2OffInstance = RuntimeManager.CreateInstance(PressurePlatePlayer2Off);
+    private void SetupMusicInstances()
+    {
+        _mainAreaMusicInstance = RuntimeManager.CreateInstance(_backgroundMusic);
+        _softPuzzleMusicInstance = RuntimeManager.CreateInstance(_backgroundMusic);
 
-        // Initialize both music instances
-        _mainAreaMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
-        _softPuzzleMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
-
-        // Set up main area music
         _mainAreaMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 0);
-        _mainAreaMusicInstance.setTimelinePosition((int)(MainAreaLoopStart * 1000));
+        _mainAreaMusicInstance.setTimelinePosition((int)(_mainAreaLoopStart * 1000));
         _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, 1f);
         _mainAreaMusicInstance.start();
 
-        // Set up soft puzzle music (initially silent)
         _softPuzzleMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 1);
-        _softPuzzleMusicInstance.setTimelinePosition((int)(SoftPuzzleLoopStart * 1000));
+        _softPuzzleMusicInstance.setTimelinePosition((int)(_softPuzzleLoopStart * 1000));
         _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, 0f);
         _softPuzzleMusicInstance.start();
-
-        // Pre-start instances to load resources
-        _itemPickupInstance.start();
-        _itemPickupInstance.setPaused(true);
-
-        _itemDropInstance.start();
-        _itemDropInstance.setPaused(true);
-
-        _mirrorPlacementInstance.start();
-        _mirrorPlacementInstance.setPaused(true);
-
-        _pedestalRotationInstance.start();
-        _pedestalRotationInstance.setPaused(true);
-
-        _beamConnectionInstance.start();
-        _beamConnectionInstance.setPaused(true);
-
-        _constellationCompleteInstance.start();
-        _constellationCompleteInstance.setPaused(true);
-
-        _pressurePlatePlayer1OnInstance.start();
-        _pressurePlatePlayer1OnInstance.setPaused(true);
-
-        _pressurePlatePlayer1OffInstance.start();
-        _pressurePlatePlayer1OffInstance.setPaused(true);
-
-        _pressurePlatePlayer2OnInstance.start();
-        _pressurePlatePlayer2OnInstance.setPaused(true);
-
-        _pressurePlatePlayer2OffInstance.start();
-        _pressurePlatePlayer2OffInstance.setPaused(true);
-
-        _backgroundMusicInstance.start();
-        _backgroundMusicInstance.setPaused(true);
-
-
-        // DEBUGGINH
-        Debug.Log("Initializing background music");
-        _backgroundMusicInstance = RuntimeManager.CreateInstance(BackgroundMusic);
-        if (!_backgroundMusicInstance.isValid())
-        {
-            Debug.LogError("Failed to create background music instance");
-            return;
-        }
-
-        Debug.Log("Starting background music");
-        FMOD.RESULT result = _backgroundMusicInstance.start();
-        if (result != FMOD.RESULT.OK)
-        {
-            Debug.LogError($"Failed to start background music: {result}");
-            return;
-        }
-
-        Debug.Log("Setting initial parameter for background music");
-        result = _backgroundMusicInstance.setParameterByName(LOOP_REGION_PARAMETER, 0);
-        if (result != FMOD.RESULT.OK)
-        {
-            Debug.LogError($"Failed to set initial parameter for background music: {result}");
-            return;
-        }
-
-        Debug.Log("Setting initial timeline position for background music");
-        result = _backgroundMusicInstance.setTimelinePosition((int)(MainAreaLoopStart * 1000));
-        if (result != FMOD.RESULT.OK)
-        {
-            Debug.LogError($"Failed to set initial timeline position for background music: {result}");
-            return;
-        }
-
-        Debug.Log("Background music initialization complete");
-
-
-
-
     }
 
-    private void OnEnable()
+    private void SubscribeToEvents()
     {
-        // Subscribe to events
         EventManager.EventSubscribe(EventType.ITEM_PICKUP, HandleItemPickup);
         EventManager.EventSubscribe(EventType.ITEM_DROP, HandleItemDrop);
         EventManager.EventSubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
@@ -203,9 +145,8 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.BACKGROUND_MUSIC, HandleBackgroundMusic);
     }
 
-    private void OnDisable()
+    private void UnsubscribeFromEvents()
     {
-        // Unsubscribe from events
         EventManager.EventUnsubscribe(EventType.ITEM_PICKUP, HandleItemPickup);
         EventManager.EventUnsubscribe(EventType.ITEM_DROP, HandleItemDrop);
         EventManager.EventUnsubscribe(EventType.MIRROR_PLACEMENT, HandleMirrorPlacement);
@@ -219,7 +160,10 @@ public class FMODEventManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER2_ON, HandlePressurePlatePlayer2On);
         EventManager.EventUnsubscribe(EventType.PRESSURE_PLATE_PLAYER2_OFF, HandlePressurePlatePlayer2Off);
         EventManager.EventUnsubscribe(EventType.BACKGROUND_MUSIC, HandleBackgroundMusic);
+    }
 
+    private void ReleaseMusicInstances()
+    {
         if (_mainAreaMusicInstance.isValid())
         {
             _mainAreaMusicInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
@@ -233,33 +177,23 @@ public class FMODEventManager : MonoBehaviour
         }
     }
 
-    private void HandleItemPickup(object data)
-    {
-        PlayEvent(_itemPickupInstance);
-    }
-
-    private void HandleItemDrop(object data)
-    {
-        PlayEvent(_itemDropInstance);
-    }
-
-    private void HandleMirrorPlacement(object data)
-    {
-        PlayEvent(_mirrorPlacementInstance);
-    }
+    private void HandleItemPickup(object data) => PlayEvent(_itemPickupInstance);
+    private void HandleItemDrop(object data) => PlayEvent(_itemDropInstance);
+    private void HandleMirrorPlacement(object data) => PlayEvent(_mirrorPlacementInstance);
+    private void HandleConstellationComplete(object data) => PlayEvent(_constellationCompleteInstance);
+    private void HandlePressurePlatePlayer1On(object data) => PlayEvent(_pressurePlatePlayer1OnInstance);
+    private void HandlePressurePlatePlayer1Off(object data) => PlayEvent(_pressurePlatePlayer1OffInstance);
+    private void HandlePressurePlatePlayer2On(object data) => PlayEvent(_pressurePlatePlayer2OnInstance);
+    private void HandlePressurePlatePlayer2Off(object data) => PlayEvent(_pressurePlatePlayer2OffInstance);
 
     private void HandleMirrorCarryingPlayer1(object data)
     {
         if (data is bool isCarrying)
         {
             if (isCarrying)
-            {
                 _mirrorCarryingPlayer1Instance.start();
-            }
             else
-            {
                 _mirrorCarryingPlayer1Instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            }
         }
     }
 
@@ -268,32 +202,19 @@ public class FMODEventManager : MonoBehaviour
         if (data is bool isCarrying)
         {
             if (isCarrying)
-            {
                 _mirrorCarryingPlayer2Instance.start();
-            }
             else
-            {
                 _mirrorCarryingPlayer2Instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            }
         }
     }
-
 
     private void HandlePedestalRotation(object data)
     {
         if (data is PedestalRotationData rotationData)
         {
-            _pedestalRotationInstance.setParameterByName("Rotation_Speed", rotationData.rotationSpeed);
-            _pedestalRotationInstance.set3DAttributes(RuntimeUtils.To3DAttributes(rotationData.position));
-
-            if (rotationData.isRotating)
-            {
-                _pedestalRotationInstance.setPaused(false);
-            }
-            else
-            {
-                _pedestalRotationInstance.setPaused(true);
-            }
+            _pedestalRotationInstance.setParameterByName("Rotation_Speed", rotationData.RotationSpeed);
+            _pedestalRotationInstance.set3DAttributes(RuntimeUtils.To3DAttributes(rotationData.Position));
+            _pedestalRotationInstance.setPaused(!rotationData.IsRotating);
         }
     }
 
@@ -306,29 +227,6 @@ public class FMODEventManager : MonoBehaviour
         }
     }
 
-    private void HandleConstellationComplete(object data)
-    {
-        PlayEvent(_constellationCompleteInstance);
-    }
-
-    private void HandlePressurePlatePlayer1On(object data)
-    {
-        PlayEvent(_pressurePlatePlayer1OnInstance);
-    }
-    private void HandlePressurePlatePlayer1Off(object data)
-    {
-        PlayEvent(_pressurePlatePlayer1OffInstance);
-    }
-
-    private void HandlePressurePlatePlayer2On(object data)
-    {
-        PlayEvent(_pressurePlatePlayer2OnInstance);
-    }
-    private void HandlePressurePlatePlayer2Off(object data)
-    {
-        PlayEvent(_pressurePlatePlayer2OffInstance);
-    }
-
     public void HandleBackgroundMusic(object data)
     {
         if (data is string section)
@@ -337,15 +235,11 @@ public class FMODEventManager : MonoBehaviour
             {
                 case "MainArea":
                     if (!_isInMainArea)
-                    {
                         StartCoroutine(CrossfadeToMainArea());
-                    }
                     break;
                 case "SoftPuzzle":
                     if (_isInMainArea)
-                    {
                         StartCoroutine(CrossfadeToSoftPuzzle());
-                    }
                     break;
             }
         }
@@ -353,52 +247,35 @@ public class FMODEventManager : MonoBehaviour
 
     private IEnumerator CrossfadeToMainArea()
     {
-        float elapsedTime = 0f;
-        float duration = MainAreaTransitionDuration;
-
-        while (elapsedTime < duration)
-        {
-            float t = elapsedTime / duration;
-            float mainAreaVolume = Mathf.Lerp(0f, 1f, t);
-            float softPuzzleVolume = Mathf.Lerp(1f, 0f, t);
-
-            _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, mainAreaVolume);
-            _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, softPuzzleVolume);
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        // Ensure final volumes are set correctly
-        _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, 1f);
-        _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, 0f);
-
+        yield return CrossfadeBetweenAreas(_mainAreaMusicInstance, _softPuzzleMusicInstance, _mainAreaTransitionDuration);
         _isInMainArea = true;
     }
 
     private IEnumerator CrossfadeToSoftPuzzle()
     {
+        yield return CrossfadeBetweenAreas(_softPuzzleMusicInstance, _mainAreaMusicInstance, _softPuzzleTransitionDuration);
+        _isInMainArea = false;
+    }
+
+    private IEnumerator CrossfadeBetweenAreas(EventInstance fadeInInstance, EventInstance fadeOutInstance, float duration)
+    {
         float elapsedTime = 0f;
-        float duration = SoftPuzzleTransitionDuration;
 
         while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;
-            float mainAreaVolume = Mathf.Lerp(1f, 0f, t);
-            float softPuzzleVolume = Mathf.Lerp(0f, 1f, t);
+            float fadeInVolume = Mathf.Lerp(0f, 1f, t);
+            float fadeOutVolume = Mathf.Lerp(1f, 0f, t);
 
-            _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, mainAreaVolume);
-            _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, softPuzzleVolume);
+            fadeInInstance.setParameterByName(VOLUME_PARAMETER, fadeInVolume);
+            fadeOutInstance.setParameterByName(VOLUME_PARAMETER, fadeOutVolume);
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // Ensure final volumes are set correctly
-        _mainAreaMusicInstance.setParameterByName(VOLUME_PARAMETER, 0f);
-        _softPuzzleMusicInstance.setParameterByName(VOLUME_PARAMETER, 1f);
-
-        _isInMainArea = false;
+        fadeInInstance.setParameterByName(VOLUME_PARAMETER, 1f);
+        fadeOutInstance.setParameterByName(VOLUME_PARAMETER, 0f);
     }
 
     private void PlayEvent(EventInstance eventInstance)
@@ -406,61 +283,18 @@ public class FMODEventManager : MonoBehaviour
         eventInstance.setPaused(false);
         eventInstance.start();
     }
-
-    private int GetMarkerPosition(string marker)
-    {
-        switch (marker)
-        {
-            case "Ambient":
-                return AMBIENT_POSITION;
-            case "Calm":
-                return CALM_POSITION;
-            case "Deep":
-                return DEEP_POSITION;
-            default:
-                return -1;
-        }
-    }
-
-    private void SetLoopRegion(string marker)
-    {
-        
-        switch (marker)
-        {
-            case "Ambient":
-                // Enable Ambient loop
-                _backgroundMusicInstance.setParameterByName("AmbientLoop", 1);
-                _backgroundMusicInstance.setParameterByName("CalmLoop", 0);
-                _backgroundMusicInstance.setParameterByName("DeepLoop", 0);
-                break;
-            case "Calm":
-                // Enable Calm loop
-                _backgroundMusicInstance.setParameterByName("AmbientLoop", 0);
-                _backgroundMusicInstance.setParameterByName("CalmLoop", 1);
-                _backgroundMusicInstance.setParameterByName("DeepLoop", 0);
-                break;
-            case "Deep":
-                // Enable Deep loop
-                _backgroundMusicInstance.setParameterByName("AmbientLoop", 0);
-                _backgroundMusicInstance.setParameterByName("CalmLoop", 0);
-                _backgroundMusicInstance.setParameterByName("DeepLoop", 1);
-                break;
-        }
-    }
 }
 
 public struct PedestalRotationData
 {
-    public float rotationSpeed;
-    public Vector3 position;
-    public bool isRotating;
+    public float RotationSpeed { get; }
+    public Vector3 Position { get; }
+    public bool IsRotating { get; }
 
-    public PedestalRotationData(float speed, Vector3 pos, bool rotating)
+    public PedestalRotationData(float rotationSpeed, Vector3 position, bool isRotating)
     {
-        rotationSpeed = speed;
-        position = pos;
-        isRotating = rotating;
+        RotationSpeed = rotationSpeed;
+        Position = position;
+        IsRotating = isRotating;
     }
 }
-
-
