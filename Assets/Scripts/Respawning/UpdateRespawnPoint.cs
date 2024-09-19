@@ -38,19 +38,40 @@ public class UpdateRespawnPoint : MonoBehaviour
         {
             if (_forwardPath1ToUpdate)
             {
-                _forwardPath1ToUpdate = !_respawnSystem.UpdateForwardPath1RespawnPoint(player);
+                //_forwardPath1ToUpdate = !_respawnSystem.UpdateForwardPath1RespawnPoint(player);
+                bool success = _respawnSystem.UpdateForwardPath1RespawnPoint(player);
+
+                if (success)
+                {
+                    _forwardPath1ToUpdate = false;
+                }
             }
             else if (_forwardPath2ToUpdate)
             {
-                _forwardPath2ToUpdate = !_respawnSystem.UpdateForwardPath2RespawnPoint(player);
+                bool success = _respawnSystem.UpdateForwardPath2RespawnPoint(player);
+
+                if (success)
+                {
+                    _forwardPath2ToUpdate = false;
+                }
             }
             else if (_backPath1ToUpdate)
             {
-                _backPath1ToUpdate = !_respawnSystem.UpdateBackPath1RespawnPoint(player);
+                bool success = _respawnSystem.UpdateBackPath1RespawnPoint(player);
+
+                if (success)
+                {
+                    _backPath1ToUpdate = false;
+                }
             }
             else if (_backPath2ToUpdate)
             {
-                _backPath2ToUpdate = !_respawnSystem.UpdateBackPath2RespawnPoint(player);
+                bool success = _respawnSystem.UpdateBackPath2RespawnPoint(player);
+
+                if (success)
+                {
+                    _backPath2ToUpdate = false;
+                }
             }
         }        
     }
