@@ -56,7 +56,8 @@ public class LevelManager : MonoBehaviour
             EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _introCutscene);
         }
 
-        EventManager.EventTrigger(EventType.MUSIC, "Calm"); // Ensure transition to Calm section
+        Debug.Log("LevelManager: Triggering initial background music");
+        EventManager.EventTrigger(EventType.MUSIC, "MainArea");
 
         // Convert soft puzzle list to the dictionary
         _softPuzzlesDone = new Dictionary<GameObject, bool>();

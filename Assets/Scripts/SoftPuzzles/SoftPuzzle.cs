@@ -68,6 +68,18 @@ public class SoftPuzzle : MonoBehaviour
         //_backwardCams.SetActive(false);
     }
 
+    private void CheckMusicTransition()
+    {
+        if (_player1InPuzzle && _player2InPuzzle)
+        {
+            EventManager.EventTrigger(EventType.MUSIC, "SoftPuzzle");
+        }
+        else if (!_player1InPuzzle && !_player2InPuzzle)
+        {
+            EventManager.EventTrigger(EventType.MUSIC, "MainArea");
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // Enables flag to check if players are within the puzzle
@@ -79,6 +91,7 @@ public class SoftPuzzle : MonoBehaviour
         {
             _player2InPuzzle = true;
         }
+        CheckMusicTransition();
     }
 
     private void OnTriggerExit(Collider other)
@@ -92,6 +105,7 @@ public class SoftPuzzle : MonoBehaviour
         {
             _player2InPuzzle = false;
         }
+        CheckMusicTransition();
 
         // Enables flag to check if players are outside the puzzle
         if (!_player1InPuzzle && !_player2InPuzzle && _puzzleCompleted)

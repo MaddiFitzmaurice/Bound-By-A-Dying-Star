@@ -363,7 +363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: field of view
-      value: 35
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: far clip plane
@@ -427,97 +427,103 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9def40be75835c04593dbee8d0355bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ItemPickup>k__BackingField:
+  _itemPickup:
     Guid:
       Data1: -1521397063
       Data2: 1125280914
       Data3: 1337427844
       Data4: -1042647547
     Path: event:/Radiant2
-  <ItemDrop>k__BackingField:
+  _itemDrop:
     Guid:
       Data1: -1521397063
       Data2: 1125280914
       Data3: 1337427844
       Data4: -1042647547
     Path: event:/Radiant2
-  <MirrorPlacement>k__BackingField:
+  _mirrorPlacement:
     Guid:
       Data1: -1449896044
       Data2: 1212714494
       Data3: 762834048
       Data4: 1848053931
     Path: event:/Mirror_On_Pedestal
-  <MirrorCarryingPlayer1>k__BackingField:
+  _mirrorCarryingPlayer1:
     Guid:
       Data1: -1073276483
       Data2: 1082699913
       Data3: -1320383559
       Data4: -1193919708
     Path: event:/Muffled_breath
-  <MirrorCarryingPlayer2>k__BackingField:
+  _mirrorCarryingPlayer2:
     Guid:
       Data1: -1073276483
       Data2: 1082699913
       Data3: -1320383559
       Data4: -1193919708
     Path: event:/Muffled_breath
-  <PedestalRotation>k__BackingField:
+  _pedestalRotation:
     Guid:
       Data1: -1720521500
       Data2: 1080472165
       Data3: 1438512033
       Data4: -1573594344
     Path: event:/Pedestal_Rotation
-  <BeamConnection>k__BackingField:
+  _beamConnection:
     Guid:
       Data1: 1130467853
       Data2: 1269255618
       Data3: -622527054
       Data4: -1657445206
     Path: event:/Angelic_Ring
-  <PressurePlatePlayer1On>k__BackingField:
+  _pressurePlatePlayer1On:
     Guid:
       Data1: 519979859
       Data2: 1285762104
       Data3: -703447921
       Data4: 497503598
     Path: event:/Local_Tile_Shift
-  <PressurePlatePlayer1Off>k__BackingField:
+  _pressurePlatePlayer1Off:
     Guid:
       Data1: 519979859
       Data2: 1285762104
       Data3: -703447921
       Data4: 497503598
     Path: event:/Local_Tile_Shift
-  <PressurePlatePlayer2On>k__BackingField:
+  _pressurePlatePlayer2On:
     Guid:
       Data1: 519979859
       Data2: 1285762104
       Data3: -703447921
       Data4: 497503598
     Path: event:/Local_Tile_Shift
-  <PressurePlatePlayer2Off>k__BackingField:
+  _pressurePlatePlayer2Off:
     Guid:
       Data1: 519979859
       Data2: 1285762104
       Data3: -703447921
       Data4: 497503598
     Path: event:/Local_Tile_Shift
-  <ConstellationComplete>k__BackingField:
+  _constellationComplete:
     Guid:
       Data1: 1356180403
       Data2: 1190924372
       Data3: 539933342
       Data4: -404590681
     Path: event:/Level Complete
-  <BackgroundMusic>k__BackingField:
+  _backgroundMusic:
     Guid:
       Data1: 1844927654
       Data2: 1174657659
       Data3: 1496675478
       Data4: 1048179752
     Path: event:/70 BPM BGM Track
+  _mainAreaLoopStart: 3.424
+  _mainAreaLoopEnd: 54.859
+  _softPuzzleLoopStart: 58.286
+  _softPuzzleLoopEnd: 109.901
+  _mainAreaTransitionDuration: 3
+  _softPuzzleTransitionDuration: 3
 --- !u!114 &431485567 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6698046749758996672, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
