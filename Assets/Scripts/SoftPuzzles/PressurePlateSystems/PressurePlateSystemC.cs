@@ -33,7 +33,7 @@ public class PressurePlateSystemC : PressurePlateSystem
     {
         if (activated)
         {
-            plate.SetVFXPlayerColour();
+            //plate.SetVFXPlayerColour();
             plate.ActivateIndividualVFX();
         }
         else

@@ -5,7 +5,6 @@ using UnityEngine;
 public class PressurePlateTriggerAnimation : MonoBehaviour
 {
     [SerializeField] private GameObject _plate; // Reference to the plate object
-    [SerializeField] private ParticleSystem _glowEffect; // Reference to the glow particle system
     [SerializeField] private float _sinkDistance = 0.2f;
     [SerializeField] private float _sinkSpeed = 2.0f;
 
@@ -29,11 +28,6 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
             Debug.LogError("Missing plate reference");
             return;
         }
-        if (_glowEffect == null)
-        {
-            Debug.LogError("Missing particle system");
-            return;
-        }
 
         _originalPosition = _plate.transform.localPosition;
         _targetPosition = _originalPosition - new Vector3(0, _sinkDistance, 0);
@@ -49,7 +43,6 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
                 _isPressed = true;
                 StopAllCoroutines();
                 StartCoroutine(SinkPlate(_targetPosition));
-                //_glowEffect.Play();
 
                 // TRIGGER AUDIO EVENT HERE
                 if (other.CompareTag(_playerTag1))
@@ -74,7 +67,6 @@ public class PressurePlateTriggerAnimation : MonoBehaviour
                 _isPressed = false;
                 StopAllCoroutines();
                 StartCoroutine(SinkPlate(_originalPosition));
-                //_glowEffect.Stop();
 
                 // TRIGGER AUDIO EVENT HERE
                 if (_lastPlayerTag == _playerTag1)

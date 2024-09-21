@@ -20,7 +20,7 @@ public class PressurePlateSystemA : PressurePlateSystem
         // If plate is activated, play VFX
         if (activated)
         {
-            plate.SetVFXPlayerColour();
+            //plate.SetVFXPlayerColour();
             plate.ActivateIndividualVFX();
         }
 
