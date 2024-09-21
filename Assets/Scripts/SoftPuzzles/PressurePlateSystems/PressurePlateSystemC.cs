@@ -74,6 +74,5 @@ public class PressurePlateSystemC : PressurePlateSystem
         {
             _movingToEnd = !_movingToEnd;
         }
-
     }
 }
