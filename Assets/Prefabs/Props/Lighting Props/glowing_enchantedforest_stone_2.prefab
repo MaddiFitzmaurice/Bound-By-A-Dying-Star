@@ -14,31 +14,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -3.8313522
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.02
+      value: 0.013282776
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -28.446375
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: -0.6729167
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0000018099951
+      value: -0.0000012179763
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.7397183
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.0000013388868
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -46,7 +46,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -144.585
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -56,7 +56,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4df566f45123aa547891ce2fc9cafd4d, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6400000, guid: 77ca079554e6f4708af20212aa457f53, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
