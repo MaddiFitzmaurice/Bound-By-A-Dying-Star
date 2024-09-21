@@ -7,8 +7,6 @@ using UnityEngine;
 public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzzleReward
 {
     #region EXTERNAL DATA
-    [SerializeField] private float _maxIntensity = 5f;
-    [SerializeField] private float _maxDistance = 10f;
     public bool InteractLocked { get; set; } = false;
     public bool IsHighlighted { get; set; } = false;
     // How high to bob up and down
@@ -34,7 +32,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     // Item Floating
     private Transform _followTarget;
-    public bool isFollowing = false;
+    public bool IsFollowing = false;
     private float _followSpeed = 5f;  // Adjust this value as needed
     [SerializeField] private ParticleSystem _itemPassivePS;
     public ParticleSystem.EmissionModule emissionPS;
@@ -55,8 +53,6 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     {
         // Get components
         _childColliders = GetComponentsInChildren<Collider>().ToList<Collider>();
-        //_light = GetComponentInChildren<Light>();
-        //_light.intensity = 0;
         emissionPS = _itemPassivePS.emission;
 
     }
@@ -73,7 +69,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     void Update()
     {
-        if (isFollowing && _followTarget != null)
+        if (IsFollowing && _followTarget != null)
         {
             // Perform the interpolation in world space
             transform.position = Vector3.Lerp(transform.position, _followTarget.position, _followSpeed * Time.deltaTime);
@@ -250,7 +246,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         }
 
         // Set item to follow player and adjust the parent
-        isFollowing = true;
+        IsFollowing = true;
         _player.PickupItem(gameObject);
         SetParent(_player.transform);
 
