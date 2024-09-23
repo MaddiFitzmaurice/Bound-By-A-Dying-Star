@@ -294,14 +294,36 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     #region EVENT HANDLERS
     public void EnableGameplayInput(object data)
     {
-        _player1Inputs.Gameplay.Enable();
-        _player2Inputs.Gameplay.Enable();
+        if (data is Player1)
+        {
+            _player1Inputs.Gameplay.Enable();
+        }
+        else if (data is Player2)
+        {
+            _player2Inputs.Gameplay.Enable();
+        }
+        else
+        {
+            _player1Inputs.Gameplay.Enable();
+            _player2Inputs.Gameplay.Enable();
+        }       
     }
 
     public void DisableGameplayInput(object data)
     {
-        _player1Inputs.Gameplay.Disable();
-        _player2Inputs.Gameplay.Disable();
+        if (data is Player1)
+        {
+            _player1Inputs.Gameplay.Disable();
+        }
+        else if (data is Player2)
+        {
+            _player2Inputs.Gameplay.Disable();
+        }
+        else
+        {
+            _player1Inputs.Gameplay.Disable();
+            _player2Inputs.Gameplay.Disable();
+        }
     }
 
     private void EnableMainMenuInput(object data)

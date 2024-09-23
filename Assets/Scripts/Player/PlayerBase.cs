@@ -58,7 +58,7 @@ public abstract class PlayerBase : MonoBehaviour
     private Cloth _clothPhysics;
     private Animator _animator;
 
-    // Parent Grouper
+    // Default Parent Info
     private Transform _playerGrouper;
 
     // Movement Data
@@ -251,9 +251,9 @@ public abstract class PlayerBase : MonoBehaviour
         }
     }
 
-    private IEnumerator RespawnSequence(Transform spawnPoint)
+    protected virtual IEnumerator RespawnSequence(Transform spawnPoint)
     {
-        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, this);
         PlayTeleportOutEffect();
         yield return new WaitForSeconds(_teleportOutEffect.GetFloat("EffectLifetime"));
         PlayFlashEffect();
@@ -267,7 +267,7 @@ public abstract class PlayerBase : MonoBehaviour
         PlayFlashEffect();
         ToggleClothPhysics(true);
         ToggleVisibility(true);
-        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, this);
     }
 
     private void ClothMovement()
