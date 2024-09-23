@@ -21,7 +21,11 @@ public class MovingPlatform : MonoBehaviour
         if (player != null)
         {
             // Reset to default parent in Gameplay Scene
-            player.DefaultParent();
+            // if parent is this transform
+            if (player.transform.parent == this.transform)
+            {
+                player.DefaultParent();
+            }
         }
     }
 }
