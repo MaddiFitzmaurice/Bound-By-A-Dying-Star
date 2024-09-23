@@ -58,6 +58,9 @@ public abstract class PlayerBase : MonoBehaviour
     private Cloth _clothPhysics;
     private Animator _animator;
 
+    // Default Parent Info
+    private Transform _playerGrouper;
+
     // Movement Data
     protected Vector3 MoveInput;
     protected Vector3 PrevMoveInput;
@@ -98,6 +101,9 @@ public abstract class PlayerBase : MonoBehaviour
         _renderers.AddRange(GetComponentsInChildren<SkinnedMeshRenderer>().ToList<Renderer>());
         _clothPhysics = GetComponentInChildren<Cloth>();
         _animator = GetComponentInChildren<Animator>();
+
+        // Store parent so it can return to this parent after being temporarily parented
+        _playerGrouper = this.transform.parent;
 
         // Set data
         _animator.SetBool("IsRunning", false);
@@ -245,9 +251,9 @@ public abstract class PlayerBase : MonoBehaviour
         }
     }
 
-    private IEnumerator RespawnSequence(Transform spawnPoint)
+    protected virtual IEnumerator RespawnSequence(Transform spawnPoint)
     {
-        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, this);
         PlayTeleportOutEffect();
         yield return new WaitForSeconds(_teleportOutEffect.GetFloat("EffectLifetime"));
         PlayFlashEffect();
@@ -261,7 +267,7 @@ public abstract class PlayerBase : MonoBehaviour
         PlayFlashEffect();
         ToggleClothPhysics(true);
         ToggleVisibility(true);
-        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, this);
     }
 
     private void ClothMovement()
@@ -333,6 +339,11 @@ public abstract class PlayerBase : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(RespawnSequence(respawnPoint));
+    }
+
+    public void DefaultParent()
+    {
+        transform.parent = _playerGrouper;
     }
 
     #region INTERACTION FUNCTIONS

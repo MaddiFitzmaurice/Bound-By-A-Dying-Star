@@ -15,12 +15,22 @@ public class PressurePlateSystemA : PressurePlateSystem
         InitAllPressurePlates();
     }
 
-    public override void PlateActivated(IPressurePlateBase plate, bool activated)
+    public override void PlateActivated(PressurePlateSingle plate, bool activated)
     {
-        // If one plate is deactivated, check if other plates are still activated
+        // If plate is activated, play VFX
+        if (activated)
+        {
+            //plate.SetVFXPlayerColour();
+            plate.ActivateIndividualVFX();
+        }
+
+        // If plate is deactivated
         if (!activated) 
         {
-            foreach (IPressurePlateBase pressurePlate in PressurePlates)
+            plate.DeactivateIndividualVFX();
+
+            // If one plate is deactivated, check if other plates are still activated
+            foreach (PressurePlateSingle pressurePlate in PressurePlates)
             {
                 if (pressurePlate != plate && pressurePlate.Activated)
                 {

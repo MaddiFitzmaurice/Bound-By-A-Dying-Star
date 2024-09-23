@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class PressurePlateSystem : MonoBehaviour
 {
     // Internal Data
-    protected List<IPressurePlateBase> PressurePlates; // Pressure plates that are part of the system
+    protected List<PressurePlateSingle> PressurePlates; // Pressure plates that are part of the system
 
     private void Awake()
     {
@@ -15,13 +15,13 @@ public abstract class PressurePlateSystem : MonoBehaviour
 
     protected virtual void InitAllPressurePlates()
     {
-        PressurePlates = GetComponentsInChildren<IPressurePlateBase>().ToList(); // Initialise all pressure plate children
+        PressurePlates = GetComponentsInChildren<PressurePlateSingle>().ToList(); // Initialise all pressure plate children
 
-        foreach (IPressurePlateBase plate in PressurePlates)
+        foreach (PressurePlateSingle plate in PressurePlates)
         {
             plate.InitPlateSystem(this);
         }
     }
 
-    public abstract void PlateActivated(IPressurePlateBase plate, bool activated);
+    public abstract void PlateActivated(PressurePlateSingle plate, bool activated);
 }

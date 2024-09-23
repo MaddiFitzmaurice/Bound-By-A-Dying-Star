@@ -29,8 +29,18 @@ public class PressurePlateSystemC : PressurePlateSystem
         }
     }
 
-    public override void PlateActivated(IPressurePlateBase plate, bool activated)
+    public override void PlateActivated(PressurePlateSingle plate, bool activated)
     {
+        if (activated)
+        {
+            //plate.SetVFXPlayerColour();
+            plate.ActivateIndividualVFX();
+        }
+        else
+        {
+            plate.DeactivateIndividualVFX();
+        }
+
         // Decide what the object should do when the system has been completed
         _isMoving = _onIsMove ? activated : !activated;
 
@@ -64,6 +74,5 @@ public class PressurePlateSystemC : PressurePlateSystem
         {
             _movingToEnd = !_movingToEnd;
         }
-
     }
 }

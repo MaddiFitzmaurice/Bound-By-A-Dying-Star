@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class GameplayUIManager : MonoBehaviour
 {
     #region EXTERNAL DATA
-    [SerializeField] private OffscreenIndicator _indicatorP1;
-    [SerializeField] private OffscreenIndicator _indicatorP2;
+    //[SerializeField] private OffscreenIndicator _indicatorP1;
+    //[SerializeField] private OffscreenIndicator _indicatorP2;
     [SerializeField] private Image _artwork;
     [SerializeField] private GameObject _tapPrompt;
     [SerializeField] private GameObject _holdPrompt;
@@ -56,8 +56,8 @@ public class GameplayUIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.HIDE_PROMPT_HOLD_INTERACT, HideHoldPrompt);
         EventManager.EventSubscribe(EventType.SHOW_PROMPT_INTERACT, ShowTapPrompt);
         EventManager.EventSubscribe(EventType.HIDE_PROMPT_INTERACT, HideTapPrompt);
-        EventManager.EventSubscribe(EventType.PLAYER1_ISOFFSCREEN, IsP1OffscreenHandler);
-        EventManager.EventSubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
+        //EventManager.EventSubscribe(EventType.PLAYER1_ISOFFSCREEN, IsP1OffscreenHandler);
+        //EventManager.EventSubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
         EventManager.EventSubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
         EventManager.EventSubscribe(EventType.ARTWORK_HIDE, HideArtwork);
     }
@@ -72,72 +72,72 @@ public class GameplayUIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.HIDE_PROMPT_HOLD_INTERACT, HideHoldPrompt);
         EventManager.EventUnsubscribe(EventType.SHOW_PROMPT_INTERACT, ShowTapPrompt);
         EventManager.EventUnsubscribe(EventType.HIDE_PROMPT_INTERACT, HideTapPrompt);
-        EventManager.EventUnsubscribe(EventType.PLAYER1_ISOFFSCREEN, IsP1OffscreenHandler);
-        EventManager.EventUnsubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
+        //EventManager.EventUnsubscribe(EventType.PLAYER1_ISOFFSCREEN, IsP1OffscreenHandler);
+        //EventManager.EventUnsubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
         EventManager.EventUnsubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
         EventManager.EventUnsubscribe(EventType.ARTWORK_HIDE, HideArtwork);
     }
 
-    public void Update()
-    {
-        UpdateOffscreenIndicators();    
-    }
+    //public void Update()
+    //{
+    //    UpdateOffscreenIndicators();    
+    //}
     #endregion
 
-    private void UpdateOffscreenIndicators()
-    {
-        // If we're not in a cutscene
-        if (_showOffscreenUI)
-        {
-            // If P1 is offscreen
-            if (_isP1Offscreen)
-            {
-                // If P1 indicator is not already active
-                if (!_p1IndicatorShown)
-                {
-                    _indicatorP1.gameObject.SetActive(true);
-                    _p1IndicatorShown = true;
-                }
+    //private void UpdateOffscreenIndicators()
+    //{
+    //    // If we're not in a cutscene
+    //    if (_showOffscreenUI)
+    //    {
+    //        // If P1 is offscreen
+    //        if (_isP1Offscreen)
+    //        {
+    //            // If P1 indicator is not already active
+    //            if (!_p1IndicatorShown)
+    //            {
+    //                _indicatorP1.gameObject.SetActive(true);
+    //                _p1IndicatorShown = true;
+    //            }
 
-                // Update indicator pos
-                _indicatorP1.UpdatePos(_player1, _cam, _screen);
-            }
-            // If P1 is onscreen
-            else
-            {
-                // If P1 indicator is active
-                if (_p1IndicatorShown)
-                {
-                    _indicatorP1.gameObject.SetActive(false);
-                    _p1IndicatorShown = false;
-                }
-            }
+    //            // Update indicator pos
+    //            _indicatorP1.UpdatePos(_player1, _cam, _screen);
+    //        }
+    //        // If P1 is onscreen
+    //        else
+    //        {
+    //            // If P1 indicator is active
+    //            if (_p1IndicatorShown)
+    //            {
+    //                _indicatorP1.gameObject.SetActive(false);
+    //                _p1IndicatorShown = false;
+    //            }
+    //        }
 
-            // If P2 is offscreen
-            if (_isP2Offscreen)
-            {
-                // If P2 indicator is not already active
-                if (!_p2IndicatorShown)
-                {
-                    _indicatorP2.gameObject.SetActive(true);
-                    _p2IndicatorShown = true;
-                }
+    //        // If P2 is offscreen
+    //        if (_isP2Offscreen)
+    //        {
+    //            // If P2 indicator is not already active
+    //            if (!_p2IndicatorShown)
+    //            {
+    //                _indicatorP2.gameObject.SetActive(true);
+    //                _p2IndicatorShown = true;
+    //            }
 
-                // Update indicator pos
-                _indicatorP2.UpdatePos(_player2, _cam, _screen);
-            }
-            // If P2 is onscreen
-            else
-            {
-                // If P1 indicator is active
-                if (_p2IndicatorShown)
-                {
-                    _indicatorP2.gameObject.SetActive(false);
-                    _p2IndicatorShown = false;
-                }
-            }
-        }
-    }
+    //            // Update indicator pos
+    //            _indicatorP2.UpdatePos(_player2, _cam, _screen);
+    //        }
+    //        // If P2 is onscreen
+    //        else
+    //        {
+    //            // If P1 indicator is active
+    //            if (_p2IndicatorShown)
+    //            {
+    //                _indicatorP2.gameObject.SetActive(false);
+    //                _p2IndicatorShown = false;
+    //            }
+    //        }
+    //    }
+    //}
 
     #region EVENT FUNCTIONS
     public void ShowArtwork(object data)
@@ -158,41 +158,41 @@ public class GameplayUIManager : MonoBehaviour
         _artwork.gameObject.SetActive(false);
     }
 
-    public void IsP1OffscreenHandler(object data)
-    {
-        // If receiving just a bool, means player is back on screen
-        if (data is bool isOffscreen)
-        {
-            _isP1Offscreen = isOffscreen;
-        }
-        // Else, if tuple, player is offscreen
-        else if (data is Tuple<bool, Plane> tuple)
-        {
-            _isP1Offscreen = tuple.Item1;
-        }
-        else
-        {
-            Debug.LogError("Did not receive a bool or tuple<bool, Plane>!");
-        }
-    }
+    //public void IsP1OffscreenHandler(object data)
+    //{
+    //    // If receiving just a bool, means player is back on screen
+    //    if (data is bool isOffscreen)
+    //    {
+    //        _isP1Offscreen = isOffscreen;
+    //    }
+    //    // Else, if tuple, player is offscreen
+    //    else if (data is Tuple<bool, Plane> tuple)
+    //    {
+    //        _isP1Offscreen = tuple.Item1;
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Did not receive a bool or tuple<bool, Plane>!");
+    //    }
+    //}
 
-    public void IsP2OffscreenHandler(object data)
-    {
-        // If receiving just a bool, means player is back on screen
-        if (data is bool isOffscreen)
-        {
-            _isP2Offscreen = isOffscreen;
-        }
-        // Else, if tuple, player is offscreen
-        else if (data is Tuple<bool, Plane> tuple)
-        {
-            _isP2Offscreen = tuple.Item1;
-        }
-        else
-        {
-            Debug.LogError("Did not receive a bool or tuple<bool, Plane>!");
-        }
-    }
+    //public void IsP2OffscreenHandler(object data)
+    //{
+    //    // If receiving just a bool, means player is back on screen
+    //    if (data is bool isOffscreen)
+    //    {
+    //        _isP2Offscreen = isOffscreen;
+    //    }
+    //    // Else, if tuple, player is offscreen
+    //    else if (data is Tuple<bool, Plane> tuple)
+    //    {
+    //        _isP2Offscreen = tuple.Item1;
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Did not receive a bool or tuple<bool, Plane>!");
+    //    }
+    //}
 
     public void ReceivePlayer1Handler(object data)
     {

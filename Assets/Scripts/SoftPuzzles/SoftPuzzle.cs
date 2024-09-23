@@ -26,7 +26,7 @@ public class SoftPuzzle : MonoBehaviour
 
     #region Internal Data
     private List<ISoftPuzzleReward> _rewards = new List<ISoftPuzzleReward>();
-    private Respawn _respawnScript;
+    private RespawnSystem _respawnSystem;
     private bool _player1InPuzzle;
     private bool _player2InPuzzle;
     private bool _puzzleCompleted;
@@ -35,7 +35,7 @@ public class SoftPuzzle : MonoBehaviour
     private void Awake()
     {
         // Component Init
-        _respawnScript = GetComponentInChildren<Respawn>();
+        _respawnSystem = GetComponentInChildren<RespawnSystem>();
 
         // Make sure only 1 or 2 reward objects are assigned
         if (_rewardObjs.Count < 0 || _rewardObjs.Count > 2)
@@ -63,9 +63,21 @@ public class SoftPuzzle : MonoBehaviour
         }
 
         // Set Forward respawn
-        _respawnScript.ChangeToForwardRespawn();
+        _respawnSystem.ChangeToForwardRespawn();
         //_forwardCams.SetActive(true);
         //_backwardCams.SetActive(false);
+    }
+
+    private void CheckMusicTransition()
+    {
+        if (_player1InPuzzle && _player2InPuzzle)
+        {
+            EventManager.EventTrigger(EventType.MUSIC, "SoftPuzzle");
+        }
+        else if (!_player1InPuzzle && !_player2InPuzzle)
+        {
+            EventManager.EventTrigger(EventType.MUSIC, "MainArea");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -79,6 +91,7 @@ public class SoftPuzzle : MonoBehaviour
         {
             _player2InPuzzle = true;
         }
+        CheckMusicTransition();
     }
 
     private void OnTriggerExit(Collider other)
@@ -92,6 +105,7 @@ public class SoftPuzzle : MonoBehaviour
         {
             _player2InPuzzle = false;
         }
+        CheckMusicTransition();
 
         // Enables flag to check if players are outside the puzzle
         if (!_player1InPuzzle && !_player2InPuzzle && _puzzleCompleted)
@@ -138,11 +152,11 @@ public class SoftPuzzle : MonoBehaviour
             yield return coroutine;
         }
 
-        // Activates the backward puzzle and resets the spawn point
+        // Activates the backward puzzle + cams and resets the spawn point
         _backwardPuzzle.SetActive(true);
         _forwardCams.SetActive(false);
         _backwardCams.SetActive(true);
-        _respawnScript.ChangeToBackRespawn(_fixedPlatforms);
+        _respawnSystem.ChangeToBackRespawn();
         _puzzleCompleted = true;
     }
 
