@@ -11,8 +11,12 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     [SerializeField] private float _raiseMirrorHeight = 2.5f;
 
     // Moving the Beam once it is activated
+    [Header("Rotation Settings")]
     [SerializeField] private float _rotationSpeed = 40f;
     [SerializeField] private float _initialAngleOffset;
+    [SerializeField] private float _currentAngle;
+    [SerializeField] private float _targetAngle;
+    // [SerializeField] private float _editorAdjustAngle = 0f;
 
     // The pedestals that forms a pair with this one
     [SerializeField] private List<GameObject> _beamDestinations;
@@ -131,6 +135,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         Vector3 startRotEuler = _startRot.eulerAngles;
         _startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
         _beamSource.rotation = _startRot;
+        _currentAngle = _beamSource.rotation.eulerAngles.y;
     }
 
     private void SetupMultipleBeamDirections()
@@ -158,6 +163,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         Vector3 startRotEuler = _startRot.eulerAngles;
         _startRot = Quaternion.Euler(0f, startRotEuler.y, 0f);
         _beamSource.rotation = _startRot;
+        _currentAngle = _beamSource.rotation.eulerAngles.y;
     }
 
     public void SetID(int id)
@@ -310,47 +316,42 @@ public class ConstPedestal : MonoBehaviour, IInteractable
     }
 
     // Rotate beam to target direction anticlockwise
-    private IEnumerator RotateMirror(Vector3 targetDir)
+    private IEnumerator RotateMirror()
     {
         _isRotating = true;
         _beamTurningPS.Play();
         StartRotationSound();
 
-        while (_isRotating)
+        Quaternion startRotation = _beamSource.rotation;
+        Quaternion targetRotation = Quaternion.Euler(0, _targetAngle, 0);
+
+        float elapsedTime = 0;
+        float rotationDuration = Quaternion.Angle(startRotation, targetRotation) / _rotationSpeed;
+
+        while (elapsedTime < rotationDuration && _isRotating)
         {
-            Quaternion endRot = Quaternion.LookRotation(targetDir, Vector3.up);
-
-            // if angle is 180 or over set angle to 90, otherwise leave it
-            if (Quaternion.Angle(endRot, _beamSource.rotation) >= 180)
-            {
-                // Calculate angle 90 degrees anticlockwise
-                endRot = _beamSource.rotation * Quaternion.Euler(0f, -90f, 0f);
-                Vector3 endRotEuler = endRot.eulerAngles;
-                endRot = Quaternion.Euler(0f, endRotEuler.y, 0f);
-            }
-
-            // Keep rotating until enemy has reached new angle or _isRotating is false
-            while (Mathf.Abs(Quaternion.Angle(endRot, _beamSource.rotation)) > 0.05f && _isRotating)
-            {
-                _beamSource.rotation = Quaternion.RotateTowards(_beamSource.rotation, endRot, _rotationSpeed * Time.deltaTime);
-                yield return null;
-            }
-
-            _beamSource.rotation = endRot;
-            _isRotating = !ReachedTargetAngle();
+            _beamSource.rotation = Quaternion.Slerp(startRotation, targetRotation, elapsedTime / rotationDuration);
+            _currentAngle = _beamSource.rotation.eulerAngles.y;
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
+
+        if (_isRotating)
+        {
+            _beamSource.rotation = targetRotation;
+            _currentAngle = _targetAngle;
+            _isRotating = false;
+            ReachedTargetAngle();
+        }
+
         StopRotationSound();
         _beamTurningPS.Stop();
-        yield return null;
     }
 
     // Check if beam if facing the destination angle
     private bool ReachedTargetAngle()
     {
-        float dot = Vector3.Dot(Vector3.Normalize(_beamSource.forward), Vector3.Normalize(_targetDir));
-
-        // If desired angle has been reached
-        if (dot > 0.985f)
+        if (Mathf.Abs(_currentAngle - _targetAngle) < 0.1f)
         {
             SetAligned(true);
             SetBeamPositions();
@@ -359,15 +360,11 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             _conController.PedestalHasBeam(_pedestalDestinations);
             _canRotateMirror = false;
 
-            // Trigger the beam connection sound
             EventManager.EventTrigger(EventType.BEAM_CONNECTION, transform.position);
 
             return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     public List<ConstPedestal> ReturnDestinations()
@@ -546,7 +543,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             {
                 // Set player as the one rotating the mirror
                 _playerRotating = player;
-                StartCoroutine(RotateMirror(_targetDir));
+                StartCoroutine(RotateMirror());
             }
         }
     }
