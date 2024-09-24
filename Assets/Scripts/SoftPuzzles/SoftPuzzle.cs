@@ -138,6 +138,8 @@ public class SoftPuzzle : MonoBehaviour
 
     private IEnumerator MovePlatformsAndActivateBackwardPuzzle()
     {
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+
         List<Coroutine> coroutines = new List<Coroutine>();
 
         // Loops through each platform and starts to move it to the required position
@@ -158,6 +160,8 @@ public class SoftPuzzle : MonoBehaviour
         _backwardCams.SetActive(true);
         _respawnSystem.ChangeToBackRespawn();
         _puzzleCompleted = true;
+
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
     }
 
     private IEnumerator MovePlatforms(SoftPuzzleFixedPlatform platform)
