@@ -222,6 +222,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 169800416990994415, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
+      propertyPath: m_BlendUpdateMethod
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169800416990994415, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_ShowCameraFrustum
       value: 1
       objectReference: {fileID: 0}
