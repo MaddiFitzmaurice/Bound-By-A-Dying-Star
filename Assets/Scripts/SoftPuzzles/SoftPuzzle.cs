@@ -130,6 +130,14 @@ public class SoftPuzzle : MonoBehaviour
         // Swap the puzzles
         _forwardPuzzle.SetActive(false);
 
+        if (_fixedPlatforms.Count > 1)
+        {
+            foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
+            {
+                platform.CheckIfPlayerOn();
+            }
+        }
+
         // INSERT HERE FOR CUTSCENE CAMERA 
 
         // Moves platforms and swaps puzzle

@@ -251,24 +251,7 @@ public abstract class PlayerBase : MonoBehaviour
         }
     }
 
-    protected virtual IEnumerator RespawnSequence(Transform spawnPoint)
-    {
-        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, this);
-        PlayTeleportOutEffect();
-        yield return new WaitForSeconds(_teleportOutEffect.GetFloat("EffectLifetime"));
-        PlayFlashEffect();
-        ToggleVisibility(false);
-        ToggleClothPhysics(false);
-        yield return new WaitForSeconds(1f);
-        transform.position = spawnPoint.position;
-        transform.rotation = spawnPoint.rotation;
-        PlayTeleportInEffect();
-        yield return new WaitForSeconds(_teleportInEffect.GetFloat("EffectLifetime"));
-        PlayFlashEffect();
-        ToggleClothPhysics(true);
-        ToggleVisibility(true);
-        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, this);
-    }
+   
 
     private void ClothMovement()
     {
@@ -335,16 +318,61 @@ public abstract class PlayerBase : MonoBehaviour
         _clothPhysics.enabled = toggle;
     }
 
+    #region POSITION MANIPULATION
     public void Respawn(Transform respawnPoint)
     {
         StopAllCoroutines();
         StartCoroutine(RespawnSequence(respawnPoint));
     }
 
+    private IEnumerator RespawnSequence(Transform spawnPoint)
+    {
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, this);
+        PlayTeleportOutEffect();
+        yield return new WaitForSeconds(_teleportOutEffect.GetFloat("EffectLifetime"));
+        PlayFlashEffect();
+        ToggleVisibility(false);
+        ToggleClothPhysics(false);
+        yield return new WaitForSeconds(1f);
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
+        PlayTeleportInEffect();
+        yield return new WaitForSeconds(_teleportInEffect.GetFloat("EffectLifetime"));
+        PlayFlashEffect();
+        ToggleClothPhysics(true);
+        ToggleVisibility(true);
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, this);
+    }
+
+    public void PuzzleTeleport(Transform teleportPoint)
+    {
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, this);
+        StopAllCoroutines();
+        StartCoroutine(PuzzleTeleportSequence(teleportPoint));
+    }
+
+    private IEnumerator PuzzleTeleportSequence(Transform spawnPoint)
+    {
+        PlayTeleportOutEffect();
+        yield return new WaitForSeconds(_teleportOutEffect.GetFloat("EffectLifetime"));
+        PlayFlashEffect();
+        ToggleVisibility(false);
+        ToggleClothPhysics(false);
+        yield return new WaitForSeconds(0.1f);
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
+        PlayTeleportInEffect();
+        yield return new WaitForSeconds(_teleportInEffect.GetFloat("EffectLifetime"));
+        PlayFlashEffect();
+        ToggleClothPhysics(true);
+        ToggleVisibility(true);
+    }
+
     public void DefaultParent()
     {
         transform.parent = _playerGrouper;
     }
+    #endregion
 
     #region INTERACTION FUNCTIONS
     // Interaction
