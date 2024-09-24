@@ -44,7 +44,7 @@ public class SoftPuzzle : MonoBehaviour
             Debug.LogError("Please assign either 1 or 2 reward objects to SoftPuzzle!");
         }
 
-        if (_forwardCams == null || _backwardCams == null || _transitionCam)
+        if (_forwardCams == null || _backwardCams == null || _transitionCam == null)
         {
             Debug.LogError("Please assign cameras!");
         }
