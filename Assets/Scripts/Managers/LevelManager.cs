@@ -4,6 +4,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Playables;
+using UnityEngine.Video;
 
 public class LevelManager : MonoBehaviour
 {
@@ -14,7 +15,9 @@ public class LevelManager : MonoBehaviour
     [Header("Soft Puzzle Data")]
     [SerializeField] private GameObject _rewardGrouper;
     [SerializeField] private List<GameObject> _softPuzzles;
+    [Header("Cutscenes")]
     [SerializeField] private PlayableAsset _introCutscene;
+    [SerializeField] private VideoClip _introPreRenderedCutscene;
     #endregion
 
     #region INTERNAL DATA

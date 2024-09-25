@@ -51,10 +51,13 @@ public enum EventType
     // Cutscene
     CUTSCENE_PLAY,
     CUTSCENE_FINISHED,
+    PRERENDERED_CUTSCENE_PLAY,
+    PRERENDERED_CUTSCENE_FINISHED,
 
     // UI
     ARTWORK_SHOW,                       // Show artwork in fullscreen
     ARTWORK_HIDE,                       // Hide fullscreen artwork
+    RENDERTEX_TOGGLE,
 
     // Level
     LEVEL_SPAWN,                        // Spawn players into level for the first time

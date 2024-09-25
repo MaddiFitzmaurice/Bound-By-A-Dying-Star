@@ -1,12 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class EndCutsceneTrigger : MonoBehaviour
 {
+    #region EXTERNAL DATA
+    [SerializeField] private VideoClip _endPreRenderedCutscene;
+    #endregion
+    #region INTERNAL DATA
     // Are both Players inside the trigger?
     private bool _player1In = false;
     private bool _player2In = false;
+    #endregion
+
+    #region FRAMEWORK FUNCTIONS
+    public void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, EndLevelCutsceneEnd);
+    }
+
+    public void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, EndLevelCutsceneEnd);
+    }
 
     public void OnTriggerEnter(Collider other)
     {
@@ -20,7 +37,7 @@ public class EndCutsceneTrigger : MonoBehaviour
             // If both players are in trigger, activate camera
             if (_player2In)
             {
-                EndLevelCutscene();
+                EndLevelCutsceneStart();
             }
 
             return;
@@ -36,7 +53,7 @@ public class EndCutsceneTrigger : MonoBehaviour
             // If both players are in trigger, activate camera
             if (_player1In)
             {
-                EndLevelCutscene();
+                EndLevelCutsceneStart();
             }
 
             return;
@@ -63,11 +80,24 @@ public class EndCutsceneTrigger : MonoBehaviour
             return;
         }
     }
+    #endregion
 
-    private void EndLevelCutscene()
+    private void EndLevelCutsceneStart()
     {
-        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
-        EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
-        EventManager.EventTrigger(EventType.MAIN_MENU, null);
+        EventManager.EventTrigger(EventType.PRERENDERED_CUTSCENE_PLAY, _endPreRenderedCutscene);
+    }
+
+    private void EndLevelCutsceneEnd(object data)
+    {
+        if (data is VideoClip clip)
+        {
+            // Ensure this is the correct cutscene that finished
+            if (clip == _endPreRenderedCutscene)
+            {
+                EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+                EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
+                EventManager.EventTrigger(EventType.MAIN_MENU, null);
+            }
+        }
     }
 }
