@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ScreenSpaceOutlines
   m_EditorClassIdentifier: 
   m_Active: 1
-  renderPassEvent: 550
+  renderPassEvent: 450
   outlinesLayerMask:
     serializedVersion: 2
     m_Bits: 2048
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
   m_DepthPrimingMode: 0
-  m_CopyDepthMode: 1
+  m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
 --- !u!114 &1657424041788903304
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: ScreenSpaceOutlines
   m_EditorClassIdentifier: 
   m_Active: 1
-  renderPassEvent: 550
+  renderPassEvent: 450
   outlinesLayerMask:
     serializedVersion: 2
     m_Bits: 648
