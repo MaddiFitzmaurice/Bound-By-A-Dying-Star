@@ -302,11 +302,15 @@ public class ConstPedestal : MonoBehaviour, IInteractable
         SetReflectingBeam(true);
     }
 
+    public void CanRotate()
+    {
+        _canRotateMirror = true;
+    }
+
     // Activate mirror orb effects
     public void ActivateOrb()
     {
         _mirrorBeamFX.SetActive(true);
-        _canRotateMirror = true;
     }
 
     // Activate sky beam
@@ -359,6 +363,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
             _conController.BeamRightDirection(this);
             _conController.PedestalHasBeam(_pedestalDestinations);
             _canRotateMirror = false;
+            ActivateOrb();
 
             EventManager.EventTrigger(EventType.BEAM_CONNECTION, transform.position);
 
