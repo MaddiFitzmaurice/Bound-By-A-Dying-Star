@@ -347,6 +347,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bobbingAmplitude: 0.25
   _bobbingFrequency: 1
+  _rotationAmplitude: 20
+  _rotationFrequency: 1
   IsFollowing: 0
   _itemPassivePS: {fileID: 384122536073096839}
 --- !u!1001 &5490138703101696267

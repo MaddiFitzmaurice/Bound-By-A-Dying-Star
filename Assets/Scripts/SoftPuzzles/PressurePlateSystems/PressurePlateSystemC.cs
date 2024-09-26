@@ -11,6 +11,8 @@ public class PressurePlateSystemC : PressurePlateSystem
     [SerializeField] private Transform _platformStartPos;
     [SerializeField] private Transform _platformEndPos;
     [SerializeField] private float _platformSpeed;
+    [SerializeField] private float _slowdownDistance; // Distance to start slowing down
+    [SerializeField] private float _slowdownFactor; // How much to slow down (e.g., 0.5f = half speed)
     #endregion
 
     #region Internal Data
@@ -68,7 +70,17 @@ public class PressurePlateSystemC : PressurePlateSystem
     void MovePlatform()
     {
         Vector3 targetPosition = _movingToEnd ? _platformEndPos.position : _platformStartPos.position;
-        _platform.transform.position = Vector3.MoveTowards(_platform.transform.position, targetPosition, _platformSpeed * Time.deltaTime);
+        float distanceToTarget = Vector3.Distance(_platform.transform.position, targetPosition);
+
+        // Adjust speed based on distance to target
+        float currentSpeed = _platformSpeed;
+        if (distanceToTarget <= _slowdownDistance)
+        {
+            // Slow down when within slowdownDistance
+            currentSpeed *= _slowdownFactor; 
+        }
+
+        _platform.transform.position = Vector3.MoveTowards(_platform.transform.position, targetPosition, currentSpeed * Time.deltaTime);
 
         if (_platform.transform.position == targetPosition)
         {
