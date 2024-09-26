@@ -69,6 +69,7 @@ public abstract class PlayerBase : MonoBehaviour
     protected bool FacingMoveDir = false;
     protected bool _canMove = true;
     private Vector3 _orientation = Vector3.up;
+    private LayerMask _playerLayer;
 
     // Camera Frustum Data
     protected bool IsOffscreen = false;
@@ -109,14 +110,13 @@ public abstract class PlayerBase : MonoBehaviour
         _animator.SetBool("IsRunning", false);
         _interactablesInRange = new List<Collider>();
         _interactablesNotInRange = new List<Collider>();
+        _playerLayer = LayerMask.GetMask("Player");
 
         PlayerZAngle = transform.rotation.eulerAngles.z;
 
         // Set step height data
-        // Note: Height calc will change depending on height/transform centre of models artists settle on
-        // Current transform centre: 1 unit
-        UpperBoundRay.transform.localPosition = new Vector3(0, -1 + StepHeight, 0);
-        LowerBoundRay.transform.localPosition = new Vector3(0, -1, 0);
+        UpperBoundRay.transform.localPosition = new Vector3(0, StepHeight, 0);
+        LowerBoundRay.transform.localPosition = new Vector3(0, 0.03f, 0);
     }
 
     protected virtual void OnEnable()
@@ -222,14 +222,12 @@ public abstract class PlayerBase : MonoBehaviour
             }
         }
     }
-    
+
     public void StepClimb()
     {
-        RaycastHit lowerBoundHit;
-        if (Physics.Raycast(LowerBoundRay.transform.position, transform.forward, out lowerBoundHit, 0.6f))
+        if (Physics.Raycast(LowerBoundRay.transform.position, transform.forward, 0.3f))
         {
-            RaycastHit upperBoundHit;
-            if (!Physics.Raycast(UpperBoundRay.transform.position, transform.forward, out upperBoundHit, 0.7f))
+            if (!Physics.Raycast(UpperBoundRay.transform.position, transform.TransformDirection(Vector3.forward), 0.4f, _playerLayer))
             {
                 _rb.position -= new Vector3(0f, -StepSmoothing * Time.deltaTime, 0f);
             }
