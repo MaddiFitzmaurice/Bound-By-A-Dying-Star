@@ -13,6 +13,10 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     [SerializeField] private float _bobbingAmplitude = 0.25f;
     // How often to bob
     [SerializeField] private float _bobbingFrequency = 1f;
+    // How much to rotate left and right
+    [SerializeField] private float _rotationAmplitude = 10f; // Max rotation in degrees
+    // How fast to rotate
+    [SerializeField] private float _rotationFrequency = 0.5f; // Speed of rotation
     #endregion
 
     #region INTERNAL DATA
@@ -43,6 +47,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     private bool _isBobbingAllowed = true;
     private Vector3 _finalRestingPosition;
     private float _frameRateSpeed = 0.0f;
+    private float _rotationSpeed = 0.0f; // Rotation over time
 
     // Tutorial Prompt
     private static bool _showPrompt = true;
@@ -259,6 +264,7 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     
     private void BobbingEffect(Vector3 finalRestingPosition)
     {
+        // Bobbing logic
         // Determine the correct base height for bobbing
         float baseHeight = finalRestingPosition.y;
 
@@ -274,6 +280,14 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
         // Apply the calculated position
         transform.position = new Vector3(transform.position.x, newYPosition, transform.position.z);
 
+        // Rotation logic
+        _rotationSpeed += _rotationFrequency * Time.deltaTime;
+
+        // Left-right rotation
+        float rotationOffset = Mathf.Sin(_rotationSpeed) * _rotationAmplitude;
+
+        // Apply rotation on the Y axis
+        transform.rotation = Quaternion.Euler(0, rotationOffset, 0); 
     }
     #endregion
 

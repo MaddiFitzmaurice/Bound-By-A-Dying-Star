@@ -69,13 +69,6 @@ public class PressurePlateSystemC : PressurePlateSystem
 
     void MovePlatform()
     {
-        //Vector3 targetPosition = _movingToEnd ? _platformEndPos.position : _platformStartPos.position;
-        //_platform.transform.position = Vector3.MoveTowards(_platform.transform.position, targetPosition, _platformSpeed * Time.deltaTime);
-
-        //if (_platform.transform.position == targetPosition)
-        //{
-        //    _movingToEnd = !_movingToEnd;
-        //}
         Vector3 targetPosition = _movingToEnd ? _platformEndPos.position : _platformStartPos.position;
         float distanceToTarget = Vector3.Distance(_platform.transform.position, targetPosition);
 
@@ -83,7 +76,8 @@ public class PressurePlateSystemC : PressurePlateSystem
         float currentSpeed = _platformSpeed;
         if (distanceToTarget <= _slowdownDistance)
         {
-            currentSpeed *= _slowdownFactor; // Slow down when within slowdownDistance
+            // Slow down when within slowdownDistance
+            currentSpeed *= _slowdownFactor; 
         }
 
         _platform.transform.position = Vector3.MoveTowards(_platform.transform.position, targetPosition, currentSpeed * Time.deltaTime);
