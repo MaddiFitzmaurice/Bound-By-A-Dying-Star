@@ -331,31 +331,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -53.674812
+      value: 0.39391068
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.6697645
+      value: 6.83
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 29.60354
+      value: 43.8332
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8454972
+      value: 0.000000089292776
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.1874422
+      value: 0.000000010173628
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.48814803
+      value: 0.9935719
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.108219795
+      value: -0.11320323
       objectReference: {fileID: 0}
     - target: {fileID: 4281683961945043205, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_IsActive
@@ -367,7 +367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: field of view
-      value: 60.000004
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: far clip plane
