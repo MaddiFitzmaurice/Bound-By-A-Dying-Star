@@ -48,6 +48,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     private Vector3 _finalRestingPosition;
     private float _frameRateSpeed = 0.0f;
     private float _rotationSpeed = 0.0f; // Rotation over time
+    private float _currentYRotation; // Declare the variable for capturing initial Y rotation
+  
 
     // Tutorial Prompt
     private static bool _showPrompt = true;
@@ -64,6 +66,9 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     private void Start()
     {
+        // Get the initial Y rotation when the object is initialized
+        _currentYRotation = transform.eulerAngles.y;
+
         // If is not a part of soft puzzle, should be stored in LevelManager's reward grouper
         if (_softPuzzle == null)
         {
@@ -265,29 +270,18 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
     private void BobbingEffect(Vector3 finalRestingPosition)
     {
         // Bobbing logic
-        // Determine the correct base height for bobbing
         float baseHeight = finalRestingPosition.y;
-
-        // Increment movement based on time passed to maintain consistent speed across frame rates
         _frameRateSpeed += _bobbingFrequency * Time.deltaTime;
-
-        // Calculate the bobbing offset using a sine wave
-        float bobbingOffset = Mathf.Sin(_frameRateSpeed += _bobbingFrequency * Time.deltaTime) * _bobbingAmplitude + _bobbingAmplitude;
-
-        // Calculate the new position
-        float newYPosition = baseHeight + bobbingOffset;  // Always above the base height
-
-        // Apply the calculated position
+        float bobbingOffset = Mathf.Sin(_frameRateSpeed) * _bobbingAmplitude + _bobbingAmplitude;
+        float newYPosition = baseHeight + bobbingOffset;
         transform.position = new Vector3(transform.position.x, newYPosition, transform.position.z);
 
-        // Rotation logic
+        // Rotation logic: Oscillate symmetrically around the initial Y rotation
         _rotationSpeed += _rotationFrequency * Time.deltaTime;
+        float rotationOffset = Mathf.Sin(_rotationSpeed) * _rotationAmplitude; // Left-right rotation
 
-        // Left-right rotation
-        float rotationOffset = Mathf.Sin(_rotationSpeed) * _rotationAmplitude;
-
-        // Apply rotation on the Y axis
-        transform.rotation = Quaternion.Euler(0, rotationOffset, 0); 
+        // Apply the rotationOffset symmetrically around the current Y rotation
+        transform.rotation = Quaternion.Euler(0, _currentYRotation + rotationOffset, 0);
     }
     #endregion
 
