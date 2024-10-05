@@ -18,6 +18,7 @@ public class SoftPuzzle : MonoBehaviour
     [Header("Cameras")]
     [SerializeField] private GameObject _forwardCams;
     [SerializeField] private GameObject _backwardCams;
+    [SerializeField] private GameObject _transitionCam;
 
     [Header("Puzzle Components")]
     [SerializeField, Space(10)] private List<GameObject> _rewardObjs;
@@ -43,7 +44,7 @@ public class SoftPuzzle : MonoBehaviour
             Debug.LogError("Please assign either 1 or 2 reward objects to SoftPuzzle!");
         }
 
-        if (_forwardCams == null || _backwardCams == null)
+        if (_forwardCams == null || _backwardCams == null || _transitionCam == null)
         {
             Debug.LogError("Please assign cameras!");
         }
@@ -130,6 +131,14 @@ public class SoftPuzzle : MonoBehaviour
         // Swap the puzzles
         _forwardPuzzle.SetActive(false);
 
+        if (_fixedPlatforms.Count > 1)
+        {
+            foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
+            {
+                platform.CheckIfPlayerOn();
+            }
+        }
+
         // INSERT HERE FOR CUTSCENE CAMERA 
 
         // Moves platforms and swaps puzzle
@@ -138,6 +147,10 @@ public class SoftPuzzle : MonoBehaviour
 
     private IEnumerator MovePlatformsAndActivateBackwardPuzzle()
     {
+        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+        _forwardCams.SetActive(false);
+        _transitionCam.SetActive(true);
+
         List<Coroutine> coroutines = new List<Coroutine>();
 
         // Loops through each platform and starts to move it to the required position
@@ -153,11 +166,13 @@ public class SoftPuzzle : MonoBehaviour
         }
 
         // Activates the backward puzzle + cams and resets the spawn point
+        _transitionCam.SetActive(false);
         _backwardPuzzle.SetActive(true);
-        _forwardCams.SetActive(false);
         _backwardCams.SetActive(true);
         _respawnSystem.ChangeToBackRespawn();
         _puzzleCompleted = true;
+
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
     }
 
     private IEnumerator MovePlatforms(SoftPuzzleFixedPlatform platform)

@@ -139,10 +139,16 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
             // Assign device to player 1 and return out of function
             if (!p1HasGamepad)
             {
-                Debug.Log("Player 1 connected to " + incomingDevice.description);
-                InputUser.PerformPairingWithDevice(incomingDevice, _player1);
-                _player1Inputs.Enable();
-                return;
+                // Make sure gamepad is not a part of lost device from p2
+                if (!_player2.pairedDevices.ToList().Contains(incomingDevice))
+                {
+                    //Debug.Log("Player 1 connected to " + incomingDevice.description);
+                    InputUser.PerformPairingWithDevice(incomingDevice, _player1);
+                    _player1Inputs.Enable();
+                    //Debug.Log("Assigned to p1!");
+                    return;
+                }
+                
             }
 
             bool p2HasGamepad = false;
@@ -161,10 +167,15 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
             // Assign device to player 2 and return out of function
             if (!p2HasGamepad)
             {
-                Debug.Log("Player 2 connected to " + incomingDevice.description);
-                InputUser.PerformPairingWithDevice(incomingDevice, _player2);
-                _player2Inputs.Enable();
-                return;
+                // Make sure gamepad is not a part of paired devices from p1
+                if (!_player1.pairedDevices.ToList().Contains(incomingDevice))
+                {
+                    //Debug.Log("Player 2 connected to " + incomingDevice.description);
+                    InputUser.PerformPairingWithDevice(incomingDevice, _player2);
+                    _player2Inputs.Enable();
+                    //Debug.Log("Assigned to p2!");
+                    return;
+                }
             }
         }
     }
@@ -175,23 +186,27 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         switch (change)
         {
             case InputDeviceChange.Added:
+                //Debug.Log("Add");
                 TryAddGamepadDevice(device);
                 break;
             case InputDeviceChange.Disconnected:
                 // If device has been disconnected from player 1
-                if (_player1.pairedDevices.ToList().Contains(device))
+                if (_player1.lostDevices.ToList().Contains(device))
                 {
-                    //_player1Inputs.Disable();
+                    //Debug.Log("Disconnect p1");
+                    _player1.lostDevices.ToList().Remove(device);
                 }
                 // Else if device has been disconnected from player 2
-                if (_player2.pairedDevices.ToList().Contains(device))
+                else if (_player2.lostDevices.ToList().Contains(device))
                 {
-                    //_player2Inputs.Disable();
+                    //Debug.Log("Disconnect p2");
+                    _player2.lostDevices.ToList().Remove(device);
                 }
                 break;
             case InputDeviceChange.Reconnected:
                 // Plugged back in.
-                Debug.Log($"Reconnected {device}");
+                //Debug.Log($"Reconnected {device}");
+                TryAddGamepadDevice(device);
                 break;
             default:
                 //Debug.Log($"Unknown activity occuring with {device}.");

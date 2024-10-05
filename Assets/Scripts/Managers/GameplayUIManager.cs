@@ -12,6 +12,7 @@ public class GameplayUIManager : MonoBehaviour
     [SerializeField] private Image _artwork;
     [SerializeField] private GameObject _tapPrompt;
     [SerializeField] private GameObject _holdPrompt;
+    [SerializeField] private GameObject _preRenderedCutscene;
     #endregion
     #region INTERNAL DATA
     // Player Data
@@ -34,16 +35,20 @@ public class GameplayUIManager : MonoBehaviour
         // Get Components
         _cam = Camera.main;
         _screen = GetComponentInChildren<RectTransform>();
+
+        // Preload UI elements
         _tapPrompt.SetActive(true);
         _holdPrompt.SetActive(true);
         _tapPrompt.SetActive(false);
         _holdPrompt.SetActive(false);
         _artwork.gameObject.SetActive(false);
+        _preRenderedCutscene.SetActive(false);
 
         // Event Init
         EventManager.EventInitialise(EventType.ARTWORK_SHOW);
         EventManager.EventInitialise(EventType.ARTWORK_HIDE);
         EventManager.EventInitialise(EventType.CAN_MOVE);
+        EventManager.EventInitialise(EventType.RENDERTEX_TOGGLE);
     }
 
     private void OnEnable()
@@ -60,6 +65,7 @@ public class GameplayUIManager : MonoBehaviour
         //EventManager.EventSubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
         EventManager.EventSubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
         EventManager.EventSubscribe(EventType.ARTWORK_HIDE, HideArtwork);
+        EventManager.EventSubscribe(EventType.RENDERTEX_TOGGLE, RenderTexToggle);
     }
 
     public void OnDisable()
@@ -76,6 +82,7 @@ public class GameplayUIManager : MonoBehaviour
         //EventManager.EventUnsubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
         EventManager.EventUnsubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
         EventManager.EventUnsubscribe(EventType.ARTWORK_HIDE, HideArtwork);
+        EventManager.EventUnsubscribe(EventType.RENDERTEX_TOGGLE, RenderTexToggle);
     }
 
     //public void Update()
@@ -156,6 +163,14 @@ public class GameplayUIManager : MonoBehaviour
     public void HideArtwork(object data)
     {
         _artwork.gameObject.SetActive(false);
+    }
+
+    public void RenderTexToggle(object data)
+    {
+        if (data is bool toggle)
+        {
+            _preRenderedCutscene.gameObject.SetActive(toggle);
+        }
     }
 
     //public void IsP1OffscreenHandler(object data)

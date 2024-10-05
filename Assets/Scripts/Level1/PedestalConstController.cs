@@ -52,9 +52,11 @@ public class PedestalConstController : MonoBehaviour
 
         // Set preset pedestal values so it is shooting beam
         pedestalSender.ActivateEffect(); // Set up first mirror beam
+
+        // Set all mirrors to be able to rotate
         foreach (ConstPedestal pedestal in _pedestalList)
         {
-            pedestal.ActivateOrb();
+            pedestal.CanRotate();
         }
 
         pedestalSender.SetReflectingBeam(true);

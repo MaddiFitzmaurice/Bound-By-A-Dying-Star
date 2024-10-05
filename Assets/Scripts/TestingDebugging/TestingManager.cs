@@ -17,10 +17,12 @@ public class TestingManager : MonoBehaviour
     #region EXTERNAL DATA
     [SerializeField] private Button _movementTypeButton;
     [SerializeField] private TextMeshProUGUI _movementTypeText;
+    [SerializeField] private TextMeshProUGUI _fpsText;
     #endregion
 
     #region INTERNAL DATA
     private ControlType _controlType = ControlType.FIXEDCAM2;
+    private FPS _fps;
     #endregion
 
     private void Awake()
@@ -28,6 +30,14 @@ public class TestingManager : MonoBehaviour
         // Event Inits
         EventManager.EventInitialise(EventType.TEST_CONTROLS);
         _movementTypeText.text = "Movement Type: " + _controlType.ToString();
+
+        // Component Inits
+        _fps = GetComponent<FPS>();
+    }
+
+    private void Update()
+    {
+        _fpsText.text = "FPS Avg: " + _fps.GetCurrentFPS();
     }
 
     public void ChangeMovementType()

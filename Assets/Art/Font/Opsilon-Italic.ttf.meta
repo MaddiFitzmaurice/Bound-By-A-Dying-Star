@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 6a95e764f3a92524388a0599de4cd2c4
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Opsilon-italic
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: eff8cad48932c3047b4d536c9429ee90, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

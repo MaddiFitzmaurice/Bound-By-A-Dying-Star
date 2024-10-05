@@ -4,24 +4,47 @@ using UnityEngine;
 
 public class SoftPuzzleFixedPlatform : MonoBehaviour
 {
+    #region EXTERNAL DATA
     [field: SerializeField] public Transform MoveToPos { get; private set; }
-    public bool HasPlayer1 { get; private set; } = false;
-    public bool HasPlayer2 { get; private set; } = false;
+    #endregion
 
+    #region INTERNAL DATA
+    private PlayerBase _lastPlayerOn;
+    private bool _hasPlayer1 = false;
+    private bool _hasPlayer2 = false;
+    #endregion
+
+    public void CheckIfPlayerOn()
+    {
+        // If no player is on the platform, teleport last player to it
+        if (!_hasPlayer1 && !_hasPlayer2)
+        {
+            if (_lastPlayerOn != null)
+            {
+                _lastPlayerOn.PuzzleTeleport(transform);
+            }
+            else
+            {
+                Debug.LogError("Somehow no player stepped on this platform!");
+            }
+        }
+    }
+
+    #region FRAMEWORK FUNCTIONS
     private void OnTriggerEnter(Collider other)
     {
         var p1 = other.GetComponent<Player1>();
 
         if (p1 != null)
         {
-            HasPlayer1 = true;
+            _hasPlayer1 = true;
         }
 
         var p2 = other.GetComponent<Player2>();
 
         if (p2 != null)
         {
-            HasPlayer2 = true;
+            _hasPlayer2 = true;
         }
     }
 
@@ -31,14 +54,27 @@ public class SoftPuzzleFixedPlatform : MonoBehaviour
 
         if (p1 != null)
         {
-            HasPlayer1 = false;
+            _hasPlayer1 = false;
+
+            // If player 2 is not on, assign player 1 as last on
+            if (!_hasPlayer2)
+            {
+                _lastPlayerOn = p1;
+            }
         }
 
         var p2 = other.GetComponent<Player2>();
 
         if (p2 != null)
         {
-            HasPlayer2 = false;
+            _hasPlayer2 = false;
+
+            // If player 1 is not on, assign player 2 as last on
+            if (!_hasPlayer1)
+            {
+                _lastPlayerOn = p2;
+            }
         }
     }
+    #endregion
 }

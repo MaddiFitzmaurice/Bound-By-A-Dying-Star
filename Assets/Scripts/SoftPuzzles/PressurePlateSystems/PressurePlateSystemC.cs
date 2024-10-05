@@ -11,6 +11,8 @@ public class PressurePlateSystemC : PressurePlateSystem
     [SerializeField] private Transform _platformStartPos;
     [SerializeField] private Transform _platformEndPos;
     [SerializeField] private float _platformSpeed;
+    [SerializeField] private float _slowdownDistance; // Distance to start slowing down
+    [SerializeField] private float _slowdownFactor; // How much to slow down (e.g., 0.5f = half speed)
     #endregion
 
     #region Internal Data
@@ -68,8 +70,28 @@ public class PressurePlateSystemC : PressurePlateSystem
     void MovePlatform()
     {
         Vector3 targetPosition = _movingToEnd ? _platformEndPos.position : _platformStartPos.position;
-        _platform.transform.position = Vector3.MoveTowards(_platform.transform.position, targetPosition, _platformSpeed * Time.deltaTime);
 
+        // Calculate the distance to both the start and end positions
+        float distanceToStart = Vector3.Distance(_platform.transform.position, _platformStartPos.position);
+        float distanceToEnd = Vector3.Distance(_platform.transform.position, _platformEndPos.position);
+
+        // Find the smaller distance between the platform and its closest start or end point
+        float closestDistance = Mathf.Min(distanceToStart, distanceToEnd);
+
+        // Adjust speed based on proximity to either the start or end position
+        float currentSpeed = _platformSpeed;
+
+        // If within the slowdown distance, adjust speed accordingly
+        if (closestDistance <= _slowdownDistance)
+        {
+            // Gradually slow down as it approaches either the start or end position
+            currentSpeed *= Mathf.Lerp(_slowdownFactor, 1f, closestDistance / _slowdownDistance);
+        }
+
+        // Move the platform toward the target position at the adjusted speed
+        _platform.transform.position = Vector3.MoveTowards(_platform.transform.position, targetPosition, currentSpeed * Time.deltaTime);
+
+        // If the platform has reached the target, reverse the direction
         if (_platform.transform.position == targetPosition)
         {
             _movingToEnd = !_movingToEnd;
