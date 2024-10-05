@@ -34,11 +34,13 @@ public class LevelManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
+        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, OnIntroPreRCutsceneEnd);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
+        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, OnIntroPreRCutsceneEnd);
     }
 
     private void Start()
@@ -53,10 +55,10 @@ public class LevelManager : MonoBehaviour
             Debug.LogError("Please use SpawnPoint object to assign players' initial spawn in level.");
         }
         
-        // Play cutscene if assigned
+        // Play pre-rendered cutscene if assigned
         if (_introCutscene != null)
         {
-            EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _introCutscene);
+            EventManager.EventTrigger(EventType.PRERENDERED_CUTSCENE_PLAY, _introPreRenderedCutscene);
         }
 
         Debug.Log("LevelManager: Triggering initial background music");
@@ -117,6 +119,18 @@ public class LevelManager : MonoBehaviour
             if (!softPuzzleDone.Value)
             {
                 return;
+            }
+        }
+    }
+
+    public void OnIntroPreRCutsceneEnd(object data)
+    {
+        if (data is VideoClip clip)
+        {
+            // Ensure this is the correct cutscene that finished
+            if (clip == _introPreRenderedCutscene)
+            {
+                EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _introCutscene);
             }
         }
     }
