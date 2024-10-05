@@ -191,6 +191,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: New_Flame_Head_from_Torch (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 941523069901396638, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7141032598986320752, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -206,7 +214,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 941523069901396638, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1255050005}
   m_SourcePrefab: {fileID: 100100000, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
 --- !u!4 &179885121 stripped
 Transform:
@@ -1321,6 +1332,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: New_Flame_Head_from_Torch
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 941523069901396638, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7141032598986320752, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1336,7 +1355,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 941523069901396638, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1002678699}
   m_SourcePrefab: {fileID: 100100000, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
 --- !u!4 &805876503 stripped
 Transform:
@@ -1348,6 +1370,34 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2237178653060740787, guid: 463b5e60ef4bd964893627ea5be37e9d, type: 3}
   m_PrefabInstance: {fileID: 1757940962}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1002678695 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 941523069901396638, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
+  m_PrefabInstance: {fileID: 805876502}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1002678699
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002678695}
+  m_Material: {fileID: 13400000, guid: 659396416b25c8d40b63b132b22119ac, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1647331
+  m_Height: 0.62868005
+  m_Direction: 1
+  m_Center: {x: 0.0068481043, y: 0.20302135, z: -0.017969567}
 --- !u!1 &1058849964 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3239183671370231162, guid: f6fb505cf3b75164f98769aadf4f0a3c, type: 3}
@@ -4923,6 +4973,34 @@ Cloth:
   - {x: 0.6, y: 0.1, z: 0.1}
   - {x: 0.5, y: 0.5, z: 0}
   m_VirtualParticleIndices: 
+--- !u!1 &1255050001 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 941523069901396638, guid: de9a4bfd041a17443ba63be522c180fb, type: 3}
+  m_PrefabInstance: {fileID: 179885120}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1255050005
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255050001}
+  m_Material: {fileID: 13400000, guid: 659396416b25c8d40b63b132b22119ac, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1647331
+  m_Height: 0.62868005
+  m_Direction: 1
+  m_Center: {x: 0.0068481043, y: 0.20302121, z: -0.017969565}
 --- !u!1 &1444716574
 GameObject:
   m_ObjectHideFlags: 0
