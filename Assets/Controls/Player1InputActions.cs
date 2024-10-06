@@ -252,6 +252,17 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Player1SkipCutscene"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7057c399-09a6-460a-965c-8319a40132ec"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1SkipCutscene"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
