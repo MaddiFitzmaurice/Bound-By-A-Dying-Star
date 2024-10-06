@@ -8,8 +8,13 @@ using UnityEngine.Video;
 public class CutsceneManager : MonoBehaviour
 {
     #region INTERNAL DATA
+    // Components
     private PlayableDirector _director;
     private VideoPlayer _videoPlayer;
+
+    // Player Skip?
+    private bool _player1Skip = false;
+    private bool _player2Skip = false;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
@@ -20,52 +25,124 @@ public class CutsceneManager : MonoBehaviour
         _videoPlayer = GetComponent<VideoPlayer>(); 
 
         // Init Events
-        EventManager.EventInitialise(EventType.CUTSCENE_PLAY);
+        EventManager.EventInitialise(EventType.INGAME_CUTSCENE_PLAY);
+        EventManager.EventInitialise(EventType.INGAME_CUTSCENE_FINISHED);
         EventManager.EventInitialise(EventType.PRERENDERED_CUTSCENE_PLAY);
         EventManager.EventInitialise(EventType.PRERENDERED_CUTSCENE_FINISHED);
     }
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.CUTSCENE_PLAY, CutscenePlayHandler);
-        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, PreRenderedCutscenePlay);
-        _director.stopped += CutsceneFinishedHandler;
-        _videoPlayer.loopPointReached += PreRenderedCutsceneFinishedHandler;
+        EventManager.EventSubscribe(EventType.INGAME_CUTSCENE_PLAY, InGameCutscenePlayHandler);
+        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, PreRenderedCutscenePlayHandler);
+        _director.stopped += InGameCutsceneFinHandler;
+        _videoPlayer.loopPointReached += PreRenderedCutsceneFinHandler;
+        EventManager.EventSubscribe(EventType.CUTSCENE_SKIP, CutsceneSkipHandler);
     }
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.CUTSCENE_PLAY, CutscenePlayHandler);
-        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, PreRenderedCutscenePlay);
-        _director.stopped -= CutsceneFinishedHandler;
-        _videoPlayer.loopPointReached -= PreRenderedCutsceneFinishedHandler;
+        EventManager.EventUnsubscribe(EventType.INGAME_CUTSCENE_PLAY, InGameCutscenePlayHandler);
+        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, PreRenderedCutscenePlayHandler);
+        _director.stopped -= InGameCutsceneFinHandler;
+        _videoPlayer.loopPointReached -= PreRenderedCutsceneFinHandler;
+        EventManager.EventUnsubscribe(EventType.CUTSCENE_SKIP, CutsceneSkipHandler);
+    }
+    #endregion
+
+    #region CUTSCENE FUNCTIONS
+    public void StopInGameCutscene()
+    {
+        EventManager.EventTrigger(EventType.DISABLE_CUTSCENE_INPUTS, null);
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+        EventManager.EventTrigger(EventType.INGAME_CUTSCENE_FINISHED, null);
+        ResetSkipBools();
+    }
+
+    public void StopPreRenderedCutscene()
+    {
+        EventManager.EventTrigger(EventType.DISABLE_CUTSCENE_INPUTS, null);
+        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+        EventManager.EventTrigger(EventType.RENDERTEX_TOGGLE, false);
+        EventManager.EventTrigger(EventType.PRERENDERED_CUTSCENE_FINISHED, _videoPlayer.clip);
+        ResetSkipBools();
+    }
+
+    public void SkipCutscene()
+    {
+        // If in-game cutscene is playing
+        if (_director.state == PlayState.Playing)
+        {
+            _director.Pause();
+            _director.time = _director.duration;
+            _director.Resume();
+            StopInGameCutscene();
+
+        }
+        // Else if pre-rendered cutscene is playing
+        else if (_videoPlayer.isPlaying)
+        {
+            _videoPlayer.Stop();
+            StopPreRenderedCutscene();
+        }
+    }
+
+    public void ResetSkipBools()
+    {
+        _player1Skip = false;
+        _player2Skip = false;
     }
     #endregion
 
     #region EVENT FUNCTIONS
-    public void PreRenderedCutscenePlay(object data)
+    public void CutsceneSkipHandler(object data)
+    {
+        if (data is int player)
+        {
+            if (player == 1)
+            {
+                if (!_player1Skip)
+                {
+                    _player1Skip = true;
+                }
+            }
+            else if (player == 2)
+            {
+                if (!_player2Skip)
+                {
+                    _player2Skip = true;
+                }
+            }
+
+            if (_player1Skip && _player2Skip)
+            {
+                SkipCutscene();
+            }
+        }
+        else
+        {
+            Debug.LogError("Did not receive int!");
+        }
+    }
+
+    public void PreRenderedCutscenePlayHandler(object data)
     {
         if (data is VideoClip clip)
         {
             _videoPlayer.clip = clip;
             EventManager.EventTrigger(EventType.RENDERTEX_TOGGLE, true);
+            EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+            EventManager.EventTrigger(EventType.ENABLE_CUTSCENE_INPUTS, null);
             _videoPlayer.Play();
         }
     }
 
-    public void PreRenderedCutsceneFinishedHandler(VideoPlayer source)
+    public void PreRenderedCutsceneFinHandler(VideoPlayer source)
     {
-        EventManager.EventTrigger(EventType.RENDERTEX_TOGGLE, false);
-        EventManager.EventTrigger(EventType.PRERENDERED_CUTSCENE_FINISHED, _videoPlayer.clip);
+        StopPreRenderedCutscene();
     }
 
-    public void CutsceneFinishedHandler(PlayableDirector director)
-    {
-        EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
-        EventManager.EventTrigger(EventType.CUTSCENE_FINISHED, null);
-    }
-
-    public void CutscenePlayHandler(object data)
+    public void InGameCutscenePlayHandler(object data)
     {
         if (data is not PlayableAsset)
         {
@@ -74,7 +151,13 @@ public class CutsceneManager : MonoBehaviour
 
         PlayableAsset cinematic = (PlayableAsset)data;
         EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+        EventManager.EventTrigger(EventType.ENABLE_CUTSCENE_INPUTS, null);
         _director.Play(cinematic); 
+    }
+
+    public void InGameCutsceneFinHandler(PlayableDirector director)
+    {
+        StopInGameCutscene();
     }
     #endregion
 }

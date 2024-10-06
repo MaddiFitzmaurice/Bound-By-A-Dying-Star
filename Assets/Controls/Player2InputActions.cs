@@ -184,6 +184,34 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Cutscene"",
+            ""id"": ""7e747232-6a3b-4b12-97da-7af160ab1931"",
+            ""actions"": [
+                {
+                    ""name"": ""Player2SkipCutscene"",
+                    ""type"": ""Button"",
+                    ""id"": ""46beb5be-b09a-4c1c-ba08-84b5369ab24f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""2a7c85c6-82c9-4dff-83df-de18b711a7b1"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2SkipCutscene"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -196,6 +224,9 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         m_MainMenu = asset.FindActionMap("MainMenu", throwIfNotFound: true);
         m_MainMenu_StartGame = m_MainMenu.FindAction("StartGame", throwIfNotFound: true);
         m_MainMenu_EndGame = m_MainMenu.FindAction("EndGame", throwIfNotFound: true);
+        // Cutscene
+        m_Cutscene = asset.FindActionMap("Cutscene", throwIfNotFound: true);
+        m_Cutscene_Player2SkipCutscene = m_Cutscene.FindAction("Player2SkipCutscene", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -361,6 +392,52 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
         }
     }
     public MainMenuActions @MainMenu => new MainMenuActions(this);
+
+    // Cutscene
+    private readonly InputActionMap m_Cutscene;
+    private List<ICutsceneActions> m_CutsceneActionsCallbackInterfaces = new List<ICutsceneActions>();
+    private readonly InputAction m_Cutscene_Player2SkipCutscene;
+    public struct CutsceneActions
+    {
+        private @Player2InputActions m_Wrapper;
+        public CutsceneActions(@Player2InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Player2SkipCutscene => m_Wrapper.m_Cutscene_Player2SkipCutscene;
+        public InputActionMap Get() { return m_Wrapper.m_Cutscene; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CutsceneActions set) { return set.Get(); }
+        public void AddCallbacks(ICutsceneActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CutsceneActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CutsceneActionsCallbackInterfaces.Add(instance);
+            @Player2SkipCutscene.started += instance.OnPlayer2SkipCutscene;
+            @Player2SkipCutscene.performed += instance.OnPlayer2SkipCutscene;
+            @Player2SkipCutscene.canceled += instance.OnPlayer2SkipCutscene;
+        }
+
+        private void UnregisterCallbacks(ICutsceneActions instance)
+        {
+            @Player2SkipCutscene.started -= instance.OnPlayer2SkipCutscene;
+            @Player2SkipCutscene.performed -= instance.OnPlayer2SkipCutscene;
+            @Player2SkipCutscene.canceled -= instance.OnPlayer2SkipCutscene;
+        }
+
+        public void RemoveCallbacks(ICutsceneActions instance)
+        {
+            if (m_Wrapper.m_CutsceneActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICutsceneActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CutsceneActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CutsceneActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CutsceneActions @Cutscene => new CutsceneActions(this);
     public interface IGameplayActions
     {
         void OnPlayer2Move(InputAction.CallbackContext context);
@@ -370,5 +447,9 @@ public partial class @Player2InputActions: IInputActionCollection2, IDisposable
     {
         void OnStartGame(InputAction.CallbackContext context);
         void OnEndGame(InputAction.CallbackContext context);
+    }
+    public interface ICutsceneActions
+    {
+        void OnPlayer2SkipCutscene(InputAction.CallbackContext context);
     }
 }

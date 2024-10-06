@@ -130,7 +130,7 @@ public class LevelManager : MonoBehaviour
             // Ensure this is the correct cutscene that finished
             if (clip == _introPreRenderedCutscene)
             {
-                EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _introCutscene);
+                EventManager.EventTrigger(EventType.INGAME_CUTSCENE_PLAY, _introCutscene);
             }
         }
     }

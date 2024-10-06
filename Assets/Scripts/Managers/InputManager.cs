@@ -14,7 +14,10 @@ public enum InteractTypes
     RELEASE_HOLD
 }
 
-public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions, Player2InputActions.IGameplayActions, Player1InputActions.IMainMenuActions, Player2InputActions.IMainMenuActions
+public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions, 
+    Player2InputActions.IGameplayActions, Player1InputActions.IMainMenuActions, 
+    Player2InputActions.IMainMenuActions, Player1InputActions.ICutsceneActions,
+    Player2InputActions.ICutsceneActions
 {
     // Input Action Assets
     private Player1InputActions _player1Inputs;
@@ -45,8 +48,10 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         _player2Inputs = new Player2InputActions();
         _player1Inputs.Gameplay.SetCallbacks(this);
         _player1Inputs.MainMenu.SetCallbacks(this);
+        _player1Inputs.Cutscene.SetCallbacks(this);
         _player2Inputs.Gameplay.SetCallbacks(this);
         _player2Inputs.MainMenu.SetCallbacks(this);
+        _player2Inputs.Cutscene.SetCallbacks(this);
         DeviceSetup();
 
         // Event Inits
@@ -58,6 +63,7 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         EventManager.EventInitialise(EventType.PLAYER_2_MOVE);
         EventManager.EventInitialise(EventType.PLAYER_1_INTERACT);
         EventManager.EventInitialise(EventType.PLAYER_2_INTERACT);
+        EventManager.EventInitialise(EventType.CUTSCENE_SKIP);
     }
 
     void OnEnable()
@@ -73,6 +79,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         EventManager.EventSubscribe(EventType.ENABLE_GAMEPLAY_INPUTS, EnableGameplayInput);
         EventManager.EventSubscribe(EventType.ENABLE_MAINMENU_INPUTS, EnableMainMenuInput);
         EventManager.EventSubscribe(EventType.DISABLE_MAINMENU_INPUTS, DisableMainMenuInput);
+        EventManager.EventSubscribe(EventType.ENABLE_CUTSCENE_INPUTS, EnableCutsceneInput);
+        EventManager.EventSubscribe(EventType.DISABLE_CUTSCENE_INPUTS, DisableCutsceneInput);
     }
 
     void OnDisable()
@@ -88,6 +96,8 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
         EventManager.EventUnsubscribe(EventType.ENABLE_GAMEPLAY_INPUTS, EnableGameplayInput);
         EventManager.EventUnsubscribe(EventType.ENABLE_MAINMENU_INPUTS, EnableMainMenuInput);
         EventManager.EventUnsubscribe(EventType.DISABLE_MAINMENU_INPUTS, DisableMainMenuInput);
+        EventManager.EventUnsubscribe(EventType.ENABLE_CUTSCENE_INPUTS, EnableCutsceneInput);
+        EventManager.EventUnsubscribe(EventType.DISABLE_CUTSCENE_INPUTS, DisableCutsceneInput);
     }
     #endregion
 
@@ -306,6 +316,24 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     }
     #endregion
 
+    #region ACTIONMAP CUTSCENE INTERFACE
+    public void OnPlayer1SkipCutscene(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.CUTSCENE_SKIP, 1);
+        }
+    }
+
+    public void OnPlayer2SkipCutscene(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            EventManager.EventTrigger(EventType.CUTSCENE_SKIP, 2);
+        }
+    }
+    #endregion
+
     #region EVENT HANDLERS
     public void EnableGameplayInput(object data)
     {
@@ -351,6 +379,18 @@ public class InputManager : MonoBehaviour, Player1InputActions.IGameplayActions,
     {
         _player1Inputs.MainMenu.Disable();
         _player2Inputs.MainMenu.Disable();
+    }
+
+    private void EnableCutsceneInput(object data)
+    {
+        _player1Inputs.Cutscene.Enable();
+        _player2Inputs.Cutscene.Enable();
+    }
+
+    private void DisableCutsceneInput(object data)
+    {
+        _player1Inputs.Cutscene.Disable();
+        _player2Inputs.Cutscene.Disable();
     }
     #endregion
 }

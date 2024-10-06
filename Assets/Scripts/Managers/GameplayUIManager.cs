@@ -1,19 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameplayUIManager : MonoBehaviour
 {
     #region EXTERNAL DATA
-    //[SerializeField] private OffscreenIndicator _indicatorP1;
-    //[SerializeField] private OffscreenIndicator _indicatorP2;
-    [SerializeField] private Image _artwork;
+    [Header("Interact UI")]
     [SerializeField] private GameObject _tapPrompt;
     [SerializeField] private GameObject _holdPrompt;
+    [SerializeField] private Image _artwork;
+    [Header("Cutscene UI")]
     [SerializeField] private GameObject _preRenderedCutscene;
     [SerializeField] private GameObject _skipCutscenePrompt;
+    [SerializeField] private Image _player1Skip;
+    [SerializeField] private Image _player2Skip;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
@@ -38,10 +41,10 @@ public class GameplayUIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.CUTSCENE_PLAY, ShowUI);
-        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, ShowUI);
-        EventManager.EventSubscribe(EventType.CUTSCENE_FINISHED, HideUI);
-        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, HideUI);
+        EventManager.EventSubscribe(EventType.INGAME_CUTSCENE_PLAY, ShowSkipUI);
+        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, ShowSkipUI);
+        EventManager.EventSubscribe(EventType.INGAME_CUTSCENE_FINISHED, HideSkipUI);
+        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, HideSkipUI);
         EventManager.EventSubscribe(EventType.SHOW_PROMPT_HOLD_INTERACT, ShowHoldPrompt);
         EventManager.EventSubscribe(EventType.HIDE_PROMPT_HOLD_INTERACT, HideHoldPrompt);
         EventManager.EventSubscribe(EventType.SHOW_PROMPT_INTERACT, ShowTapPrompt);
@@ -49,14 +52,15 @@ public class GameplayUIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
         EventManager.EventSubscribe(EventType.ARTWORK_HIDE, HideArtwork);
         EventManager.EventSubscribe(EventType.RENDERTEX_TOGGLE, RenderTexToggle);
+        EventManager.EventSubscribe(EventType.CUTSCENE_SKIP, ActivateSkipFlame);
     }
 
     public void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.CUTSCENE_PLAY, ShowUI);
-        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, ShowUI);
-        EventManager.EventUnsubscribe(EventType.CUTSCENE_FINISHED, HideUI);
-        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, HideUI);
+        EventManager.EventUnsubscribe(EventType.INGAME_CUTSCENE_PLAY, ShowSkipUI);
+        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, ShowSkipUI);
+        EventManager.EventUnsubscribe(EventType.INGAME_CUTSCENE_FINISHED, HideSkipUI);
+        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, HideSkipUI);
         EventManager.EventUnsubscribe(EventType.SHOW_PROMPT_HOLD_INTERACT, ShowHoldPrompt);
         EventManager.EventUnsubscribe(EventType.HIDE_PROMPT_HOLD_INTERACT, HideHoldPrompt);
         EventManager.EventUnsubscribe(EventType.SHOW_PROMPT_INTERACT, ShowTapPrompt);
@@ -64,8 +68,14 @@ public class GameplayUIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
         EventManager.EventUnsubscribe(EventType.ARTWORK_HIDE, HideArtwork);
         EventManager.EventUnsubscribe(EventType.RENDERTEX_TOGGLE, RenderTexToggle);
+        EventManager.EventUnsubscribe(EventType.CUTSCENE_SKIP, ActivateSkipFlame);
     }
     #endregion
+    public void ResetSkipFlames()
+    {
+        _player1Skip.color = Color.black;
+        _player2Skip.color = Color.black;
+    }
 
     #region EVENT FUNCTIONS
     public void ShowArtwork(object data)
@@ -94,14 +104,30 @@ public class GameplayUIManager : MonoBehaviour
         }
     }
 
-    public void ShowUI(object data)
+    public void ShowSkipUI(object data)
     {
         _skipCutscenePrompt.SetActive(true);
     }
 
-    public void HideUI(object data)
+    public void HideSkipUI(object data)
     {
         _skipCutscenePrompt.SetActive(false);
+        ResetSkipFlames();
+    }
+
+    public void ActivateSkipFlame(object data)
+    {
+        if (data is int player)
+        {
+            if (player == 1)
+            {
+                _player1Skip.color = Color.white;
+            }
+            else if (player == 2)
+            {
+                _player2Skip.color = Color.white;
+            }
+        }
     }
 
     public void ShowTapPrompt(object data)

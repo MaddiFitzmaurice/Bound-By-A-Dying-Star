@@ -204,6 +204,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Cutscene",
+            "id": "f54b8516-bbb0-44b1-ba00-4a116999dce4",
+            "actions": [
+                {
+                    "name": "Player1SkipCutscene",
+                    "type": "Button",
+                    "id": "7bc3433d-9fed-4a8f-b043-4b0061e54fb8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c17028f3-6311-4bb6-8fac-03b8f7439cd3",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player1SkipCutscene",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
