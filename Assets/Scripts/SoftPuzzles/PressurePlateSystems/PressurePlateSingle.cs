@@ -14,6 +14,8 @@ public class PressurePlateSingle : MonoBehaviour
     #endregion
 
     #region Internal Data
+    private bool _isPlayer1OnPlate = false;
+    private bool _isPlayer2OnPlate = false;
     private GameObject _lastPlayer;
     ParticleSystem.MainModule _mainPS;
     #endregion
@@ -28,36 +30,53 @@ public class PressurePlateSingle : MonoBehaviour
     {
         if (other.CompareTag("Player1"))
         {
+            _isPlayer1OnPlate = true;
             _lastPlayer = other.gameObject;
-            Activated = true;
-            _ppSystem.PlateActivated(this, Activated);
+            UpdateActivationStatus();
         }
         else if (other.CompareTag("Player2"))
         {
+            _isPlayer2OnPlate = true;
             _lastPlayer = other.gameObject;
-            Activated = true;
-            _ppSystem.PlateActivated(this, Activated);
+            UpdateActivationStatus();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player1") || other.CompareTag("Player2"))
+        if (other.CompareTag("Player1"))
         {
-            // Check if the exiting player is the one who activated the plate
-            if (other.gameObject == _lastPlayer)
-            {
-                Activated = false;
-                _ppSystem.PlateActivated(this, Activated);
-            }
-        }   
+            _isPlayer1OnPlate = false;
+            UpdateActivationStatus();
+        }
+        else if (other.CompareTag("Player2"))
+        {
+            _isPlayer2OnPlate = false;
+            UpdateActivationStatus();
+        }
+    }
+
+    private void UpdateActivationStatus()
+    {
+        // Activate if either player is on the plate, deactivate only if both are off
+        if (_isPlayer1OnPlate || _isPlayer2OnPlate)
+        {
+            Activated = true;
+        }
+        else
+        {
+            Activated = false;
+        }
+
+        // Notify the system of the updated activation status
+        _ppSystem.PlateActivated(this, Activated);
     }
 
     public void InitPlateSystem(PressurePlateSystem system)
     {
         _ppSystem = system;
     }
-    
+
     // NOT part of the overall system's VFX
     public void ActivateIndividualVFX()
     {
