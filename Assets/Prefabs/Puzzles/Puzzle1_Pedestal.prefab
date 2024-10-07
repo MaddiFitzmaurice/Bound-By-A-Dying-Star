@@ -48,12 +48,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b82cc30c27201e4ba764a684808644b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mirrorParent: {fileID: 0}
   _validInteractables:
   - {fileID: 0}
   _presetPlacedObject: {fileID: 0}
   _raiseMirrorHeight: 1.5
   _rotationSpeed: 40
   _initialAngleOffset: 90
+  _currentAngle: 0
+  _targetAngle: 0
   _beamDestinations:
   - {fileID: 0}
   _lightBeam: {fileID: 775294244184712969, guid: 1dd2fec955ae27845834598e653cd488, type: 3}
@@ -152,6 +155,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: ca8851ac081863047943b6159a4273b8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ec1cdfd346d22eb438726fb7e231f522, type: 2}
     - target: {fileID: 919132149155446097, guid: ca8851ac081863047943b6159a4273b8, type: 3}
       propertyPath: m_Name
       value: Pedestal
@@ -159,6 +166,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ca8851ac081863047943b6159a4273b8, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ca8851ac081863047943b6159a4273b8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
