@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WaterfallingSandShader
-  m_Shader: {fileID: -6465566751694194690, guid: 73095c55061aa91468340164ac293da8, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: e5c1a9d1eb78663488d44229fb294895, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -111,6 +111,7 @@ Material:
     - _DstBlendAlpha: 0
     - _DuneShineMin: 0.5
     - _EnvironmentReflections: 1
+    - _FallSpeed: 0.2
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -120,19 +121,19 @@ Material:
     - _Metallic: 0
     - _NoiseAmplitude: 1.58
     - _NoiseScale: 4.21
-    - _NormalStrength: 1
+    - _NormalStrength: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _PolygonSides: 5.54
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _SandDuneMaxHeight: 0.1
+    - _SandDuneMaxHeight: 0
     - _ShineThreshold: 0.69
     - _SineAmplitude: 0.69
     - _SineFrequency: 9.52
-    - _SineRotation: 8.36
-    - _Smoothness: 0.5
+    - _SineRotation: 90
+    - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
