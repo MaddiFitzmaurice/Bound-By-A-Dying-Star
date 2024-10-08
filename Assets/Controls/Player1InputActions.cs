@@ -224,6 +224,17 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""EndGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""59ea0b7a-2c9f-4b5a-910e-814f1b0fc5bf"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
