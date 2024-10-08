@@ -55,7 +55,7 @@ public class CutsceneManager : MonoBehaviour
     {
         EventManager.EventTrigger(EventType.DISABLE_CUTSCENE_INPUTS, null);
         EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
-        EventManager.EventTrigger(EventType.INGAME_CUTSCENE_FINISHED, null);
+        EventManager.EventTrigger(EventType.INGAME_CUTSCENE_FINISHED, _director.playableAsset);
         ResetSkipBools();
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Video;
 
 public class PedestalConstController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class PedestalConstController : MonoBehaviour
     [Header("Cinematics")]
     [SerializeField] PlayableAsset _cutsceneDoor;
     [SerializeField] PlayableAsset _cutsceneBeam;
+    [SerializeField] VideoClip _finalCutscene;
     #endregion
 
     #region INTERNAL DATA
@@ -26,6 +28,18 @@ public class PedestalConstController : MonoBehaviour
         _pedestalNum = _pedestalList.Count;
         EventManager.EventInitialise(EventType.LVL1_STARBEAM_ACTIVATE);
         EventManager.EventInitialise(EventType.LVL1_STAR_ACTIVATE);
+    }
+
+    private void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.INGAME_CUTSCENE_FINISHED, FinalInGameCutsceneEnd);
+        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, FinalPreRenderedCutsceneEnd);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.INGAME_CUTSCENE_FINISHED, FinalInGameCutsceneEnd);
+        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, FinalPreRenderedCutsceneEnd);
     }
 
     void Start()
@@ -207,6 +221,32 @@ public class PedestalConstController : MonoBehaviour
         PedestalLinkData linkData = _pedestalList[0].GetPedestalLinkData();
         AffordanceBeamActivate(linkData);
     }
+
+    #region EVENT HANDLERS
+    public void FinalInGameCutsceneEnd(object data)
+    {
+        if (data is PlayableAsset cutscene)
+        {
+            if (cutscene == _cutsceneDoor)
+            {
+                EventManager.EventTrigger(EventType.PRERENDERED_CUTSCENE_PLAY, _finalCutscene);
+            }
+        }
+    }
+
+    public void FinalPreRenderedCutsceneEnd(object data)
+    {
+        if (data is VideoClip clip)
+        {
+            if (clip == _finalCutscene)
+            {
+                EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+                EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
+                EventManager.EventTrigger(EventType.MAIN_MENU, null);
+            }
+        }
+    }
+    #endregion
 }
 
 // Data class for sending a pedestal and its beam destinations to the controller 
