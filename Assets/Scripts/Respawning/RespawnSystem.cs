@@ -190,6 +190,20 @@ public class RespawnSystem : MonoBehaviour
 
     public void ChangeToBackRespawn()
     {
+        // NOPATH IS INVALID NOW, SO NEED TO CHECK IF
+        // BOTH PLAYERS HAVE SAME PATH Q AND FIX
+        if (_player1FutureBackQ == _player2FutureBackQ)
+        {
+            if (_player2FutureBackQ == _path1BackQ)
+            {
+                _player2FutureBackQ = _path2BackQ;
+            }
+            else if (_player2FutureBackQ == _path2BackQ)
+            {
+                _player2FutureBackQ = _path1BackQ;
+            }
+        }
+
         _player1CurrentQ = _player1FutureBackQ;
         _player2CurrentQ = _player2FutureBackQ;
     }
