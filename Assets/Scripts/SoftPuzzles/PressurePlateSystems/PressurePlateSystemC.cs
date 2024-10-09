@@ -19,6 +19,7 @@ public class PressurePlateSystemC : PressurePlateSystem
     private bool _isMoving;
     private bool _movingToEnd;
     private Coroutine _currentCoroutine;
+    private HashSet<PressurePlateSingle> _activePlates = new HashSet<PressurePlateSingle>();
     #endregion
 
     private void OnEnable()
@@ -36,15 +37,20 @@ public class PressurePlateSystemC : PressurePlateSystem
         if (activated)
         {
             //plate.SetVFXPlayerColour();
+            _activePlates.Add(plate);
             plate.ActivateIndividualVFX();
         }
         else
         {
+            _activePlates.Remove(plate);
             plate.DeactivateIndividualVFX();
         }
 
         // Decide what the object should do when the system has been completed
-        _isMoving = _onIsMove ? activated : !activated;
+        //_isMoving = _onIsMove ? activated : !activated;
+
+        // Update moving state based on active plates
+        _isMoving = _activePlates.Count > 0;
 
         // Checks to see if Coroutine is already happening to ensure no duplicate coroutines
         if (_currentCoroutine != null)

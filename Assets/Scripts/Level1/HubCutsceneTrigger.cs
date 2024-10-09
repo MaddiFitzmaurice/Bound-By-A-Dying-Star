@@ -22,7 +22,7 @@ public class HubCutsceneTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player1") || other.CompareTag("Player2"))
         {
-            EventManager.EventTrigger(EventType.CUTSCENE_PLAY, _hubCutscene);
+            EventManager.EventTrigger(EventType.INGAME_CUTSCENE_PLAY, _hubCutscene);
             EventManager.EventTrigger(EventType.LEVEL_SPAWN, _movePlayersTo);
         }
     }

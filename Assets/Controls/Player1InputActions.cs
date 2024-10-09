@@ -224,6 +224,56 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""EndGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""59ea0b7a-2c9f-4b5a-910e-814f1b0fc5bf"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Cutscene"",
+            ""id"": ""f54b8516-bbb0-44b1-ba00-4a116999dce4"",
+            ""actions"": [
+                {
+                    ""name"": ""Player1SkipCutscene"",
+                    ""type"": ""Button"",
+                    ""id"": ""7bc3433d-9fed-4a8f-b043-4b0061e54fb8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c17028f3-6311-4bb6-8fac-03b8f7439cd3"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1SkipCutscene"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7057c399-09a6-460a-965c-8319a40132ec"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1SkipCutscene"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -239,6 +289,9 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         m_MainMenu = asset.FindActionMap("MainMenu", throwIfNotFound: true);
         m_MainMenu_StartGame = m_MainMenu.FindAction("StartGame", throwIfNotFound: true);
         m_MainMenu_EndGame = m_MainMenu.FindAction("EndGame", throwIfNotFound: true);
+        // Cutscene
+        m_Cutscene = asset.FindActionMap("Cutscene", throwIfNotFound: true);
+        m_Cutscene_Player1SkipCutscene = m_Cutscene.FindAction("Player1SkipCutscene", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -412,6 +465,52 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
         }
     }
     public MainMenuActions @MainMenu => new MainMenuActions(this);
+
+    // Cutscene
+    private readonly InputActionMap m_Cutscene;
+    private List<ICutsceneActions> m_CutsceneActionsCallbackInterfaces = new List<ICutsceneActions>();
+    private readonly InputAction m_Cutscene_Player1SkipCutscene;
+    public struct CutsceneActions
+    {
+        private @Player1InputActions m_Wrapper;
+        public CutsceneActions(@Player1InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Player1SkipCutscene => m_Wrapper.m_Cutscene_Player1SkipCutscene;
+        public InputActionMap Get() { return m_Wrapper.m_Cutscene; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CutsceneActions set) { return set.Get(); }
+        public void AddCallbacks(ICutsceneActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CutsceneActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CutsceneActionsCallbackInterfaces.Add(instance);
+            @Player1SkipCutscene.started += instance.OnPlayer1SkipCutscene;
+            @Player1SkipCutscene.performed += instance.OnPlayer1SkipCutscene;
+            @Player1SkipCutscene.canceled += instance.OnPlayer1SkipCutscene;
+        }
+
+        private void UnregisterCallbacks(ICutsceneActions instance)
+        {
+            @Player1SkipCutscene.started -= instance.OnPlayer1SkipCutscene;
+            @Player1SkipCutscene.performed -= instance.OnPlayer1SkipCutscene;
+            @Player1SkipCutscene.canceled -= instance.OnPlayer1SkipCutscene;
+        }
+
+        public void RemoveCallbacks(ICutsceneActions instance)
+        {
+            if (m_Wrapper.m_CutsceneActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICutsceneActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CutsceneActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CutsceneActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CutsceneActions @Cutscene => new CutsceneActions(this);
     public interface IGameplayActions
     {
         void OnPlayer1Move(InputAction.CallbackContext context);
@@ -422,5 +521,9 @@ public partial class @Player1InputActions: IInputActionCollection2, IDisposable
     {
         void OnStartGame(InputAction.CallbackContext context);
         void OnEndGame(InputAction.CallbackContext context);
+    }
+    public interface ICutsceneActions
+    {
+        void OnPlayer1SkipCutscene(InputAction.CallbackContext context);
     }
 }

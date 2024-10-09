@@ -1,41 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameplayUIManager : MonoBehaviour
 {
     #region EXTERNAL DATA
-    //[SerializeField] private OffscreenIndicator _indicatorP1;
-    //[SerializeField] private OffscreenIndicator _indicatorP2;
-    [SerializeField] private Image _artwork;
+    [Header("Interact UI")]
     [SerializeField] private GameObject _tapPrompt;
     [SerializeField] private GameObject _holdPrompt;
+    [SerializeField] private Image _artwork;
+    [Header("Cutscene UI")]
     [SerializeField] private GameObject _preRenderedCutscene;
-    #endregion
-    #region INTERNAL DATA
-    // Player Data
-    private Player1 _player1;
-    private Player2 _player2;
-    private bool _isP1Offscreen = false;
-    private bool _isP2Offscreen = false;
-
-    // Screen Data
-    private Camera _cam;
-    private RectTransform _screen;
-    private bool _showOffscreenUI = true;
-    private bool _p1IndicatorShown = false;
-    private bool _p2IndicatorShown = false;
+    [SerializeField] private GameObject _skipCutscenePrompt;
+    [SerializeField] private Image _player1Skip;
+    [SerializeField] private Image _player2Skip;
     #endregion
 
     #region FRAMEWORK FUNCTIONS
     private void Awake()
     {
-        // Get Components
-        _cam = Camera.main;
-        _screen = GetComponentInChildren<RectTransform>();
-
         // Preload UI elements
         _tapPrompt.SetActive(true);
         _holdPrompt.SetActive(true);
@@ -43,108 +29,52 @@ public class GameplayUIManager : MonoBehaviour
         _holdPrompt.SetActive(false);
         _artwork.gameObject.SetActive(false);
         _preRenderedCutscene.SetActive(false);
+        _skipCutscenePrompt.SetActive(true);
+        _skipCutscenePrompt.SetActive(false);
 
         // Event Init
         EventManager.EventInitialise(EventType.ARTWORK_SHOW);
         EventManager.EventInitialise(EventType.ARTWORK_HIDE);
         EventManager.EventInitialise(EventType.CAN_MOVE);
         EventManager.EventInitialise(EventType.RENDERTEX_TOGGLE);
+        EventManager.EventInitialise(EventType.SKIPUI_SHOW);
     }
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.PLAYERMANAGER_SEND_PLAYER1, ReceivePlayer1Handler);
-        EventManager.EventSubscribe(EventType.PLAYERMANAGER_SEND_PLAYER2, ReceivePlayer2Handler);
-        EventManager.EventSubscribe(EventType.CUTSCENE_PLAY, HideUI);
-        EventManager.EventSubscribe(EventType.CUTSCENE_FINISHED, ShowUI);
+        EventManager.EventSubscribe(EventType.SKIPUI_SHOW, ShowSkipUI);
+        EventManager.EventSubscribe(EventType.INGAME_CUTSCENE_FINISHED, HideSkipUI);
+        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, HideSkipUI);
         EventManager.EventSubscribe(EventType.SHOW_PROMPT_HOLD_INTERACT, ShowHoldPrompt);
         EventManager.EventSubscribe(EventType.HIDE_PROMPT_HOLD_INTERACT, HideHoldPrompt);
         EventManager.EventSubscribe(EventType.SHOW_PROMPT_INTERACT, ShowTapPrompt);
         EventManager.EventSubscribe(EventType.HIDE_PROMPT_INTERACT, HideTapPrompt);
-        //EventManager.EventSubscribe(EventType.PLAYER1_ISOFFSCREEN, IsP1OffscreenHandler);
-        //EventManager.EventSubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
         EventManager.EventSubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
         EventManager.EventSubscribe(EventType.ARTWORK_HIDE, HideArtwork);
         EventManager.EventSubscribe(EventType.RENDERTEX_TOGGLE, RenderTexToggle);
+        EventManager.EventSubscribe(EventType.CUTSCENE_SKIP, ActivateSkipFlame);
     }
 
     public void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.PLAYERMANAGER_SEND_PLAYER1, ReceivePlayer1Handler);
-        EventManager.EventUnsubscribe(EventType.PLAYERMANAGER_SEND_PLAYER2, ReceivePlayer2Handler);
-        EventManager.EventUnsubscribe(EventType.CUTSCENE_PLAY, HideUI);
-        EventManager.EventUnsubscribe(EventType.CUTSCENE_FINISHED, ShowUI);
+        EventManager.EventUnsubscribe(EventType.SKIPUI_SHOW, ShowSkipUI);
+        EventManager.EventUnsubscribe(EventType.INGAME_CUTSCENE_FINISHED, HideSkipUI);
+        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, HideSkipUI);
         EventManager.EventUnsubscribe(EventType.SHOW_PROMPT_HOLD_INTERACT, ShowHoldPrompt);
         EventManager.EventUnsubscribe(EventType.HIDE_PROMPT_HOLD_INTERACT, HideHoldPrompt);
         EventManager.EventUnsubscribe(EventType.SHOW_PROMPT_INTERACT, ShowTapPrompt);
         EventManager.EventUnsubscribe(EventType.HIDE_PROMPT_INTERACT, HideTapPrompt);
-        //EventManager.EventUnsubscribe(EventType.PLAYER1_ISOFFSCREEN, IsP1OffscreenHandler);
-        //EventManager.EventUnsubscribe(EventType.PLAYER2_ISOFFSCREEN, IsP2OffscreenHandler);
         EventManager.EventUnsubscribe(EventType.ARTWORK_SHOW, ShowArtwork);
         EventManager.EventUnsubscribe(EventType.ARTWORK_HIDE, HideArtwork);
         EventManager.EventUnsubscribe(EventType.RENDERTEX_TOGGLE, RenderTexToggle);
+        EventManager.EventUnsubscribe(EventType.CUTSCENE_SKIP, ActivateSkipFlame);
     }
-
-    //public void Update()
-    //{
-    //    UpdateOffscreenIndicators();    
-    //}
     #endregion
-
-    //private void UpdateOffscreenIndicators()
-    //{
-    //    // If we're not in a cutscene
-    //    if (_showOffscreenUI)
-    //    {
-    //        // If P1 is offscreen
-    //        if (_isP1Offscreen)
-    //        {
-    //            // If P1 indicator is not already active
-    //            if (!_p1IndicatorShown)
-    //            {
-    //                _indicatorP1.gameObject.SetActive(true);
-    //                _p1IndicatorShown = true;
-    //            }
-
-    //            // Update indicator pos
-    //            _indicatorP1.UpdatePos(_player1, _cam, _screen);
-    //        }
-    //        // If P1 is onscreen
-    //        else
-    //        {
-    //            // If P1 indicator is active
-    //            if (_p1IndicatorShown)
-    //            {
-    //                _indicatorP1.gameObject.SetActive(false);
-    //                _p1IndicatorShown = false;
-    //            }
-    //        }
-
-    //        // If P2 is offscreen
-    //        if (_isP2Offscreen)
-    //        {
-    //            // If P2 indicator is not already active
-    //            if (!_p2IndicatorShown)
-    //            {
-    //                _indicatorP2.gameObject.SetActive(true);
-    //                _p2IndicatorShown = true;
-    //            }
-
-    //            // Update indicator pos
-    //            _indicatorP2.UpdatePos(_player2, _cam, _screen);
-    //        }
-    //        // If P2 is onscreen
-    //        else
-    //        {
-    //            // If P1 indicator is active
-    //            if (_p2IndicatorShown)
-    //            {
-    //                _indicatorP2.gameObject.SetActive(false);
-    //                _p2IndicatorShown = false;
-    //            }
-    //        }
-    //    }
-    //}
+    public void ResetSkipFlames()
+    {
+        _player1Skip.color = Color.black;
+        _player2Skip.color = Color.black;
+    }
 
     #region EVENT FUNCTIONS
     public void ShowArtwork(object data)
@@ -173,74 +103,30 @@ public class GameplayUIManager : MonoBehaviour
         }
     }
 
-    //public void IsP1OffscreenHandler(object data)
-    //{
-    //    // If receiving just a bool, means player is back on screen
-    //    if (data is bool isOffscreen)
-    //    {
-    //        _isP1Offscreen = isOffscreen;
-    //    }
-    //    // Else, if tuple, player is offscreen
-    //    else if (data is Tuple<bool, Plane> tuple)
-    //    {
-    //        _isP1Offscreen = tuple.Item1;
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Did not receive a bool or tuple<bool, Plane>!");
-    //    }
-    //}
-
-    //public void IsP2OffscreenHandler(object data)
-    //{
-    //    // If receiving just a bool, means player is back on screen
-    //    if (data is bool isOffscreen)
-    //    {
-    //        _isP2Offscreen = isOffscreen;
-    //    }
-    //    // Else, if tuple, player is offscreen
-    //    else if (data is Tuple<bool, Plane> tuple)
-    //    {
-    //        _isP2Offscreen = tuple.Item1;
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Did not receive a bool or tuple<bool, Plane>!");
-    //    }
-    //}
-
-    public void ReceivePlayer1Handler(object data)
+    public void ShowSkipUI(object data)
     {
-        if (data is Player1 player1)
-        {
-            _player1 = player1;
-        }
-        else
-        {
-            Debug.LogError("GameplayUIManager has not received Player1");
-        }
-    } 
-
-    public void ReceivePlayer2Handler(object data)
-    {
-        if (data is Player2 player2)
-        {
-            _player2 = player2;
-        }
-        else
-        {
-            Debug.LogError("GameplayUIManager has not received Player2");
-        }
+        _skipCutscenePrompt.SetActive(true);
     }
 
-    public void ShowUI(object data)
+    public void HideSkipUI(object data)
     {
-        _showOffscreenUI = true;
+        _skipCutscenePrompt.SetActive(false);
+        ResetSkipFlames();
     }
 
-    public void HideUI(object data)
+    public void ActivateSkipFlame(object data)
     {
-        _showOffscreenUI = false;
+        if (data is int player)
+        {
+            if (player == 1)
+            {
+                _player1Skip.color = Color.white;
+            }
+            else if (player == 2)
+            {
+                _player2Skip.color = Color.white;
+            }
+        }
     }
 
     public void ShowTapPrompt(object data)

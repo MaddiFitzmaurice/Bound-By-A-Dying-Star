@@ -14,7 +14,7 @@ public class PressurePlateSystemA : PressurePlateSystem
 
     #region INTERNAL DATA
     private List<Renderer> _affectedObjRenderers;
-    private Collider _affectedObjCollider;
+    private List<Collider> _affectedObjColliders;
     private List<Material> _normalMats;
     #endregion
     private void Awake()
@@ -23,7 +23,7 @@ public class PressurePlateSystemA : PressurePlateSystem
         InitAllPressurePlates();
 
         // Init components
-        _affectedObjCollider = _affectedObj.GetComponent<Collider>();
+        _affectedObjColliders = _affectedObj.GetComponents<Collider>().ToList();
         _affectedObjRenderers = _affectedObj.GetComponentsInChildren<Renderer>().ToList();
 
         // Record default materials of each affected renderer
@@ -80,6 +80,10 @@ public class PressurePlateSystemA : PressurePlateSystem
                 _affectedObjRenderers[i].material = _ghostEffectMat;
             }
         }
-        _affectedObjCollider.enabled = active;
+
+        foreach (Collider collider in _affectedObjColliders)
+        {
+            collider.enabled = active;
+        }
     }
 }

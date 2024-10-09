@@ -160,6 +160,56 @@
                     "action": "EndGame",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0640175-e2d0-465d-ac0c-fae01dcadeda",
+                    "path": "<Keyboard>/slash",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StartGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Cutscene",
+            "id": "7e747232-6a3b-4b12-97da-7af160ab1931",
+            "actions": [
+                {
+                    "name": "Player2SkipCutscene",
+                    "type": "Button",
+                    "id": "46beb5be-b09a-4c1c-ba08-84b5369ab24f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2a7c85c6-82c9-4dff-83df-de18b711a7b1",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2SkipCutscene",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "77565214-acc1-4158-9d95-ee0cc0c8afd4",
+                    "path": "<Keyboard>/slash",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2SkipCutscene",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

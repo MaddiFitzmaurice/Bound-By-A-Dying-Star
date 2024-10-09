@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-1690764020894577238
+--- !u!114 &-3160266523129512382
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_SandTrails
-  m_Shader: {fileID: -6465566751694194690, guid: ab78819b9c24c6647a5ac36d2a59792b, type: 3}
+  m_Name: SandPPShaderFallMound
+  m_Shader: {fileID: -6465566751694194690, guid: 22fcf23087d215d488f0d187bb7e3845, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -36,10 +36,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 0861f31a33d1c8d4eb4d677defba0f0a, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -54,12 +50,33 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DissolveScale: 35
+    - _DistortAmplitude: 1.81
+    - _DistortNoisePeriod: 1
+    - _DuneShineMin: 0.5
+    - _FallSpeed: 0.1
+    - _GrainColorBlend: 0.42
+    - _GrainPeriod: 761
+    - _GrainShineStrength: 0.58
+    - _NoiseAmplitude: 1.58
+    - _NoiseScale: 4.21
+    - _NormalStrength: 1
+    - _PolygonSides: 5.54
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _SandDuneMaxHeight: 0
+    - _ShineThreshold: 0.69
+    - _SineAmplitude: 0.69
+    - _SineFrequency: 0.1
+    - _SineRotation: 90
+    - _Smoothness: 0
+    - _SubstrateDuneHeightMax: 0.167
+    - _SubstrateGrainHeightMax: 0.285
+    - _SubstrateTightening: 0.1
+    - _UVScale: 0.2
     m_Colors:
-    - _Colour1: {r: 0.018500218, g: 0.020288562, b: 0.12477186, a: 1}
-    - _Colour2: {r: 0.018500218, g: 0.016807375, b: 0.086500466, a: 1}
-    - _DissolveSpeed: {r: -0.5, g: 0, b: 0, a: 0}
-    - _MainTexSpeed: {r: 2.06, g: 0, b: 0, a: 0}
+    - _SandHighColor: {r: 0.3960784, g: 0.4117647, b: 0.7372549, a: 1}
+    - _SandLowColor: {r: 0.3960784, g: 0.34117648, b: 0.5568628, a: 1}
+    - _ShineColor: {r: 0.7176471, g: 0.70980394, b: 0.972549, a: 1}
+    - _SubstrateColor: {r: 0.7647059, g: 0.57254905, b: 0.2784314, a: 1}
+    - _UVTiling: {r: 0.2, g: 5.6, b: 0, a: 0}
   m_BuildTextureStacks: []

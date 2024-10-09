@@ -10,12 +10,16 @@ public enum EventType
     // Inputs
     ENABLE_GAMEPLAY_INPUTS,
     ENABLE_MAINMENU_INPUTS,
+    ENABLE_CUTSCENE_INPUTS,
     DISABLE_GAMEPLAY_INPUTS,
     DISABLE_MAINMENU_INPUTS,
+    DISABLE_CUTSCENE_INPUTS,
 
     PLAYER_1_MOVE,
     PLAYER_2_MOVE,
     CAN_MOVE,
+
+    CUTSCENE_SKIP,
 
     PLAYER_1_INTERACT,
     PLAYER_1_HOLDINTERACT,
@@ -41,6 +45,7 @@ public enum EventType
     PLAYERMANAGER_REQUEST_FOLLOWGROUP,  // Request that PlayerManager send the followgroup transform
     PLAYER1_ISOFFSCREEN,                // Send bool for whether player 1 is offscreen
     PLAYER2_ISOFFSCREEN,                // Send bool for whether player 2 is offscreen
+    RESET_CLOTH_PHYS,                   // To get rid of visual bug with cloth during soft puzzle transition
 
     // Camera
     CAMERA_NEW_FWD_DIR,                 // Send new forward direction vector to change what orientation forward is for input movement
@@ -49,8 +54,8 @@ public enum EventType
     CAMERA_ACTIVATE,                    // Activate (make live) a registered Camera
 
     // Cutscene
-    CUTSCENE_PLAY,
-    CUTSCENE_FINISHED,
+    INGAME_CUTSCENE_PLAY,
+    INGAME_CUTSCENE_FINISHED,
     PRERENDERED_CUTSCENE_PLAY,
     PRERENDERED_CUTSCENE_FINISHED,
 
@@ -58,6 +63,7 @@ public enum EventType
     ARTWORK_SHOW,                       // Show artwork in fullscreen
     ARTWORK_HIDE,                       // Hide fullscreen artwork
     RENDERTEX_TOGGLE,
+    SKIPUI_SHOW,
 
     // Level
     LEVEL_SPAWN,                        // Spawn players into level for the first time
