@@ -240,8 +240,6 @@ public class PedestalConstController : MonoBehaviour
         {
             if (clip == _finalCutscene)
             {
-                EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
-                EventManager.EventTrigger(EventType.ENABLE_MAINMENU_INPUTS, null);
                 EventManager.EventTrigger(EventType.MAIN_MENU, null);
             }
         }
