@@ -331,31 +331,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 72.12839
+      value: 0.39390972
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 18.35
+      value: 6.83
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20.143696
+      value: 68.7777
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8877697
+      value: 0.000000089292776
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.38077357
+      value: 0.000000010173628
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.23766625
+      value: 0.9935719
       objectReference: {fileID: 0}
     - target: {fileID: 3585284863000298844, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.101937376
+      value: -0.11320323
       objectReference: {fileID: 0}
     - target: {fileID: 4281683961945043205, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_IsActive
@@ -367,11 +367,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: field of view
-      value: 60
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: far clip plane
-      value: 300
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 7364324026508007121, guid: 2869255d026b8884f8e58048c0cdcd86, type: 3}
       propertyPath: m_TargetDisplay
@@ -482,32 +482,32 @@ MonoBehaviour:
     Path: event:/Angelic_Ring
   _pressurePlatePlayer1On:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: -570541785
+      Data2: 1163302060
+      Data3: -182689614
+      Data4: 1065957712
+    Path: event:/Colin_Short_1
   _pressurePlatePlayer1Off:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: 1229130296
+      Data2: 1305071870
+      Data3: 372293507
+      Data4: 1607710978
+    Path: event:/Temp Silence - Blank Template
   _pressurePlatePlayer2On:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: 1560292168
+      Data2: 1266792853
+      Data3: 1289200810
+      Data4: -1138711396
+    Path: event:/Colin_Short_2
   _pressurePlatePlayer2Off:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: 1229130296
+      Data2: 1305071870
+      Data3: 372293507
+      Data4: 1607710978
+    Path: event:/Temp Silence - Blank Template
   _constellationComplete:
     Guid:
       Data1: 1356180403

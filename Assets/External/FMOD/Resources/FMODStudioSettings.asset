@@ -408,6 +408,7 @@ MonoBehaviour:
   MasterBanks:
   - Master
   Banks:
+  - Colin_SFX
   - Local_BGM
   - Local_SFX
   BanksToLoad: []
