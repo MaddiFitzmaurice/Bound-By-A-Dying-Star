@@ -124,6 +124,7 @@ public abstract class PlayerBase : MonoBehaviour
         EventManager.EventSubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
         EventManager.EventSubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
         EventManager.EventSubscribe(EventType.CAN_MOVE, CanMoveHandler);
+        EventManager.EventSubscribe(EventType.RESET_CLOTH_PHYS, ResetClothPhys);
     }
 
     protected virtual void OnDisable()
@@ -131,6 +132,7 @@ public abstract class PlayerBase : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
         EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
         EventManager.EventUnsubscribe(EventType.CAN_MOVE, CanMoveHandler);
+        EventManager.EventUnsubscribe(EventType.RESET_CLOTH_PHYS, ResetClothPhys);
     }
 
     private void Update()
@@ -566,6 +568,14 @@ public abstract class PlayerBase : MonoBehaviour
         PrevMoveInput = MoveInput; // Record previous Move Input so it can continue until player input changes
         _prevCam = _currentCam; // Record previous CamY so it can continue until player input changes
         _currentCam = (GameObject)data;
+    }
+
+    public void ResetClothPhys(object data)
+    {
+        ToggleVisibility(false);
+        ToggleClothPhysics(false);
+        ToggleVisibility(true);
+        ToggleClothPhysics(true);
     }
     #endregion
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Video;
 
 public class SoftPuzzle : MonoBehaviour
 {
@@ -11,9 +12,10 @@ public class SoftPuzzle : MonoBehaviour
     private GameObject _forwardPuzzle;
     [SerializeField] private GameObject _backwardPuzzle;
 
-    [Header("Moving Platform Data")]
+    [Header("Puzzle Transition Data")]
     [SerializeField] private List<SoftPuzzleFixedPlatform> _fixedPlatforms;
     [SerializeField] private float _platformMoveSpeed = 2.0f;
+    [SerializeField] private VideoClip _transitionClip;
 
     [Header("Cameras")]
     [SerializeField] private GameObject _forwardCams;
@@ -35,6 +37,9 @@ public class SoftPuzzle : MonoBehaviour
 
     private void Awake()
     {
+        // Event Init
+        EventManager.EventInitialise(EventType.RESET_CLOTH_PHYS);
+
         // Component Init
         _respawnSystem = GetComponentInChildren<RespawnSystem>();
 
@@ -128,9 +133,6 @@ public class SoftPuzzle : MonoBehaviour
             }
         }
 
-        // Swap the puzzles
-        _forwardPuzzle.SetActive(false);
-
         if (_fixedPlatforms.Count > 1)
         {
             foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
@@ -140,6 +142,7 @@ public class SoftPuzzle : MonoBehaviour
         }
 
         // INSERT HERE FOR CUTSCENE CAMERA 
+        EventManager.EventTrigger(EventType.PRERENDERED_CUTSCENE_PLAY, _transitionClip);
 
         // Moves platforms and swaps puzzle
         StartCoroutine(MovePlatformsAndActivateBackwardPuzzle());
@@ -148,8 +151,12 @@ public class SoftPuzzle : MonoBehaviour
     private IEnumerator MovePlatformsAndActivateBackwardPuzzle()
     {
         EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
-        _forwardCams.SetActive(false);
-        _transitionCam.SetActive(true);
+
+        yield return new WaitForSeconds(4f);
+
+        // Swap the puzzles
+        _forwardPuzzle.SetActive(false);
+        //_transitionCam.SetActive(true);
 
         List<Coroutine> coroutines = new List<Coroutine>();
 
@@ -165,8 +172,10 @@ public class SoftPuzzle : MonoBehaviour
             yield return coroutine;
         }
 
+        EventManager.EventTrigger(EventType.RESET_CLOTH_PHYS, null);
         // Activates the backward puzzle + cams and resets the spawn point
-        _transitionCam.SetActive(false);
+        //_transitionCam.SetActive(false);
+        _forwardCams.SetActive(false);
         _backwardPuzzle.SetActive(true);
         _backwardCams.SetActive(true);
         _respawnSystem.ChangeToBackRespawn();
@@ -192,6 +201,7 @@ public class SoftPuzzle : MonoBehaviour
 
         // Ensure the platform reaches the target position after the loop
         platform.transform.position = targetPosition;
+        platform.transform.eulerAngles += new Vector3(0f, 180f, 0f);
     }
 
     public void SetRewardGrouper(Transform transform)
@@ -201,4 +211,8 @@ public class SoftPuzzle : MonoBehaviour
             reward.SetRewardGrouper(transform);
         }
     }
+
+    #region EVENT HANDLERS
+
+    #endregion
 }

@@ -37,12 +37,12 @@ public class GameplayUIManager : MonoBehaviour
         EventManager.EventInitialise(EventType.ARTWORK_HIDE);
         EventManager.EventInitialise(EventType.CAN_MOVE);
         EventManager.EventInitialise(EventType.RENDERTEX_TOGGLE);
+        EventManager.EventInitialise(EventType.SKIPUI_SHOW);
     }
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.INGAME_CUTSCENE_PLAY, ShowSkipUI);
-        EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, ShowSkipUI);
+        EventManager.EventSubscribe(EventType.SKIPUI_SHOW, ShowSkipUI);
         EventManager.EventSubscribe(EventType.INGAME_CUTSCENE_FINISHED, HideSkipUI);
         EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, HideSkipUI);
         EventManager.EventSubscribe(EventType.SHOW_PROMPT_HOLD_INTERACT, ShowHoldPrompt);
@@ -57,8 +57,7 @@ public class GameplayUIManager : MonoBehaviour
 
     public void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.INGAME_CUTSCENE_PLAY, ShowSkipUI);
-        EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_PLAY, ShowSkipUI);
+        EventManager.EventUnsubscribe(EventType.SKIPUI_SHOW, ShowSkipUI);
         EventManager.EventUnsubscribe(EventType.INGAME_CUTSCENE_FINISHED, HideSkipUI);
         EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, HideSkipUI);
         EventManager.EventUnsubscribe(EventType.SHOW_PROMPT_HOLD_INTERACT, ShowHoldPrompt);

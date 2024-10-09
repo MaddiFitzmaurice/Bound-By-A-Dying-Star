@@ -7,6 +7,12 @@ using UnityEngine.Video;
 [RequireComponent(typeof(PlayableDirector))]
 public class CutsceneManager : MonoBehaviour
 {
+    #region EXTERNAL DATA
+    [Header("Unskippable Cutscenes")]
+    [SerializeField] private List<VideoClip> _preRenderedUnskippables;
+    [SerializeField] private List<PlayableAsset> _inGameUnskippables;
+    #endregion
+
     #region INTERNAL DATA
     // Components
     private PlayableDirector _director;
@@ -61,11 +67,12 @@ public class CutsceneManager : MonoBehaviour
 
     public void StopPreRenderedCutscene()
     {
+        _videoPlayer.targetTexture.Release();
         EventManager.EventTrigger(EventType.DISABLE_CUTSCENE_INPUTS, null);
         EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
+        ResetSkipBools();
         EventManager.EventTrigger(EventType.RENDERTEX_TOGGLE, false);
         EventManager.EventTrigger(EventType.PRERENDERED_CUTSCENE_FINISHED, _videoPlayer.clip);
-        ResetSkipBools();
     }
 
     public void SkipCutscene()
@@ -91,6 +98,32 @@ public class CutsceneManager : MonoBehaviour
     {
         _player1Skip = false;
         _player2Skip = false;
+    }
+
+    public bool IsInGameUnskippable(PlayableAsset inGameCutscene)
+    {
+        foreach (PlayableAsset playable in _inGameUnskippables)
+        {
+            if (playable == inGameCutscene)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool IsPreRenderedUnskippable(VideoClip preRenderedCutscene)
+    {
+        foreach (VideoClip clip in _preRenderedUnskippables)
+        {
+            if (clip == preRenderedCutscene)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     #endregion
 
@@ -130,10 +163,20 @@ public class CutsceneManager : MonoBehaviour
         if (data is VideoClip clip)
         {
             _videoPlayer.clip = clip;
+
+            if (!IsPreRenderedUnskippable(clip))
+            {
+                EventManager.EventTrigger(EventType.SKIPUI_SHOW, null);
+                EventManager.EventTrigger(EventType.ENABLE_CUTSCENE_INPUTS, null);
+            }
+
             EventManager.EventTrigger(EventType.RENDERTEX_TOGGLE, true);
             EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
-            EventManager.EventTrigger(EventType.ENABLE_CUTSCENE_INPUTS, null);
             _videoPlayer.Play();
+        }
+        else
+        {
+            Debug.LogError("CutsceneManager has not received a VideoClip!");
         }
     }
 
@@ -144,15 +187,23 @@ public class CutsceneManager : MonoBehaviour
 
     public void InGameCutscenePlayHandler(object data)
     {
-        if (data is not PlayableAsset)
+        if (data is PlayableAsset playable)
+        {
+
+            if (!IsInGameUnskippable(playable))
+            {
+                EventManager.EventTrigger(EventType.SKIPUI_SHOW, null);
+                EventManager.EventTrigger(EventType.ENABLE_CUTSCENE_INPUTS, null);
+            }
+
+            EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+            _director.Play(playable);
+        }
+        else
         {
             Debug.LogError("CutsceneManager has not received a PlayableAsset!");
         }
 
-        PlayableAsset cinematic = (PlayableAsset)data;
-        EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
-        EventManager.EventTrigger(EventType.ENABLE_CUTSCENE_INPUTS, null);
-        _director.Play(cinematic); 
     }
 
     public void InGameCutsceneFinHandler(PlayableDirector director)
