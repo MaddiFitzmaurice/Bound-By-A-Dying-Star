@@ -482,32 +482,32 @@ MonoBehaviour:
     Path: event:/Angelic_Ring
   _pressurePlatePlayer1On:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: -570541785
+      Data2: 1163302060
+      Data3: -182689614
+      Data4: 1065957712
+    Path: event:/Colin_Short_1
   _pressurePlatePlayer1Off:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: 1229130296
+      Data2: 1305071870
+      Data3: 372293507
+      Data4: 1607710978
+    Path: event:/Temp Silence - Blank Template
   _pressurePlatePlayer2On:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: 1560292168
+      Data2: 1266792853
+      Data3: 1289200810
+      Data4: -1138711396
+    Path: event:/Colin_Short_2
   _pressurePlatePlayer2Off:
     Guid:
-      Data1: 519979859
-      Data2: 1285762104
-      Data3: -703447921
-      Data4: 497503598
-    Path: event:/Local_Tile_Shift
+      Data1: 1229130296
+      Data2: 1305071870
+      Data3: 372293507
+      Data4: 1607710978
+    Path: event:/Temp Silence - Blank Template
   _constellationComplete:
     Guid:
       Data1: 1356180403
