@@ -122,7 +122,7 @@ public abstract class PlayerBase : MonoBehaviour
     protected virtual void OnEnable()
     {
         EventManager.EventSubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
-        EventManager.EventSubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
+        //EventManager.EventSubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
         EventManager.EventSubscribe(EventType.CAN_MOVE, CanMoveHandler);
         EventManager.EventSubscribe(EventType.RESET_CLOTH_PHYS, ResetClothPhys);
     }
@@ -130,7 +130,7 @@ public abstract class PlayerBase : MonoBehaviour
     protected virtual void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.CAMERA_NEW_FWD_DIR, ReceiveNewCamAngle);
-        EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
+        //EventManager.EventUnsubscribe(EventType.GRAVITY_INVERT, GravityChangeHandler);
         EventManager.EventUnsubscribe(EventType.CAN_MOVE, CanMoveHandler);
         EventManager.EventUnsubscribe(EventType.RESET_CLOTH_PHYS, ResetClothPhys);
     }
@@ -348,7 +348,12 @@ public abstract class PlayerBase : MonoBehaviour
     {
         EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, this);
         StopAllCoroutines();
-        StartCoroutine(PuzzleTeleportSequence(teleportPoint));
+        ToggleVisibility(false);
+        ToggleClothPhysics(false);
+        transform.position = teleportPoint.position;
+        transform.rotation = teleportPoint.rotation;
+        ToggleClothPhysics(true);
+        ToggleVisibility(true);
     }
 
     private IEnumerator PuzzleTeleportSequence(Transform spawnPoint)

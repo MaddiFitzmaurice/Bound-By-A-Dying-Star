@@ -13,8 +13,9 @@ public class SoftPuzzle : MonoBehaviour
     [SerializeField] private GameObject _backwardPuzzle;
 
     [Header("Puzzle Transition Data")]
-    [SerializeField] private List<SoftPuzzleFixedPlatform> _fixedPlatforms;
-    [SerializeField] private float _platformMoveSpeed = 2.0f;
+    [SerializeField] private List<GameObject> _fixedPlatforms;
+    [SerializeField] private List<Transform> _moveToPosList;
+    //[SerializeField] private float _platformMoveSpeed = 2.0f;
     [SerializeField] private VideoClip _transitionClip;
 
     [Header("Cameras")]
@@ -29,6 +30,7 @@ public class SoftPuzzle : MonoBehaviour
 
     #region Internal Data
     private List<ISoftPuzzleReward> _rewards = new List<ISoftPuzzleReward>();
+    private List<PlayerBase> _players;
     private RespawnSystem _respawnSystem;
     private bool _player1InPuzzle;
     private bool _player2InPuzzle;
@@ -42,6 +44,20 @@ public class SoftPuzzle : MonoBehaviour
 
         // Component Init
         _respawnSystem = GetComponentInChildren<RespawnSystem>();
+
+        // List Init
+        _players = new List<PlayerBase>();
+
+        // Make sure only 2 are contained in each list
+        if (_moveToPosList.Count != 2)
+        {
+            Debug.LogError("MoveToPos list needs 2 transforms!");
+        }
+
+        if (_fixedPlatforms.Count != 2)
+        {
+            Debug.LogError("FixedPlatforms list needs 2 transforms!");
+        }
 
         // Make sure only 1 or 2 reward objects are assigned
         if (_rewardObjs.Count < 0 || _rewardObjs.Count > 2)
@@ -92,10 +108,12 @@ public class SoftPuzzle : MonoBehaviour
         if (other.CompareTag("Player1"))
         {
             _player1InPuzzle = true;
+            _players.Add(other.GetComponent<PlayerBase>());
         }
         else if (other.CompareTag("Player2"))
         {
             _player2InPuzzle = true;
+            _players.Add(other.GetComponent<PlayerBase>());
         }
         CheckMusicTransition();
     }
@@ -133,13 +151,13 @@ public class SoftPuzzle : MonoBehaviour
             }
         }
 
-        if (_fixedPlatforms.Count > 1)
-        {
-            foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
-            {
-                platform.CheckIfPlayerOn();
-            }
-        }
+        //if (_fixedPlatforms.Count > 1)
+        //{
+        //    foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
+        //    {
+        //        platform.CheckIfPlayerOn();
+        //    }
+        //}
 
         // INSERT HERE FOR CUTSCENE CAMERA 
         EventManager.EventTrigger(EventType.PRERENDERED_CUTSCENE_PLAY, _transitionClip);
@@ -154,29 +172,38 @@ public class SoftPuzzle : MonoBehaviour
 
         yield return new WaitForSeconds(4f);
 
-        // Swap the puzzles
-        _forwardPuzzle.SetActive(false);
-        //_transitionCam.SetActive(true);
-
-        List<Coroutine> coroutines = new List<Coroutine>();
+        //List<Coroutine> coroutines = new List<Coroutine>();
 
         // Loops through each platform and starts to move it to the required position
-        foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
-        {
-            coroutines.Add(StartCoroutine(MovePlatforms(platform)));
-        }
+        //foreach (SoftPuzzleFixedPlatform platform in _fixedPlatforms)
+        //{
+        //    //coroutines.Add(StartCoroutine(MovePlatforms(platform)));
+        //    platform.PuzzleTransition();
 
-        // Waits till all platforms have finished moving
-        foreach (Coroutine coroutine in coroutines)
-        {
-            yield return coroutine;
-        }
-
-        EventManager.EventTrigger(EventType.RESET_CLOTH_PHYS, null);
-        // Activates the backward puzzle + cams and resets the spawn point
-        //_transitionCam.SetActive(false);
+        //    platform.transform.position = _moveToPos.position;
+        //    _lastPlayerOn.PuzzleTeleport(_moveToPos);
+        //}
         _forwardCams.SetActive(false);
         _backwardPuzzle.SetActive(true);
+
+        for (int i = 0; i < _players.Count; i++)
+        {
+            _fixedPlatforms[i].transform.position = _moveToPosList[i].transform.position;
+            _players[i].PuzzleTeleport(_moveToPosList[i]);
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        // Waits till all platforms have finished moving
+        //foreach (Coroutine coroutine in coroutines)
+        //{
+        //    yield return coroutine;
+        //}
+
+        //EventManager.EventTrigger(EventType.RESET_CLOTH_PHYS, null);
+        // Activates the backward puzzle + cams and resets the spawn point
+        //_transitionCam.SetActive(false);
+        _forwardPuzzle.SetActive(false);
         _backwardCams.SetActive(true);
         _respawnSystem.ChangeToBackRespawn();
         _puzzleCompleted = true;
@@ -184,25 +211,25 @@ public class SoftPuzzle : MonoBehaviour
         EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
     }
 
-    private IEnumerator MovePlatforms(SoftPuzzleFixedPlatform platform)
-    {
-        float elapsedTime = 0f;
+    //private IEnumerator MovePlatforms(SoftPuzzleFixedPlatform platform)
+    //{
+    //    float elapsedTime = 0f;
 
-        Vector3 initialPositionPlatform = platform.transform.position;
-        Vector3 targetPosition = platform.MoveToPos.position;
+    //    Vector3 initialPositionPlatform = platform.transform.position;
+    //    Vector3 targetPosition = platform.MoveToPos.position;
 
-        // Moves platform to the target position, players are automatically moved with the platform containing the "Moving Platform" script
-        while (elapsedTime < _platformMoveSpeed)
-        {
-            platform.transform.position = Vector3.Lerp(initialPositionPlatform, targetPosition, elapsedTime / _platformMoveSpeed);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+    //    // Moves platform to the target position, players are automatically moved with the platform containing the "Moving Platform" script
+    //    while (elapsedTime < _platformMoveSpeed)
+    //    {
+    //        platform.transform.position = Vector3.Lerp(initialPositionPlatform, targetPosition, elapsedTime / _platformMoveSpeed);
+    //        elapsedTime += Time.deltaTime;
+    //        yield return null;
+    //    }
 
-        // Ensure the platform reaches the target position after the loop
-        platform.transform.position = targetPosition;
-        platform.transform.eulerAngles += new Vector3(0f, 180f, 0f);
-    }
+    //    // Ensure the platform reaches the target position after the loop
+    //    platform.transform.position = targetPosition;
+    //    platform.transform.eulerAngles += new Vector3(0f, 180f, 0f);
+    //}
 
     public void SetRewardGrouper(Transform transform)
     {
