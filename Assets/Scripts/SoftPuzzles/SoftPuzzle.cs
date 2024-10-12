@@ -184,7 +184,9 @@ public class SoftPuzzle : MonoBehaviour
         //    _lastPlayerOn.PuzzleTeleport(_moveToPos);
         //}
         _forwardCams.SetActive(false);
+        _backwardCams.SetActive(true);
         _backwardPuzzle.SetActive(true);
+        _forwardPuzzle.SetActive(false);
 
         for (int i = 0; i < _players.Count; i++)
         {
@@ -203,8 +205,6 @@ public class SoftPuzzle : MonoBehaviour
         //EventManager.EventTrigger(EventType.RESET_CLOTH_PHYS, null);
         // Activates the backward puzzle + cams and resets the spawn point
         //_transitionCam.SetActive(false);
-        _forwardPuzzle.SetActive(false);
-        _backwardCams.SetActive(true);
         _respawnSystem.ChangeToBackRespawn();
         _puzzleCompleted = true;
 
