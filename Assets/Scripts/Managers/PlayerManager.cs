@@ -15,6 +15,7 @@ public class PlayerManager : MonoBehaviour
     // Players
     private Player1 _player1;
     private Player2 _player2;
+    private List<PlayerBase> _players;
 
     // Camera Data
     private CinemachineTargetGroup _targetGroup;
@@ -29,6 +30,12 @@ public class PlayerManager : MonoBehaviour
         _player1 = _playerGrouper.GetComponentInChildren<Player1>();
         _player2 = _playerGrouper.GetComponentInChildren<Player2>();
 
+        _players = new List<PlayerBase>
+        {
+            _player1,
+            _player2
+        };
+
         // Event Inits
         EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_FOLLOWGROUP);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
@@ -42,6 +49,7 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
         EventManager.EventSubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
         EventManager.EventSubscribe(EventType.PLAYERMANAGER_REQUEST_FOLLOWGROUP, SendFollowGroup);
+        EventManager.EventSubscribe(EventType.SOFTPUZZLE_REQUEST_PLAYERLIST, SendPlayerList);
     }
 
     private void OnDisable()
@@ -49,6 +57,7 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LEVEL_SPAWN, SpawnInLevel);
         EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_PLAYER_TELEPORT, PlayerTeleport);
         EventManager.EventUnsubscribe(EventType.PLAYERMANAGER_REQUEST_FOLLOWGROUP, SendFollowGroup);
+        EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_REQUEST_PLAYERLIST, SendPlayerList);
     }
 
     private void Start()
@@ -61,6 +70,11 @@ public class PlayerManager : MonoBehaviour
     {
         EventManager.EventTrigger(EventType.PLAYERMANAGER_SEND_PLAYER1, _player1);
         EventManager.EventTrigger(EventType.PLAYERMANAGER_SEND_PLAYER2, _player2);
+    }
+
+    private void SendPlayerList(object data)
+    {
+        EventManager.EventTrigger(EventType.SOFTPUZZLE_RECEIVE_PLAYERLIST, _players);
     }
 
     private void SendFollowGroup(object data)

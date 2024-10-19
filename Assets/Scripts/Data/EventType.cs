@@ -41,6 +41,8 @@ public enum EventType
     // Players
     PLAYERMANAGER_SEND_PLAYER1,         // Send the player1 object
     PLAYERMANAGER_SEND_PLAYER2,         // Send the player2 object
+    SOFTPUZZLE_REQUEST_PLAYERLIST,      // Sends request to get list of players
+    SOFTPUZZLE_RECEIVE_PLAYERLIST,      // Sends list of players
     PLAYERMANAGER_SEND_FOLLOWGROUP,     // Send the transform that Cinemachine will use to track both players
     PLAYERMANAGER_REQUEST_FOLLOWGROUP,  // Request that PlayerManager send the followgroup transform
     PLAYER1_ISOFFSCREEN,                // Send bool for whether player 1 is offscreen

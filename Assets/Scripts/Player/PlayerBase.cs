@@ -229,8 +229,10 @@ public abstract class PlayerBase : MonoBehaviour
     {
         if (Physics.Raycast(LowerBoundRay.transform.position, transform.forward, 0.3f))
         {
+            //Debug.Log("LowerBound");
             if (!Physics.Raycast(UpperBoundRay.transform.position, transform.TransformDirection(Vector3.forward), 0.4f, _playerLayer))
             {
+                //Debug.Log("UpperBound");
                 _rb.position -= new Vector3(0f, -StepSmoothing * Time.deltaTime, 0f);
             }
         }
@@ -250,8 +252,6 @@ public abstract class PlayerBase : MonoBehaviour
             _animator.SetBool("IsRunning", false);
         }
     }
-
-   
 
     private void ClothMovement()
     {
@@ -350,7 +350,7 @@ public abstract class PlayerBase : MonoBehaviour
         StopAllCoroutines();
         ToggleVisibility(false);
         ToggleClothPhysics(false);
-        transform.position = teleportPoint.position;
+        transform.position = teleportPoint.position + new Vector3(0f, 0f, 0.1f);
         transform.rotation = teleportPoint.rotation;
         ToggleClothPhysics(true);
         ToggleVisibility(true);
