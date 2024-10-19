@@ -67,6 +67,7 @@ public class CutsceneManager : MonoBehaviour
 
     public void StopPreRenderedCutscene()
     {
+        _videoPlayer.Stop();
         _videoPlayer.targetTexture.Release();
         EventManager.EventTrigger(EventType.DISABLE_CUTSCENE_INPUTS, null);
         EventManager.EventTrigger(EventType.ENABLE_GAMEPLAY_INPUTS, null);
@@ -89,7 +90,6 @@ public class CutsceneManager : MonoBehaviour
         // Else if pre-rendered cutscene is playing
         else if (_videoPlayer.isPlaying)
         {
-            _videoPlayer.Stop();
             StopPreRenderedCutscene();
         }
     }
@@ -172,6 +172,7 @@ public class CutsceneManager : MonoBehaviour
 
             EventManager.EventTrigger(EventType.RENDERTEX_TOGGLE, true);
             EventManager.EventTrigger(EventType.DISABLE_GAMEPLAY_INPUTS, null);
+            _videoPlayer.targetTexture.Create();
             _videoPlayer.Play();
         }
         else

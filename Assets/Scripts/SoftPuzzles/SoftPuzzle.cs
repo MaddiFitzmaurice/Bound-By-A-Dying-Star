@@ -41,12 +41,15 @@ public class SoftPuzzle : MonoBehaviour
     {
         // Event Init
         EventManager.EventInitialise(EventType.RESET_CLOTH_PHYS);
+        EventManager.EventInitialise(EventType.SOFTPUZZLE_REQUEST_PLAYERLIST);
+        EventManager.EventInitialise(EventType.SOFTPUZZLE_RECEIVE_PLAYERLIST);
 
         // Component Init
         _respawnSystem = GetComponentInChildren<RespawnSystem>();
 
-        // List Init
+        // List Init and request player list
         _players = new List<PlayerBase>();
+        EventManager.EventTrigger(EventType.SOFTPUZZLE_REQUEST_PLAYERLIST, null);
 
         // Make sure only 2 are contained in each list
         if (_moveToPosList.Count != 2)
@@ -90,6 +93,16 @@ public class SoftPuzzle : MonoBehaviour
         //_backwardCams.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.SOFTPUZZLE_RECEIVE_PLAYERLIST, ReceivePlayersHandler);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_RECEIVE_PLAYERLIST, ReceivePlayersHandler);
+    }
+
     private void CheckMusicTransition()
     {
         if (_player1InPuzzle && _player2InPuzzle)
@@ -108,12 +121,10 @@ public class SoftPuzzle : MonoBehaviour
         if (other.CompareTag("Player1"))
         {
             _player1InPuzzle = true;
-            _players.Add(other.GetComponent<PlayerBase>());
         }
         else if (other.CompareTag("Player2"))
         {
             _player2InPuzzle = true;
-            _players.Add(other.GetComponent<PlayerBase>());
         }
         CheckMusicTransition();
     }
@@ -240,6 +251,16 @@ public class SoftPuzzle : MonoBehaviour
     }
 
     #region EVENT HANDLERS
-
+    public void ReceivePlayersHandler(object data)
+    {
+        if (data is List<PlayerBase> players)
+        {
+            _players = players;
+        }
+        else
+        {
+            Debug.LogError("Did not receive list of players!");
+        }
+    }
     #endregion
 }
