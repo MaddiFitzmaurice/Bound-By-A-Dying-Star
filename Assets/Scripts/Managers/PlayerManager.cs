@@ -30,11 +30,9 @@ public class PlayerManager : MonoBehaviour
         _player1 = _playerGrouper.GetComponentInChildren<Player1>();
         _player2 = _playerGrouper.GetComponentInChildren<Player2>();
 
-        _players = new List<PlayerBase>
-        {
-            _player1,
-            _player2
-        };
+        _players = new List<PlayerBase>();
+        _players.Add(_player1 as PlayerBase);
+        _players.Add(_player2 as PlayerBase);
 
         // Event Inits
         EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_FOLLOWGROUP);
@@ -42,6 +40,8 @@ public class PlayerManager : MonoBehaviour
         EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_PLAYER1);
         EventManager.EventInitialise(EventType.PLAYERMANAGER_SEND_PLAYER2);
         EventManager.EventInitialise(EventType.PLAYERMANAGER_REQUEST_FOLLOWGROUP);
+        EventManager.EventInitialise(EventType.SOFTPUZZLE_REQUEST_PLAYERLIST);
+        EventManager.EventInitialise(EventType.SOFTPUZZLE_RECEIVE_PLAYERLIST);
     }
 
     private void OnEnable()

@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour
 
     #region INTERNAL DATA
     private Dictionary<GameObject, bool> _softPuzzlesDone;
+    private List<PlayerBase> _players;
     #endregion
 
     private void Awake()
@@ -29,18 +30,22 @@ public class LevelManager : MonoBehaviour
         // Event Inits
         EventManager.EventInitialise(EventType.LEVEL_SPAWN);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
+
+        EventManager.EventTrigger(EventType.SOFTPUZZLE_REQUEST_PLAYERLIST, null);
     }
 
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
         EventManager.EventSubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, OnIntroPreRCutsceneEnd);
+        EventManager.EventSubscribe(EventType.SOFTPUZZLE_RECEIVE_PLAYERLIST, ReceivePlayerList);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_COMPLETE, OnSoftPuzzleComplete);
         EventManager.EventUnsubscribe(EventType.PRERENDERED_CUTSCENE_FINISHED, OnIntroPreRCutsceneEnd);
+        EventManager.EventUnsubscribe(EventType.SOFTPUZZLE_RECEIVE_PLAYERLIST, ReceivePlayerList);
     }
 
     private void Start()
@@ -104,6 +109,23 @@ public class LevelManager : MonoBehaviour
     //}
 
     #region EVENT HANDLERS
+    public void ReceivePlayerList(object data)
+    {
+        if (data is List<PlayerBase> players)
+        {
+            _players = players;
+
+            foreach (GameObject softPuzzle in _softPuzzles)
+            {
+                softPuzzle.GetComponent<SoftPuzzle>().ReceivePlayers(_players);
+            }
+        }
+        else
+        {
+            Debug.LogError("Did not receive list of players!");
+        }
+    }
+
     public void OnSoftPuzzleComplete(object data)
     {
         if (data is GameObject softPuzzle)
