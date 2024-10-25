@@ -31,7 +31,6 @@ public class LevelManager : MonoBehaviour
         EventManager.EventInitialise(EventType.LEVEL_SPAWN);
         EventManager.EventInitialise(EventType.SOFTPUZZLE_PLAYER_TELEPORT);
 
-        EventManager.EventTrigger(EventType.SOFTPUZZLE_REQUEST_PLAYERLIST, null);
     }
 
     private void OnEnable()
@@ -65,6 +64,8 @@ public class LevelManager : MonoBehaviour
         {
             EventManager.EventTrigger(EventType.PRERENDERED_CUTSCENE_PLAY, _introPreRenderedCutscene);
         }
+
+        EventManager.EventTrigger(EventType.SOFTPUZZLE_REQUEST_PLAYERLIST, null);
 
         Debug.Log("LevelManager: Triggering initial background music");
         EventManager.EventTrigger(EventType.MUSIC, "MainArea");
