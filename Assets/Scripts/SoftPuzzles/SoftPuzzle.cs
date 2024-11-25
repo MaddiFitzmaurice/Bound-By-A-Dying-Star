@@ -13,9 +13,7 @@ public class SoftPuzzle : MonoBehaviour
     [SerializeField] private GameObject _backwardPuzzle;
 
     [Header("Puzzle Transition Data")]
-    [SerializeField] private List<GameObject> _fixedPlatforms;
     [SerializeField] private List<Transform> _moveToPosList;
-    //[SerializeField] private float _platformMoveSpeed = 2.0f;
     [SerializeField] private VideoClip _transitionClip;
 
     [Header("Cameras")]
@@ -52,11 +50,6 @@ public class SoftPuzzle : MonoBehaviour
         if (_moveToPosList.Count != 2)
         {
             Debug.LogError("MoveToPos list needs 2 transforms!");
-        }
-
-        if (_fixedPlatforms.Count != 2)
-        {
-            Debug.LogError("FixedPlatforms list needs 2 transforms!");
         }
 
         // Make sure only 1 or 2 reward objects are assigned
@@ -188,7 +181,6 @@ public class SoftPuzzle : MonoBehaviour
 
         for (int i = 0; i < _players.Count; i++)
         {
-            _fixedPlatforms[i].transform.position = _moveToPosList[i].transform.position;
             _players[i].PuzzleTeleport(_moveToPosList[i]);
         }
 

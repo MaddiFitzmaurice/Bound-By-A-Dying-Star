@@ -70,51 +70,36 @@ public class RespawnSystem : MonoBehaviour
         }
     }
 
-    public void AssignPlayer1Path(RespawnPathNum pathNum)
-    {
-        // If no separate paths to take, assume player1 = path1
-        if (pathNum == RespawnPathNum.NOPATH)
-        {
-            _player1FutureBackQ = _path1BackQ;
-        }
-        else if (pathNum == RespawnPathNum.PATH1)
-        {
-            _player1FutureBackQ = _path1BackQ;
-        }
-        else
-        {
-            _player1FutureBackQ = _path2BackQ;
-        }
-    }
+    //public void AssignPlayer1Path(RespawnPathNum pathNum)
+    //{
+    //    if (pathNum == RespawnPathNum.PATH1)
+    //    {
+    //        _player1FutureBackQ = _path1BackQ;
+    //    }
+    //    else
+    //    {
+    //        _player1FutureBackQ = _path2BackQ;
+    //    }
+    //}
 
-    public void AssignPlayer2Path(RespawnPathNum pathNum)
-    {
-        // If no separate paths to take, assume player2 = path2
-        if (pathNum == RespawnPathNum.NOPATH)
-        {
-            _player2FutureBackQ = _path2BackQ;
-        }
-        else if (pathNum == RespawnPathNum.PATH1)
-        {
-            _player2FutureBackQ = _path1BackQ;
-        }
-        else
-        {
-            _player2FutureBackQ = _path2BackQ;
-        }
-    }
+    //public void AssignPlayer2Path(RespawnPathNum pathNum)
+    //{
+    //    if (pathNum == RespawnPathNum.PATH1)
+    //    {
+    //        _player2FutureBackQ = _path1BackQ;
+    //    }
+    //    else
+    //    {
+    //        _player2FutureBackQ = _path2BackQ;
+    //    }
+    //}
 
     // Update respawn point of a path, return true to UpdateRespawnPoint if updated successfully
     public bool UpdateForwardPath1RespawnPoint(PlayerBase player)
     {
-        if (player is Player1 && _player1CurrentQ == _path1ForwardQ)
+        if (player is Player1)
         {
             _player1CurrentQ.Dequeue();
-            return true;
-        }
-        else if (player is Player2 && _player2CurrentQ == _path1ForwardQ)
-        {
-            _player2CurrentQ.Dequeue();
             return true;
         }
         else
@@ -126,12 +111,7 @@ public class RespawnSystem : MonoBehaviour
     // Update respawn point of a path, return true to UpdateRespawnPoint if updated successfully
     public bool UpdateForwardPath2RespawnPoint(PlayerBase player)
     {
-        if (player is Player1 && _player1CurrentQ == _path2ForwardQ)
-        {
-            _player1CurrentQ.Dequeue();
-            return true;
-        }
-        else if (player is Player2 && _player2CurrentQ == _path2ForwardQ)
+        if (player is Player2)
         {
             _player2CurrentQ.Dequeue();
             return true;
@@ -145,18 +125,13 @@ public class RespawnSystem : MonoBehaviour
     // Update respawn point of a path, return true to UpdateRespawnPoint if updated successfully
     public bool UpdateBackPath1RespawnPoint(PlayerBase player)
     {
-        if (player is Player1 && _player1CurrentQ == _path1BackQ)
+        if (player is Player1)
         {
             _player1CurrentQ.Dequeue();
             return true;
         }
-        else if (player is Player2 && _player2CurrentQ == _path1BackQ)
-        {
-            _player2CurrentQ.Dequeue();
-            return true;
-        }
         else
-        { 
+        {
             return false;
         }
     }
@@ -164,12 +139,7 @@ public class RespawnSystem : MonoBehaviour
     // Update respawn point of a path, return true to UpdateRespawnPoint if updated successfully
     public bool UpdateBackPath2RespawnPoint(PlayerBase player)
     {
-        if (player is Player1 && _player1CurrentQ == _path2BackQ)
-        {
-            _player1CurrentQ.Dequeue();
-            return true;
-        }
-        else if (player is Player2 && _player2CurrentQ == _path2BackQ)
+        if (player is Player2)
         {
             _player2CurrentQ.Dequeue();
             return true;
@@ -190,21 +160,7 @@ public class RespawnSystem : MonoBehaviour
 
     public void ChangeToBackRespawn()
     {
-        // NOPATH IS INVALID NOW, SO NEED TO CHECK IF
-        // BOTH PLAYERS HAVE SAME PATH Q AND FIX
-        if (_player1FutureBackQ == _player2FutureBackQ)
-        {
-            if (_player2FutureBackQ == _path1BackQ)
-            {
-                _player2FutureBackQ = _path2BackQ;
-            }
-            else if (_player2FutureBackQ == _path2BackQ)
-            {
-                _player2FutureBackQ = _path1BackQ;
-            }
-        }
-
-        _player1CurrentQ = _player1FutureBackQ;
-        _player2CurrentQ = _player2FutureBackQ;
+        _player1CurrentQ = _path1BackQ;
+        _player2CurrentQ = _path2BackQ;
     }
 }
