@@ -13,7 +13,8 @@ public class PressurePlateSystemD : PressurePlateSystem
     #region INTERNAL DATA
     private bool _timerActive = false;
     private float _timer;
-    private List<PPVFXTimer> _ppVFXs;
+    //private List<PPVFXTimer> _ppVFXs;
+    private Dictionary<PressurePlateSingle, PPVFXTimer> _ppVFXDict;
     #endregion
 
     protected override void InitAllPressurePlates()
@@ -21,22 +22,27 @@ public class PressurePlateSystemD : PressurePlateSystem
         // Initialize the list of pressure plates from the manually assigned list in inspector
         PressurePlates = new List<PressurePlateSingle>();
         // Init list of VFX timers
-        _ppVFXs = new List<PPVFXTimer>();
+        //_ppVFXs = new List<PPVFXTimer>();
+        _ppVFXDict = new Dictionary<PressurePlateSingle, PPVFXTimer>();
 
         foreach (GameObject plateObject in _pressurePlateObjects)
         {
             var plate = plateObject.GetComponent<PressurePlateSingle>();
+
             if (plate != null)
             {
                 PressurePlates.Add(plate);
                 plate.InitPlateSystem(this);
-            }
 
-            PPVFXTimer vfx = plateObject.GetComponentInChildren<PPVFXTimer>();
-            if (vfx != null)
-            {
-                _ppVFXs.Add(vfx);
-                vfx.SetDrainTime(_activationTime);
+
+                PPVFXTimer vfx = plateObject.GetComponentInChildren<PPVFXTimer>();
+                if (vfx != null)
+                {
+                    //_ppVFXs.Add(vfx);
+                    _ppVFXDict.Add(plate, vfx);
+
+                    vfx.SetDrainTime(_activationTime);
+                }
             }
         }
     }
@@ -83,7 +89,7 @@ public class PressurePlateSystemD : PressurePlateSystem
     private void FinalizeActivation()
     {
         // Stop timer VFX and set it to complete state
-        foreach (var vfx in _ppVFXs)
+        foreach (var vfx in _ppVFXDict.Values)
         {
             vfx.StopVFXDrainer();
             vfx.FinaliseActivation();
@@ -101,7 +107,7 @@ public class PressurePlateSystemD : PressurePlateSystem
             plate.Activated = false;
         }
 
-        foreach (var vfx in _ppVFXs)
+        foreach (var vfx in _ppVFXDict.Values)
         {
             vfx.StopVFXDrainer();
         }
@@ -118,7 +124,7 @@ public class PressurePlateSystemD : PressurePlateSystem
         }
 
         plate.Activated = true;
-        plate.SetVFXPlayerColour();
+        _ppVFXDict[plate].PlatePressed();
 
         // Immediately check if this activation fulfilled all conditions
         CheckAllPlatesActivated();
@@ -126,7 +132,7 @@ public class PressurePlateSystemD : PressurePlateSystem
 
     private void ActivateTimerVFXs()
     {
-        foreach (PPVFXTimer timer in _ppVFXs)
+        foreach (PPVFXTimer timer in _ppVFXDict.Values)
         {
             timer.StartVFXDrainer();
         }

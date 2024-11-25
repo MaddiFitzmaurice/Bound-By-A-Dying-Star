@@ -106,6 +106,54 @@ PrefabInstance:
       propertyPath: _defaultColour.r
       value: 0.9372549
       objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _pressedColour.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _pressedColour.b
+      value: 0.19424175
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _pressedColour.g
+      value: 0.9150943
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _pressedColour.r
+      value: 0.5724055
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _waitingColour.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _waitingColour.b
+      value: 0.2028302
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _waitingColour.g
+      value: 0.82273084
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _waitingColour.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _finishedColour.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _finishedColour.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _finishedColour.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937601501237410828, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
+      propertyPath: _finishedColour.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5711108469530618141, guid: eb7fbe98983d0c64d85a332343860bff, type: 3}
       propertyPath: m_Name
       value: PPTimer

@@ -6,9 +6,6 @@ public class PressurePlateSingle : MonoBehaviour
 {
     #region External Data
     public bool Activated { get; set; }
-    [SerializeField] private Color _player1Colour;
-    [SerializeField] private Color _player2Colour;
-    //[SerializeField] public bool _persistVisualEffect = false;
     [SerializeField] private ParticleSystem _particleSystem;
     [SerializeField] private PressurePlateSystem _ppSystem;
     #endregion
@@ -87,18 +84,6 @@ public class PressurePlateSingle : MonoBehaviour
     public void DeactivateIndividualVFX()
     {
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-    }
-
-    public void SetVFXPlayerColour()
-    {
-        if (_lastPlayer.CompareTag("Player1"))
-        {
-            _mainPS.startColor = _player1Colour;
-        }
-        else if (_lastPlayer.CompareTag("Player2"))
-        {
-            _mainPS.startColor = _player2Colour;
-        }
     }
 
     //public void ActivateColour(int colorMode)

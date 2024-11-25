@@ -6,7 +6,9 @@ using UnityEngine.ProBuilder.Shapes;
 public class PPVFXTimer : MonoBehaviour
 {
     #region EXTERNAL DATA
-    [SerializeField] private Color _defaultColour;
+    [SerializeField] private Color _waitingColour;
+    [SerializeField] private Color _pressedColour;
+    [SerializeField] private Color _finishedColour;
     #endregion
     
     #region INTERNAL DATA
@@ -24,15 +26,20 @@ public class PPVFXTimer : MonoBehaviour
         _shape = _system.shape;
         _main = _system.main;
         _emission = _system.emission;
-        _main.startColor = _defaultColour;
+        _main.startColor = _waitingColour;
         _system.gameObject.SetActive(false);
     }
 
     public void FinaliseActivation()
     {
         ResetAnim();
-        SetColour(Color.white);
+        SetColour(_finishedColour);
         _system.gameObject.SetActive(true);
+    }
+
+    public void PlatePressed()
+    {
+        SetColour(_pressedColour);
     }
 
     public void SetColour(Color colour)
@@ -80,6 +87,6 @@ public class PPVFXTimer : MonoBehaviour
     {
         _shape.arc = 360f;
         _emission.rateOverTimeMultiplier = 3600f;
-        SetColour(_defaultColour);
+        SetColour(_waitingColour);
     }
 }
