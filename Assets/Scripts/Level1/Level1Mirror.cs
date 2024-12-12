@@ -66,6 +66,8 @@ public class Level1Mirror : MonoBehaviour, IInteractable, IPickupable, ISoftPuzz
 
     private void Start()
     {
+        _showPrompt = true;
+
         // Get the initial Y rotation when the object is initialized
         _currentYRotation = transform.eulerAngles.y;
 

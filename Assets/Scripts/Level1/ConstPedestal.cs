@@ -88,6 +88,7 @@ public class ConstPedestal : MonoBehaviour, IInteractable
 
     void Start()
     {
+        _showPrompt = true;
         SetupBeamDirections();
 
         if (_initialAngleOffset == 0f)
